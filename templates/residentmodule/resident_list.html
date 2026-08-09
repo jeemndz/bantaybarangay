@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resident Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Resident Management</h1>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Birth Date</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for resident in residents %}
+
+            <tr>
+                <td>{{ resident.resident_id }}</td>
+
+                <td>
+                    {{ resident.first_name }}
+                    {% if resident.middle_name %}
+                        {{ resident.middle_name }}
+                    {% endif %}
+                    {{ resident.last_name }}
+                    {% if resident.suffix %}
+                        {{ resident.suffix }}
+                    {% endif %}
+                </td>
+
+                <td>{{ resident.birth_date }}</td>
+
+                <td>{{ resident.gender }}</td>
+
+                <td>{{ resident.address }}</td>
+
+                <td>{{ resident.contact_number }}</td>
+
+                <td>{{ resident.email }}</td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="7">
+                    No residents found.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</body>
+</html>
