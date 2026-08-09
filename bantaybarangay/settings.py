@@ -88,7 +88,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'ssl': {
-                'ca': None,
+                "ca": str(BASE_DIR / "certs" / "DigiCertGlobalRootG2.crt.pem"),
             },
         },
     }
