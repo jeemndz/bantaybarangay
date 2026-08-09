@@ -15,7 +15,7 @@ def get_connection():
         port=3306,
         user="bantayadmin",
         password="Bantayadmin1",
-        database="bantaybarangay",
+        database="bantay",
         ssl_disabled=False
         )
 
