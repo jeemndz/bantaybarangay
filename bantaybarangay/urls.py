@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('residents/', include('residentmodule.urls')),
+    path('login/', include('login.urls')),
 ]
