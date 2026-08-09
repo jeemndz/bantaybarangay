@@ -6,11 +6,7 @@ def resident_list(request):
     residents = Resident.objects.all()
 
     context = {
-        'residentsAll': residents
+        'residents': residents
     }
 
-    return render(
-        request,
-        'residentmodule/resident_list.html',
-        context
-    )
+    return render(request, 'residentmodule/resident_list.html', context)
