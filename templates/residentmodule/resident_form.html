@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ page_title }} | BantayBarangay
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/residents.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="resident-page">
+
+    <!-- HEADER -->
+    <div class="resident-header">
+        <div>
+            <h1>{{ page_title }}</h1>
+            <p>{{ page_description }}</p>
+
+            <a href="{% url 'resident_list' %}" class="back-link">
+                ← Back to Residents
+            </a>
+        </div>
+    </div>
+
+
+    <!-- FORM CARD -->
+    <div class="resident-form-card">
+
+        <div class="form-card-header">
+            <div class="form-icon">👤</div>
+
+            <div>
+                <h2>Resident Information</h2>
+                <p>Enter the resident's personal and contact details.</p>
+            </div>
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <!-- PERSONAL INFORMATION -->
+            <div class="form-section">
+
+                <h3>Personal Information</h3>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="{{ form.first_name.id_for_label }}">
+                            First Name
+                        </label>
+                        {{ form.first_name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.middle_name.id_for_label }}">
+                            Middle Name
+                        </label>
+                        {{ form.middle_name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.last_name.id_for_label }}">
+                            Last Name
+                        </label>
+                        {{ form.last_name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.suffix.id_for_label }}">
+                            Suffix
+                        </label>
+                        {{ form.suffix }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.gender.id_for_label }}">
+                            Gender
+                        </label>
+                        {{ form.gender }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.birth_date.id_for_label }}">
+                            Birth Date
+                        </label>
+                        {{ form.birth_date }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT INFORMATION -->
+            <div class="form-section">
+
+                <h3>Contact Information</h3>
+
+                <div class="form-grid">
+
+                    <div class="form-group full-width">
+
+                        <label for="{{ form.address.id_for_label }}">
+                            Address
+                        </label>
+
+                        {{ form.address }}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.contact_number.id_for_label }}">
+                            Contact Number
+                        </label>
+
+                        {{ form.contact_number }}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="{{ form.email.id_for_label }}">
+                            Email Address
+                        </label>
+
+                        {{ form.email }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'resident_list' %}"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="save-resident-btn"
+                >
+                    {% if resident %}
+                        Update Resident
+                    {% else %}
+                        Add Resident
+                    {% endif %}
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

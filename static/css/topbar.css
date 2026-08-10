@@ -1,0 +1,195 @@
+.topbar {
+
+    height: 72px;
+
+    background: white;
+
+    border-bottom: 1px solid #e5ebe8;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 900;
+}
+
+
+/* SEARCH */
+
+.topbar-search {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 380px;
+
+    background: #f3f6f4;
+
+    border: 1px solid #e5ebe8;
+
+    border-radius: 9px;
+
+    padding: 10px 14px;
+}
+
+.search-icon {
+
+    font-size: 20px;
+
+    color: #73817c;
+}
+
+.topbar-search input {
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    width: 100%;
+
+    font-size: 14px;
+}
+
+
+/* RIGHT */
+
+.topbar-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+/* NOTIFICATION */
+
+.notification-btn {
+
+    position: relative;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 19px;
+
+    padding: 8px;
+}
+
+.notification-badge {
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    background: #d9534f;
+
+    color: white;
+
+    width: 17px;
+    height: 17px;
+
+    border-radius: 50%;
+
+    font-size: 10px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* DIVIDER */
+
+.topbar-divider {
+
+    width: 1px;
+
+    height: 35px;
+
+    background: #e1e7e4;
+}
+
+
+/* USER */
+
+.topbar-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    cursor: pointer;
+}
+
+.user-avatar {
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #2f8f68;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.user-info strong {
+
+    font-size: 13px;
+
+    color: #26332f;
+}
+
+.user-info span {
+
+    font-size: 11px;
+
+    color: #7b8984;
+}
+
+.user-arrow {
+
+    color: #7b8984;
+
+    margin-left: 5px;
+}

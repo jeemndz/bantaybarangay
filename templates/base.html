@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}BantayBarangay{% endblock %}
+    </title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/base.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'css/sidebar.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'css/topbar.css' %}">
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    {% include 'partials/sidebar.html' %}
+
+
+    <!-- MAIN AREA -->
+    <div class="main-content">
+
+        <!-- TOPBAR -->
+        {% include 'partials/topbar.html' %}
+
+
+        <!-- PAGE CONTENT -->
+        <main class="page-content">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>

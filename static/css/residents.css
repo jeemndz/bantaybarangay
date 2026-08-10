@@ -1,0 +1,1127 @@
+.resident-page {
+    width: 100%;
+}
+
+
+/* HEADER */
+
+.resident-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.resident-header h1 {
+    font-size: 28px;
+    color: #1e2d28;
+    margin-bottom: 7px;
+}
+
+.resident-header p {
+    color: #718079;
+    font-size: 14px;
+}
+
+
+/* ADD BUTTON */
+
+.add-resident-btn {
+    background: #2f8f68;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-resident-btn:hover {
+
+    background: #267958;
+}
+
+
+/* STATISTICS */
+
+.resident-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 28px;
+}
+
+.resident-stat-card {
+
+    background: white;
+
+    border: 1px solid #e4ebe7;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.stat-icon {
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 10px;
+
+    background: #e8f4ee;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.resident-stat-card span {
+
+    color: #7b8984;
+
+    font-size: 12px;
+}
+
+.resident-stat-card h2 {
+
+    color: #26332f;
+
+    font-size: 25px;
+
+    margin-top: 4px;
+}
+
+
+/* TABLE HEADER */
+
+.resident-table-header {
+
+    background: white;
+
+    border: 1px solid #e4ebe7;
+
+    border-bottom: none;
+
+    border-radius: 12px 12px 0 0;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.resident-table-header h2 {
+
+    font-size: 18px;
+
+    color: #26332f;
+}
+
+.resident-table-header p {
+
+    font-size: 12px;
+
+    color: #84908c;
+
+    margin-top: 4px;
+}
+
+
+/* TOOLS */
+
+.resident-tools {
+
+    display: flex;
+
+    gap: 10px;
+}
+
+.resident-search {
+
+    width: 230px;
+
+    padding: 10px 13px;
+
+    border: 1px solid #dfe7e3;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 13px;
+}
+
+.resident-search:focus {
+
+    border-color: #2f8f68;
+}
+
+.filter-btn {
+
+    border: 1px solid #dfe7e3;
+
+    background: white;
+
+    padding: 10px 15px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+
+/* TABLE */
+
+.resident-table-container {
+
+    background: white;
+
+    border: 1px solid #e4ebe7;
+
+    border-radius: 0 0 12px 12px;
+
+    overflow-x: auto;
+}
+
+.resident-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.resident-table th {
+
+    text-align: left;
+
+    padding: 14px 18px;
+
+    background: #f7faf8;
+
+    border-bottom: 1px solid #e4ebe7;
+
+    color: #68766f;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+.resident-table td {
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #edf1ef;
+
+    color: #4b5954;
+
+    font-size: 13px;
+}
+
+.resident-table tbody tr:hover {
+
+    background: #f9fbfa;
+}
+
+
+/* NAME */
+
+.resident-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.resident-name strong {
+
+    color: #26332f;
+
+    font-size: 13px;
+}
+
+.resident-avatar {
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    background: #dcefe5;
+
+    color: #2f7658;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: 700;
+}
+
+
+/* ID */
+
+.resident-id {
+
+    color: #2f8f68;
+
+    font-weight: 600;
+}
+
+
+/* STATUS */
+
+.status-active {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #e6f5ec;
+
+    color: #28744f;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* EMPTY */
+
+.empty-residents {
+
+    text-align: center;
+
+    padding: 60px 20px;
+}
+
+.empty-icon {
+
+    font-size: 40px;
+
+    margin-bottom: 10px;
+}
+
+.empty-residents h3 {
+
+    color: #34423c;
+
+    margin-bottom: 5px;
+}
+
+.empty-residents p {
+
+    color: #84908c;
+
+    font-size: 13px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+    .resident-stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .main-content {
+
+        margin-left: 0;
+    }
+
+    .sidebar {
+
+        display: none;
+    }
+
+    .resident-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .resident-table-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .resident-tools {
+
+        width: 100%;
+    }
+
+    .resident-search {
+
+        width: 100%;
+    }
+
+    .add-resident-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #2f8f68;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 18px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        text-decoration: none;
+        white-space: nowrap;
+
+        cursor: pointer;
+    }
+
+/* =========================================
+   RESIDENT FORM
+========================================= */
+
+.resident-form-container {
+    background: #ffffff;
+    border: 1px solid #e4ebe7;
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 1100px;
+    margin-top: 20px;
+}
+
+
+/* FORM HEADER */
+
+.resident-form-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #edf1ef;
+    margin-bottom: 25px;
+}
+
+.form-header-icon {
+    width: 48px;
+    height: 48px;
+    background: #e8f4ee;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.resident-form-header h2 {
+    color: #26332f;
+    font-size: 20px;
+    margin: 0 0 4px 0;
+}
+
+.resident-form-header p {
+    color: #84908c;
+    font-size: 13px;
+    margin: 0;
+}
+
+
+/* FORM SECTION */
+
+.form-section {
+    margin-bottom: 28px;
+}
+
+.form-section h3 {
+    color: #26332f;
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+
+
+/* FORM GRID */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-full {
+    grid-column: 1 / -1;
+}
+
+
+/* LABEL */
+
+.form-group label {
+    color: #45534d;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+
+/* INPUT */
+
+.form-input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #dfe7e3;
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #26332f;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: #2f8f68;
+}
+
+
+/* TEXTAREA */
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 90px;
+}
+
+
+/* SELECT */
+
+select.form-input {
+    cursor: pointer;
+}
+
+
+/* ERROR */
+
+.form-error {
+    color: #c94a4a;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+
+/* NOTE */
+
+.form-note {
+    color: #84908c;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* FORM ACTIONS */
+
+.resident-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #edf1ef;
+}
+
+
+/* BACK BUTTON */
+
+.back-resident-btn {
+    color: #2f8f68;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-resident-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* CANCEL */
+
+.cancel-resident-btn {
+    padding: 11px 18px;
+
+    border: 1px solid #dfe7e3;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #596760;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.cancel-resident-btn:hover {
+    background: #f7faf8;
+}
+
+
+/* SAVE */
+
+.save-resident-btn {
+    padding: 11px 20px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #2f8f68;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.save-resident-btn:hover {
+    background: #267958;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-full {
+        grid-column: auto;
+    }
+
+    .resident-form-container {
+        padding: 20px;
+    }
+
+    .resident-form-actions {
+        flex-direction: column;
+    }
+
+    .cancel-resident-btn,
+    .save-resident-btn {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+
+/* =========================================================
+   RESIDENT FORM
+   ========================================================= */
+
+.resident-form-page {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Page Header */
+
+.form-page-header {
+    margin-bottom: 24px;
+}
+
+.form-page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e2d28;
+    margin-bottom: 5px;
+}
+
+.form-page-header p {
+    color: #718079;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.back-link {
+    color: #2f8f68;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Main Form Card */
+
+.resident-form-card {
+    background: #ffffff;
+    border: 1px solid #e4ebe7;
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 3px 12px rgba(35, 60, 50, 0.04);
+}
+
+/* Form Header */
+
+.form-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.form-section-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #e8f4ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.form-section-header h2 {
+    color: #26332f;
+    font-size: 20px;
+    margin: 0;
+}
+
+.form-section-header p {
+    color: #84908c;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+
+/* Section */
+
+.form-section {
+    border-top: 1px solid #edf1ef;
+    padding-top: 24px;
+    margin-top: 24px;
+}
+
+.form-section h3 {
+    color: #34423c;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+
+/* Form Grid */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 22px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* Labels */
+
+.form-group label {
+    color: #34423c;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.required {
+    color: #d9534f;
+}
+
+
+/* Inputs */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid #d9e3de;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    padding: 11px 13px;
+
+    color: #26332f;
+    font-size: 13px;
+
+    outline: none;
+
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+}
+
+
+/* Placeholder */
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a2aca8;
+}
+
+
+/* Focus */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2f8f68;
+    box-shadow: 0 0 0 3px rgba(47, 143, 104, 0.10);
+    background: #ffffff;
+}
+
+
+/* Textarea */
+
+.form-group textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+
+/* Select */
+
+.form-group select {
+    cursor: pointer;
+}
+
+
+/* Help Text */
+
+.form-help {
+    color: #8a9691;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+
+/* Error */
+
+.form-error {
+    color: #d9534f;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+
+/* Django error list */
+
+.form-group ul.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0;
+}
+
+.form-group ul.errorlist li {
+    color: #d9534f;
+    font-size: 11px;
+}
+
+
+/* Buttons */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+
+    border-top: 1px solid #edf1ef;
+
+    margin-top: 28px;
+    padding-top: 20px;
+}
+
+
+/* Cancel */
+
+.cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 18px;
+
+    border: 1px solid #d9e3de;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #53615b;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background: #f6f9f7;
+}
+
+
+/* Submit */
+
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2f8f68;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease,
+                transform 0.1s ease;
+}
+
+.submit-btn:hover {
+    background: #267958;
+}
+
+.submit-btn:active {
+    transform: translateY(1px);
+}
+
+
+/* =========================================================
+   DELETE CONFIRMATION
+   ========================================================= */
+
+.delete-container {
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.delete-card {
+    background: #ffffff;
+    border: 1px solid #e4ebe7;
+    border-radius: 14px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(35, 60, 50, 0.05);
+}
+
+.delete-icon {
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: #fff1f0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.delete-card h2 {
+    color: #26332f;
+    font-size: 21px;
+    margin-bottom: 8px;
+}
+
+.delete-card p {
+    color: #718079;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.delete-name {
+    color: #26332f;
+    font-weight: 700;
+}
+
+.delete-warning {
+    background: #fff8f7;
+    border: 1px solid #f1d8d5;
+    border-radius: 8px;
+
+    padding: 12px;
+
+    margin: 20px 0;
+
+    color: #8c514d;
+    font-size: 12px;
+}
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.delete-cancel-btn {
+    padding: 11px 20px;
+
+    border: 1px solid #d9e3de;
+    border-radius: 8px;
+
+    background: white;
+    color: #53615b;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.delete-confirm-btn {
+    padding: 11px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #d9534f;
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.delete-confirm-btn:hover {
+    background: #c74440;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .resident-form-card {
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .cancel-btn,
+    .submit-btn {
+        width: 100%;
+    }
+
+    .delete-container {
+        margin: 25px auto;
+    }
+
+    .delete-card {
+        padding: 25px 20px;
+    }
+
+    .delete-actions {
+        flex-direction: column;
+    }
+
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+}

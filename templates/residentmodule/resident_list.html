@@ -1,827 +1,242 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resident Management | BantayBarangay</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+{% block title %}
+Resident Management | BantayBarangay
+{% endblock %}
 
-        body {
-            background: #e1f3e3;
-            color: #18352d;
-            min-height: 100vh;
-        }
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/residents.css' %}">
+{% endblock %}
 
-        /* ================= SIDEBAR ================= */
+{% block content %}
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 180px;
-            height: 100vh;
-            background: #062f2b;
-            color: white;
-            padding: 18px 12px;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
+<div class="resident-page">
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
+    <!-- PAGE HEADER -->
+    <div class="resident-header">
 
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            border: 2px solid white;
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-        }
+        <div>
+            <h1>Resident Management</h1>
 
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
+            <p>
+                Manage and oversee community resident records with
+                blockchain-verified integrity.
+            </p>
+        </div>
 
-        .menu a {
-            text-decoration: none;
-            color: #b7cbc7;
-            font-size: 9px;
-            padding: 10px 7px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        <a href="{% url 'resident_create' %}" class="add-resident-btn">
+            + Add Resident
+        </a>
 
-        .menu a:hover,
-        .menu a.active {
-            background: #164b43;
-            color: white;
-        }
-
-        .menu-icon {
-            width: 14px;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .settings-title {
-            color: #b7cbc7;
-            font-size: 9px;
-            padding: 10px 7px 5px;
-        }
-
-        .submenu {
-            padding-left: 15px;
-        }
-
-        .submenu a {
-            padding: 7px;
-        }
-
-        .logout {
-            margin-top: auto;
-            border: 1px dashed #8d6e4d;
-            color: #d4c5b1;
-            padding: 10px 8px;
-            font-size: 9px;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /* ================= MAIN ================= */
-
-        .main {
-            margin-left: 180px;
-            min-height: 100vh;
-        }
-
-        /* ================= TOPBAR ================= */
-
-        .topbar {
-            height: 50px;
-            background: #f7faf5;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            border-bottom: 1px solid #d9e7dc;
-        }
-
-        .search {
-            width: 365px;
-            background: #e2e6e2;
-            border-radius: 20px;
-            padding: 7px 15px;
-            color: #7c8580;
-            font-size: 9px;
-        }
-
-        .search input {
-            border: none;
-            outline: none;
-            background: transparent;
-            width: 90%;
-            font-size: 9px;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 8px;
-        }
-
-        .profile-name {
-            font-weight: bold;
-        }
-
-        .profile-role {
-            color: #75817c;
-            font-size: 7px;
-        }
-
-        .profile-icon {
-            width: 22px;
-            height: 22px;
-            background: #d4eee0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content {
-            padding: 14px;
-        }
-
-        .page-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .page-description {
-            font-size: 8px;
-            color: #63736d;
-            margin-bottom: 15px;
-        }
-
-        /* ================= STAT CARDS ================= */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .stat-card {
-            background: #f7fbf6;
-            border-radius: 9px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 12px rgba(35, 70, 50, 0.08);
-        }
-
-        .stat-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 7px;
-            background: #e2f1e7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .stat-label {
-            font-size: 7px;
-            color: #65756e;
-            margin-bottom: 3px;
-        }
-
-        .stat-number {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* ================= TOOLBAR ================= */
-
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .toolbar-left {
-            display: flex;
-            gap: 7px;
-        }
-
-        .btn {
-            border: 1px solid #d2ded6;
-            background: #f8fbf7;
-            border-radius: 5px;
-            padding: 6px 9px;
-            font-size: 8px;
-            cursor: pointer;
-            color: #34463f;
-        }
-
-        .btn:hover {
-            background: #e7f2e9;
-        }
-
-        .record-count {
-            font-size: 7px;
-            color: #65756e;
-        }
-
-        /* ================= TABLE ================= */
-
-        .table-container {
-            background: #f8fbf7;
-            border-radius: 9px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(35, 70, 50, 0.10);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: #06352f;
-            color: white;
-        }
-
-        th {
-            padding: 9px 10px;
-            text-align: left;
-            font-size: 7px;
-            font-weight: 600;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #e1e9e2;
-            font-size: 7px;
-            color: #35453f;
-            vertical-align: middle;
-        }
-
-        tbody tr:hover {
-            background: #eef7ef;
-        }
-
-        .resident-name {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .avatar {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #d7e9dc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: bold;
-            color: #315c4c;
-        }
-
-        .name {
-            font-weight: 600;
-        }
-
-        .age {
-            font-size: 6px;
-            color: #8a9690;
-            margin-top: 2px;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 4px 7px;
-            border-radius: 10px;
-            font-size: 6px;
-        }
-
-        .status-clear {
-            background: #e5f5e9;
-            color: #287049;
-        }
-
-        .status-resolved {
-            background: #eeeeea;
-            color: #666c67;
-        }
-
-        .action {
-            cursor: pointer;
-            font-size: 14px;
-            color: #63716b;
-        }
-
-        /* ================= FOOTER ================= */
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 130px;
-            right: 0;
-            height: 35px;
-            background: #e5f2e7;
-            border-top: 1px solid #d4e3d6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 15px;
-            font-size: 7px;
-            color: #65736d;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 900px) {
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .table-container {
-                overflow-x: auto;
-            }
-
-            table {
-                min-width: 850px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .sidebar {
-                width: 65px;
-            }
-
-            .sidebar .logo span,
-            .menu a span,
-            .settings-title,
-            .submenu {
-                display: none;
-            }
-
-            .main {
-                margin-left: 65px;
-            }
-
-            footer {
-                left: 65px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .search {
-                width: 200px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- ================= SIDEBAR ================= -->
-
-<aside class="sidebar">
-
-    <div class="logo">
-        <div class="logo-icon">⬡</div>
-        <span>BantayBarangay</span>
     </div>
 
-    <nav class="menu">
 
-        <a href="#">
-            <span class="menu-icon">⌂</span>
-            <span>Dashboard</span>
-        </a>
+    <!-- STAT CARDS -->
+    <div class="resident-stats">
 
-        <a href="#">
-            <span class="menu-icon">⚠</span>
-            <span>Complaints</span>
-        </a>
-
-        <a href="#" class="active">
-            <span class="menu-icon">♙</span>
-            <span>Residents</span>
-        </a>
-
-        <a href="#">
-            <span class="menu-icon">▣</span>
-            <span>Documents</span>
-        </a>
-
-        <a href="#">
-            <span class="menu-icon">▤</span>
-            <span>Blockchain Logs</span>
-        </a>
-
-        <a href="#">
-            <span class="menu-icon">▥</span>
-            <span>Reports & Analytics</span>
-        </a>
-
-        <a href="#">
-            <span class="menu-icon">◉</span>
-            <span>Evidence Management</span>
-        </a>
-
-        <a href="#">
-            <span class="menu-icon">▱</span>
-            <span>Audit Logs</span>
-        </a>
-
-        <div class="settings-title">
-            ⚙ Settings
-        </div>
-
-        <div class="submenu">
-            <a href="#">
-                <span>♙</span>
-                <span>User Management</span>
-            </a>
-
-            <a href="#">
-                <span>▣</span>
-                <span>Backup & Restore</span>
-            </a>
-        </div>
-
-    </nav>
-
-    <a href="#" class="logout">
-        ⇥ &nbsp; Sign-out
-    </a>
-
-</aside>
-
-
-<!-- ================= MAIN ================= -->
-
-<main class="main">
-
-    <!-- TOPBAR -->
-
-    <header class="topbar">
-
-        <div class="search">
-            🔍
-            <input
-                type="text"
-                placeholder="Global search..."
-            >
-        </div>
-
-        <div class="profile">
-
-            <span>🔔</span>
-            <span>◉</span>
+        <!-- TOTAL RESIDENTS -->
+        <div class="resident-stat-card">
+            <div class="stat-icon">👥</div>
 
             <div>
-                <div class="profile-name">
-                    Juan Dela Cruz
-                </div>
-
-                <div class="profile-role">
-                    Chief Admin
-                </div>
+                <span>Total Residents</span>
+                <h2>{{ total_residents|default:"0" }}</h2>
             </div>
-
-            <div class="profile-icon">
-                👤
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <!-- CONTENT -->
-
-    <section class="content">
-
-        <h1 class="page-title">
-            Resident Management
-        </h1>
-
-        <p class="page-description">
-            Manage and oversee community resident records with blockchain-verified integrity.
-            Real-time updates and transparent auditing for all civic activities.
-        </p>
-
-
-        <!-- STATISTICS -->
-
-        <div class="stats">
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    👥
-                </div>
-
-                <div>
-                    <div class="stat-label">
-                        Total Residents
-                    </div>
-
-                    <div class="stat-number">
-                        {{ residents|length }}
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    🏠
-                </div>
-
-                <div>
-                    <div class="stat-label">
-                        Households
-                    </div>
-
-                    <div class="stat-number">
-                        3,120
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    ♿
-                </div>
-
-                <div>
-                    <div class="stat-label">
-                        Senior Citizens
-                    </div>
-
-                    <div class="stat-number">
-                        845
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    ♿
-                </div>
-
-                <div>
-                    <div class="stat-label">
-                        PWD Residents
-                    </div>
-
-                    <div class="stat-number">
-                        192
-                    </div>
-                </div>
-
-            </div>
-
         </div>
 
 
-        <!-- FILTERS -->
+        <!-- HOUSEHOLDS -->
+        <div class="resident-stat-card">
+            <div class="stat-icon">🏠</div>
 
-        <div class="toolbar">
-
-            <div class="toolbar-left">
-
-                <button class="btn">
-                    ▼ Filter
-                </button>
-
-                <button class="btn">
-                    ↕ Sort by Name
-                </button>
-
+            <div>
+                <span>Households</span>
+                <h2>{{ total_households|default:"0" }}</h2>
             </div>
-
-            <div class="record-count">
-                Showing {{ residents|length }} residents
-            </div>
-
         </div>
 
 
-        <!-- RESIDENT TABLE -->
+        <!-- SENIOR CITIZENS -->
+        <div class="resident-stat-card">
+            <div class="stat-icon">⭐</div>
 
-        <div class="table-container">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Resident ID</th>
-                        <th>Name</th>
-                        <th>Gender</th>
-                        <th>Address</th>
-                        <th>Household</th>
-                        <th>Contact Number</th>
-                        <th>Complaint History</th>
-                        <th>Actions</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {% for resident in residents %}
-
-                    <tr>
-
-                        <!-- ID -->
-
-                        <td>
-                            RES-{{ resident.resident_id }}
-                        </td>
-
-
-                        <!-- NAME -->
-
-                        <td>
-
-                            <div class="resident-name">
-
-                                <div class="avatar">
-                                    {{ resident.first_name|first }}{{ resident.last_name|first }}
-                                </div>
-
-                                <div>
-
-                                    <div class="name">
-
-                                        {{ resident.first_name }}
-
-                                        {% if resident.middle_name %}
-                                            {{ resident.middle_name }}
-                                        {% endif %}
-
-                                        {{ resident.last_name }}
-
-                                        {% if resident.suffix %}
-                                            {{ resident.suffix }}
-                                        {% endif %}
-
-                                    </div>
-
-                                    {% if resident.birth_date %}
-                                    <div class="age">
-                                        Born {{ resident.birth_date|date:"M d, Y" }}
-                                    </div>
-                                    {% endif %}
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        <!-- GENDER -->
-
-                        <td>
-                            {{ resident.gender|default:"-" }}
-                        </td>
-
-
-                        <!-- ADDRESS -->
-
-                        <td>
-                            {{ resident.address }}
-                        </td>
-
-
-                        <!-- HOUSEHOLD -->
-
-                        <td>
-                            —
-                        </td>
-
-
-                        <!-- CONTACT -->
-
-                        <td>
-                            {{ resident.contact_number|default:"-" }}
-                        </td>
-
-
-                        <!-- COMPLAINT -->
-
-                        <td>
-
-                            <span class="status status-clear">
-                                ✓ Clear
-                            </span>
-
-                        </td>
-
-
-                        <!-- ACTION -->
-
-                        <td>
-                            <span class="action">⋮</span>
-                        </td>
-
-                    </tr>
-
-                    {% empty %}
-
-                    <tr>
-
-                        <td colspan="8"
-                            style="text-align:center; padding:30px;">
-
-                            No residents found.
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
+            <div>
+                <span>Senior Citizens</span>
+                <h2>{{ senior_citizens|default:"0" }}</h2>
+            </div>
         </div>
 
-    </section>
 
-</main>
+        <!-- PWD -->
+        <div class="resident-stat-card">
+            <div class="stat-icon">♿</div>
 
+            <div>
+                <span>PWD Residents</span>
+                <h2>{{ pwd_residents|default:"0" }}</h2>
+            </div>
+        </div>
 
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-    <div>
-        © 2026 BantayBarangay. Secure Blockchain Governance.
     </div>
 
-    <div class="footer-links">
-        <span>Privacy Policy</span>
-        <span>Terms of Service</span>
+
+    <!-- TABLE HEADER -->
+    <div class="resident-table-header">
+
+        <div>
+            <h2>Resident Records</h2>
+
+            <p>
+                View and manage registered barangay residents.
+            </p>
+        </div>
+
+
+        <div class="resident-tools">
+
+            <input type="text" placeholder="Search residents..." class="resident-search">
+
+            <button type="button" class="filter-btn">
+                Filter
+            </button>
+
+        </div>
+
     </div>
 
-</footer>
 
-</body>
-</html>
+    <!-- TABLE -->
+    <div class="resident-table-container">
+
+        <table class="resident-table">
+
+            <thead>
+                <tr>
+
+                    <th>Resident ID</th>
+
+                    <th>Name</th>
+
+                    <th>Gender</th>
+
+                    <th>Address</th>
+
+                    <th>Contact Number</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+                {% for resident in residents %}
+
+                <tr>
+
+                    <!-- RESIDENT ID -->
+                    <td>
+                        {{ resident.resident_id }}
+                    </td>
+
+
+                    <!-- NAME -->
+                    <td>
+
+                        {{ resident.first_name }}
+
+                        {% if resident.middle_name %}
+                        {{ resident.middle_name }}
+                        {% endif %}
+
+                        {{ resident.last_name }}
+
+                        {% if resident.suffix %}
+                        {{ resident.suffix }}
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- GENDER -->
+                    <td>
+                        {{ resident.gender }}
+                    </td>
+
+
+                    <!-- ADDRESS -->
+                    <td>
+                        {{ resident.address }}
+                    </td>
+
+
+                    <!-- CONTACT -->
+                    <td>
+                        {{ resident.contact_number }}
+                    </td>
+
+
+                    <!-- STATUS -->
+                    <td>
+
+                        {% if resident.is_active %}
+                        <span class="status-active">
+                            Active
+                        </span>
+                        {% else %}
+                        <span class="status-inactive">
+                            Inactive
+                        </span>
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- CRUD ACTIONS -->
+                    <td>
+
+                        <div class="resident-actions">
+
+                            <!-- UPDATE -->
+                            <a href="{% url 'resident_update' resident.resident_id %}" class="action-edit">
+                                Edit
+                            </a>
+
+
+                            <!-- DELETE -->
+                            <a href="{% url 'resident_delete' resident.resident_id %}" class="action-delete">
+                                Delete
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="7" class="no-residents">
+                        No residents found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
