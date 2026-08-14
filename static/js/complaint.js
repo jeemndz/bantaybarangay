@@ -11,16 +11,20 @@ function openComplaintDetails(
 ) {
 
     document.getElementById("drawerComplaintId").textContent =
-        "#CP-2024-" + String(complaintId).padStart(3, "0");
+        "#CP-" + String(complaintId).padStart(4, "0");
+
 
     document.getElementById("drawerStatus").textContent =
         status || "Under Investigation";
 
+
     document.getElementById("drawerComplainant").textContent =
         complainant || "The complainant";
 
+
     document.getElementById("drawerDescription").textContent =
         description || "No incident description available.";
+
 
     document.getElementById("timelineComplainant").textContent =
         complainant || "the complainant";
@@ -29,8 +33,10 @@ function openComplaintDetails(
     document.getElementById("complaintDrawer")
         .classList.add("active");
 
+
     document.getElementById("complaintOverlay")
         .classList.add("active");
+
 
     document.body.style.overflow = "hidden";
 }
@@ -41,21 +47,24 @@ function closeComplaintDetails() {
     document.getElementById("complaintDrawer")
         .classList.remove("active");
 
+
     document.getElementById("complaintOverlay")
         .classList.remove("active");
+
 
     document.body.style.overflow = "";
 }
 
 
-/* Close using ESC */
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
 
-    if (event.key === "Escape") {
+            closeComplaintDetails();
 
-        closeComplaintDetails();
+        }
 
     }
-
-});
+);

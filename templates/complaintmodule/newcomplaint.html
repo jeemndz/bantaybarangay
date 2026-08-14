@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+New Complaint | BantayBarangay
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/newcomplaint.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="new-complaint-page">
+
+
+    <!-- HEADER -->
+
+    <div class="new-complaint-header">
+
+        <div>
+
+            <h1>
+                New Complaint
+            </h1>
+
+            <p>
+                Submit a new community complaint or incident report.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'complaints' %}"
+            class="back-btn">
+
+            ← Back to Complaints
+
+        </a>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="complaint-form-container">
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- RESIDENT ID -->
+
+            <div class="form-group">
+
+                <label for="resident_id">
+                    Resident ID
+                </label>
+
+                <input
+                    type="number"
+                    id="resident_id"
+                    name="resident_id"
+                    placeholder="Enter resident ID"
+                    required>
+
+            </div>
+
+
+            <!-- COMPLAINT TYPE -->
+
+            <div class="form-group">
+
+                <label for="complaint_type">
+                    Complaint Category
+                </label>
+
+
+                <select
+                    id="complaint_type"
+                    name="complaint_type"
+                    required>
+
+                    <option value="">
+                        Select complaint category
+                    </option>
+
+                    <option value="Property Dispute">
+                        Property Dispute
+                    </option>
+
+                    <option value="Noise Complaint">
+                        Noise Complaint
+                    </option>
+
+                    <option value="Illegal Parking">
+                        Illegal Parking
+                    </option>
+
+                    <option value="Public Disturbance">
+                        Public Disturbance
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SUBJECT -->
+
+            <div class="form-group">
+
+                <label for="subject">
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    maxlength="255"
+                    placeholder="Enter complaint subject"
+                    required>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="6"
+                    placeholder="Describe the complaint or incident..."
+                    required></textarea>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="form-group">
+
+                <label for="location">
+                    Location
+                </label>
+
+                <textarea
+                    id="location"
+                    name="location"
+                    rows="3"
+                    placeholder="Enter the location of the incident"></textarea>
+
+            </div>
+
+
+            <!-- INCIDENT DATE -->
+
+            <div class="form-group">
+
+                <label for="incident_date">
+                    Incident Date
+                </label>
+
+                <input
+                    type="datetime-local"
+                    id="incident_date"
+                    name="incident_date">
+
+            </div>
+
+
+            <!-- PRIORITY -->
+
+            <div class="form-group">
+
+                <label for="priority">
+                    Priority
+                </label>
+
+
+                <select
+                    id="priority"
+                    name="priority"
+                    required>
+
+                    <option value="">
+                        Select priority
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="High">
+                        High
+                    </option>
+
+                    <option value="Urgent">
+                        Urgent
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+
+                <a
+                    href="{% url 'complaints' %}"
+                    class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn">
+
+                    Submit Complaint
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

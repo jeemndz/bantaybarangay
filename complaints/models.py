@@ -52,7 +52,7 @@ class Complaint(models.Model):
     updated_at = models.DateTimeField()
 
     class Meta:
-        db_table = 'complaints'
+        db_table = "complaints"
         managed = False
 
     def __str__(self):
