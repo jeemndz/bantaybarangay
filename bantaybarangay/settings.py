@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'dashboard',
     'residentmodule',
     'complaints',
+    'documents',
 ]
 
 MIDDLEWARE = [
