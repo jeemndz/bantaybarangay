@@ -1,0 +1,1549 @@
+/* =========================================
+   COMPLAINT MANAGEMENT
+========================================= */
+
+.complaint-page {
+    width: 100%;
+    color: #26332f;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.complaint-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.complaint-header h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #172f29;
+}
+
+.complaint-header p {
+    margin-top: 5px;
+    color: #718079;
+    font-size: 13px;
+}
+
+.new-complaint-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #063c34;
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.new-complaint-btn:hover {
+    background: #075447;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   FILTERS
+========================================= */
+
+.complaint-filters {
+    background: white;
+
+    border: 1px solid #dfe8e3;
+
+    border-radius: 10px;
+
+    padding: 14px 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+    min-height: 62px;
+
+    box-sizing: border-box;
+}
+
+.filter-group {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.filter-group label {
+    font-size: 13px;
+
+    color: #44554f;
+}
+
+.filter-group select {
+    height: 34px;
+
+    min-width: 135px;
+
+    border: 1px solid #d8e2dd;
+
+    border-radius: 6px;
+
+    background: white;
+
+    padding: 0 10px;
+
+    color: #43534e;
+
+    outline: none;
+}
+
+.filter-group select:focus {
+    border-color: #2f8f68;
+}
+
+.date-filter {
+    height: 34px;
+
+    padding: 0 14px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #f4f8f6;
+
+    color: #52635d;
+
+    cursor: pointer;
+}
+
+.advanced-filter {
+    margin-left: auto;
+
+    border: none;
+
+    background: transparent;
+
+    color: #53645e;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.complaint-table-container {
+    background: white;
+
+    border: 1px solid #dfe8e3;
+
+    border-radius: 11px;
+
+    overflow: hidden;
+}
+
+.complaint-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.complaint-table thead {
+    background: #064f45;
+}
+
+.complaint-table th {
+    padding: 14px 17px;
+
+    text-align: left;
+
+    color: white;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+.complaint-table td {
+    padding: 14px 17px;
+
+    border-bottom: 1px solid #edf1ef;
+
+    color: #475750;
+
+    font-size: 12px;
+}
+
+.complaint-row {
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.complaint-row:hover {
+    background: #f5faf7;
+}
+
+
+/* =========================================
+   COMPLAINANT
+========================================= */
+
+.complainant-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.complainant-avatar {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #e2f1eb;
+
+    color: #2d8163;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+}
+
+.complainant-info strong {
+    display: block;
+
+    color: #263731;
+
+    font-size: 12px;
+}
+
+.complainant-info small {
+    display: block;
+
+    color: #85918d;
+
+    font-size: 10px;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   COMPLAINT ID
+========================================= */
+
+.complaint-id {
+    color: #214f42;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.complaint-id span {
+    color: #8a9892;
+    font-weight: normal;
+}
+
+
+/* =========================================
+   COMPLAINANT
+========================================= */
+
+.complainant {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.complainant-avatar {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcefe6;
+    color: #28745a;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.complainant-name {
+    color: #26332f;
+    font-weight: 600;
+}
+
+.complainant-location {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #89958f;
+    font-size: 9px;
+}
+
+
+/* =========================================
+   CATEGORY
+========================================= */
+
+.complaint-category {
+    color: #586761;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   PRIORITY
+========================================= */
+
+.priority {
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.priority.high {
+    color: #c45a5a;
+}
+
+.priority.medium {
+    color: #9b7b3c;
+}
+
+.priority.low {
+    color: #3c8a65;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.complaint-status {
+    font-size: 10px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+}
+
+.complaint-status.new {
+    color: #298c75;
+}
+
+.complaint-status.under-investigation {
+    color: #5d786f;
+}
+
+.complaint-status.resolved {
+    color: #4d9068;
+}
+
+
+
+/* =========================================
+   ACTION
+========================================= */
+
+.action-btn {
+    border: none;
+
+    background: transparent;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    color: #56645f;
+}
+
+
+.action-btn:hover {
+    background: #edf5f1;
+    color: #1d6b52;
+}
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.empty-complaints {
+    text-align: center;
+
+    padding: 45px !important;
+
+    color: #87928e !important;
+}
+
+
+/* =========================================
+   SUMMARY CARDS
+========================================= */
+
+.complaint-summary {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-top: 16px;
+}
+
+.complaint-summary-card {
+    background: white;
+
+    border: 1px solid #e2ebe6;
+
+    border-radius: 10px;
+
+    padding: 16px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.summary-label {
+    display: block;
+
+    color: #7b8984;
+
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+.summary-value {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #26332f;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.summary-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcefe7;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   COMPLAINT DETAILS PANEL
+========================================= */
+
+.complaint-detail-panel {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+
+    width: 360px;
+    height: 100vh;
+
+    background: white;
+
+    border-left: 1px solid #dce6e1;
+
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.08);
+
+    z-index: 1000;
+
+    padding: 22px;
+
+    overflow-y: auto;
+}
+
+.detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid #e7eeeb;
+}
+
+.detail-header h2 {
+    margin: 0;
+
+    font-size: 17px;
+    color: #26332f;
+}
+
+.detail-header p {
+    margin-top: 4px;
+
+    color: #87938e;
+    font-size: 10px;
+}
+
+.detail-close {
+    border: none;
+
+    background: transparent;
+
+    color: #596a63;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   DETAIL STATUS
+========================================= */
+
+.detail-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin: 15px 0;
+
+    padding: 10px 12px;
+
+    background: #eef6f3;
+
+    border-radius: 7px;
+
+    color: #37695c;
+
+    font-size: 11px;
+}
+
+.change-status {
+    color: #1e6f56;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   DETAIL SECTIONS
+========================================= */
+
+.detail-section {
+    margin-bottom: 18px;
+}
+
+.detail-section-title {
+    margin-bottom: 8px;
+
+    color: #4c5c55;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.detail-summary {
+    padding: 12px;
+
+    background: #f7faf8;
+
+    border: 1px solid #e7eeeb;
+
+    border-radius: 8px;
+
+    color: #5b6963;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ATTACHMENTS
+========================================= */
+
+.attachments {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 7px;
+}
+
+.attachment {
+    height: 70px;
+
+    border: 1px solid #dce6e1;
+
+    border-radius: 7px;
+
+    background: #f5f8f6;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 10px;
+    color: #728079;
+}
+
+.attachment.add {
+    border-style: dashed;
+
+    background: #eef7f2;
+
+    color: #34735c;
+}
+
+
+/* =========================================
+   TIMELINE
+========================================= */
+
+.complaint-timeline {
+    position: relative;
+
+    padding-left: 18px;
+}
+
+.timeline-item {
+    position: relative;
+
+    padding-bottom: 15px;
+
+    font-size: 10px;
+
+    color: #6d7974;
+}
+
+.timeline-item::before {
+    content: "";
+
+    position: absolute;
+
+    left: -14px;
+    top: 3px;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #3b9a76;
+}
+
+.timeline-item::after {
+    content: "";
+
+    position: absolute;
+
+    left: -11px;
+    top: 10px;
+
+    width: 1px;
+    height: calc(100% - 5px);
+
+    background: #dce6e1;
+}
+
+.timeline-item:last-child::after {
+    display: none;
+}
+
+.timeline-date {
+    color: #33483f;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   OFFICER
+========================================= */
+
+.officer-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px;
+
+    background: #f6f9f7;
+
+    border-radius: 9px;
+}
+
+.officer-avatar {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #d8ece2;
+
+    color: #286b53;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.officer-name {
+    color: #35453f;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.officer-role {
+    margin-top: 2px;
+
+    color: #89958f;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   NOTES
+========================================= */
+
+.officer-notes textarea {
+    width: 100%;
+
+    min-height: 80px;
+
+    resize: vertical;
+
+    box-sizing: border-box;
+
+    padding: 10px;
+
+    border: 1px solid #dce6e1;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 10px;
+}
+
+.officer-notes textarea:focus {
+    border-color: #3a9472;
+}
+
+
+/* =========================================
+   DETAIL ACTIONS
+========================================= */
+
+.detail-actions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.detail-action-btn {
+    flex: 1;
+
+    padding: 10px;
+
+    border-radius: 7px;
+
+    border: 1px solid #2e6f5b;
+
+    background: #2e6f5b;
+
+    color: white;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.detail-action-btn.secondary {
+    background: white;
+
+    color: #31594e;
+}
+
+.detail-action-btn:hover {
+    opacity: 0.9;
+}
+
+
+/* ================================
+   COMPLAINT STATISTICS
+================================ */
+
+.complaint-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.complaint-stat-card {
+    background: #ffffff;
+    border: 1px solid #dfe8e3;
+    border-radius: 12px;
+
+    min-height: 86px;
+    padding: 16px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+/* Left side of card */
+.complaint-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.complaint-stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #65746e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.complaint-stat-value {
+    font-size: 25px;
+    font-weight: 700;
+    color: #182c27;
+    line-height: 1.1;
+}
+
+/* Icon on right */
+.complaint-stat-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    background: #e1f3eb;
+}
+
+/* Individual icon backgrounds */
+.complaint-stat-card:nth-child(1) .complaint-stat-icon {
+    background: #dff3ed;
+}
+
+.complaint-stat-card:nth-child(2) .complaint-stat-icon {
+    background: #dff3ed;
+}
+
+.complaint-stat-card:nth-child(3) .complaint-stat-icon {
+    background: #dff3ed;
+}
+
+.complaint-stat-card:nth-child(4) .complaint-stat-icon {
+    background: #dff3ed;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .complaint-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 750px) {
+
+    .complaint-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .complaint-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .complaint-filters {
+        flex-wrap: wrap;
+    }
+
+    .advanced-filter {
+        margin-left: 0;
+    }
+
+    .complaint-table-container {
+        overflow-x: auto;
+    }
+
+    .complaint-table {
+        min-width: 900px;
+    }
+}
+
+/* =========================================================
+   COMPLAINT ROW
+========================================================= */
+
+.complaint-row {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.complaint-row:hover {
+    background: #f1f8f4;
+}
+
+
+/* =========================================================
+   COMPLAINT MODAL
+========================================================= */
+
+.complaint-modal {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: flex-end;
+
+    visibility: hidden;
+    opacity: 0;
+
+    z-index: 9999;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+
+/* Active modal */
+
+.complaint-modal.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* =========================================================
+   BACKDROP
+========================================================= */
+
+.complaint-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(10, 30, 25, 0.35);
+
+    backdrop-filter: blur(2px);
+}
+
+
+/* =========================================================
+   DETAILS PANEL
+========================================================= */
+
+.complaint-modal .complaint-details {
+    position: relative;
+
+    width: 390px;
+    max-width: 92vw;
+
+    height: 100vh;
+
+    background: #f4f8f5;
+
+    box-shadow:
+        -8px 0 30px rgba(0, 0, 0, 0.15);
+
+    overflow-y: auto;
+
+    transform: translateX(100%);
+
+    transition:
+        transform 0.3s ease;
+
+    z-index: 2;
+}
+
+
+/* Slide panel in */
+
+.complaint-modal.active .complaint-details {
+    transform: translateX(0);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.complaint-modal .details-header {
+    background: #ffffff;
+
+    padding: 18px 20px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #dfe8e3;
+}
+
+.complaint-modal .details-header h2 {
+    margin: 0;
+
+    font-size: 17px;
+
+    color: #183b32;
+}
+
+.complaint-modal .details-header span {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+    color: #788782;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.complaint-modal .close-details {
+    width: 32px;
+    height: 32px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 24px;
+
+    color: #566761;
+
+    cursor: pointer;
+
+    border-radius: 7px;
+}
+
+.complaint-modal .close-details:hover {
+    background: #edf3ef;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.complaint-modal .details-status {
+    margin: 14px 16px;
+
+    padding: 11px 13px;
+
+    border-radius: 9px;
+
+    background: #e8f3ee;
+
+    border: 1px solid #d2e5dc;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.complaint-modal .details-status span {
+    font-size: 11px;
+
+    color: #477365;
+
+    font-weight: 600;
+}
+
+.complaint-modal .details-status button {
+    border: none;
+
+    background: transparent;
+
+    color: #315e50;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   DETAILS SECTION
+========================================================= */
+
+.complaint-modal .details-section {
+    padding: 0 16px;
+
+    margin-bottom: 18px;
+}
+
+.complaint-modal .details-section h3 {
+    margin-bottom: 9px;
+
+    font-size: 10px;
+
+    color: #30483f;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.complaint-modal .summary-box {
+    background: #ffffff;
+
+    border-radius: 9px;
+
+    padding: 13px;
+
+    border: 1px solid #e1e9e5;
+}
+
+.complaint-modal .summary-box p {
+    margin: 0;
+
+    color: #52635c;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   COMPLAINT INFORMATION
+========================================================= */
+
+.detail-info-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+.detail-info-item {
+    background: #ffffff;
+
+    border: 1px solid #e1e9e5;
+
+    border-radius: 8px;
+
+    padding: 10px;
+}
+
+.detail-info-item span {
+    display: block;
+
+    font-size: 9px;
+
+    color: #85928d;
+
+    margin-bottom: 4px;
+}
+
+.detail-info-item strong {
+    display: block;
+
+    font-size: 11px;
+
+    color: #33483f;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   ATTACHMENTS
+========================================================= */
+
+.complaint-modal .attachments {
+    display: flex;
+
+    gap: 8px;
+}
+
+.complaint-modal .attachment {
+    width: 82px;
+}
+
+.complaint-modal .attachment-image {
+    width: 82px;
+    height: 68px;
+
+    border-radius: 7px;
+
+    background: #e7eee9;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    border: 1px solid #d8e4de;
+}
+
+.complaint-modal .attachment small {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 8px;
+
+    color: #64736c;
+
+    text-align: center;
+}
+
+.complaint-modal .add-attachment .attachment-image {
+    border: 1px dashed #a8c9b8;
+
+    background: #e4f3e9;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.complaint-modal .timeline {
+    position: relative;
+
+    padding-left: 18px;
+}
+
+.complaint-modal .timeline::before {
+    content: "";
+
+    position: absolute;
+
+    left: 4px;
+    top: 5px;
+    bottom: 5px;
+
+    width: 1px;
+
+    background: #cddbd5;
+}
+
+.complaint-modal .timeline-item {
+    position: relative;
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.complaint-modal .timeline-dot {
+    position: absolute;
+
+    left: -18px;
+    top: 4px;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #3a9270;
+
+    border: 2px solid #e7f3ec;
+}
+
+.complaint-modal .timeline-item strong {
+    display: block;
+
+    font-size: 9px;
+
+    color: #3b5149;
+}
+
+.complaint-modal .timeline-item p {
+    margin-top: 4px;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+    color: #7a8782;
+}
+
+
+/* =========================================================
+   OFFICER CARD
+========================================================= */
+
+.complaint-modal .officer-card {
+    background: #ffffff;
+
+    border: 1px solid #e1e9e5;
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.complaint-modal .officer-avatar {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #d8ebe1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #31745c;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.complaint-modal .officer-card strong {
+    display: block;
+
+    font-size: 10px;
+
+    color: #354941;
+}
+
+.complaint-modal .officer-card small {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 8px;
+
+    color: #87928d;
+}
+
+.complaint-modal .message-btn {
+    margin-left: auto;
+
+    width: 27px;
+    height: 27px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e3f0ea;
+
+    color: #32745c;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.complaint-modal .officer-notes {
+    width: 100%;
+
+    min-height: 80px;
+
+    resize: vertical;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d7e1dc;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    padding: 10px;
+
+    font-size: 10px;
+
+    outline: none;
+}
+
+.complaint-modal .officer-notes:focus {
+    border-color: #4d987c;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.complaint-modal .details-actions {
+    position: sticky;
+
+    bottom: 0;
+
+    background: #f4f8f5;
+
+    padding: 14px 16px;
+
+    display: flex;
+
+    gap: 8px;
+
+    border-top: 1px solid #dce6e1;
+}
+
+.complaint-modal .details-actions button {
+    flex: 1;
+
+    padding: 11px;
+
+    border-radius: 7px;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.complaint-modal .mediation-btn {
+    background: #427866;
+
+    color: white;
+
+    border: none;
+}
+
+.complaint-modal .close-case-btn {
+    background: transparent;
+
+    color: #284e40;
+
+    border: 1px solid #477b68;
+}
+
+
+/* =========================================================
+   PREVENT BACKGROUND SCROLL
+========================================================= */
+
+body.complaint-modal-open {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .complaint-modal .complaint-details {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .detail-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

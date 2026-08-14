@@ -6,50 +6,54 @@ Delete Resident | BantayBarangay
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/residents.css' %}">
+<link rel="stylesheet" href="{% static 'css/resident_delete.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<div class="resident-page">
+<div class="resident-delete-page">
 
-    <div class="resident-form-card delete-card">
+    <div class="delete-card">
 
         <div class="delete-icon">
-            ⚠️
+            🗑️
         </div>
 
-        <h2>Delete Resident</h2>
+        <h1>Delete Resident?</h1>
 
         <p>
-            Are you sure you want to delete
-            <strong>
-                {{ resident.first_name }}
-                {{ resident.last_name }}
-            </strong>?
+            Are you sure you want to delete this resident?
         </p>
 
-        <p class="delete-warning">
-            This action cannot be undone.
-        </p>
+        <div class="delete-resident-name">
+            {{ resident.first_name }}
+            {% if resident.middle_name %}
+                {{ resident.middle_name }}
+            {% endif %}
+            {{ resident.last_name }}
+            {% if resident.suffix %}
+                {{ resident.suffix }}
+            {% endif %}
+        </div>
+
+        <div class="delete-warning">
+            ⚠ This action cannot be undone. The resident record will be permanently removed.
+        </div>
+
 
         <form method="POST">
 
             {% csrf_token %}
 
-            <div class="form-actions">
+            <div class="delete-actions">
 
-                <a
-                    href="{% url 'resident_list' %}"
-                    class="cancel-btn"
-                >
+                <a href="{% url 'resident_list' %}"
+                   class="delete-cancel-btn">
                     Cancel
                 </a>
 
-                <button
-                    type="submit"
-                    class="delete-resident-btn"
-                >
+                <button type="submit"
+                        class="delete-confirm-btn">
                     Delete Resident
                 </button>
 

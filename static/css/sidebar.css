@@ -1,156 +1,273 @@
+/* =========================================
+   SIDEBAR
+========================================= */
+
 .sidebar {
-
     position: fixed;
-
-    left: 0;
     top: 0;
+    left: 0;
 
-    width: 260px;
+    width: 245px;
     height: 100vh;
 
-    background: #073b32;
-
-    color: white;
+    background: #063f35;
+    color: #ffffff;
 
     display: flex;
     flex-direction: column;
 
-    padding: 22px 16px;
+    padding: 24px 16px;
+
+    box-sizing: border-box;
 
     z-index: 1000;
 }
 
 
-/* LOGO */
+/* =========================================
+   LOGO
+========================================= */
 
 .sidebar-logo {
-
     display: flex;
-
     align-items: center;
 
     gap: 12px;
 
-    padding: 5px 10px 25px;
+    padding: 8px 10px 22px;
 
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+    margin-bottom: 28px;
 }
 
 .sidebar-logo img {
-
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 
     object-fit: contain;
+
+    flex-shrink: 0;
 }
 
 .sidebar-logo h2 {
+    margin: 0;
+
+    color: #ffffff;
 
     font-size: 18px;
-
     font-weight: 700;
 
-    color: white;
+    line-height: 1.2;
 }
 
 .sidebar-logo span {
-
     display: block;
 
+    margin-top: 4px;
+
+    color: #b8d6cf;
+
     font-size: 10px;
-
-    color: #a9c4bc;
-
-    margin-top: 3px;
 }
 
 
-/* NAVIGATION */
+/* =========================================
+   NAVIGATION
+========================================= */
 
 .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 24px;
 
     flex: 1;
-
-    padding-top: 25px;
 
     overflow-y: auto;
 }
 
+
+/* =========================================
+   NAVIGATION SECTION
+========================================= */
+
 .nav-section {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.nav-title {
+    display: block;
+
+    margin: 0 10px 8px;
+
+    color: #8ebbb2;
 
     font-size: 10px;
-
     font-weight: 700;
-
-    color: #87a99f;
 
     letter-spacing: 1px;
 
-    padding: 15px 12px 8px;
+    text-transform: uppercase;
 }
 
 
+/* =========================================
+   NAV ITEMS
+========================================= */
+
 .nav-item {
-
     display: flex;
-
     align-items: center;
 
-    gap: 12px;
+    width: 100%;
 
-    padding: 12px;
+    box-sizing: border-box;
 
-    margin: 3px 0;
+    padding: 11px 12px;
 
     border-radius: 8px;
 
-    color: #d6e5e1;
+    color: #d7ebe7;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    gap: 11px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.nav-item span {
+    width: 18px;
+
+    text-align: center;
 
     font-size: 14px;
 
-    transition: 0.2s;
+    flex-shrink: 0;
 }
 
+
+/* HOVER */
+
 .nav-item:hover {
+    background: rgba(255, 255, 255, 0.08);
 
-    background: rgba(255,255,255,0.08);
+    color: #ffffff;
 
-    color: white;
+    text-decoration: none;
 }
 
 
 /* ACTIVE */
 
 .nav-item.active {
+    background: #2f9b70;
 
-    background: #2f8f68;
-
-    color: white;
+    color: #ffffff;
 
     font-weight: 600;
 }
 
 
-.nav-icon {
-
-    width: 22px;
-
-    text-align: center;
-
-    font-size: 17px;
-}
-
-
-/* BOTTOM */
+/* =========================================
+   SIDEBAR BOTTOM
+========================================= */
 
 .sidebar-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
 
-    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 18px;
 
-    padding-top: 12px;
+    margin-top: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
 }
 
-.logout {
 
-    color: #ffb7b7;
+/* LOGOUT */
+
+.sidebar-bottom .logout {
+    color: #ffb2aa;
+}
+
+.sidebar-bottom .logout:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #ffd1cc;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+
+    border-radius: 10px;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.main-content {
+    margin-left: 230px;
+
+    min-height: 100vh;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main-content {
+        margin-left: 210px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        width: 0;
+
+        padding: 0;
+
+        overflow: hidden;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
 }

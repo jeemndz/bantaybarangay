@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'login',
     'dashboard',
     'residentmodule',
+    'complaints',
 ]
 
 MIDDLEWARE = [

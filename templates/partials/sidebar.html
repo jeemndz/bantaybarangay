@@ -2,12 +2,12 @@
 
 <aside class="sidebar">
 
-    <!-- Logo -->
+    <!-- LOGO -->
     <div class="sidebar-logo">
 
         <img
             src="{% static 'images/logo.png' %}"
-            alt="BantayBarangay Logo"
+            alt="BantayBarangay"
         >
 
         <div>
@@ -18,111 +18,130 @@
     </div>
 
 
-    <!-- Navigation -->
+    <!-- NAVIGATION -->
     <nav class="sidebar-nav">
 
+        <!-- MAIN -->
         <div class="nav-section">
-            MAIN
+
+            <span class="nav-title">
+                Main
+            </span>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>▦</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="{% url 'complaint_list' %}"
+               class="nav-item">
+
+                <span>⚠</span>
+
+                Complaints
+
+            </a>
+
+
+            <a href="{% url 'resident_list' %}"
+               class="nav-item">
+
+                <span>♟</span>
+
+                Residents
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>▤</span>
+
+                Documents
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>◇</span>
+
+                Blockchain Logs
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>▥</span>
+
+                Reports & Analytics
+
+            </a>
+
         </div>
 
 
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">▦</span>
-
-            <span>Dashboard</span>
-
-        </a>
-
-
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">⚠</span>
-
-            <span>Complaints</span>
-
-        </a>
-
-
-        <!-- Residents -->
-        <a href="{% url 'resident_list' %}" class="nav-item active">
-
-            <span class="nav-icon">👥</span>
-
-            <span>Residents</span>
-
-        </a>
-
-
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">▤</span>
-
-            <span>Documents</span>
-
-        </a>
-
-
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">◈</span>
-
-            <span>Blockchain Logs</span>
-
-        </a>
-
-
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">▥</span>
-
-            <span>Reports & Analytics</span>
-
-        </a>
-
-
+        <!-- SYSTEM -->
         <div class="nav-section">
-            SYSTEM
+
+            <span class="nav-title">
+                System
+            </span>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>⚙</span>
+
+                Settings
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                <span>♙</span>
+
+                User Management
+
+            </a>
+
         </div>
-
-
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">⚙</span>
-
-            <span>Settings</span>
-
-        </a>
-
-
-        <a href="#" class="nav-item">
-
-            <span class="nav-icon">♙</span>
-
-            <span>User Management</span>
-
-        </a>
 
     </nav>
 
 
-    <!-- Bottom -->
+    <!-- BOTTOM -->
     <div class="sidebar-bottom">
 
-        <a href="#" class="nav-item">
+        <a href="#"
+           class="nav-item">
 
-            <span class="nav-icon">?</span>
+            <span>?</span>
 
-            <span>Help & Support</span>
+            Help & Support
 
         </a>
 
 
-        <a href="#" class="nav-item logout">
+        <a href="#"
+           class="nav-item logout">
 
-            <span class="nav-icon">↪</span>
+            <span>↪</span>
 
-            <span>Sign Out</span>
+            Sign Out
 
         </a>
 

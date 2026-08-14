@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Complaint Management | BantayBarangay
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/complaints.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="complaint-page">
+
+    <!-- PAGE HEADER -->
+    <div class="complaint-header">
+        <div>
+            <h1>Complaint Management</h1>
+            <p>Oversee and resolve community grievances with blockchain integrity.</p>
+        </div>
+
+        <a href="#" class="new-complaint-btn">
+            + New Complaint
+        </a>
+    </div>
+
+
+    <!-- STATISTICS CARDS -->
+    <div class="complaint-stats">
+
+        <div class="complaint-stat-card">
+            <div class="stat-content">
+                <span>Total Filed</span>
+                <h2>{{ total_complaints|default:"0" }}</h2>
+            </div>
+
+            <div class="stat-icon">
+                ▣
+            </div>
+        </div>
+
+
+        <div class="complaint-stat-card">
+            <div class="stat-content">
+                <span>Pending Action</span>
+                <h2>{{ pending_complaints|default:"0" }}</h2>
+            </div>
+
+            <div class="stat-icon">
+                ◷
+            </div>
+        </div>
+
+
+        <div class="complaint-stat-card">
+            <div class="stat-content">
+                <span>Resolved This Month</span>
+                <h2>{{ resolved_percentage|default:"0" }}%</h2>
+            </div>
+
+            <div class="stat-icon">
+                ✓
+            </div>
+        </div>
+
+
+        <div class="complaint-stat-card">
+            <div class="stat-content">
+                <span>Avg. Time to Close</span>
+                <h2>{{ average_close_days|default:"0" }} Days</h2>
+            </div>
+
+            <div class="stat-icon">
+                ◷
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- FILTERS -->
+    <div class="complaint-filters">
+
+        <div class="filter-group">
+
+            <label>Category:</label>
+
+            <select>
+                <option>All Types</option>
+                <option>Property Dispute</option>
+                <option>Noise Complaint</option>
+                <option>Illegal Parking</option>
+            </select>
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label>Status:</label>
+
+            <select>
+                <option>All Status</option>
+                <option>New</option>
+                <option>Under Investigation</option>
+                <option>Resolved</option>
+            </select>
+
+        </div>
+
+
+        <button class="date-filter">
+            📅 Last 30 Days
+        </button>
+
+
+        <button class="advanced-filter">
+            ☰ Advanced Filters
+        </button>
+
+    </div>
+
+
+    <!-- COMPLAINT TABLE -->
+    <div class="complaint-table-container">
+
+        <table class="complaint-table">
+
+            <thead>
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Complainant</th>
+                    <th>Category</th>
+                    <th>Filed Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for complaint in complaints %}
+
+                <tr class="complaint-row"
+                    onclick="openComplaintDetails('{{ complaint.complaint_id }}')">
+
+                    <td>
+                        <span class="complaint-id">
+                            #CP-{{ complaint.complaint_id|stringformat:"04d" }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="complainant-info">
+
+                            <div class="complainant-avatar">
+                                {{ complaint.complainant|first|upper }}
+                            </div>
+
+                            <div>
+                                <strong>
+                                    {{ complaint.complainant }}
+                                </strong>
+
+                                <small>
+                                    {{ complaint.location }}
+                                </small>
+                            </div>
+
+                        </div>
+                    </td>
+
+                    <td>
+                        {{ complaint.category }}
+                    </td>
+
+                    <td>
+                        {{ complaint.incident_date|date:"M d, Y" }}
+                    </td>
+
+                    <td>
+                        <span class="priority {{ complaint.priority|lower }}">
+                            {{ complaint.priority }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="complaint-status {{ complaint.status|lower }}">
+                            {{ complaint.status }}
+                        </span>
+                    </td>
+
+                    <td onclick="event.stopPropagation();">
+
+                        <button class="action-btn">
+                            ⋮
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7" class="empty-complaints">
+                        No complaints found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
