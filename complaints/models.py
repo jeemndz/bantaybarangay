@@ -3,10 +3,14 @@ from django.db import models
 
 class Complaint(models.Model):
 
+    complaint_id = models.AutoField(
+        primary_key=True
+    )
+
     resident_id = models.IntegerField()
 
     complaint_type = models.CharField(
-        max_length=255
+        max_length=100
     )
 
     subject = models.CharField(
@@ -16,33 +20,40 @@ class Complaint(models.Model):
     description = models.TextField()
 
     location = models.TextField(
-        blank=True,
-        null=True
+        null=True,
+        blank=True
     )
 
     incident_date = models.DateTimeField(
-        blank=True,
-        null=True
+        null=True,
+        blank=True
     )
 
     priority = models.CharField(
-        max_length=50
+        max_length=20
     )
 
     status = models.CharField(
-        max_length=100,
-        default="New"
+        max_length=30
     )
 
-    submitted_at = models.DateTimeField(
-        auto_now_add=False
+    assigned_official = models.IntegerField(
+        null=True,
+        blank=True
     )
 
-    updated_at = models.DateTimeField(
-        auto_now=False
+    resolution = models.TextField(
+        null=True,
+        blank=True
     )
 
+    submitted_at = models.DateTimeField()
+
+    updated_at = models.DateTimeField()
+
+    class Meta:
+        db_table = "complaints"
+        managed = False
 
     def __str__(self):
-
-        return self.subject
+        return f"Complaint #{self.complaint_id}"
