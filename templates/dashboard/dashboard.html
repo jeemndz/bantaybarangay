@@ -1,0 +1,458 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <!-- =========================
+         DASHBOARD HEADER
+    ========================== -->
+    <div class="dashboard-header">
+        <div>
+            <h1>Barangay Governance Overview</h1>
+            <p>Real-time transparency and incident monitoring</p>
+        </div>
+
+        <div class="dashboard-actions">
+            <button class="dashboard-btn">
+                <span>▣</span>
+                Last 30 Days
+            </button>
+
+            <button class="dashboard-btn">
+                <span>⇩</span>
+                Export PDF
+            </button>
+        </div>
+    </div>
+
+
+    <!-- =========================
+         SUMMARY CARDS
+    ========================== -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon">▣</div>
+                <span class="stat-change positive">+12%</span>
+            </div>
+
+            <div class="stat-label">TOTAL COMPLAINTS</div>
+            <div class="stat-value">1,284</div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon">▣</div>
+                <span class="stat-change negative">-4%</span>
+            </div>
+
+            <div class="stat-label">ACTIVE CASES</div>
+            <div class="stat-value">42</div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon">△</div>
+                <span class="stat-change neutral">Steady</span>
+            </div>
+
+            <div class="stat-label">INCIDENT REPORTS</div>
+            <div class="stat-value">156</div>
+        </div>
+
+
+        <div class="stat-card highlighted">
+            <div class="stat-top">
+                <div class="stat-icon verified-icon">✓</div>
+                <span class="stat-change positive">+100%</span>
+            </div>
+
+            <div class="stat-label">VERIFIED DOCS</div>
+            <div class="stat-value">3,012</div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon">♙</div>
+                <span class="stat-change neutral">+31</span>
+            </div>
+
+            <div class="stat-label">RESIDENTS</div>
+            <div class="stat-value">8,920</div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon">⚖</div>
+                <span class="stat-change neutral">8 New</span>
+            </div>
+
+            <div class="stat-label">PENDING HEARINGS</div>
+            <div class="stat-value">14</div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN DASHBOARD GRID
+    ========================== -->
+    <div class="dashboard-grid">
+
+        <!-- MONTHLY COMPLAINT TRENDS -->
+        <div class="dashboard-card trends-card">
+
+            <div class="card-header">
+                <h2>Monthly Complaint Trends</h2>
+
+                <div class="chart-legend">
+                    <span>
+                        <i class="legend-dot current"></i>
+                        2024
+                    </span>
+
+                    <span>
+                        <i class="legend-dot previous"></i>
+                        2023
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="bar-chart">
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 52%;"></div>
+                    <span>JAN</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 68%;"></div>
+                    <span>FEB</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 46%;"></div>
+                    <span>MAR</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 75%;"></div>
+                    <span>APR</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 92%;"></div>
+                    <span>MAY</span>
+                </div>
+
+                <div class="bar-column active">
+                    <div class="bar" style="height: 60%;"></div>
+                    <span>JUN</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 64%;"></div>
+                    <span>JUL</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 80%;"></div>
+                    <span>AUG</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 72%;"></div>
+                    <span>SEP</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 42%;"></div>
+                    <span>OCT</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 52%;"></div>
+                    <span>NOV</span>
+                </div>
+
+                <div class="bar-column">
+                    <div class="bar" style="height: 68%;"></div>
+                    <span>DEC</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             INCIDENT CATEGORIES
+        ========================== -->
+        <div class="dashboard-card category-card">
+
+            <div class="card-header">
+                <h2>Incident Categories</h2>
+            </div>
+
+            <div class="donut-wrapper">
+
+                <div class="donut-chart">
+                    <div class="donut-center">
+                        <strong>156</strong>
+                        <span>TOTAL</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="category-legend">
+
+                <div>
+                    <span class="category-dot one"></span>
+                    Public Nuisance (45%)
+                </div>
+
+                <div>
+                    <span class="category-dot two"></span>
+                    Theft (20%)
+                </div>
+
+                <div>
+                    <span class="category-dot three"></span>
+                    Dispute (25%)
+                </div>
+
+                <div>
+                    <span class="category-dot four"></span>
+                    Other (10%)
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             RECENT COMPLAINTS
+        ========================== -->
+        <div class="dashboard-card complaints-card">
+
+            <div class="card-header">
+                <h2>Recent Complaints</h2>
+
+                <a href="{% url 'complaints' %}" class="view-all">
+                    View All →
+                </a>
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="dashboard-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Complainant</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>#BB-2024-001</td>
+                            <td class="person-name">Maria Santos</td>
+                            <td>Noise Complaint</td>
+                            <td>
+                                <span class="status pending">
+                                    PENDING
+                                </span>
+                            </td>
+                            <td>Oct 12, 2024</td>
+                            <td class="action-eye">◉</td>
+                        </tr>
+
+
+                        <tr>
+                            <td>#BB-2024-002</td>
+                            <td class="person-name">Roberto Cruz</td>
+                            <td>Land Dispute</td>
+                            <td>
+                                <span class="status approved">
+                                    APPROVED
+                                </span>
+                            </td>
+                            <td>Oct 11, 2024</td>
+                            <td class="action-eye">◉</td>
+                        </tr>
+
+
+                        <tr>
+                            <td>#BB-2024-003</td>
+                            <td class="person-name">Liza Gomez</td>
+                            <td>Illegal Parking</td>
+                            <td>
+                                <span class="status rejected">
+                                    REJECTED
+                                </span>
+                            </td>
+                            <td>Oct 10, 2024</td>
+                            <td class="action-eye">◉</td>
+                        </tr>
+
+
+                        <tr>
+                            <td>#BB-2024-004</td>
+                            <td class="person-name">Antonio P.</td>
+                            <td>Waste Mgmt</td>
+                            <td>
+                                <span class="status resolved">
+                                    RESOLVED
+                                </span>
+                            </td>
+                            <td>Oct 09, 2024</td>
+                            <td class="action-eye">◉</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CHAIN LOGS
+        ========================== -->
+        <div class="dashboard-card chain-card">
+
+            <div class="card-header">
+                <h2>
+                    <span class="chain-title-icon">✧</span>
+                    Chain Logs
+                </h2>
+
+                <span class="block-number">
+                    Block #82910
+                </span>
+            </div>
+
+
+            <div class="chain-list">
+
+                <div class="chain-item">
+
+                    <div class="chain-icon">✓</div>
+
+                    <div class="chain-info">
+                        <strong>New Doc Hashed</strong>
+                        <p>0x71C...a4f2 verified at 10:22</p>
+                    </div>
+
+                    <span class="chain-status">VERIFIED</span>
+
+                </div>
+
+
+                <div class="chain-item">
+
+                    <div class="chain-icon">✓</div>
+
+                    <div class="chain-info">
+                        <strong>Complaint Signed</strong>
+                        <p>#BB-2024-001 Admin_V4</p>
+                    </div>
+
+                    <span class="chain-status">VERIFIED</span>
+
+                </div>
+
+
+                <div class="chain-item">
+
+                    <div class="chain-icon">✓</div>
+
+                    <div class="chain-info">
+                        <strong>Admin Re-Auth</strong>
+                        <p>Session valid for 2 hours.</p>
+                    </div>
+
+                    <span class="chain-status">VERIFIED</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             QUICK ALERTS
+        ========================== -->
+        <div class="dashboard-card alerts-card">
+
+            <div class="card-header">
+                <h2>Quick Alerts</h2>
+            </div>
+
+
+            <div class="alert-list">
+
+                <div class="alert-item">
+                    <strong>New Resident Registration</strong>
+                    <span>3 pending approvals in District 04.</span>
+                </div>
+
+
+                <div class="alert-item">
+                    <strong>Hearing Rescheduled</strong>
+                    <span>Case #82 moved to Oct 20th.</span>
+                </div>
+
+
+                <div class="alert-item">
+                    <strong>System Update</strong>
+                    <span>Version 2.4.0 blockchain patch applied.</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="dashboard-footer">
+
+        <span>
+            © 2026 BantayBarangay. Secure Blockchain Governance.
+        </span>
+
+        <div>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+
+    </footer>
+
+</div>
+
+{% endblock %}
