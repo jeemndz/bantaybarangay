@@ -1,0 +1,350 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registration | BantayBarangay</title>
+
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+</head>
+
+<body>
+
+<div class="registration-page">
+
+    <!-- ========================================= -->
+    <!-- LEFT SIDE -->
+    <!-- ========================================= -->
+
+    <section class="registration-left">
+
+        <!-- Background pattern -->
+        <div class="network-pattern"></div>
+
+        <div class="left-content">
+
+            <!-- LOGO -->
+            <div class="brand">
+
+                <div class="brand-logo">
+
+                    <div class="cube">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+                <div class="brand-text">
+                    <h1>BANTAY</h1>
+                    <span>Barangay</span>
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION CARD -->
+
+            <div class="community-card">
+
+                <div class="secure-badge">
+                    <span class="secure-icon">⚙</span>
+                    SECURE PROTOCOL ACTIVE
+                </div>
+
+                <h2>
+                    Join the Community
+                </h2>
+
+                <p>
+                    Establish your secure blockchain identity to participate
+                    in local governance, access public ledgers, and engage
+                    with your community securely.
+                </p>
+
+
+                <div class="benefits">
+
+                    <div class="benefit-item">
+                        <span class="check-icon">✓</span>
+                        <span>Cryptographically secured data</span>
+                    </div>
+
+                    <div class="benefit-item">
+                        <span class="check-icon">✓</span>
+                        <span>Transparent local governance</span>
+                    </div>
+
+                    <div class="benefit-item">
+                        <span class="check-icon">✓</span>
+                        <span>Direct access to public services</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="left-footer">
+            © 2026 BantayBarangay. Secured by Blockchain Technology.
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- RIGHT SIDE -->
+    <!-- ========================================= -->
+
+    <section class="registration-right">
+
+        <div class="registration-container">
+
+
+            <!-- HEADER -->
+
+            <div class="registration-header">
+
+                <h2>Registration</h2>
+
+                <p>
+                    Please fill in your details to establish your civic identity.
+                </p>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-section">
+
+                <div class="progress-top">
+
+                    <strong>
+                        Step 1 of 4
+                    </strong>
+
+                    <span>
+                        Personal Information
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div class="progress-fill"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form method="POST" action="">
+
+                {% csrf_token %}
+
+                <div class="form-section">
+
+                    <h3>
+                        Personal Information
+                    </h3>
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group full-width">
+
+                        <label for="full_name">
+                            Full Name as per Valid ID
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">♙</span>
+
+                            <input
+                                type="text"
+                                id="full_name"
+                                name="full_name"
+                                placeholder="Juan Dela Cruz"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATE + GENDER -->
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="birth_date">
+                                Date of Birth
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">▣</span>
+
+                                <input
+                                    type="date"
+                                    id="birth_date"
+                                    name="birth_date"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="gender">
+                                Gender
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper select-wrapper">
+
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Gender
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                                <span class="select-arrow">
+                                   ⌄
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CIVIL STATUS -->
+
+                    <div class="form-group full-width">
+
+                        <label for="civil_status">
+                            Civil Status
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper select-wrapper">
+
+                            <select
+                                id="civil_status"
+                                name="civil_status"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Status
+                                </option>
+
+                                <option value="Single">
+                                    Single
+                                </option>
+
+                                <option value="Married">
+                                    Married
+                                </option>
+
+                                <option value="Widowed">
+                                    Widowed
+                                </option>
+
+                                <option value="Separated">
+                                    Separated
+                                </option>
+
+                            </select>
+
+                            <span class="select-arrow">
+                               ⌄
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NEXT BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="next-button"
+                    >
+
+                        <span>
+                            Proceed to Contact Details
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- LOGIN -->
+
+            <div class="login-link">
+
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Log in here
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

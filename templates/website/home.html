@@ -1,0 +1,560 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BantayBarangay | Resident Portal</title>
+
+    <link rel="stylesheet"
+          href="{% static '/css/website.css' %}">
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="brand">
+
+            <div class="brand-icon">
+                🛡
+            </div>
+
+            <span>BantayBarangay</span>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="/" class="active">
+                Home
+            </a>
+
+            <a href="#">
+                Submit Complaint
+            </a>
+
+            <a href="#">
+                Track Complaint
+            </a>
+
+            <a href="#">
+                Verify Document
+            </a>
+
+            <a href="#">
+                About
+            </a>
+
+            <a href="#">
+                Contact
+            </a>
+
+        </nav>
+
+
+        <a href="{% url 'login' %}" class="login-btn">
+            Login
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-container">
+
+        <div class="hero-content">
+
+            <h1>
+                Your Voice Matters.
+                <span>Build a Safer Community Together.</span>
+            </h1>
+
+            <p>
+                Report concerns, track resolutions, and access
+                barangay services securely with blockchain-verified
+                transparency. We empower every resident to
+                participate in civic governance.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="#" class="primary-btn">
+                    Submit a Complaint
+                </a>
+
+                <a href="#services" class="secondary-btn">
+                    Learn More
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-image">
+
+            <div class="hero-placeholder">
+
+                <div class="block block-1"></div>
+                <div class="block block-2"></div>
+                <div class="block block-3"></div>
+
+                <div class="shield">
+                    🛡
+                </div>
+
+                <span>
+                    Secure Barangay
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     QUICK SERVICES
+========================= -->
+
+<section class="quick-services">
+
+    <div class="quick-grid">
+
+
+        <div class="quick-card">
+
+            <div class="quick-icon">
+                ⚖
+            </div>
+
+            <h3>
+                Submit Complaint
+            </h3>
+
+            <p>
+                Formalize your concerns through
+                our secure digital filing system.
+            </p>
+
+        </div>
+
+
+        <div class="quick-card">
+
+            <div class="quick-icon">
+                ⚠
+            </div>
+
+            <h3>
+                Report Incident
+            </h3>
+
+            <p>
+                Immediate reporting for safety
+                hazards or community incidents.
+            </p>
+
+        </div>
+
+
+        <div class="quick-card">
+
+            <div class="quick-icon">
+                📈
+            </div>
+
+            <h3>
+                Track Status
+            </h3>
+
+            <p>
+                Real-time updates on the progress
+                of your submitted reports.
+            </p>
+
+        </div>
+
+
+        <div class="quick-card">
+
+            <div class="quick-icon">
+                ✓
+            </div>
+
+            <h3>
+                Verify Documents
+            </h3>
+
+            <p>
+                Blockchain-verified document
+                authentication for official use.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ANNOUNCEMENTS
+========================= -->
+
+<section class="announcements">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                UPDATES
+            </span>
+
+            <h2>
+                Recent Announcements
+            </h2>
+
+        </div>
+
+        <a href="#">
+            View All News →
+        </a>
+
+    </div>
+
+
+    <div class="announcement-grid">
+
+
+        <article class="announcement-card">
+
+            <div class="announcement-image health">
+                HEALTH
+            </div>
+
+            <div class="announcement-content">
+
+                <span>
+                    October 24, 2023
+                </span>
+
+                <h3>
+                    Quarterly Health Mission:
+                    Free Medical Checkups for Seniors
+                </h3>
+
+                <p>
+                    Join us this weekend for our comprehensive
+                    health mission focused on providing diagnostic
+                    services...
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="announcement-card">
+
+            <div class="announcement-image digital">
+                DIGITAL
+            </div>
+
+            <div class="announcement-content">
+
+                <span>
+                    October 21, 2023
+                </span>
+
+                <h3>
+                    BantayBarangay Portal Digital
+                    Literacy Workshop
+                </h3>
+
+                <p>
+                    Our team will be conducting a hands-on
+                    session on how to utilize the new
+                    blockchain-based...
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="announcement-card">
+
+            <div class="announcement-image infrastructure">
+                INFRASTRUCTURE
+            </div>
+
+            <div class="announcement-content">
+
+                <span>
+                    October 18, 2023
+                </span>
+
+                <h3>
+                    Smart Lighting Initiative:
+                    Enhancing Safety in Zone 4
+                </h3>
+
+                <p>
+                    New motion-activated LED lighting systems
+                    are being installed across the North sector
+                    to improve...
+                </p>
+
+            </div>
+
+        </article>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SERVICES
+========================= -->
+
+<section id="services" class="services">
+
+    <div class="services-heading">
+
+        <h2>
+            Our Services
+        </h2>
+
+        <p>
+            Access essential government documentation
+            and community support services with just
+            a few clicks.
+        </p>
+
+    </div>
+
+
+    <div class="service-grid">
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h3>
+                    Barangay Clearance
+                </h3>
+
+                <p>
+                    Quick processing for residency and
+                    employment requirements with
+                    digital copies available.
+                </p>
+
+                <a href="#">
+                    Apply Now →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🏪
+            </div>
+
+            <div>
+
+                <h3>
+                    Business Permits
+                </h3>
+
+                <p>
+                    Streamlined application and renewal
+                    for local micro and small enterprises
+                    within the zone.
+                </p>
+
+                <a href="#">
+                    Start Application →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🏥
+            </div>
+
+            <div>
+
+                <h3>
+                    Health Services
+                </h3>
+
+                <p>
+                    Book appointments for vaccinations,
+                    dental checkups, and general health
+                    consultations.
+                </p>
+
+                <a href="#">
+                    Schedule Appointment →
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+
+        <div class="footer-brand">
+
+            <h3>
+                🛡 BantayBarangay
+            </h3>
+
+            <p>
+                Empowering communities through secure,
+                transparent, and accessible digital
+                governance.
+            </p>
+
+            <div class="socials">
+                🌐 &nbsp; ✉ &nbsp; ☎
+            </div>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                Quick Links
+            </h4>
+
+            <a href="#">
+                Services
+            </a>
+
+            <a href="#">
+                Track
+            </a>
+
+            <a href="#">
+                Verify
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                Legal
+            </h4>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms of Service
+            </a>
+
+            <a href="#">
+                Accessibility
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                Support
+            </h4>
+
+            <a href="#">
+                Help Center
+            </a>
+
+            <a href="#">
+                FAQ
+            </a>
+
+            <a href="#">
+                Contact Us
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 BantayBarangay.
+        Secure Resident Services Portal.
+
+    </div>
+
+</footer>
+
+
+</body>
+</html>

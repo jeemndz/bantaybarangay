@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'residentmodule',
     'complaints',
     'documents',
+    'website',
+    'registration',
 ]
 
 MIDDLEWARE = [
