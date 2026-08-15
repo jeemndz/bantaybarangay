@@ -1,0 +1,170 @@
+/* =========================================
+   RESIDENT DELETE CONFIRMATION
+========================================= */
+
+.resident-delete-page {
+    min-height: 500px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 70px;
+}
+
+/* DELETE CARD */
+
+.delete-card {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border: 1px solid #e4ebe7;
+    border-radius: 14px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(31, 63, 50, 0.08);
+}
+
+/* ICON */
+
+.delete-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #fff1f1;
+
+    font-size: 28px;
+}
+
+/* TITLE */
+
+.delete-card h1 {
+    margin: 0 0 10px;
+    font-size: 23px;
+    color: #26332f;
+}
+
+/* DESCRIPTION */
+
+.delete-card p {
+    margin: 0 auto 8px;
+    color: #718079;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* RESIDENT NAME */
+
+.delete-resident-name {
+    display: inline-block;
+    margin: 8px 0 18px;
+
+    padding: 9px 15px;
+
+    border-radius: 7px;
+
+    background: #f4f7f5;
+    color: #26332f;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* WARNING */
+
+.delete-warning {
+    background: #fff8e8;
+    border: 1px solid #f1dfaa;
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-bottom: 24px;
+
+    color: #8a6a20;
+    font-size: 12px;
+}
+
+/* ACTIONS */
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* CANCEL */
+
+.delete-cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 20px;
+
+    border: 1px solid #d8e2de;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #596761;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.delete-cancel-btn:hover {
+    background: #f5f8f6;
+}
+
+/* DELETE BUTTON */
+
+.delete-confirm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #d9534f;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.delete-confirm-btn:hover {
+    background: #c43f3b;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+
+    .resident-delete-page {
+        padding: 30px 15px;
+    }
+
+    .delete-card {
+        padding: 24px 20px;
+    }
+
+    .delete-actions {
+        flex-direction: column-reverse;
+    }
+
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        width: 100%;
+    }
+}
