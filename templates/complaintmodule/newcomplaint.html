@@ -20,7 +20,9 @@ New Complaint | BantayBarangay
 <div class="new-complaint-page">
 
 
+    <!-- ========================================= -->
     <!-- HEADER -->
+    <!-- ========================================= -->
 
     <div class="new-complaint-header">
 
@@ -49,22 +51,27 @@ New Complaint | BantayBarangay
 
 
 
+    <!-- ========================================= -->
     <!-- FORM -->
+    <!-- ========================================= -->
 
     <div class="complaint-form-container">
+
 
         <form method="POST">
 
             {% csrf_token %}
 
 
-            <!-- RESIDENT -->
+
+            <!-- ========================================= -->
+            <!-- RESIDENT ID -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
                 <label for="resident_id">
                     Resident
-                    <span class="required">*</span>
                 </label>
 
 
@@ -80,60 +87,50 @@ New Complaint | BantayBarangay
 
                     {% for resident in residents %}
 
-                    <option value="{{ resident.resident_id }}">
+                        <option value="{{ resident.resident_id }}">
 
-                        {{ resident.resident_id }}
-                        -
-                        {{ resident.first_name }}
+                            {{ resident.resident_id }}
+                            -
+                            {{ resident.first_name }}
 
-                        {% if resident.middle_name %}
-                            {{ resident.middle_name }}
-                        {% endif %}
+                            {% if resident.middle_name %}
+                                {{ resident.middle_name }}
+                            {% endif %}
 
-                        {{ resident.last_name }}
+                            {{ resident.last_name }}
 
-                        {% if resident.suffix %}
-                            {{ resident.suffix }}
-                        {% endif %}
+                            {% if resident.suffix %}
+                                {{ resident.suffix }}
+                            {% endif %}
 
-                    </option>
+                        </option>
 
                     {% empty %}
 
-                    <option value="" disabled>
-                        No residents registered
-                    </option>
+                        <option value="">
+                            No residents available
+                        </option>
 
                     {% endfor %}
 
                 </select>
 
-
-                {% if residents %}
-
                 <small class="form-help">
-                    Select the resident submitting this complaint.
+                    Select an existing resident from the list.
                 </small>
-
-                {% else %}
-
-                <small class="form-help error-text">
-                    No residents are currently registered.
-                </small>
-
-                {% endif %}
 
             </div>
 
 
 
+            <!-- ========================================= -->
             <!-- COMPLAINT CATEGORY -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
                 <label for="complaint_type">
                     Complaint Category
-                    <span class="required">*</span>
                 </label>
 
 
@@ -146,21 +143,26 @@ New Complaint | BantayBarangay
                         Select complaint category
                     </option>
 
+
                     <option value="Property Dispute">
                         Property Dispute
                     </option>
+
 
                     <option value="Noise Complaint">
                         Noise Complaint
                     </option>
 
+
                     <option value="Illegal Parking">
                         Illegal Parking
                     </option>
 
+
                     <option value="Public Disturbance">
                         Public Disturbance
                     </option>
+
 
                     <option value="Other">
                         Other
@@ -172,13 +174,44 @@ New Complaint | BantayBarangay
 
 
 
+            <!-- ========================================= -->
+            <!-- OTHER COMPLAINT CATEGORY -->
+            <!-- ========================================= -->
+
+            <div
+                class="form-group"
+                id="other-category-group"
+                style="display: none;">
+
+                <label for="other_category">
+                    Specify Complaint Category
+                </label>
+
+
+                <input
+                    type="text"
+                    id="other_category"
+                    name="other_category"
+                    maxlength="255"
+                    placeholder="Enter complaint category">
+
+
+                <small class="form-help">
+                    Please specify the type of complaint.
+                </small>
+
+            </div>
+
+
+
+            <!-- ========================================= -->
             <!-- SUBJECT -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
                 <label for="subject">
                     Subject
-                    <span class="required">*</span>
                 </label>
 
 
@@ -194,13 +227,14 @@ New Complaint | BantayBarangay
 
 
 
+            <!-- ========================================= -->
             <!-- DESCRIPTION -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
                 <label for="description">
                     Description
-                    <span class="required">*</span>
                 </label>
 
 
@@ -215,7 +249,9 @@ New Complaint | BantayBarangay
 
 
 
+            <!-- ========================================= -->
             <!-- LOCATION -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
@@ -234,7 +270,9 @@ New Complaint | BantayBarangay
 
 
 
+            <!-- ========================================= -->
             <!-- INCIDENT DATE -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
@@ -252,13 +290,14 @@ New Complaint | BantayBarangay
 
 
 
+            <!-- ========================================= -->
             <!-- PRIORITY -->
+            <!-- ========================================= -->
 
             <div class="form-group">
 
                 <label for="priority">
                     Priority
-                    <span class="required">*</span>
                 </label>
 
 
@@ -271,17 +310,21 @@ New Complaint | BantayBarangay
                         Select priority
                     </option>
 
+
                     <option value="Low">
                         Low
                     </option>
+
 
                     <option value="Medium">
                         Medium
                     </option>
 
+
                     <option value="High">
                         High
                     </option>
+
 
                     <option value="Urgent">
                         Urgent
@@ -293,9 +336,12 @@ New Complaint | BantayBarangay
 
 
 
+            <!-- ========================================= -->
             <!-- BUTTONS -->
+            <!-- ========================================= -->
 
             <div class="form-actions">
+
 
                 <a
                     href="{% url 'complaints' %}"
@@ -319,8 +365,79 @@ New Complaint | BantayBarangay
 
         </form>
 
+
     </div>
 
+
 </div>
+
+
+
+<!-- ========================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const complaintType =
+        document.getElementById("complaint_type");
+
+    const otherCategoryGroup =
+        document.getElementById("other-category-group");
+
+    const otherCategoryInput =
+        document.getElementById("other_category");
+
+
+    complaintType.addEventListener("change", function () {
+
+        if (this.value === "Other") {
+
+            /*
+             * Show the custom category field
+             */
+            otherCategoryGroup.style.display = "block";
+
+
+            /*
+             * Make the field required
+             */
+            otherCategoryInput.required = true;
+
+
+            /*
+             * Focus the field
+             */
+            otherCategoryInput.focus();
+
+        } else {
+
+            /*
+             * Hide the custom category field
+             */
+            otherCategoryGroup.style.display = "none";
+
+
+            /*
+             * Remove required status
+             */
+            otherCategoryInput.required = false;
+
+
+            /*
+             * Clear previous value
+             */
+            otherCategoryInput.value = "";
+
+        }
+
+    });
+
+});
+
+</script>
+
 
 {% endblock %}

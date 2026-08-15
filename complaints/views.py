@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from .models import Complaint
@@ -46,28 +46,31 @@ def complaints(request):
 
 def new_complaint(request):
 
-    # Get all existing residents
+    # Get all existing residents for the dropdown
     residents = Resident.objects.all().order_by("resident_id")
 
     if request.method == "POST":
 
         resident_id = request.POST.get("resident_id")
         complaint_type = request.POST.get("complaint_type")
+        other_category = request.POST.get("other_category")
         subject = request.POST.get("subject")
         description = request.POST.get("description")
         location = request.POST.get("location")
         incident_date = request.POST.get("incident_date")
         priority = request.POST.get("priority")
 
-        # Get the selected resident
-        resident = get_object_or_404(
-            Resident,
-            resident_id=resident_id
-        )
+        # If "Other" is selected,
+        # use the custom category entered by the user.
+        if complaint_type == "Other":
 
-        # Create complaint
+            if other_category:
+                complaint_type = other_category.strip()
+            else:
+                complaint_type = "Other"
+
         Complaint.objects.create(
-            resident=resident,
+            resident_id=resident_id,
             complaint_type=complaint_type,
             subject=subject,
             description=description,
