@@ -8,10 +8,8 @@ def complaints(request):
 
     complaints_list = Complaint.objects.all().order_by("-submitted_at")
 
-    # Total complaints
     total_complaints = complaints_list.count()
 
-    # Pending complaints
     pending_complaints = complaints_list.filter(
         status__in=[
             "New",
@@ -19,12 +17,10 @@ def complaints(request):
         ]
     ).count()
 
-    # Resolved complaints
     resolved_complaints = complaints_list.filter(
         status="Resolved"
     ).count()
 
-    # Resolved percentage
     if total_complaints > 0:
         resolved_percentage = round(
             (resolved_complaints / total_complaints) * 100
