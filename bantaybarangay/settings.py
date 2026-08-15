@@ -31,7 +31,7 @@ DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = ["bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net"]
 CSRF_TRUSTED_ORIGINS = [
-    "bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net",
+    "https://bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net",
 ]
 
 # Application definition
