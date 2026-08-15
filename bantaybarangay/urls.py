@@ -23,6 +23,6 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('registration/', include('registration.urls')),
     path('complaints/', include('complaints.urls')),
-    path('documents/', include('documents.urls')),
+    path("documents/", include("documents.urls")),
     path('', include('website.urls')),
 ]
