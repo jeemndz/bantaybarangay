@@ -29,8 +29,15 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = ["bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net",
+]
+
 CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
     "https://bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net",
 ]
 
