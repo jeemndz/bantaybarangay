@@ -5,11 +5,15 @@
 New Complaint | BantayBarangay
 {% endblock %}
 
+
 {% block extra_css %}
+
 <link
     rel="stylesheet"
     href="{% static 'css/newcomplaint.css' %}">
+
 {% endblock %}
+
 
 {% block content %}
 
@@ -44,40 +48,92 @@ New Complaint | BantayBarangay
     </div>
 
 
+
     <!-- FORM -->
 
     <div class="complaint-form-container">
-
 
         <form method="POST">
 
             {% csrf_token %}
 
 
-            <!-- RESIDENT ID -->
+            <!-- RESIDENT -->
 
             <div class="form-group">
 
                 <label for="resident_id">
-                    Resident ID
+                    Resident
+                    <span class="required">*</span>
                 </label>
 
-                <input
-                    type="number"
+
+                <select
                     id="resident_id"
                     name="resident_id"
-                    placeholder="Enter resident ID"
                     required>
+
+                    <option value="">
+                        Select resident
+                    </option>
+
+
+                    {% for resident in residents %}
+
+                    <option value="{{ resident.resident_id }}">
+
+                        {{ resident.resident_id }}
+                        -
+                        {{ resident.first_name }}
+
+                        {% if resident.middle_name %}
+                            {{ resident.middle_name }}
+                        {% endif %}
+
+                        {{ resident.last_name }}
+
+                        {% if resident.suffix %}
+                            {{ resident.suffix }}
+                        {% endif %}
+
+                    </option>
+
+                    {% empty %}
+
+                    <option value="" disabled>
+                        No residents registered
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                {% if residents %}
+
+                <small class="form-help">
+                    Select the resident submitting this complaint.
+                </small>
+
+                {% else %}
+
+                <small class="form-help error-text">
+                    No residents are currently registered.
+                </small>
+
+                {% endif %}
 
             </div>
 
 
-            <!-- COMPLAINT TYPE -->
+
+            <!-- COMPLAINT CATEGORY -->
 
             <div class="form-group">
 
                 <label for="complaint_type">
                     Complaint Category
+                    <span class="required">*</span>
                 </label>
 
 
@@ -115,13 +171,16 @@ New Complaint | BantayBarangay
             </div>
 
 
+
             <!-- SUBJECT -->
 
             <div class="form-group">
 
                 <label for="subject">
                     Subject
+                    <span class="required">*</span>
                 </label>
+
 
                 <input
                     type="text"
@@ -134,13 +193,16 @@ New Complaint | BantayBarangay
             </div>
 
 
+
             <!-- DESCRIPTION -->
 
             <div class="form-group">
 
                 <label for="description">
                     Description
+                    <span class="required">*</span>
                 </label>
+
 
                 <textarea
                     id="description"
@@ -152,6 +214,7 @@ New Complaint | BantayBarangay
             </div>
 
 
+
             <!-- LOCATION -->
 
             <div class="form-group">
@@ -159,6 +222,7 @@ New Complaint | BantayBarangay
                 <label for="location">
                     Location
                 </label>
+
 
                 <textarea
                     id="location"
@@ -169,6 +233,7 @@ New Complaint | BantayBarangay
             </div>
 
 
+
             <!-- INCIDENT DATE -->
 
             <div class="form-group">
@@ -176,6 +241,7 @@ New Complaint | BantayBarangay
                 <label for="incident_date">
                     Incident Date
                 </label>
+
 
                 <input
                     type="datetime-local"
@@ -185,12 +251,14 @@ New Complaint | BantayBarangay
             </div>
 
 
+
             <!-- PRIORITY -->
 
             <div class="form-group">
 
                 <label for="priority">
                     Priority
+                    <span class="required">*</span>
                 </label>
 
 
@@ -224,10 +292,10 @@ New Complaint | BantayBarangay
             </div>
 
 
+
             <!-- BUTTONS -->
 
             <div class="form-actions">
-
 
                 <a
                     href="{% url 'complaints' %}"
@@ -247,6 +315,7 @@ New Complaint | BantayBarangay
                 </button>
 
             </div>
+
 
         </form>
 

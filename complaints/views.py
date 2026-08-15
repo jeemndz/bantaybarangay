@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from .models import Complaint
+from residentmodule.models import Resident
 
 
 def complaints(request):
@@ -45,6 +46,9 @@ def complaints(request):
 
 def new_complaint(request):
 
+    # Get all existing residents
+    residents = Resident.objects.all().order_by("resident_id")
+
     if request.method == "POST":
 
         resident_id = request.POST.get("resident_id")
@@ -55,8 +59,15 @@ def new_complaint(request):
         incident_date = request.POST.get("incident_date")
         priority = request.POST.get("priority")
 
+        # Get the selected resident
+        resident = get_object_or_404(
+            Resident,
+            resident_id=resident_id
+        )
+
+        # Create complaint
         Complaint.objects.create(
-            resident_id=resident_id,
+            resident=resident,
             complaint_type=complaint_type,
             subject=subject,
             description=description,
@@ -70,7 +81,12 @@ def new_complaint(request):
 
         return redirect("complaints")
 
+    context = {
+        "residents": residents,
+    }
+
     return render(
         request,
-        "complaintmodule/newcomplaint.html"
+        "complaintmodule/newcomplaint.html",
+        context
     )
