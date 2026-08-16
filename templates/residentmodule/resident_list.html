@@ -13,7 +13,10 @@ Resident Management | BantayBarangay
 
 <div class="resident-page">
 
+    <!-- ===================================================== -->
     <!-- PAGE HEADER -->
+    <!-- ===================================================== -->
+
     <div class="resident-header">
 
         <div>
@@ -32,72 +35,106 @@ Resident Management | BantayBarangay
     </div>
 
 
+    <!-- ===================================================== -->
     <!-- STAT CARDS -->
+    <!-- ===================================================== -->
+
     <div class="resident-stats">
 
         <!-- TOTAL RESIDENTS -->
         <div class="resident-stat-card">
-            <div class="stat-icon">👥</div>
+
+            <div class="stat-icon">
+                👥
+            </div>
 
             <div>
                 <span>Total Residents</span>
                 <h2>{{ total_residents|default:"0" }}</h2>
             </div>
+
         </div>
 
 
         <!-- HOUSEHOLDS -->
         <div class="resident-stat-card">
-            <div class="stat-icon">🏠</div>
+
+            <div class="stat-icon">
+                🏠
+            </div>
 
             <div>
                 <span>Households</span>
                 <h2>{{ total_households|default:"0" }}</h2>
             </div>
+
         </div>
 
 
         <!-- SENIOR CITIZENS -->
         <div class="resident-stat-card">
-            <div class="stat-icon">⭐</div>
+
+            <div class="stat-icon">
+                ⭐
+            </div>
 
             <div>
                 <span>Senior Citizens</span>
                 <h2>{{ senior_citizens|default:"0" }}</h2>
             </div>
+
         </div>
 
 
         <!-- PWD -->
         <div class="resident-stat-card">
-            <div class="stat-icon">♿</div>
+
+            <div class="stat-icon">
+                ♿
+            </div>
 
             <div>
                 <span>PWD Residents</span>
                 <h2>{{ pwd_residents|default:"0" }}</h2>
             </div>
+
         </div>
 
     </div>
 
 
-    <!-- TABLE HEADER -->
+
+    <!-- ===================================================== -->
+    <!-- RESIDENT RECORDS HEADER -->
+    <!-- ===================================================== -->
+
     <div class="resident-table-header">
 
         <div>
-            <h2>Resident Records</h2>
+
+            <h2>
+                Resident Records
+            </h2>
 
             <p>
                 View and manage registered barangay residents.
             </p>
+
         </div>
 
 
         <div class="resident-tools">
 
-            <input type="text" placeholder="Search residents..." class="resident-search">
+            <input
+                type="text"
+                placeholder="Search residents..."
+                class="resident-search"
+            >
 
-            <button type="button" class="filter-btn">
+            <button
+                type="button"
+                class="filter-btn"
+            >
                 Filter
             </button>
 
@@ -106,29 +143,49 @@ Resident Management | BantayBarangay
     </div>
 
 
-    <!-- TABLE -->
+
+    <!-- ===================================================== -->
+    <!-- RESIDENT RECORDS TABLE -->
+    <!-- ===================================================== -->
+
     <div class="resident-table-container">
 
         <table class="resident-table">
 
             <thead>
+
                 <tr>
 
-                    <th>Resident ID</th>
+                    <th>
+                        Resident ID
+                    </th>
 
-                    <th>Name</th>
+                    <th>
+                        Name
+                    </th>
 
-                    <th>Gender</th>
+                    <th>
+                        Gender
+                    </th>
 
-                    <th>Address</th>
+                    <th>
+                        Address
+                    </th>
 
-                    <th>Contact Number</th>
+                    <th>
+                        Contact Number
+                    </th>
 
-                    <th>Status</th>
+                    <th>
+                        Status
+                    </th>
 
-                    <th>Actions</th>
+                    <th>
+                        Actions
+                    </th>
 
                 </tr>
+
             </thead>
 
 
@@ -139,76 +196,103 @@ Resident Management | BantayBarangay
                 <tr>
 
                     <!-- RESIDENT ID -->
+
                     <td>
                         {{ resident.resident_id }}
                     </td>
 
 
                     <!-- NAME -->
+
                     <td>
 
                         {{ resident.first_name }}
 
                         {% if resident.middle_name %}
-                        {{ resident.middle_name }}
+                            {{ resident.middle_name }}
                         {% endif %}
 
                         {{ resident.last_name }}
 
                         {% if resident.suffix %}
-                        {{ resident.suffix }}
+                            {{ resident.suffix }}
                         {% endif %}
 
                     </td>
 
 
                     <!-- GENDER -->
+
                     <td>
                         {{ resident.gender }}
                     </td>
 
 
                     <!-- ADDRESS -->
+
                     <td>
                         {{ resident.address }}
                     </td>
 
 
                     <!-- CONTACT -->
+
                     <td>
                         {{ resident.contact_number }}
                     </td>
 
 
                     <!-- STATUS -->
+
                     <td>
 
-                        {% if resident.is_active %}
-                        <span class="status-active">
-                            Active
-                        </span>
+                        {% if resident.verification_status == "Verified" %}
+
+                            <span class="status-active">
+                                Verified
+                            </span>
+
+                        {% elif resident.verification_status == "Pending" %}
+
+                            <span class="status-pending">
+                                Pending
+                            </span>
+
+                        {% elif resident.verification_status == "Rejected" %}
+
+                            <span class="status-inactive">
+                                Rejected
+                            </span>
+
                         {% else %}
-                        <span class="status-inactive">
-                            Inactive
-                        </span>
+
+                            <span class="status-inactive">
+                                {{ resident.verification_status }}
+                            </span>
+
                         {% endif %}
 
                     </td>
 
 
-                    <!-- CRUD ACTIONS -->
+                    <!-- ACTIONS -->
+
                     <td>
 
                         <div class="resident-actions">
 
-                            <!-- UPDATE -->
-                            <a href="{% url 'resident_update' resident.resident_id %}" class="action-edit">
+                            <a
+                                href="{% url 'resident_update' resident.resident_id %}"
+                                class="action-edit"
+                            >
                                 Edit
                             </a>
 
 
-                            <!-- DELETE -->
-                            <a href="{% url 'resident_delete' resident.resident_id %}" class="action-delete">
+                            <a
+                                href="{% url 'resident_delete' resident.resident_id %}"
+                                class="action-delete"
+                            >
                                 Delete
                             </a>
 
@@ -223,7 +307,10 @@ Resident Management | BantayBarangay
 
                 <tr>
 
-                    <td colspan="7" class="no-residents">
+                    <td
+                        colspan="7"
+                        class="no-residents"
+                    >
                         No residents found.
                     </td>
 
@@ -234,6 +321,296 @@ Resident Management | BantayBarangay
             </tbody>
 
         </table>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- VERIFICATION REQUESTS SECTION -->
+    <!-- ===================================================== -->
+
+    <div class="verification-section">
+
+
+        <!-- VERIFICATION HEADER -->
+
+        <div class="resident-table-header verification-header">
+
+            <div>
+
+                <h2>
+                    Resident Verification
+                </h2>
+
+                <p>
+                    Review and verify residents who registered
+                    through the BantayBarangay system.
+                </p>
+
+            </div>
+
+
+            <div class="verification-summary">
+
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- VERIFICATION TABLE -->
+        <!-- ================================================= -->
+
+        <div class="resident-table-container verification-table-container">
+
+            <table class="resident-table verification-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Resident ID
+                        </th>
+
+                        <th>
+                            Applicant
+                        </th>
+
+                        <th>
+                            Contact
+                        </th>
+
+                        <th>
+                            Address
+                        </th>
+
+                        <th>
+                            Submitted
+                        </th>
+
+                        <th>
+                            Verification Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for resident in verification_residents %}
+
+                    <tr>
+
+
+                        <!-- RESIDENT ID -->
+
+                        <td>
+
+                            <strong>
+                                #{{ resident.resident_id }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- APPLICANT -->
+
+                        <td>
+
+                            <div class="verification-applicant">
+
+                                <div class="verification-avatar">
+                                    {{ resident.first_name|first|upper }}
+                                </div>
+
+                                <div>
+
+                                    <strong>
+
+                                        {{ resident.first_name }}
+
+                                        {% if resident.middle_name %}
+                                            {{ resident.middle_name }}
+                                        {% endif %}
+
+                                        {{ resident.last_name }}
+
+                                        {% if resident.suffix %}
+                                            {{ resident.suffix }}
+                                        {% endif %}
+
+                                    </strong>
+
+                                    <small>
+                                        {{ resident.email }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- CONTACT -->
+
+                        <td>
+
+                            {{ resident.contact_number }}
+
+                        </td>
+
+
+                        <!-- ADDRESS -->
+
+                        <td>
+
+                            {{ resident.barangay }},
+                            {{ resident.municipality_city }}
+
+                        </td>
+
+
+                        <!-- SUBMITTED -->
+
+                        <td>
+
+                            {% if resident.created_at %}
+
+                                {{ resident.created_at|date:"M d, Y" }}
+
+                                <small class="date-time">
+                                    {{ resident.created_at|date:"h:i A" }}
+                                </small>
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- VERIFICATION STATUS -->
+
+                        <td>
+
+                            {% if resident.verification_status == "Pending" %}
+
+                                <span class="verification-badge pending">
+                                    Pending Review
+                                </span>
+
+                            {% elif resident.verification_status == "Verified" %}
+
+                                <span class="verification-badge verified">
+                                    ✓ Verified
+                                </span>
+
+                            {% elif resident.verification_status == "Rejected" %}
+
+                                <span class="verification-badge rejected">
+                                    ✕ Rejected
+                                </span>
+
+                            {% else %}
+
+                                <span class="verification-badge pending">
+                                    {{ resident.verification_status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- VERIFICATION ACTION -->
+
+                        <td>
+
+                            {% if resident.verification_status == "Pending" %}
+
+                            <div class="verification-actions">
+
+                                <a
+                                    href="{% url 'resident_verify' resident.resident_id %}"
+                                    class="verify-button"
+                                >
+                                    Review
+                                </a>
+
+                            </div>
+
+                            {% elif resident.verification_status == "Verified" %}
+
+                                <span class="verified-label">
+                                    Completed
+                                </span>
+
+                            {% else %}
+
+                                <a
+                                    href="{% url 'resident_verify' resident.resident_id %}"
+                                    class="action-edit"
+                                >
+                                    Review
+                                </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="no-residents verification-empty"
+                        >
+
+                            <div class="empty-verification">
+
+                                <div class="empty-icon"> </div>
+
+                                <strong>
+                                    No Pending Verifications
+                                </strong>
+
+                                <p>
+                                    There are currently no resident
+                                    registrations waiting for verification.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 

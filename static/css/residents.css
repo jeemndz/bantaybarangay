@@ -1124,4 +1124,251 @@ select.form-input {
     }
 }
 
+
+/* =====================================================
+   VERIFICATION SECTION
+===================================================== */
+
+.verification-section {
+    margin-top: 50px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e3ebe7;
+    box-shadow: 0 4px 16px rgba(25, 72, 60, 0.06);
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   VERIFICATION HEADER
+===================================================== */
+
+.verification-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 24px 26px;
+
+    border-bottom: 1px solid #e6eeea;
+    margin-top: 10px;
+}
+
+.verification-table-header h2 {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    color: #173f37;
+}
+
+.verification-table-header p {
+    margin: 6px 0 0;
+
+    font-size: 13px;
+
+    color: #78908a;
+}
+
+
+/* =====================================================
+   TABLE CONTAINER
+===================================================== */
+
+.verification-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.verification-table {
+    width: 100%;
+    min-width: 1050px;
+
+    border-collapse: collapse;
+}
+
+.verification-table thead {
+    background: #f4faf6;
+}
+
+.verification-table th {
+    padding: 14px 16px;
+
+    text-align: left;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    color: #60766f;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    border-bottom: 1px solid #e3ebe7;
+}
+
+.verification-table td {
+    padding: 16px;
+
+    font-size: 13px;
+
+    color: #405952;
+
+    border-bottom: 1px solid #edf2ef;
+
+    vertical-align: middle;
+}
+
+.verification-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.verification-table tbody tr:hover {
+    background: #f8fcf9;
+}
+
+
+/* =====================================================
+   DOCUMENT LINKS
+===================================================== */
+
+.document-link {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border-radius: 6px;
+
+    background: #e8f5ed;
+
+    color: #17604e;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.document-link:hover {
+    background: #d8eee1;
+}
+
+.document-missing {
+    color: #a0aaa6;
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   VERIFICATION STATUS
+===================================================== */
+
+.verification-pending,
+.verification-approved,
+.verification-rejected {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.verification-pending {
+    background: #fff5d8;
+    color: #92711b;
+}
+
+.verification-approved {
+    background: #e1f5e8;
+    color: #26704f;
+}
+
+.verification-rejected {
+    background: #fde8e8;
+    color: #a23c3c;
+}
+
+
+/* =====================================================
+   REVIEW BUTTON
+===================================================== */
+
+.verification-actions {
+    display: flex;
+    align-items: center;
+}
+
+.review-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 13px;
+
+    border-radius: 6px;
+
+    background: #063f35;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.review-button:hover {
+    background: #0a5a4c;
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.no-verifications {
+    padding: 40px !important;
+
+    text-align: center;
+
+    color: #8b9d97 !important;
+
+    font-size: 13px !important;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .verification-table-header {
+        padding: 20px;
+    }
+
+    .verification-table th,
+    .verification-table td {
+        padding: 12px;
+    }
+
+}
+
 }
