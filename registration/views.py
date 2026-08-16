@@ -3,9 +3,13 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib import messages
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password
+from django.db import transaction
+
+from .models import User, Resident
+
 import os
-
-
+import random
 # =====================================================
 # STEP 1 — PERSONAL INFORMATION
 # =====================================================
@@ -379,12 +383,11 @@ def step4_review(request):
     if not registration_data:
         return redirect("registration")
 
-
     if request.method == "POST":
 
-        # -------------------------------------------------
+        # ---------------------------------------------
         # CHECK CONSENTS
-        # -------------------------------------------------
+        # ---------------------------------------------
 
         if not request.POST.get("truth_declaration"):
             return render(
@@ -396,7 +399,6 @@ def step4_review(request):
                 }
             )
 
-
         if not request.POST.get("data_consent"):
             return render(
                 request,
@@ -407,10 +409,53 @@ def step4_review(request):
                 }
             )
 
+        # ---------------------------------------------
+        # CHECK USERNAME
+        # ---------------------------------------------
 
-        # -------------------------------------------------
+        if User.objects.filter(
+            username=registration_data["username"]
+        ).exists():
+
+            return render(
+                request,
+                "registration/step4_review.html",
+                {
+                    "registration_data": registration_data,
+                    "error": "Username already exists."
+                }
+            )
+
+        # ---------------------------------------------
+        # CHECK EMAIL
+        # ---------------------------------------------
+
+        email = registration_data.get("email")
+
+        # ---------------------------------------------
+        # SPLIT FULL NAME
+        # ---------------------------------------------
+
+        full_name = registration_data.get(
+            "full_name",
+            ""
+        ).strip()
+
+        name_parts = full_name.split()
+
+        first_name = name_parts[0] if len(name_parts) >= 1 else ""
+
+        last_name = name_parts[-1] if len(name_parts) >= 2 else ""
+
+        middle_name = (
+            " ".join(name_parts[1:-1])
+            if len(name_parts) >= 3
+            else None
+        )
+
+        # ---------------------------------------------
         # GENERATE APPLICATION REFERENCE
-        # -------------------------------------------------
+        # ---------------------------------------------
 
         year = timezone.now().year
 
@@ -423,13 +468,107 @@ def step4_review(request):
             f"BB-{year}-{random_number}"
         )
 
+        # ---------------------------------------------
+        # SAVE TO DATABASE
+        # ---------------------------------------------
 
-        # -------------------------------------------------
-        # SAVE SUBMISSION DATA
-        #
-        # Later, this is where you can create the
-        # Resident/Application database record.
-        # -------------------------------------------------
+        try:
+
+            with transaction.atomic():
+
+                # CREATE USER
+                user = User.objects.create(
+                    username=registration_data["username"],
+
+                    password_hash=make_password(
+                        registration_data["password"]
+                    ),
+
+                    email=email,
+
+                    role="Resident",
+
+                    is_active=True
+                )
+
+                # CREATE RESIDENT
+                Resident.objects.create(
+
+                    user_id=user.user_id,
+
+                    first_name=first_name,
+
+                    middle_name=middle_name,
+
+                    last_name=last_name,
+
+                    birth_date=registration_data[
+                        "birth_date"
+                    ],
+
+                    gender=registration_data[
+                        "gender"
+                    ],
+
+                    civil_status=registration_data[
+                        "civil_status"
+                    ],
+
+                    address=(
+                        f'{registration_data.get("house_block_lot", "")}, '
+                        f'{registration_data.get("street", "")}, '
+                        f'{registration_data.get("barangay", "")}, '
+                        f'{registration_data.get("municipality", "")}, '
+                        f'{registration_data.get("province", "")}'
+                    ),
+
+                    contact_number=registration_data[
+                        "mobile_number"
+                    ],
+
+                    house_block_lot=registration_data.get(
+                        "house_block_lot"
+                    ),
+
+                    street_purok_sitio=registration_data.get(
+                        "street"
+                    ),
+
+                    province=registration_data[
+                        "province"
+                    ],
+
+                    municipality_city=registration_data[
+                        "municipality"
+                    ],
+
+                    barangay=registration_data[
+                        "barangay"
+                    ],
+
+                    zip_code=registration_data.get(
+                        "zip_code"
+                    ),
+
+                    verification_status="Pending",
+
+                    email=email
+                )
+
+        except Exception as e:
+
+            return render(
+                request,
+                "registration/step4_review.html",
+                {
+                    "registration_data": registration_data,
+                    "error": f"Registration failed: {str(e)}"
+                }
+            )
+
+        # ---------------------------------------------
+        # SAVE APPLICATION INFORMATION
+        # ---------------------------------------------
 
         registration_data["application_reference"] = (
             application_reference
@@ -443,20 +582,17 @@ def step4_review(request):
             "Pending Verification"
         )
 
-
-        # Save updated session
-
         request.session["registration_data"] = (
             registration_data
         )
 
+        request.session.modified = True
 
-        # -------------------------------------------------
-        # REDIRECT TO SUCCESS PAGE
-        # -------------------------------------------------
+        # ---------------------------------------------
+        # GO TO SUCCESS PAGE
+        # ---------------------------------------------
 
         return redirect("registration_success")
-
 
     return render(
         request,
