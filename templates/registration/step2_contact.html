@@ -7,19 +7,11 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Contact & Address | BantayBarangay
-    </title>
+    <title>Contact & Address | BantayBarangay</title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'css/registration.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
 
 </head>
 
@@ -42,16 +34,18 @@
         <div class="left-content">
 
 
+            <!-- ================================================= -->
+            <!-- BRAND -->
+            <!-- ================================================= -->
+
             <div class="brand">
 
                 <div class="brand-logo">
 
                     <div class="cube">
-
                         <span></span>
                         <span></span>
                         <span></span>
-
                     </div>
 
                 </div>
@@ -70,6 +64,10 @@
             </div>
 
 
+
+            <!-- ================================================= -->
+            <!-- COMMUNITY CARD -->
+            <!-- ================================================= -->
 
             <div class="community-card">
 
@@ -98,7 +96,6 @@
                     governance ecosystem.
 
                 </p>
-
 
 
                 <div class="benefits">
@@ -153,6 +150,10 @@
 
 
 
+        <!-- ================================================= -->
+        <!-- FOOTER -->
+        <!-- ================================================= -->
+
         <div class="left-footer">
 
             © 2026 BantayBarangay.
@@ -175,12 +176,14 @@
         <div class="registration-container">
 
 
+            <!-- ================================================= -->
             <!-- HEADER -->
+            <!-- ================================================= -->
 
             <div class="registration-header">
 
                 <h2>
-                    Contact & Address
+                    Registration
                 </h2>
 
                 <p>
@@ -214,9 +217,7 @@
 
                 <div class="progress-bar">
 
-                    <div
-                        class="progress-fill step-two"
-                    ></div>
+                    <div class="progress-fill step-two"></div>
 
                 </div>
 
@@ -226,15 +227,27 @@
 
 
             <!-- ================================================= -->
+            <!-- ERROR MESSAGE -->
+            <!-- ================================================= -->
+
+            {% if error %}
+
+            <div class="error-message">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
             <!-- FORM -->
             <!-- ================================================= -->
 
-            <form
-                method="POST"
-                action=""
-            >
+            <form method="POST" action="{% url 'step2_contact' %}">
 
                 {% csrf_token %}
+
 
 
                 <!-- ================================================= -->
@@ -252,7 +265,9 @@
                     <div class="form-row">
 
 
-                        <!-- MOBILE -->
+                        <!-- ================================================= -->
+                        <!-- MOBILE NUMBER -->
+                        <!-- ================================================= -->
 
                         <div class="form-group">
 
@@ -292,7 +307,9 @@
 
 
 
+                        <!-- ================================================= -->
                         <!-- EMAIL -->
+                        <!-- ================================================= -->
 
                         <div class="form-group">
 
@@ -346,10 +363,14 @@
 
 
 
+                    <!-- ================================================= -->
                     <!-- HOUSE + STREET -->
+                    <!-- ================================================= -->
 
                     <div class="form-row">
 
+
+                        <!-- HOUSE / BLOCK / LOT -->
 
                         <div class="form-group">
 
@@ -380,6 +401,8 @@
                         </div>
 
 
+
+                        <!-- STREET / PUROK / SITIO -->
 
                         <div class="form-group">
 
@@ -414,10 +437,16 @@
 
 
 
+                    <!-- ================================================= -->
                     <!-- PROVINCE + MUNICIPALITY -->
+                    <!-- ================================================= -->
 
                     <div class="form-row">
 
+
+                        <!-- ================================================= -->
+                        <!-- PROVINCE -->
+                        <!-- ================================================= -->
 
                         <div class="form-group">
 
@@ -443,23 +472,26 @@
                                         Select Province
                                     </option>
 
+
                                     <option
                                         value="Bulacan"
                                         {% if registration_data.province == "Bulacan" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         Bulacan
                                     </option>
 
+
                                     <option
                                         value="Metro Manila"
                                         {% if registration_data.province == "Metro Manila" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         Metro Manila
                                     </option>
+
 
                                 </select>
 
@@ -471,9 +503,14 @@
 
                             </div>
 
+
                         </div>
 
 
+
+                        <!-- ================================================= -->
+                        <!-- MUNICIPALITY / CITY -->
+                        <!-- ================================================= -->
 
                         <div class="form-group">
 
@@ -499,23 +536,26 @@
                                         Select Municipality / City
                                     </option>
 
+
                                     <option
                                         value="San Ildefonso"
                                         {% if registration_data.municipality == "San Ildefonso" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         San Ildefonso
                                     </option>
 
+
                                     <option
                                         value="San Rafael"
                                         {% if registration_data.municipality == "San Rafael" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         San Rafael
                                     </option>
+
 
                                 </select>
 
@@ -527,6 +567,7 @@
 
                             </div>
 
+
                         </div>
 
 
@@ -534,9 +575,12 @@
 
 
 
+                    <!-- ================================================= -->
                     <!-- BARANGAY -->
+                    <!-- ================================================= -->
 
                     <div class="form-group full-width">
+
 
                         <label for="barangay">
 
@@ -560,17 +604,26 @@
                                     Select Barangay
                                 </option>
 
+
                                 <option
                                     value="Barangay San Antonio"
+                                    {% if registration_data.barangay == "Barangay San Antonio" %}
+                                        selected
+                                    {% endif %}
                                 >
                                     Barangay San Antonio
                                 </option>
 
+
                                 <option
                                     value="Barangay Poblacion"
+                                    {% if registration_data.barangay == "Barangay Poblacion" %}
+                                        selected
+                                    {% endif %}
                                 >
                                     Barangay Poblacion
                                 </option>
+
 
                             </select>
 
@@ -582,11 +635,14 @@
 
                         </div>
 
+
                     </div>
 
 
 
+                    <!-- ================================================= -->
                     <!-- ZIP CODE -->
+                    <!-- ================================================= -->
 
                     <div class="form-group">
 
@@ -617,13 +673,16 @@
 
 
 
-                    <!-- INFORMATION -->
+                    <!-- ================================================= -->
+                    <!-- INFORMATION BOX -->
+                    <!-- ================================================= -->
 
                     <div class="info-box">
 
                         <span>
                             ⓘ
                         </span>
+
 
                         <p>
 
@@ -647,6 +706,8 @@
                 <div class="step-navigation">
 
 
+                    <!-- BACK BUTTON -->
+
                     <a
                         href="{% url 'registration' %}"
                         class="back-button"
@@ -665,19 +726,17 @@
 
 
 
+                    <!-- NEXT BUTTON -->
+
                     <button
                         type="submit"
                         class="next-button"
                     >
 
                         <span>
-
-                            Proceed to Identity
-                            <br>
+                            Proceed to Identity<br>
                             Verification
-
                         </span>
-
 
                         <span class="arrow">
                             →
@@ -693,7 +752,9 @@
 
 
 
+            <!-- ================================================= -->
             <!-- LOGIN -->
+            <!-- ================================================= -->
 
             <div class="login-link">
 

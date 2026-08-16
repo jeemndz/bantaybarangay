@@ -13,7 +13,7 @@ class User(models.Model):
     )
 
     password_hash = models.CharField(
-        max_length=255
+        max_length=255      
     )
 
     email = models.CharField(

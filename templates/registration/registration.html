@@ -7,10 +7,7 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Registration | BantayBarangay</title>
 
@@ -174,7 +171,9 @@
         <div class="registration-container">
 
 
+            <!-- ================================================= -->
             <!-- HEADER -->
+            <!-- ================================================= -->
 
             <div class="registration-header">
 
@@ -230,17 +229,38 @@
 
             {% if error %}
 
-            <div class="error-message">{{ error }}</div>
+                <div class="error-message">
+                    {{ error }}
+                </div>
+
             {% endif %}
+
+
 
             <!-- ================================================= -->
             <!-- FORM -->
             <!-- ================================================= -->
 
-            <form method="POST" action="{% url 'step2_contact' %}" >
+            <!-- IMPORTANT:
+                 POST TO registration VIEW.
+                 registration VIEW saves Step 1
+                 and redirects to Step 2.
+            -->
+
+            <form
+                method="POST"
+                action="{% url 'registration' %}"
+            >
+
                 {% csrf_token %}
+
+
                 <div class="form-section">
 
+
+                    <!-- ================================================= -->
+                    <!-- PERSONAL INFORMATION -->
+                    <!-- ================================================= -->
 
                     <h3>
                         Personal Information
@@ -292,7 +312,7 @@
                     <div class="form-row">
 
 
-                        <!-- DATE -->
+                        <!-- DATE OF BIRTH -->
 
                         <div class="form-group">
 
@@ -352,32 +372,36 @@
                                         Select Gender
                                     </option>
 
+
                                     <option
                                         value="Male"
                                         {% if gender == "Male" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         Male
                                     </option>
 
+
                                     <option
                                         value="Female"
                                         {% if gender == "Female" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         Female
                                     </option>
 
+
                                     <option
                                         value="Other"
                                         {% if gender == "Other" %}
-                                        selected
+                                            selected
                                         {% endif %}
                                     >
                                         Other
                                     </option>
+
 
                                 </select>
 
@@ -425,41 +449,46 @@
                                     Select Status
                                 </option>
 
+
                                 <option
                                     value="Single"
                                     {% if civil_status == "Single" %}
-                                    selected
+                                        selected
                                     {% endif %}
                                 >
                                     Single
                                 </option>
 
+
                                 <option
                                     value="Married"
                                     {% if civil_status == "Married" %}
-                                    selected
+                                        selected
                                     {% endif %}
                                 >
                                     Married
                                 </option>
 
+
                                 <option
                                     value="Widowed"
                                     {% if civil_status == "Widowed" %}
-                                    selected
+                                        selected
                                     {% endif %}
                                 >
                                     Widowed
                                 </option>
 
+
                                 <option
                                     value="Separated"
                                     {% if civil_status == "Separated" %}
-                                    selected
+                                        selected
                                     {% endif %}
                                 >
                                     Separated
                                 </option>
+
 
                             </select>
 
@@ -497,7 +526,9 @@
 
 
 
+                        <!-- ================================================= -->
                         <!-- USERNAME -->
+                        <!-- ================================================= -->
 
                         <div class="form-group full-width">
 
@@ -524,6 +555,8 @@
                                     placeholder="juan.delacruz"
                                     value="{{ username|default:'' }}"
                                     autocomplete="username"
+                                    minlength="4"
+                                    maxlength="30"
                                     required
                                 >
 
@@ -538,7 +571,9 @@
 
 
 
+                        <!-- ================================================= -->
                         <!-- PASSWORD -->
+                        <!-- ================================================= -->
 
                         <div class="form-group full-width">
 
@@ -579,7 +614,9 @@
 
 
 
+                        <!-- ================================================= -->
                         <!-- CONFIRM PASSWORD -->
+                        <!-- ================================================= -->
 
                         <div class="form-group full-width">
 
@@ -645,7 +682,9 @@
 
 
 
+            <!-- ================================================= -->
             <!-- LOGIN -->
+            <!-- ================================================= -->
 
             <div class="login-link">
 
