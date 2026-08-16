@@ -2,91 +2,150 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Registration | BantayBarangay</title>
 
-    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+    <link
+        rel="stylesheet"
+        href="{% static 'css/registration.css' %}"
+    >
+
 </head>
+
 
 <body>
 
+
 <div class="registration-page">
 
-    <!-- ========================================= -->
+
+    <!-- ================================================= -->
     <!-- LEFT SIDE -->
-    <!-- ========================================= -->
+    <!-- ================================================= -->
 
     <section class="registration-left">
 
-        <!-- Background pattern -->
         <div class="network-pattern"></div>
+
 
         <div class="left-content">
 
+
             <!-- LOGO -->
+
             <div class="brand">
 
                 <div class="brand-logo">
 
                     <div class="cube">
+
                         <span></span>
                         <span></span>
                         <span></span>
+
                     </div>
 
                 </div>
 
+
                 <div class="brand-text">
+
                     <h1>BANTAY</h1>
+
                     <span>Barangay</span>
+
                 </div>
 
             </div>
 
 
-            <!-- INFORMATION CARD -->
+            <!-- COMMUNITY INFORMATION -->
 
             <div class="community-card">
 
+
                 <div class="secure-badge">
-                    <span class="secure-icon">⚙</span>
+
+                    <span class="secure-icon">
+                        ⚙
+                    </span>
+
                     SECURE PROTOCOL ACTIVE
+
                 </div>
+
 
                 <h2>
                     Join the Community
                 </h2>
 
+
                 <p>
-                    Establish your secure blockchain identity to participate
-                    in local governance, access public ledgers, and engage
-                    with your community securely.
+
+                    Establish your secure blockchain identity
+                    to participate in local governance, access
+                    public ledgers, and engage with your
+                    community securely.
+
                 </p>
 
 
                 <div class="benefits">
 
-                    <div class="benefit-item">
-                        <span class="check-icon">✓</span>
-                        <span>Cryptographically secured data</span>
-                    </div>
 
                     <div class="benefit-item">
-                        <span class="check-icon">✓</span>
-                        <span>Transparent local governance</span>
+
+                        <span class="check-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Cryptographically secured data
+                        </span>
+
                     </div>
 
+
                     <div class="benefit-item">
-                        <span class="check-icon">✓</span>
-                        <span>Direct access to public services</span>
+
+                        <span class="check-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Transparent local governance
+                        </span>
+
                     </div>
+
+
+                    <div class="benefit-item">
+
+                        <span class="check-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Direct access to public services
+                        </span>
+
+                    </div>
+
 
                 </div>
 
+
             </div>
+
 
         </div>
 
@@ -94,17 +153,23 @@
         <!-- FOOTER -->
 
         <div class="left-footer">
-            © 2026 BantayBarangay. Secured by Blockchain Technology.
+
+            © 2026 BantayBarangay.
+            Secured by Blockchain Technology.
+
         </div>
+
 
     </section>
 
 
-    <!-- ========================================= -->
+
+    <!-- ================================================= -->
     <!-- RIGHT SIDE -->
-    <!-- ========================================= -->
+    <!-- ================================================= -->
 
     <section class="registration-right">
+
 
         <div class="registration-container">
 
@@ -113,18 +178,27 @@
 
             <div class="registration-header">
 
-                <h2>Registration</h2>
+                <h2>
+                    Registration
+                </h2>
 
                 <p>
-                    Please fill in your details to establish your civic identity.
+
+                    Please fill in your details to establish
+                    your civic identity.
+
                 </p>
 
             </div>
 
 
+
+            <!-- ================================================= -->
             <!-- PROGRESS -->
+            <!-- ================================================= -->
 
             <div class="progress-section">
+
 
                 <div class="progress-top">
 
@@ -145,40 +219,63 @@
 
                 </div>
 
+
             </div>
 
 
+
+            <!-- ================================================= -->
+            <!-- ERROR MESSAGE -->
+            <!-- ================================================= -->
+
+            {% if error %}
+
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
+
+            <!-- ================================================= -->
             <!-- FORM -->
+            <!-- ================================================= -->
 
-            <form method="POST" action="">
-
+            <form method="POST" action="{% url 'step2_contact' %}" >
                 {% csrf_token %}
-
                 <div class="form-section">
+
 
                     <h3>
                         Personal Information
                     </h3>
 
 
+
+                    <!-- ================================================= -->
                     <!-- FULL NAME -->
+                    <!-- ================================================= -->
 
                     <div class="form-group full-width">
 
                         <label for="full_name">
+
                             Full Name as per Valid ID
+
                             <span>*</span>
+
                         </label>
+
 
                         <div class="input-wrapper">
 
-                            <span class="input-icon">♙</span>
+                            <span class="input-icon">
+                                ♙
+                            </span>
+
 
                             <input
                                 type="text"
                                 id="full_name"
                                 name="full_name"
                                 placeholder="Juan Dela Cruz"
+                                value="{{ full_name|default:'' }}"
                                 required
                             >
 
@@ -187,25 +284,39 @@
                     </div>
 
 
+
+                    <!-- ================================================= -->
                     <!-- DATE + GENDER -->
+                    <!-- ================================================= -->
 
                     <div class="form-row">
+
+
+                        <!-- DATE -->
 
                         <div class="form-group">
 
                             <label for="birth_date">
+
                                 Date of Birth
+
                                 <span>*</span>
+
                             </label>
+
 
                             <div class="input-wrapper">
 
-                                <span class="input-icon">▣</span>
+                                <span class="input-icon">
+                                    ▣
+                                </span>
+
 
                                 <input
                                     type="date"
                                     id="birth_date"
                                     name="birth_date"
+                                    value="{{ birth_date|default:'' }}"
                                     required
                                 >
 
@@ -214,14 +325,22 @@
                         </div>
 
 
+
+                        <!-- GENDER -->
+
                         <div class="form-group">
 
                             <label for="gender">
+
                                 Gender
+
                                 <span>*</span>
+
                             </label>
 
+
                             <div class="input-wrapper select-wrapper">
+
 
                                 <select
                                     id="gender"
@@ -233,41 +352,68 @@
                                         Select Gender
                                     </option>
 
-                                    <option value="Male">
+                                    <option
+                                        value="Male"
+                                        {% if gender == "Male" %}
+                                        selected
+                                        {% endif %}
+                                    >
                                         Male
                                     </option>
 
-                                    <option value="Female">
+                                    <option
+                                        value="Female"
+                                        {% if gender == "Female" %}
+                                        selected
+                                        {% endif %}
+                                    >
                                         Female
                                     </option>
 
-                                    <option value="Other">
+                                    <option
+                                        value="Other"
+                                        {% if gender == "Other" %}
+                                        selected
+                                        {% endif %}
+                                    >
                                         Other
                                     </option>
 
                                 </select>
 
+
                                 <span class="select-arrow">
-                                   ⌄
+                                    ⌄
                                 </span>
+
 
                             </div>
 
                         </div>
 
+
                     </div>
 
 
+
+                    <!-- ================================================= -->
                     <!-- CIVIL STATUS -->
+                    <!-- ================================================= -->
 
                     <div class="form-group full-width">
 
+
                         <label for="civil_status">
+
                             Civil Status
+
                             <span>*</span>
+
                         </label>
 
+
                         <div class="input-wrapper select-wrapper">
+
 
                             <select
                                 id="civil_status"
@@ -279,34 +425,202 @@
                                     Select Status
                                 </option>
 
-                                <option value="Single">
+                                <option
+                                    value="Single"
+                                    {% if civil_status == "Single" %}
+                                    selected
+                                    {% endif %}
+                                >
                                     Single
                                 </option>
 
-                                <option value="Married">
+                                <option
+                                    value="Married"
+                                    {% if civil_status == "Married" %}
+                                    selected
+                                    {% endif %}
+                                >
                                     Married
                                 </option>
 
-                                <option value="Widowed">
+                                <option
+                                    value="Widowed"
+                                    {% if civil_status == "Widowed" %}
+                                    selected
+                                    {% endif %}
+                                >
                                     Widowed
                                 </option>
 
-                                <option value="Separated">
+                                <option
+                                    value="Separated"
+                                    {% if civil_status == "Separated" %}
+                                    selected
+                                    {% endif %}
+                                >
                                     Separated
                                 </option>
 
                             </select>
 
+
                             <span class="select-arrow">
-                               ⌄
+                                ⌄
                             </span>
 
+
                         </div>
+
 
                     </div>
 
 
+
+                    <!-- ================================================= -->
+                    <!-- ACCOUNT INFORMATION -->
+                    <!-- ================================================= -->
+
+                    <div class="account-section">
+
+
+                        <h3>
+                            Account Information
+                        </h3>
+
+
+                        <p class="section-description">
+
+                            Create your account credentials for
+                            accessing BantayBarangay.
+
+                        </p>
+
+
+
+                        <!-- USERNAME -->
+
+                        <div class="form-group full-width">
+
+                            <label for="username">
+
+                                Username
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    👤
+                                </span>
+
+
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    placeholder="juan.delacruz"
+                                    value="{{ username|default:'' }}"
+                                    autocomplete="username"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <small>
+                                Use 4–30 characters.
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group full-width">
+
+                            <label for="password">
+
+                                Password
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    🔒
+                                </span>
+
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Create a password"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <small>
+                                Password must contain at least 8 characters.
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="form-group full-width">
+
+                            <label for="confirm_password">
+
+                                Confirm Password
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    🔒
+                                </span>
+
+
+                                <input
+                                    type="password"
+                                    id="confirm_password"
+                                    name="confirm_password"
+                                    placeholder="Re-enter your password"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
                     <!-- NEXT BUTTON -->
+                    <!-- ================================================= -->
 
                     <button
                         type="submit"
@@ -323,9 +637,12 @@
 
                     </button>
 
+
                 </div>
 
+
             </form>
+
 
 
             <!-- LOGIN -->
@@ -340,11 +657,16 @@
 
             </div>
 
+
         </div>
+
 
     </section>
 
+
 </div>
 
+
 </body>
+
 </html>
