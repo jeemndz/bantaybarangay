@@ -1,42 +1,136 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
 
 from .models import User
 
 
 def login_view(request):
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+        remember = request.POST.get("remember")
 
-        try:
-            user = User.objects.get(
-                username=username,
-                is_active=True
+
+        # CHECK EMPTY FIELDS
+        if not username or not password:
+
+            messages.error(
+                request,
+                "Please enter your username and password."
             )
 
-            if check_password(password, user.password_hash):
+            return render(
+                request,
+                "login/login.html"
+            )
 
-                request.session['user_id'] = user.user_id
-                request.session['username'] = user.username
-                request.session['role'] = user.role
 
-                return redirect('resident_list')
+        # FIND USER
+        try:
 
-            else:
-                messages.error(
-                    request,
-                    'Invalid username or password.'
-                )
+            user = User.objects.get(
+                username=username
+            )
 
         except User.DoesNotExist:
 
             messages.error(
                 request,
-                'Invalid username or password.'
+                "Invalid username or password."
             )
 
-    return render(request, 'login/login.html')
+            return render(
+                request,
+                "login/login.html"
+            )
+
+
+        # CHECK ACCOUNT STATUS
+        if not user.is_active:
+
+            messages.error(
+                request,
+                "Your account is currently inactive."
+            )
+
+            return render(
+                request,
+                "login/login.html"
+            )
+
+
+        # CHECK NORMAL PASSWORD
+        if password != user.password_hash:
+
+            messages.error(
+                request,
+                "Invalid username or password."
+            )
+
+            return render(
+                request,
+                "login/login.html"
+            )
+
+
+        # STORE SESSION
+        request.session["user_id"] = user.user_id
+        request.session["username"] = user.username
+        request.session["email"] = user.email
+        request.session["role"] = user.role
+
+
+        # REMEMBER ME
+        if remember:
+
+            request.session.set_expiry(
+                60 * 60 * 24 * 14
+            )
+
+        else:
+
+            request.session.set_expiry(0)
+
+
+        # ROLE-BASED REDIRECT
+        if user.role == "admin":
+
+            return redirect("dashboard")
+
+        elif user.role == "official":
+
+            return redirect("dashboard")
+
+        elif user.role == "resident":
+
+            return redirect("home")
+
+        else:
+
+            messages.error(
+                request,
+                "Your account has an invalid role."
+            )
+
+            request.session.flush()
+
+            return render(
+                request,
+                "login/login.html"
+            )
+
+
+    # GET REQUEST
+    return render(
+        request,
+        "login/login.html"
+    )
+
+
+def logout_view(request):
+
+    request.session.flush()
+
+    return redirect("login")

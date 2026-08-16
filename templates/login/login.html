@@ -4,173 +4,340 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Login | BantayBarangay</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        rel="stylesheet"
+        href="{% static 'css/login.css' %}"
+    >
 
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    
 </head>
+
 
 <body>
 
-    <div class="login-container">
 
-        <!-- ================= LEFT SIDE ================= -->
-        <section class="left-section">
+<div class="login-container">
 
-            <img src="{% static 'images/Background.png' %}" alt="BantayBarangay Secure Governance" class="login-image">
 
-            <div class="left-overlay"></div>
+    <!-- =====================================================
+         LEFT SIDE
+    ====================================================== -->
 
-            <div class="secure-card">
+    <section class="left-section">
 
-                <h2>Secure Governance</h2>
 
-                <p>
-                    Utilizing blockchain technology to ensure that every
-                    incident report and document remains immutable,
-                    transparent, and verified for the community's safety.
-                </p>
+        <!-- BACKGROUND IMAGE -->
 
-                <div class="badges">
-                    <span class="badge">● Blockchain Verified</span>
-                    <span class="badge">● Encrypted Data</span>
-                </div>
+        <img
+            src="{% static 'images/Background.png' %}"
+            alt="BantayBarangay Background"
+            class="login-image"
+        >
+
+
+        <!-- OVERLAY -->
+
+        <div class="left-overlay"></div>
+
+
+
+        <!-- SECURE GOVERNANCE CARD -->
+
+        <div class="secure-card">
+
+
+            <div class="secure-label">
+
+                <span class="secure-dot"></span>
+
+                SECURE BLOCKCHAIN SYSTEM
 
             </div>
 
-        </section>
+
+            <h1>
+                Secure<br>
+                Governance
+            </h1>
 
 
-        <!-- ================= RIGHT SIDE ================= -->
-        <section class="right-section">
+            <p>
 
-            <!-- LOGO -->
+                Utilizing blockchain technology to ensure
+                that every incident report and document
+                remains immutable, transparent, and
+                verified for the community's safety.
+
+            </p>
+
+
+            <!-- BADGES -->
+
+            <div class="badges">
+
+                <span class="badge">
+                    ✓ Blockchain Verified
+                </span>
+
+                <span class="badge">
+                    ✓ Encrypted Data
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         RIGHT SIDE
+    ====================================================== -->
+
+    <section class="right-section">
+
+
+        <div class="login-wrapper">
+
+
+            <!-- =================================================
+                 LOGO
+            ================================================== -->
+
             <div class="logo-area">
 
-                <div class="logo-icon">
-                    ⬡
-                </div>
-
-                <div class="logo-text">
-
-                    <div class="brand">
-                        BANTAY
-                    </div>
-
-                    <div class="sub-brand">
-                        Barangay
-                    </div>
-
-                </div>
+                <img
+                    src="{% static 'images/LOGOV2.png' %}"
+                    alt="BantayBarangay Logo"
+                    class="login-logo"
+                >
 
             </div>
 
 
-            <!-- LOGIN CARD -->
+
+            <!-- =================================================
+                 LOGIN CARD
+            ================================================== -->
+
             <div class="login-card">
 
+
+                <!-- TITLE -->
+
                 <div class="login-title">
-                    Barangay Complaint and Incident Reporting System
+
+                    Barangay Complaint and Incident
+                    Reporting System
+
                 </div>
+
 
                 <div class="login-subtitle">
-                    SECURE BLOCKCHAIN-BASED DOCUMENT VERIFICATION
+
+                    SECURE BLOCKCHAIN-BASED DOCUMENT
+                    VERIFICATION
+
                 </div>
 
 
-                <!-- ERROR MESSAGE -->
+
+                <!-- =================================================
+                     ERROR MESSAGES
+                ================================================== -->
+
                 {% if messages %}
-                {% for message in messages %}
-                <div class="error-message">
-                    {{ message }}
-                </div>
-                {% endfor %}
+
+                    {% for message in messages %}
+
+                        <div class="error-message">
+
+                            {{ message }}
+
+                        </div>
+
+                    {% endfor %}
+
                 {% endif %}
 
 
-                <!-- LOGIN FORM -->
-                <form method="POST" action="{% url 'login' %}">
+
+                <!-- =================================================
+                     LOGIN FORM
+                ================================================== -->
+
+                <form
+                    method="POST"
+                    action="{% url 'login' %}"
+                >
 
                     {% csrf_token %}
 
+
+
                     <!-- USERNAME -->
+
                     <div class="form-group">
 
-                        <label class="form-label">
+                        <label
+                            for="username"
+                            class="form-label"
+                        >
+
                             Username
+
                         </label>
 
+
                         <div class="input-wrapper">
+
 
                             <span class="input-icon">
                                 ♙
                             </span>
 
-                            <input type="text" name="username" class="form-input" placeholder="Enter your credentials"
-                                required autocomplete="username">
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-input"
+                                placeholder="Enter your username"
+                                required
+                                autocomplete="username"
+                            >
+
 
                         </div>
 
                     </div>
 
 
+
                     <!-- PASSWORD -->
+
                     <div class="form-group">
 
-                        <label class="form-label">
+                        <label
+                            for="password"
+                            class="form-label"
+                        >
+
                             Password
+
                         </label>
 
+
                         <div class="input-wrapper">
+
 
                             <span class="input-icon">
                                 🔒
                             </span>
 
-                            <input type="password" name="password" id="password" class="form-input"
-                                placeholder="••••••••" required autocomplete="current-password">
 
-                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-input password-input"
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                            >
+
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()"
+                                aria-label="Show password"
+                            >
+
                                 👁
+
                             </button>
+
 
                         </div>
 
                     </div>
 
 
-                    <!-- OPTIONS -->
+
+                    <!-- =================================================
+                         OPTIONS
+                    ================================================== -->
+
                     <div class="form-options">
+
 
                         <label class="remember">
 
-                            <input type="checkbox" name="remember">
+                            <input
+                                type="checkbox"
+                                name="remember"
+                            >
 
-                            Remember Me
+                            <span>
+                                Remember Me
+                            </span>
 
                         </label>
 
-                        <a href="#" class="forgot">
+
+                        <a
+                            href="#"
+                            class="forgot"
+                        >
                             Forgot Password?
                         </a>
+
 
                     </div>
 
 
-                    <!-- LOGIN -->
-                    <button type="submit" class="login-button">
-                        Login →
+
+                    <!-- =================================================
+                         LOGIN BUTTON
+                    ================================================== -->
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+
+                        <span>
+                            Login
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
                     </button>
+
 
                 </form>
 
 
-                <!-- REGISTER -->
+
+                <!-- =================================================
+                     REGISTER
+                ================================================== -->
+
                 <div class="register-text">
 
                     Don't have an account?
@@ -181,15 +348,25 @@
 
                 </div>
 
+
             </div>
 
 
-            <!-- FOOTER -->
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
             <footer class="footer">
 
+
                 <span>
-                    © 2026 BantayBarangay. Secure Blockchain Governance.
+
+                    © 2026 BantayBarangay.
+                    Secure Blockchain Governance.
+
                 </span>
+
 
                 <div class="footer-links">
 
@@ -203,33 +380,53 @@
 
                 </div>
 
+
             </footer>
 
-        </section>
 
-    </div>
+        </div>
 
 
-    <script>
+    </section>
 
-        function togglePassword() {
 
-            const password =
-                document.getElementById("password");
+</div>
 
-            if (password.type === "password") {
 
-                password.type = "text";
 
-            } else {
+<!-- =====================================================
+     PASSWORD TOGGLE
+====================================================== -->
 
-                password.type = "password";
+<script>
 
-            }
+function togglePassword() {
 
-        }
+    const password =
+        document.getElementById("password");
 
-    </script>
+    const button =
+        document.querySelector(".password-toggle");
+
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        button.textContent = "👁️‍🗨️";
+
+    } else {
+
+        password.type = "password";
+
+        button.textContent = "👁";
+
+    }
+
+}
+
+</script>
+
 
 </body>
 
