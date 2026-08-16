@@ -28,4 +28,14 @@ urlpatterns = [
         name='resident_delete'
     ),
 
+    # ---------------------------------------------
+    # RESIDENT VERIFICATION
+    # ---------------------------------------------
+
+    path(
+        'verify/<int:resident_id>/',
+        views.resident_verify,
+        name='resident_verify'
+    ),
+
 ]

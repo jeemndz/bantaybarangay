@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Resident</title>
+</head>
+
+<body>
+
+    <h1>Resident Verification</h1>
+
+    <h2>
+        {{ resident.first_name }}
+        {% if resident.middle_name %}
+            {{ resident.middle_name }}
+        {% endif %}
+        {{ resident.last_name }}
+    </h2>
+
+    <p>
+        <strong>Resident ID:</strong>
+        {{ resident.resident_id }}
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        {{ resident.email }}
+    </p>
+
+    <p>
+        <strong>Contact Number:</strong>
+        {{ resident.contact_number }}
+    </p>
+
+    <p>
+        <strong>Address:</strong>
+        {{ resident.address }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ resident.verification_status }}
+    </p>
+
+    <br>
+
+    <a href="{% url 'resident_list' %}">
+        ← Back to Resident Verification
+    </a>
+
+</body>
+</html>
