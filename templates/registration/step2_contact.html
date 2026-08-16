@@ -1,0 +1,781 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact & Address | BantayBarangay</title>
+
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+</head>
+
+
+<body>
+
+
+<div class="registration-page">
+
+
+    <!-- ================================================= -->
+    <!-- LEFT SIDE -->
+    <!-- ================================================= -->
+
+    <section class="registration-left">
+
+        <div class="network-pattern"></div>
+
+
+        <div class="left-content">
+
+
+            <!-- ================================================= -->
+            <!-- BRAND -->
+            <!-- ================================================= -->
+
+            <div class="brand">
+
+                <div class="brand-logo">
+
+                    <div class="cube">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+
+                <div class="brand-text">
+
+                    <h1>BANTAY</h1>
+
+                    <span>
+                        Barangay
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- COMMUNITY CARD -->
+            <!-- ================================================= -->
+
+            <div class="community-card">
+
+
+                <div class="secure-badge">
+
+                    <span class="secure-icon">
+                        ⚙
+                    </span>
+
+                    SECURE PROTOCOL ACTIVE
+
+                </div>
+
+
+                <h2>
+                    Join the Community
+                </h2>
+
+
+                <p>
+
+                    Registering for your local barangay
+                    network gives you access to a secure,
+                    verified, and transparent local
+                    governance ecosystem.
+
+                </p>
+
+
+                <div class="benefits">
+
+
+                    <div class="benefit-item">
+
+                        <span class="check-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Cryptographically secured data
+                        </span>
+
+                    </div>
+
+
+                    <div class="benefit-item">
+
+                        <span class="check-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Transparent local governance
+                        </span>
+
+                    </div>
+
+
+                    <div class="benefit-item">
+
+                        <span class="check-icon">
+                            ✓
+                        </span>
+
+                        <span>
+                            Direct access to public services
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- FOOTER -->
+        <!-- ================================================= -->
+
+        <div class="left-footer">
+
+            © 2026 BantayBarangay.
+            Secured by Blockchain Technology.
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================================= -->
+    <!-- RIGHT SIDE -->
+    <!-- ================================================= -->
+
+    <section class="registration-right">
+
+
+        <div class="registration-container">
+
+
+            <!-- ================================================= -->
+            <!-- HEADER -->
+            <!-- ================================================= -->
+
+            <div class="registration-header">
+
+                <h2>
+                    Registration
+                </h2>
+
+                <p>
+                    Provide your contact details and current
+                    residential address.
+                </p>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- PROGRESS -->
+            <!-- ================================================= -->
+
+            <div class="progress-section">
+
+
+                <div class="progress-top">
+
+                    <strong>
+                        Step 2 of 4
+                    </strong>
+
+                    <span>
+                        Contact & Address
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div class="progress-fill step-two"></div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- ERROR MESSAGE -->
+            <!-- ================================================= -->
+
+            {% if error %}
+
+            <div class="error-message">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- FORM -->
+            <!-- ================================================= -->
+
+            <form method="POST" action="{% url 'step2_contact' %}">
+
+                {% csrf_token %}
+
+
+
+                <!-- ================================================= -->
+                <!-- CONTACT INFORMATION -->
+                <!-- ================================================= -->
+
+                <div class="form-section">
+
+
+                    <h3>
+                        Contact Information
+                    </h3>
+
+
+                    <div class="form-row">
+
+
+                        <!-- ================================================= -->
+                        <!-- MOBILE NUMBER -->
+                        <!-- ================================================= -->
+
+                        <div class="form-group">
+
+                            <label for="mobile_number">
+
+                                Mobile Number
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    ☎
+                                </span>
+
+
+                                <input
+                                    type="tel"
+                                    id="mobile_number"
+                                    name="mobile_number"
+                                    placeholder="09XX XXX XXXX"
+                                    value="{{ registration_data.mobile_number|default:'' }}"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <small>
+                                OTP verification may be required.
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- EMAIL -->
+                        <!-- ================================================= -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+
+                                Email Address
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    ✉
+                                </span>
+
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="juan.delacruz@email.com"
+                                    value="{{ registration_data.email|default:'' }}"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- RESIDENTIAL ADDRESS -->
+                <!-- ================================================= -->
+
+                <div class="form-section">
+
+
+                    <h3>
+                        Residential Address
+                    </h3>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- HOUSE + STREET -->
+                    <!-- ================================================= -->
+
+                    <div class="form-row">
+
+
+                        <!-- HOUSE / BLOCK / LOT -->
+
+                        <div class="form-group">
+
+                            <label for="house_block_lot">
+
+                                House/Block/Lot No.
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    ⌂
+                                </span>
+
+
+                                <input
+                                    type="text"
+                                    id="house_block_lot"
+                                    name="house_block_lot"
+                                    placeholder="123"
+                                    value="{{ registration_data.house_block_lot|default:'' }}"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- STREET / PUROK / SITIO -->
+
+                        <div class="form-group">
+
+                            <label for="street">
+
+                                Street/Purok/Sitio
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    ⌂
+                                </span>
+
+
+                                <input
+                                    type="text"
+                                    id="street"
+                                    name="street"
+                                    placeholder="Purok 1"
+                                    value="{{ registration_data.street|default:'' }}"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- PROVINCE + MUNICIPALITY -->
+                    <!-- ================================================= -->
+
+                    <div class="form-row">
+
+
+                        <!-- ================================================= -->
+                        <!-- PROVINCE -->
+                        <!-- ================================================= -->
+
+                        <div class="form-group">
+
+                            <label for="province">
+
+                                Province
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper select-wrapper">
+
+
+                                <select
+                                    id="province"
+                                    name="province"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Province
+                                    </option>
+
+
+                                    <option
+                                        value="Bulacan"
+                                        {% if registration_data.province == "Bulacan" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Bulacan
+                                    </option>
+
+
+                                    <option
+                                        value="Metro Manila"
+                                        {% if registration_data.province == "Metro Manila" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Metro Manila
+                                    </option>
+
+
+                                </select>
+
+
+                                <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- MUNICIPALITY / CITY -->
+                        <!-- ================================================= -->
+
+                        <div class="form-group">
+
+                            <label for="municipality">
+
+                                Municipality / City
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="input-wrapper select-wrapper">
+
+
+                                <select
+                                    id="municipality"
+                                    name="municipality"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Municipality / City
+                                    </option>
+
+
+                                    <option
+                                        value="San Ildefonso"
+                                        {% if registration_data.municipality == "San Ildefonso" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        San Ildefonso
+                                    </option>
+
+
+                                    <option
+                                        value="San Rafael"
+                                        {% if registration_data.municipality == "San Rafael" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        San Rafael
+                                    </option>
+
+
+                                </select>
+
+
+                                <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- BARANGAY -->
+                    <!-- ================================================= -->
+
+                    <div class="form-group full-width">
+
+
+                        <label for="barangay">
+
+                            Barangay
+
+                            <span>*</span>
+
+                        </label>
+
+
+                        <div class="input-wrapper select-wrapper">
+
+
+                            <select
+                                id="barangay"
+                                name="barangay"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Barangay
+                                </option>
+
+
+                                <option
+                                    value="Barangay San Antonio"
+                                    {% if registration_data.barangay == "Barangay San Antonio" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Barangay San Antonio
+                                </option>
+
+
+                                <option
+                                    value="Barangay Poblacion"
+                                    {% if registration_data.barangay == "Barangay Poblacion" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Barangay Poblacion
+                                </option>
+
+
+                            </select>
+
+
+                            <span class="select-arrow">
+                                ⌄
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- ZIP CODE -->
+                    <!-- ================================================= -->
+
+                    <div class="form-group">
+
+
+                        <label for="zip_code">
+
+                            ZIP Code
+
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+
+                            <input
+                                type="text"
+                                id="zip_code"
+                                name="zip_code"
+                                placeholder="3010"
+                                value="{{ registration_data.zip_code|default:'' }}"
+                            >
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- INFORMATION BOX -->
+                    <!-- ================================================= -->
+
+                    <div class="info-box">
+
+                        <span>
+                            ⓘ
+                        </span>
+
+
+                        <p>
+
+                            Your residential address will be used
+                            to verify your eligibility as a resident
+                            of the barangay.
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- NAVIGATION -->
+                <!-- ================================================= -->
+
+                <div class="step-navigation">
+
+
+                    <!-- BACK BUTTON -->
+
+                    <a
+                        href="{% url 'registration' %}"
+                        class="back-button"
+                    >
+
+                        <span>
+                            ←
+                        </span>
+
+                        <span>
+                            Back to Personal<br>
+                            Information
+                        </span>
+
+                    </a>
+
+
+
+                    <!-- NEXT BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="next-button"
+                    >
+
+                        <span>
+                            Proceed to Identity<br>
+                            Verification
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+
+            <!-- ================================================= -->
+            <!-- LOGIN -->
+            <!-- ================================================= -->
+
+            <div class="login-link">
+
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Log in here
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>

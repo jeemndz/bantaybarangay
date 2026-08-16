@@ -1,0 +1,644 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Review & Submit | BantayBarangay
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/step4_review.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="review-page">
+
+
+    <!-- ===================================================== -->
+    <!-- LEFT SIDE -->
+    <!-- ===================================================== -->
+
+    <section class="review-left">
+
+
+        <div class="left-content">
+
+
+            <!-- BRAND -->
+
+            <div class="brand">
+
+                <div class="brand-logo">
+
+                    <div class="shield-icon">
+                        ♙
+                    </div>
+
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>BantayBarangay</h1>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- COMMUNITY -->
+
+            <div class="community-content">
+
+                <h2>
+                    Join the<br>
+                    Community
+                </h2>
+
+
+                <p>
+
+                    Your registration ensures a secure,
+                    transparent, and verified community
+                    ecosystem. Powered by advanced blockchain
+                    verification to protect your identity.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- LEFT FOOTER -->
+
+        <div class="left-security">
+
+
+            <div class="security-line"></div>
+
+
+            <div class="security-content">
+
+                <span class="security-icon">
+                    ✦
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure Decentralized Identity
+                    </strong>
+
+                    <small>
+                        End-to-end encrypted data transmission.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- RIGHT SIDE -->
+    <!-- ===================================================== -->
+
+    <section class="review-right">
+
+
+        <div class="review-container">
+
+
+            <!-- ================================================= -->
+            <!-- HEADER -->
+            <!-- ================================================= -->
+
+            <div class="review-header">
+
+                <div>
+
+                    <div class="step-label">
+                        STEP 4 OF 4
+                    </div>
+
+                    <h1>
+                        Review & Submit
+                    </h1>
+
+                </div>
+
+
+                <div class="percentage">
+                    100%
+                </div>
+
+            </div>
+
+
+
+            <!-- PROGRESS BAR -->
+
+            <div class="progress-bar">
+
+                <div class="progress-fill"></div>
+
+            </div>
+
+
+            <p class="review-description">
+
+                Review your information carefully before
+                submitting your registration.
+
+            </p>
+
+
+
+            <!-- ================================================= -->
+            <!-- PERSONAL INFORMATION -->
+            <!-- ================================================= -->
+
+            <div class="review-card">
+
+
+                <div class="card-header">
+
+                    <h2>
+                        Personal Information
+                    </h2>
+
+
+                    <a
+                        href="{% url 'registration' %}"
+                        class="edit-link"
+                    >
+                        ✎ Edit
+                    </a>
+
+                </div>
+
+
+
+                <div class="information-grid">
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="information-item">
+
+                        <span class="information-label">
+                            Full Name
+                        </span>
+
+                        <strong>
+                            {{ registration_data.full_name|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- DATE OF BIRTH -->
+
+                    <div class="information-item">
+
+                        <span class="information-label">
+                            Date of Birth
+                        </span>
+
+                        <strong>
+                            {{ registration_data.birth_date|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- GENDER -->
+
+                    <div class="information-item">
+
+                        <span class="information-label">
+                            Gender
+                        </span>
+
+                        <strong>
+                            {{ registration_data.gender|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- CIVIL STATUS -->
+
+                    <div class="information-item">
+
+                        <span class="information-label">
+                            Civil Status
+                        </span>
+
+                        <strong>
+                            {{ registration_data.civil_status|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- CONTACT & ADDRESS -->
+            <!-- ================================================= -->
+
+            <div class="review-card">
+
+
+                <div class="card-header">
+
+                    <h2>
+                        Contact & Address
+                    </h2>
+
+
+                    <a
+                        href="{% url 'step2_contact' %}"
+                        class="edit-link"
+                    >
+                        ✎ Edit
+                    </a>
+
+                </div>
+
+
+
+                <div class="information-grid">
+
+
+                    <!-- MOBILE -->
+
+                    <div class="information-item">
+
+                        <span class="information-label">
+                            Mobile Number
+                        </span>
+
+                        <strong>
+                            {{ registration_data.mobile_number|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div class="information-item">
+
+                        <span class="information-label">
+                            Email Address
+                        </span>
+
+                        <strong>
+                            {{ registration_data.email|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- COMPLETE ADDRESS -->
+
+                    <div class="information-item full">
+
+                        <span class="information-label">
+                            Complete Address
+                        </span>
+
+                        <strong>
+
+                            {{ registration_data.house_block_lot|default:"" }}
+
+                            {% if registration_data.house_block_lot %}
+                                ,
+                            {% endif %}
+
+                            {{ registration_data.street|default:"" }}
+
+                            {% if registration_data.street %}
+                                ,
+                            {% endif %}
+
+                            {{ registration_data.barangay|default:"" }},
+
+                            {{ registration_data.municipality|default:"" }},
+
+                            {{ registration_data.province|default:"" }}
+
+                            {% if registration_data.zip_code %}
+                                - {{ registration_data.zip_code }}
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- VERIFICATION DOCUMENTS -->
+            <!-- ================================================= -->
+
+            <div class="review-card">
+
+
+                <div class="card-header">
+
+                    <h2>
+                        Verification Documents
+                    </h2>
+
+
+                    <a
+                        href="{% url 'step3_identity' %}"
+                        class="edit-link"
+                    >
+                        ✎ Edit
+                    </a>
+
+                </div>
+
+
+
+                <div class="document-list">
+
+
+                    <!-- GOVERNMENT ID -->
+
+                    <div class="document-item">
+
+                        <span class="document-check">
+                            ✓
+                        </span>
+
+                        <span class="document-name">
+
+                            Government ID
+
+                            {% if registration_data.government_id %}
+                                <small>(Uploaded)</small>
+                            {% else %}
+                                <small>(Not uploaded)</small>
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- PROOF OF RESIDENCY -->
+
+                    <div class="document-item">
+
+                        <span class="document-check">
+                            ✓
+                        </span>
+
+                        <span class="document-name">
+
+                            Proof of Residency
+
+                            {% if registration_data.proof_of_residency %}
+                                <small>(Uploaded)</small>
+                            {% else %}
+                                <small>(Not uploaded)</small>
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="status-badge">
+
+                    <span></span>
+
+                    STATUS:
+                    {% if registration_data.government_id and registration_data.proof_of_residency %}
+                        READY FOR REVIEW
+                    {% else %}
+                        DOCUMENTS INCOMPLETE
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- DECLARATION -->
+            <!-- ================================================= -->
+
+            <form
+                method="POST"
+                action="{% url 'registration_success' %}"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="declaration-box">
+
+
+                    <div class="declaration-title">
+
+                        Declaration & Consent
+
+                    </div>
+
+
+
+                    <!-- DECLARATION 1 -->
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            name="truth_declaration"
+                            value="1"
+                            required
+                        >
+
+                        <span class="custom-checkbox"></span>
+
+                        <span class="checkbox-text">
+
+                            I certify that the information and
+                            documents I provided are true, complete,
+                            and accurate. I understand that submitting
+                            false information may result in the
+                            rejection of my registration.
+
+                        </span>
+
+                    </label>
+
+
+
+                    <!-- DECLARATION 2 -->
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            name="data_consent"
+                            value="1"
+                            required
+                        >
+
+                        <span class="custom-checkbox"></span>
+
+                        <span class="checkbox-text">
+
+                            I agree to the collection and processing
+                            of my information for resident
+                            verification and barangay services.
+
+                        </span>
+
+                    </label>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- NAVIGATION -->
+                <!-- ================================================= -->
+
+                <div class="navigation">
+
+
+                    <a
+                        href="{% url 'step3_identity' %}"
+                        class="back-button"
+                    >
+
+                        <span>
+                            ←
+                        </span>
+
+                        <span>
+                            Back to Identity & Residency
+                        </span>
+
+                    </a>
+
+
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                    >
+
+                        <span>
+                            Submit Registration
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+
+            <!-- ================================================= -->
+            <!-- NOTICE -->
+            <!-- ================================================= -->
+
+            <p class="submission-notice">
+
+                Your registration will be reviewed by the barangay
+                administrator. You will be notified once your
+                resident account has been verified.
+
+            </p>
+
+
+
+            <!-- LOGIN -->
+
+            <div class="login-link">
+
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Log in here
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,359 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Registration Submitted | BantayBarangay
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/registration_success.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="success-page">
+
+
+    <!-- ===================================================== -->
+    <!-- LEFT SIDE -->
+    <!-- ===================================================== -->
+
+    <section class="success-left">
+
+
+        <!-- BACKGROUND PATTERN -->
+
+        <div class="network-background"></div>
+
+
+        <div class="left-overlay"></div>
+
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+
+            <div class="brand-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M12 3L19 6V11C19 15.5 16.2 19.5 12 21C7.8 19.5 5 15.5 5 11V6L12 3Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                    />
+
+                    <rect
+                        x="9"
+                        y="10"
+                        width="6"
+                        height="5"
+                        rx="1"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    />
+
+                    <path
+                        d="M10 10V8.5C10 7.4 10.9 6.5 12 6.5C13.1 6.5 14 7.4 14 8.5V10"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    />
+
+                </svg>
+
+            </div>
+
+
+            <span>
+                BantayBarangay
+            </span>
+
+
+        </div>
+
+
+
+        <!-- LEFT CONTENT -->
+
+        <div class="left-content">
+
+
+            <h1>
+
+                Join the<br>
+                Community
+
+            </h1>
+
+
+            <p>
+
+                BantayBarangay utilizes advanced blockchain
+                verification to ensure the integrity of community
+                reporting and registration processes.
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- LEFT FOOTER -->
+
+        <div class="left-footer">
+
+
+            <div class="footer-divider"></div>
+
+
+            <div class="footer-security">
+
+
+                <div class="footer-security-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+
+                        <path
+                            d="M12 3L19 6V11C19 15.5 16.2 19.5 12 21C7.8 19.5 5 15.5 5 11V6L12 3Z"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M9 12L11 14L15 10"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Secure Decentralized Identity
+                    </strong>
+
+                    <span>
+                        End-to-end encrypted data transmission.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- RIGHT SIDE -->
+    <!-- ===================================================== -->
+
+    <section class="success-right">
+
+
+        <div class="success-card">
+
+
+            <!-- SUCCESS ICON -->
+
+            <div class="success-icon-container">
+
+                <div class="success-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+
+                        <path
+                            d="M5 12.5L9.5 17L19 7.5"
+                            stroke="white"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SUCCESS MESSAGE -->
+
+            <div class="success-message">
+
+
+                <h2>
+                    Registration Submitted Successfully
+                </h2>
+
+
+                <p>
+                    Your registration is now pending verification.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- APPLICATION DETAILS -->
+            <!-- ================================================= -->
+
+            <div class="application-details">
+
+
+                <!-- REFERENCE NUMBER -->
+
+                <div class="detail-row">
+
+
+                    <span class="detail-label">
+                        Application Reference No.
+                    </span>
+
+
+                    <strong class="reference-number">
+
+                        {{ application_reference|default:"BB-2026-000123" }}
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="detail-divider"></div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="detail-row">
+
+
+                    <span class="detail-label">
+                        Status
+                    </span>
+
+
+                    <span class="status-badge">
+
+                        <span class="status-icon">
+                            ⏳
+                        </span>
+
+                        Pending Verification
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="detail-divider"></div>
+
+
+
+                <!-- DATE -->
+
+                <div class="detail-row">
+
+
+                    <span class="detail-label">
+                        Submitted
+                    </span>
+
+
+                    <span class="submitted-date">
+
+                        {{ submitted_date|default:"August 15, 2026" }}
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- RETURN TO LOGIN -->
+            <!-- ================================================= -->
+
+            <a
+                href="{% url 'login' %}"
+                class="login-button"
+            >
+
+                <span>
+                    Return to Login
+                </span>
+
+
+                <span class="button-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>

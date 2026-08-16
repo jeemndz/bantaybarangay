@@ -1,0 +1,1008 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+body {
+    background: #e6f8e9;
+    color: #092f29;
+}
+
+
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.registration-page {
+    min-height: 100vh;
+    display: flex;
+}
+
+
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.registration-left {
+    width: 33%;
+    min-height: 100vh;
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #062f2a 0%,
+            #073c35 50%,
+            #092e2a 100%
+        );
+
+    color: white;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.left-background-circle {
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -90px;
+    top: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(106, 163, 151, 0.18);
+}
+
+
+.left-content {
+    position: relative;
+    z-index: 2;
+
+    padding: 38px 42px;
+}
+
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 65px;
+}
+
+
+.brand-icon {
+    width: 30px;
+    height: 34px;
+
+    border: 3px solid #e7fff3;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #e7fff3;
+
+    transform: rotate(45deg);
+}
+
+
+.brand-icon span {
+    transform: rotate(-45deg);
+
+    font-size: 20px;
+}
+
+
+.brand-name {
+    font-size: 24px;
+    font-weight: 600;
+
+    letter-spacing: -0.5px;
+}
+
+
+
+/* =========================================================
+   COMMUNITY CONTENT
+========================================================= */
+
+.community-content h1 {
+    font-size: clamp(40px, 4vw, 60px);
+
+    line-height: 1.05;
+
+    font-weight: 600;
+
+    letter-spacing: -2px;
+
+    margin-bottom: 55px;
+}
+
+
+
+/* =========================================================
+   BENEFITS
+========================================================= */
+
+.benefit-item {
+    display: flex;
+
+    gap: 17px;
+
+    margin-bottom: 35px;
+
+    max-width: 350px;
+}
+
+
+.benefit-icon {
+    flex-shrink: 0;
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255, 255, 255, 0.13);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #c9f1df;
+
+    font-size: 17px;
+}
+
+
+.benefit-text h3 {
+    font-size: 15px;
+
+    margin-bottom: 7px;
+
+    font-weight: 600;
+}
+
+
+.benefit-text p {
+    color: #9bb9b2;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+}
+
+
+
+/* =========================================================
+   LEFT FOOTER
+========================================================= */
+
+.left-footer {
+    position: relative;
+    z-index: 2;
+
+    padding: 30px 42px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    color: #77978f;
+
+    font-size: 12px;
+}
+
+
+
+/* =========================================================
+   RIGHT SIDE
+========================================================= */
+
+.registration-right {
+    width: 67%;
+
+    min-height: 100vh;
+
+    background: #e5f8e8;
+
+    padding: 60px 70px;
+}
+
+
+.registration-container {
+    width: 100%;
+    max-width: 700px;
+
+    margin: 0 auto;
+}
+
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.registration-header {
+    margin-bottom: 32px;
+}
+
+
+.registration-header h2 {
+    font-size: 34px;
+
+    line-height: 1.2;
+
+    font-weight: 600;
+
+    letter-spacing: -1px;
+
+    color: #082f29;
+
+    margin-bottom: 10px;
+}
+
+
+.registration-header p {
+    color: #58716b;
+
+    font-size: 16px;
+
+    line-height: 1.5;
+}
+
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-section {
+    margin-bottom: 38px;
+}
+
+
+.progress-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+}
+
+
+.progress-top strong {
+    font-size: 11px;
+
+    letter-spacing: 0.6px;
+
+    color: #0b3a32;
+}
+
+
+.progress-top span {
+    font-size: 12px;
+
+    color: #526b65;
+}
+
+
+.progress-bar {
+    width: 100%;
+
+    height: 7px;
+
+    background: #c9e4d0;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+.progress-fill {
+    width: 75%;
+
+    height: 100%;
+
+    background: #073b33;
+
+    border-radius: 20px;
+}
+
+
+.progress-label {
+    text-align: right;
+
+    margin-top: 9px;
+
+    color: #173f38;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.verification-form {
+    width: 100%;
+}
+
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.verification-card {
+    background: rgba(255, 255, 255, 0.78);
+
+    border-radius: 22px;
+
+    padding: 35px 36px 32px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 4px 15px rgba(31, 75, 61, 0.025);
+}
+
+
+.card-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding-bottom: 23px;
+
+    margin-bottom: 24px;
+
+    border-bottom: 1px solid #e3ebe5;
+}
+
+
+.title-icon {
+    font-size: 23px;
+
+    color: #164f45;
+}
+
+
+.card-title h3 {
+    font-size: 22px;
+
+    font-weight: 500;
+
+    color: #0c342d;
+}
+
+
+
+/* =========================================================
+   FORM ROW
+========================================================= */
+
+.form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+    margin-bottom: 23px;
+}
+
+
+.form-group {
+    width: 100%;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    color: #273c38;
+
+    font-weight: 600;
+}
+
+
+.form-group label span {
+    color: #b83d3d;
+}
+
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input[type="text"],
+select {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 13px;
+
+    border: 1px solid #b9c4c2;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #30433f;
+
+    font-size: 14px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #3e8274;
+
+    box-shadow:
+        0 0 0 3px rgba(62, 130, 116, 0.10);
+}
+
+
+input::placeholder {
+    color: #8b9694;
+}
+
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.select-wrapper {
+    position: relative;
+}
+
+
+.select-wrapper select {
+    appearance: none;
+
+    padding-right: 40px;
+
+    cursor: pointer;
+}
+
+
+.select-arrow {
+    position: absolute;
+
+    right: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+
+    color: #354b46;
+
+    font-size: 18px;
+}
+
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+.upload-group {
+    margin-top: 4px;
+}
+
+
+.upload-box {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 150px;
+
+    border: 2px dashed #8cbda7;
+
+    border-radius: 13px;
+
+    background: rgba(241, 250, 243, 0.65);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+.upload-box:hover {
+    background: #f3fbf5;
+
+    border-color: #4f927a;
+}
+
+
+.upload-box input[type="file"] {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    cursor: pointer;
+}
+
+
+.upload-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #4a7068;
+
+    font-size: 30px;
+
+    margin-bottom: 7px;
+}
+
+
+.upload-icon.cloud {
+    font-size: 32px;
+}
+
+
+.upload-box strong {
+    font-size: 14px;
+
+    color: #183c35;
+
+    font-weight: 600;
+
+    max-width: 90%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.upload-box small {
+    margin-top: 7px;
+
+    color: #52645f;
+
+    font-size: 11px;
+}
+
+
+
+/* =========================================================
+   RESIDENCY CARD
+========================================================= */
+
+.residency-card {
+    padding-bottom: 34px;
+}
+
+
+.document-type-group {
+    max-width: 230px;
+
+    margin-bottom: 23px;
+}
+
+
+
+/* =========================================================
+   SECURITY NOTICE
+========================================================= */
+
+.security-notice {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    margin: 0 0 25px;
+
+    border: 1px solid #c4dfca;
+
+    border-radius: 8px;
+
+    background: #dff2e2;
+
+    color: #35564d;
+}
+
+
+.security-notice-icon {
+    flex-shrink: 0;
+
+    font-size: 17px;
+
+    margin-top: 1px;
+}
+
+
+.security-notice p {
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    margin-bottom: 2px;
+}
+
+
+.security-notice p:last-child {
+    margin-bottom: 0;
+}
+
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.form-navigation {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-top: 8px;
+}
+
+
+.back-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    text-decoration: none;
+
+    color: #153f37;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    padding: 13px 8px;
+
+    transition: 0.2s ease;
+}
+
+
+.back-button:hover {
+    color: #286b5b;
+}
+
+
+.next-button {
+    border: none;
+
+    min-width: 190px;
+
+    height: 48px;
+
+    padding: 0 22px;
+
+    border-radius: 11px;
+
+    background: #05382f;
+
+    color: white;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 14px rgba(5, 56, 47, 0.12);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.next-button:hover {
+    background: #075044;
+
+    transform: translateY(-1px);
+}
+
+
+.next-button:active {
+    transform: translateY(0);
+}
+
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-link {
+    text-align: center;
+
+    margin-top: 25px;
+
+    color: #687a75;
+
+    font-size: 12px;
+}
+
+
+.login-link a {
+    color: #184e43;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .registration-left {
+        width: 36%;
+    }
+
+    .registration-right {
+        width: 64%;
+
+        padding: 45px 40px;
+    }
+
+    .left-content {
+        padding: 32px;
+    }
+
+    .left-footer {
+        padding: 25px 32px;
+    }
+
+    .community-content h1 {
+        font-size: 42px;
+    }
+
+}
+
+
+
+@media (max-width: 850px) {
+
+    .registration-page {
+        flex-direction: column;
+    }
+
+
+    .registration-left {
+        width: 100%;
+
+        min-height: auto;
+    }
+
+
+    .registration-right {
+        width: 100%;
+
+        min-height: auto;
+
+        padding: 40px 25px;
+    }
+
+
+    .left-content {
+        padding: 35px 30px;
+    }
+
+
+    .community-content h1 {
+        font-size: 42px;
+
+        margin-bottom: 35px;
+    }
+
+
+    .benefit-item {
+        margin-bottom: 22px;
+    }
+
+
+    .left-footer {
+        padding: 20px 30px;
+    }
+
+}
+
+
+
+@media (max-width: 600px) {
+
+    .registration-right {
+        padding: 30px 16px;
+    }
+
+
+    .registration-container {
+        max-width: 100%;
+    }
+
+
+    .registration-header h2 {
+        font-size: 27px;
+    }
+
+
+    .registration-header p {
+        font-size: 14px;
+    }
+
+
+    .verification-card {
+        padding: 25px 20px;
+        border-radius: 17px;
+    }
+
+
+    .card-title h3 {
+        font-size: 19px;
+    }
+
+
+    .form-row {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+
+    .document-type-group {
+        max-width: 100%;
+    }
+
+
+    .upload-box {
+        min-height: 135px;
+    }
+
+
+    .form-navigation {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .back-button {
+        justify-content: center;
+    }
+
+
+    .next-button {
+        width: 100%;
+    }
+
+
+    .left-content {
+        padding: 30px 25px;
+    }
+
+
+    .left-footer {
+        padding: 20px 25px;
+
+        font-size: 10px;
+    }
+
+}

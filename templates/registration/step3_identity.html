@@ -1,0 +1,853 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Identity Verification | BantayBarangay
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/step3_identity.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="registration-page">
+
+
+    <!-- ===================================================== -->
+    <!-- LEFT SIDE -->
+    <!-- ===================================================== -->
+
+    <section class="registration-left">
+
+        <div class="left-background-circle"></div>
+
+
+        <div class="left-content">
+
+
+            <!-- BRAND -->
+
+            <div class="brand">
+
+                <div class="brand-icon">
+
+                    <span>
+                        ♢
+                    </span>
+
+                </div>
+
+
+                <div class="brand-name">
+
+                    BantayBarangay
+
+                </div>
+
+            </div>
+
+
+
+            <!-- COMMUNITY CONTENT -->
+
+            <div class="community-content">
+
+
+                <h1>
+
+                    Join the<br>
+                    Community
+
+                </h1>
+
+
+
+                <!-- BENEFIT 1 -->
+
+                <div class="benefit-item">
+
+                    <div class="benefit-icon">
+
+                        ✓
+
+                    </div>
+
+
+                    <div class="benefit-text">
+
+                        <h3>
+                            Verified Identity
+                        </h3>
+
+                        <p>
+                            Secure, blockchain-backed verification
+                            for trusted community interactions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BENEFIT 2 -->
+
+                <div class="benefit-item">
+
+                    <div class="benefit-icon">
+
+                        ♧
+
+                    </div>
+
+
+                    <div class="benefit-text">
+
+                        <h3>
+                            Residency Proof
+                        </h3>
+
+                        <p>
+                            Establish your local presence to access
+                            civic services.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="left-footer">
+
+            <span>
+                © 2026 BantayBarangay
+            </span>
+
+            <span>
+                🔒 Secure Node
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ===================================================== -->
+    <!-- RIGHT SIDE -->
+    <!-- ===================================================== -->
+
+    <section class="registration-right">
+
+
+        <div class="registration-container">
+
+
+            <!-- ================================================= -->
+            <!-- HEADER -->
+            <!-- ================================================= -->
+
+            <div class="registration-header">
+
+                <h2>
+                    Identity &amp; Residency Verification
+                </h2>
+
+                <p>
+                    Upload valid documents to verify your identity
+                    and residency.
+                </p>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- PROGRESS -->
+            <!-- ================================================= -->
+
+            <div class="progress-section">
+
+
+                <div class="progress-top">
+
+                    <strong>
+                        STEP 3 OF 4
+                    </strong>
+
+                    <span>
+                        75%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div class="progress-fill"></div>
+
+                </div>
+
+
+                <div class="progress-label">
+
+                    Identity &amp; Residency Verification
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- ERROR -->
+            <!-- ================================================= -->
+
+            {% if error %}
+
+            <div class="error-message">
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- ================================================= -->
+            <!-- ONE FORM ONLY -->
+            <!-- ================================================= -->
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                action="{% url 'step3_identity' %}"
+                class="verification-form"
+            >
+
+                {% csrf_token %}
+
+
+
+                <!-- ================================================= -->
+                <!-- GOVERNMENT ID -->
+                <!-- ================================================= -->
+
+                <div class="verification-card">
+
+
+                    <div class="card-title">
+
+                        <span class="title-icon">
+                            ▣
+                        </span>
+
+                        <h3>
+                            Government-Issued ID
+                        </h3>
+
+                    </div>
+
+
+
+                    <!-- ID TYPE + ID NUMBER -->
+
+                    <div class="form-row">
+
+
+                        <!-- ID TYPE -->
+
+                        <div class="form-group">
+
+                            <label for="id_type">
+
+                                ID Type
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="select-wrapper">
+
+                                <select
+                                    id="id_type"
+                                    name="id_type"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select ID Type
+                                    </option>
+
+
+                                    <option
+                                        value="National ID"
+                                        {% if registration_data.id_type == "National ID" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        National ID
+                                    </option>
+
+
+                                    <option
+                                        value="Driver's License"
+                                        {% if registration_data.id_type == "Driver's License" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Driver's License
+                                    </option>
+
+
+                                    <option
+                                        value="Passport"
+                                        {% if registration_data.id_type == "Passport" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Passport
+                                    </option>
+
+
+                                    <option
+                                        value="UMID"
+                                        {% if registration_data.id_type == "UMID" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        UMID
+                                    </option>
+
+
+                                    <option
+                                        value="PhilHealth ID"
+                                        {% if registration_data.id_type == "PhilHealth ID" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        PhilHealth ID
+                                    </option>
+
+
+                                    <option
+                                        value="Postal ID"
+                                        {% if registration_data.id_type == "Postal ID" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Postal ID
+                                    </option>
+
+
+                                    <option
+                                        value="Voter's ID"
+                                        {% if registration_data.id_type == "Voter's ID" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Voter's ID
+                                    </option>
+
+
+                                    <option
+                                        value="Senior Citizen ID"
+                                        {% if registration_data.id_type == "Senior Citizen ID" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Senior Citizen ID
+                                    </option>
+
+
+                                    <option
+                                        value="Other"
+                                        {% if registration_data.id_type == "Other" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Other
+                                    </option>
+
+                                </select>
+
+
+                                <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ID NUMBER -->
+
+                        <div class="form-group">
+
+                            <label for="id_number">
+
+                                ID Number
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="id_number"
+                                name="id_number"
+                                placeholder="Enter ID Number"
+                                value="{{ registration_data.id_number|default:'' }}"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- UPLOAD VALID ID -->
+
+                    <div class="form-group upload-group">
+
+
+                        <label>
+
+                            Upload Valid ID
+
+                            <span>*</span>
+
+                        </label>
+
+
+
+                        <label
+                            for="valid_id"
+                            class="upload-box"
+                        >
+
+                            <input
+                                type="file"
+                                id="valid_id"
+                                name="valid_id"
+                                accept=".jpg,.jpeg,.png,.pdf"
+                                required
+                            >
+
+
+                            <div class="upload-icon">
+                                ↑
+                            </div>
+
+
+                            <strong id="valid-id-name">
+
+                                {% if registration_data.valid_id_name %}
+                                    {{ registration_data.valid_id_name }}
+                                {% else %}
+                                    Upload front of your valid ID
+                                {% endif %}
+
+                            </strong>
+
+
+                            <small>
+                                JPG, PNG or PDF • Maximum 5MB
+                            </small>
+
+
+                        </label>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- PROOF OF RESIDENCY -->
+                <!-- ================================================= -->
+
+                <div class="verification-card residency-card">
+
+
+                    <div class="card-title">
+
+                        <span class="title-icon">
+                            ♧
+                        </span>
+
+                        <h3>
+                            Proof of Residency
+                        </h3>
+
+                    </div>
+
+
+
+                    <!-- DOCUMENT TYPE -->
+
+                    <div class="form-group document-type-group">
+
+
+                        <label for="document_type">
+
+                            Document Type
+
+                            <span>*</span>
+
+                        </label>
+
+
+                        <div class="select-wrapper">
+
+
+                            <select
+                                id="document_type"
+                                name="document_type"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Document Type
+                                </option>
+
+
+                                <option
+                                    value="Barangay Certificate"
+                                    {% if registration_data.document_type == "Barangay Certificate" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Barangay Certificate
+                                </option>
+
+
+                                <option
+                                    value="Barangay Clearance"
+                                    {% if registration_data.document_type == "Barangay Clearance" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Barangay Clearance
+                                </option>
+
+
+                                <option
+                                    value="Certificate of Residency"
+                                    {% if registration_data.document_type == "Certificate of Residency" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Certificate of Residency
+                                </option>
+
+
+                                <option
+                                    value="Utility Bill"
+                                    {% if registration_data.document_type == "Utility Bill" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Utility Bill
+                                </option>
+
+
+                                <option
+                                    value="Lease Agreement"
+                                    {% if registration_data.document_type == "Lease Agreement" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Lease Agreement
+                                </option>
+
+
+                                <option
+                                    value="Other"
+                                    {% if registration_data.document_type == "Other" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Other
+                                </option>
+
+
+                            </select>
+
+
+                            <span class="select-arrow">
+                                ⌄
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- UPLOAD PROOF -->
+
+                    <div class="form-group upload-group">
+
+
+                        <label>
+
+                            Upload Proof
+
+                            <span>*</span>
+
+                        </label>
+
+
+                        <label
+                            for="residency_proof"
+                            class="upload-box"
+                        >
+
+
+                            <input
+                                type="file"
+                                id="residency_proof"
+                                name="residency_proof"
+                                accept=".jpg,.jpeg,.png,.pdf"
+                                required
+                            >
+
+
+                            <div class="upload-icon cloud">
+                                ☁
+                            </div>
+
+
+                            <strong id="residency-name">
+
+                                {% if registration_data.residency_proof_name %}
+                                    {{ registration_data.residency_proof_name }}
+                                {% else %}
+                                    Upload proof of residency
+                                {% endif %}
+
+                            </strong>
+
+
+                            <small>
+                                JPG, PNG or PDF • Maximum 5MB
+                            </small>
+
+
+                        </label>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- SECURITY NOTICE -->
+                <!-- ================================================= -->
+
+                <div class="security-notice">
+
+
+                    <div class="security-notice-icon">
+                        🔒
+                    </div>
+
+
+                    <div>
+
+                        <p>
+
+                            Your documents are securely stored and
+                            will only be used for resident verification.
+
+                        </p>
+
+
+                        <p>
+
+                            Document integrity may be recorded using
+                            blockchain verification.
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- NAVIGATION -->
+                <!-- ================================================= -->
+
+                <div class="form-navigation">
+
+
+                    <!-- BACK -->
+
+                    <a
+                        href="{% url 'step2_contact' %}"
+                        class="back-button"
+                    >
+
+                        <span>
+                            ←
+                        </span>
+
+                        <span>
+                            Back to Contact &amp; Address
+                        </span>
+
+                    </a>
+
+
+
+                    <!-- NEXT -->
+
+                    <button
+                        type="submit"
+                        class="next-button"
+                    >
+
+                        <span>
+                            Proceed to Review
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+
+            <!-- ================================================= -->
+            <!-- LOGIN -->
+            <!-- ================================================= -->
+
+            <div class="login-link">
+
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Log in here
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+
+<!-- ===================================================== -->
+<!-- FILE NAME DISPLAY -->
+<!-- ===================================================== -->
+
+<script>
+
+    const validIDInput =
+        document.getElementById("valid_id");
+
+    const residencyInput =
+        document.getElementById("residency_proof");
+
+
+    function updateFileName(input) {
+
+        const uploadBox =
+            input.closest(".upload-box");
+
+        const strong =
+            uploadBox.querySelector("strong");
+
+
+        if (input.files.length > 0) {
+
+            strong.textContent =
+                input.files[0].name;
+
+        }
+
+    }
+
+
+    validIDInput.addEventListener(
+        "change",
+        function () {
+
+            updateFileName(this);
+
+        }
+    );
+
+
+    residencyInput.addEventListener(
+        "change",
+        function () {
+
+            updateFileName(this);
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

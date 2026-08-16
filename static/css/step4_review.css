@@ -1,0 +1,884 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: #eaffed;
+
+    color: #102b26;
+}
+
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.review-page {
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 40% 60%;
+}
+
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.review-left {
+    position: relative;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 80% 50%,
+            rgba(36, 104, 91, 0.18),
+            transparent 30%
+        ),
+        #06352e;
+
+    color: white;
+
+    padding: 55px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    overflow: hidden;
+}
+
+
+.review-left::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.04);
+
+    right: -250px;
+    top: 35%;
+}
+
+
+.review-left::after {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.03);
+
+    right: -175px;
+    top: 40%;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+.brand-logo {
+    width: 34px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.shield-icon {
+    font-size: 31px;
+
+    color: #d9f7e8;
+}
+
+
+.brand-text h1 {
+    font-size: 24px;
+
+    font-weight: 600;
+
+    letter-spacing: -.5px;
+}
+
+
+/* =========================================================
+   COMMUNITY
+========================================================= */
+
+.community-content {
+    margin-top: 70px;
+
+    max-width: 420px;
+}
+
+
+.community-content h2 {
+    font-size: 45px;
+
+    line-height: 1.15;
+
+    font-weight: 600;
+
+    letter-spacing: -1.5px;
+
+    margin-bottom: 28px;
+}
+
+
+.community-content p {
+    font-size: 17px;
+
+    line-height: 1.65;
+
+    color: #a9c8c0;
+
+    max-width: 390px;
+}
+
+
+/* =========================================================
+   LEFT SECURITY
+========================================================= */
+
+.left-security {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.security-line {
+    width: 100%;
+
+    height: 1px;
+
+    background: rgba(255,255,255,.12);
+
+    margin-bottom: 45px;
+}
+
+
+.security-content {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.security-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    color: #d4f3e4;
+}
+
+
+.security-content strong {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 5px;
+}
+
+
+.security-content small {
+    display: block;
+
+    font-size: 11px;
+
+    color: #8fb4aa;
+}
+
+
+/* =========================================================
+   RIGHT SIDE
+========================================================= */
+
+.review-right {
+    background: #eaffed;
+
+    min-height: 100vh;
+
+    padding: 32px 7%;
+}
+
+
+.review-container {
+    max-width: 900px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.review-header {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+}
+
+
+.step-label {
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    color: #54756d;
+
+    margin-bottom: 6px;
+}
+
+
+.review-header h1 {
+    font-size: 30px;
+
+    line-height: 1.1;
+
+    font-weight: 500;
+
+    color: #092a24;
+}
+
+
+.percentage {
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #54756d;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-bar {
+    width: 100%;
+
+    height: 7px;
+
+    border-radius: 20px;
+
+    background: #c7dfce;
+
+    margin-top: 12px;
+
+    overflow: hidden;
+}
+
+
+.progress-fill {
+    width: 100%;
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    background: #07382f;
+}
+
+
+.review-description {
+    margin-top: 22px;
+
+    margin-bottom: 42px;
+
+    color: #50675f;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   REVIEW CARD
+========================================================= */
+
+.review-card {
+    background: rgba(255,255,255,.55);
+
+    border: 1px solid rgba(160,190,170,.25);
+
+    border-radius: 20px;
+
+    padding: 25px 28px;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 5px 18px rgba(26,65,51,.025);
+}
+
+
+.card-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 26px;
+}
+
+
+.card-header h2 {
+    font-size: 21px;
+
+    font-weight: 500;
+
+    color: #092a24;
+}
+
+
+.edit-link {
+    text-decoration: none;
+
+    color: #416b62;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: .2s;
+}
+
+
+.edit-link:hover {
+    color: #07382f;
+}
+
+
+/* =========================================================
+   INFORMATION GRID
+========================================================= */
+
+.information-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 25px 60px;
+}
+
+
+.information-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.information-item.full {
+    grid-column: 1 / -1;
+}
+
+
+.information-label {
+    font-size: 11px;
+
+    color: #536b63;
+
+    font-weight: 500;
+}
+
+
+.information-item strong {
+    font-size: 15px;
+
+    color: #122f29;
+
+    font-weight: 500;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   DOCUMENTS
+========================================================= */
+
+.document-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+.document-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.document-check {
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    background: #e4f3ea;
+
+    color: #74aa96;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 13px;
+}
+
+
+.document-name {
+    font-size: 14px;
+
+    color: #243f37;
+}
+
+
+.document-name small {
+    color: #647b73;
+
+    margin-left: 4px;
+}
+
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    background: #d9f1df;
+
+    color: #496d5c;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .2px;
+}
+
+
+.status-badge span {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #527f6c;
+}
+
+
+/* =========================================================
+   DECLARATION
+========================================================= */
+
+.declaration-box {
+    background: rgba(217,242,222,.55);
+
+    border: 1px solid #c7e4ce;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    margin-top: 42px;
+
+    margin-bottom: 70px;
+}
+
+
+.declaration-title {
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #173c32;
+
+    margin-bottom: 15px;
+}
+
+
+.checkbox-row {
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    cursor: pointer;
+
+    margin-bottom: 17px;
+}
+
+
+.checkbox-row:last-child {
+    margin-bottom: 0;
+}
+
+
+.checkbox-row input {
+    position: absolute;
+
+    opacity: 0;
+
+    width: 1px;
+    height: 1px;
+}
+
+
+.custom-checkbox {
+    width: 18px;
+    height: 18px;
+
+    min-width: 18px;
+
+    border: 1.5px solid #6d8a80;
+
+    border-radius: 4px;
+
+    background: transparent;
+
+    margin-top: 2px;
+
+    position: relative;
+}
+
+
+.checkbox-row input:checked + .custom-checkbox {
+    background: #07382f;
+
+    border-color: #07382f;
+}
+
+
+.checkbox-row input:checked + .custom-checkbox::after {
+    content: "✓";
+
+    position: absolute;
+
+    left: 3px;
+    top: -1px;
+
+    font-size: 13px;
+
+    color: white;
+}
+
+
+.checkbox-text {
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: #566b63;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.navigation {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 60px;
+
+    align-items: center;
+}
+
+
+.back-button,
+.submit-button {
+    height: 42px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+.back-button {
+    border: 2px solid #0b372f;
+
+    background: transparent;
+
+    color: #103b33;
+}
+
+
+.back-button:hover {
+    background: rgba(255,255,255,.5);
+}
+
+
+.submit-button {
+    border: none;
+
+    background: #07382f;
+
+    color: white;
+
+    box-shadow:
+        0 4px 8px rgba(7,56,47,.15);
+}
+
+
+.submit-button:hover {
+    background: #0b463b;
+}
+
+
+/* =========================================================
+   NOTICE
+========================================================= */
+
+.submission-notice {
+    margin-top: 40px;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    color: #667d74;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-link {
+    margin-top: 12px;
+
+    font-size: 14px;
+
+    color: #536b63;
+}
+
+
+.login-link a {
+    color: #315f53;
+
+    text-decoration: none;
+
+    font-weight: 500;
+}
+
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .review-page {
+        grid-template-columns: 35% 65%;
+    }
+
+    .review-left {
+        padding: 40px;
+    }
+
+    .community-content h2 {
+        font-size: 38px;
+    }
+
+    .review-right {
+        padding: 30px 5%;
+    }
+
+    .navigation {
+        gap: 25px;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .review-page {
+        display: block;
+    }
+
+
+    .review-left {
+        min-height: auto;
+
+        padding: 35px 25px;
+
+        display: block;
+    }
+
+
+    .community-content {
+        margin-top: 40px;
+    }
+
+
+    .community-content h2 {
+        font-size: 36px;
+    }
+
+
+    .left-security {
+        margin-top: 60px;
+    }
+
+
+    .review-right {
+        padding: 35px 20px;
+    }
+
+
+    .information-grid {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+
+    .information-item.full {
+        grid-column: auto;
+    }
+
+
+    .navigation {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+
+    .declaration-box {
+        margin-bottom: 35px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .review-card {
+        padding: 20px;
+    }
+
+
+    .card-header h2 {
+        font-size: 18px;
+    }
+
+
+    .review-header h1 {
+        font-size: 25px;
+    }
+
+
+    .community-content h2 {
+        font-size: 32px;
+    }
+
+
+    .review-left {
+        padding: 30px 20px;
+    }
+
+}
