@@ -462,43 +462,14 @@
                             <div class="input-wrapper select-wrapper">
 
 
-                                <select
-                                    id="province"
-                                    name="province"
-                                    required
-                                >
+                                <select id="province" name="province" required>
 
-                                    <option value="">
-                                        Select Province
-                                    </option>
-
-
-                                    <option
-                                        value="Bulacan"
-                                        {% if registration_data.province == "Bulacan" %}
-                                            selected
-                                        {% endif %}
-                                    >
-                                        Bulacan
-                                    </option>
-
-
-                                    <option
-                                        value="Metro Manila"
-                                        {% if registration_data.province == "Metro Manila" %}
-                                            selected
-                                        {% endif %}
-                                    >
-                                        Metro Manila
-                                    </option>
-
+                                    <option value="Bulacan" {% if registration_data.province == "Bulacan" %}selected {% endif %}> Bulacan </option>
 
                                 </select>
 
 
-                                <span class="select-arrow">
-                                    ⌄
-                                </span>
+                                <span class="select-arrow"> ▾ </span>
 
 
                             </div>
@@ -532,27 +503,7 @@
                                     required
                                 >
 
-                                    <option value="">
-                                        Select Municipality / City
-                                    </option>
-
-
-                                    <option
-                                        value="San Ildefonso"
-                                        {% if registration_data.municipality == "San Ildefonso" %}
-                                            selected
-                                        {% endif %}
-                                    >
-                                        San Ildefonso
-                                    </option>
-
-
-                                    <option
-                                        value="San Rafael"
-                                        {% if registration_data.municipality == "San Rafael" %}
-                                            selected
-                                        {% endif %}
-                                    >
+                                    <option value="San Rafael" {% if registration_data.municipality == "San Rafael" %} selected {% endif %}>
                                         San Rafael
                                     </option>
 
@@ -561,7 +512,7 @@
 
 
                                 <span class="select-arrow">
-                                    ⌄
+                                    ▾
                                 </span>
 
 
@@ -600,28 +551,9 @@
                                 required
                             >
 
-                                <option value="">
-                                    Select Barangay
-                                </option>
 
-
-                                <option
-                                    value="Barangay San Antonio"
-                                    {% if registration_data.barangay == "Barangay San Antonio" %}
-                                        selected
-                                    {% endif %}
-                                >
-                                    Barangay San Antonio
-                                </option>
-
-
-                                <option
-                                    value="Barangay Poblacion"
-                                    {% if registration_data.barangay == "Barangay Poblacion" %}
-                                        selected
-                                    {% endif %}
-                                >
-                                    Barangay Poblacion
+                                <option value="Barangay San Antonio" {% if registration_data.barangay == "Barangay San Antonio" %} selected {% endif %} >
+                                    Ulingao
                                 </option>
 
 
@@ -629,13 +561,9 @@
 
 
                             <span class="select-arrow">
-                                ⌄
+                               ▾
                             </span>
-
-
                         </div>
-
-
                     </div>
 
 
