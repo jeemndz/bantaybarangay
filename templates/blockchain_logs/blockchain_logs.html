@@ -1,0 +1,800 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Blockchain Logs | BantayBarangay
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blockchain_logs.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="blockchain-page">
+
+    <!-- ===================================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ===================================================== -->
+
+    <div class="blockchain-header">
+
+        <div class="header-left">
+
+            <h1>
+                Blockchain Ledger Audit
+            </h1>
+
+            <p>
+                Monitor and verify the integrity of all digital records
+                via distributed consensus.
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <button class="filter-button">
+                <span>⚱</span>
+                Filters
+            </button>
+
+            <button class="resync-button">
+                <span>↻</span>
+                Force Resync
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- SUMMARY CARDS -->
+    <!-- ===================================================== -->
+
+    <div class="blockchain-stats">
+
+
+        <!-- VERIFIED DOCUMENTS -->
+
+        <div class="blockchain-stat-card">
+
+            <div class="stat-card-top">
+
+                <span class="stat-label">
+                    Verified Documents
+                </span>
+
+                <span class="stat-icon">
+                    ▣
+                </span>
+
+            </div>
+
+            <h2>
+                8,432
+            </h2>
+
+            <span class="stat-growth positive">
+                ↑ 12.5% this month
+            </span>
+
+        </div>
+
+
+
+        <!-- BLOCKCHAIN TRANSACTIONS -->
+
+        <div class="blockchain-stat-card">
+
+            <div class="stat-card-top">
+
+                <span class="stat-label">
+                    Blockchain Transactions
+                </span>
+
+                <span class="stat-icon">
+                    ▤
+                </span>
+
+            </div>
+
+            <h2>
+                12,105
+            </h2>
+
+            <span class="stat-growth">
+                ◉ Active Sync
+            </span>
+
+        </div>
+
+
+
+        <!-- TODAY'S TRANSACTIONS -->
+
+        <div class="blockchain-stat-card">
+
+            <div class="stat-card-top">
+
+                <span class="stat-label">
+                    Today's Transactions
+                </span>
+
+                <span class="stat-icon">
+                    ▣
+                </span>
+
+            </div>
+
+            <h2>
+                42
+            </h2>
+
+            <span class="stat-growth">
+                ◷ 2 hours avg. frequency
+            </span>
+
+        </div>
+
+
+
+        <!-- FAILED VERIFICATIONS -->
+
+        <div class="blockchain-stat-card failed-card">
+
+            <div class="stat-card-top">
+
+                <span class="stat-label">
+                    Failed Verifications
+                </span>
+
+                <span class="stat-icon">
+                    ◉
+                </span>
+
+            </div>
+
+            <h2>
+                0
+            </h2>
+
+            <span class="stat-growth success">
+                ✓ Systems Optimal & Secure
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- MAIN BLOCKCHAIN CONTENT -->
+    <!-- ===================================================== -->
+
+    <div class="blockchain-content">
+
+
+        <!-- ================================================= -->
+        <!-- LEDGER FEED -->
+        <!-- ================================================= -->
+
+        <section class="ledger-panel">
+
+
+            <!-- PANEL HEADER -->
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Ledger Feed
+                    </h2>
+
+                </div>
+
+                <span class="live-status">
+                    ● Real-time Updating
+                </span>
+
+            </div>
+
+
+
+            <!-- TRANSACTION TABLE -->
+
+            <div class="ledger-table-wrapper">
+
+                <table class="ledger-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Transaction ID
+                            </th>
+
+                            <th>
+                                Document Type
+                            </th>
+
+                            <th>
+                                Block #
+                            </th>
+
+                            <th>
+                                Timestamp
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <!-- TRANSACTION 1 -->
+
+                        <tr
+                            class="transaction-row active-row"
+                            onclick="showTransaction(
+                                '0x8b2...fe94',
+                                'Indigency Certificate',
+                                '#48,291',
+                                '10:45 AM, May 24',
+                                '0x8b2f7a1c9e3d4b...'
+                            )"
+                        >
+
+                            <td>
+
+                                <div class="transaction-id">
+                                    0x8b2...fe94
+                                </div>
+
+                                <small>
+                                    DOC-ID: 982-01
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="document-badge">
+                                    Indigency Certificate
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                #48,291
+                            </td>
+
+
+                            <td>
+                                10:45 AM, May 24
+                            </td>
+
+
+                            <td>
+
+                                <span class="status-validated">
+                                    ● VALIDATED
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- TRANSACTION 2 -->
+
+                        <tr
+                            class="transaction-row"
+                            onclick="showTransaction(
+                                '0x4c9...d211',
+                                'Official Resolution',
+                                '#48,290',
+                                '09:12 AM, May 24',
+                                '0x4c9e12ab8d...'
+                            )"
+                        >
+
+                            <td>
+
+                                <div class="transaction-id">
+                                    0x4c9...d211
+                                </div>
+
+                                <small>
+                                    DOC-ID: 92-17
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="document-badge">
+                                    Official Resolution
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                #48,290
+                            </td>
+
+
+                            <td>
+                                09:12 AM, May 24
+                            </td>
+
+
+                            <td>
+
+                                <span class="status-validated">
+                                    ● VALIDATED
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- TRANSACTION 3 -->
+
+                        <tr
+                            class="transaction-row"
+                            onclick="showTransaction(
+                                '0x42d...6843',
+                                'Business Permit',
+                                '#48,289',
+                                '08:45 PM, May 23',
+                                '0x42d6a81bc...'
+                            )"
+                        >
+
+                            <td>
+
+                                <div class="transaction-id">
+                                    0x42d...6843
+                                </div>
+
+                                <small>
+                                    DOC-ID: 67-01
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="document-badge">
+                                    Business Permit
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                #48,289
+                            </td>
+
+
+                            <td>
+                                08:45 PM, May 23
+                            </td>
+
+
+                            <td>
+
+                                <span class="status-validated">
+                                    ● VALIDATED
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- TRANSACTION 4 -->
+
+                        <tr
+                            class="transaction-row"
+                            onclick="showTransaction(
+                                '0x95...a12c',
+                                'Barangay Clearance',
+                                '#48,288',
+                                '06:20 PM, May 23',
+                                '0x95ab42d91c...'
+                            )"
+                        >
+
+                            <td>
+
+                                <div class="transaction-id">
+                                    0x95...a12c
+                                </div>
+
+                                <small>
+                                    DOC-ID: 63-80
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="document-badge">
+                                    Barangay Clearance
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                #48,288
+                            </td>
+
+
+                            <td>
+                                06:20 PM, May 23
+                            </td>
+
+
+                            <td>
+
+                                <span class="status-validated">
+                                    ● VALIDATED
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- TABLE FOOTER -->
+
+            <div class="ledger-footer">
+
+                <span>
+                    Showing 1–4 of 12,105 records
+                </span>
+
+
+                <div class="pagination">
+
+                    <button>
+                        ‹
+                    </button>
+
+                    <button class="active">
+                        1
+                    </button>
+
+                    <button>
+                        2
+                    </button>
+
+                    <button>
+                        3
+                    </button>
+
+                    <button>
+                        4
+                    </button>
+
+                    <button>
+                        ›
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- TRANSACTION DETAILS -->
+        <!-- ================================================= -->
+
+        <aside class="transaction-panel">
+
+
+            <!-- PANEL HEADER -->
+
+            <div class="transaction-header">
+
+                <h2>
+                    Transaction Details
+                </h2>
+
+                <span class="block-number">
+                    BLOCK #48,291
+                </span>
+
+            </div>
+
+
+
+            <!-- BLOCKCHAIN HASH CARD -->
+
+            <div class="hash-card">
+
+                <div class="qr-placeholder">
+                    <div class="qr-code">
+                        ▦
+                    </div>
+                </div>
+
+
+                <small>
+                    Blockchain Hash (Full)
+                </small>
+
+
+                <p id="hashValue">
+                    0x8b2f7a1c9e3d4b98e45e2d1c0b9a8f7e6d5c4b3a2
+                </p>
+
+            </div>
+
+
+
+            <!-- DOCUMENT INFORMATION -->
+
+            <div class="transaction-information">
+
+                <div class="information-row">
+
+                    <span>
+                        Document Hash (SHA-256)
+                    </span>
+
+                    <strong>
+                        95a8...d8e
+                    </strong>
+
+                </div>
+
+
+                <div class="information-row">
+
+                    <span>
+                        Issuer Name
+                    </span>
+
+                    <strong id="issuerName">
+                        J. Cruz
+                    </strong>
+
+                </div>
+
+
+                <div class="information-row">
+
+                    <span>
+                        Network Status
+                    </span>
+
+                    <strong class="network-status">
+                        ✓ Confirmed by 12 Nodes
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- VERIFICATION HISTORY -->
+
+            <div class="verification-history">
+
+                <h3>
+                    Verification History
+                </h3>
+
+
+                <div class="history-item">
+
+                    <span class="history-dot"></span>
+
+                    <div>
+
+                        <strong>
+                            Final Consensus Achieved
+                        </strong>
+
+                        <small>
+                            10:47 AM, May 24, 2024
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="history-item">
+
+                    <span class="history-dot"></span>
+
+                    <div>
+
+                        <strong>
+                            Block Validation
+                        </strong>
+
+                        <small>
+                            10:46 AM, May 24, 2024
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="history-item">
+
+                    <span class="history-dot"></span>
+
+                    <div>
+
+                        <strong>
+                            Ledger Entry Submitted
+                        </strong>
+
+                        <small>
+                            10:45 AM, May 24, 2024
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PANEL ACTIONS -->
+
+            <div class="transaction-actions">
+
+                <button
+                    type="button"
+                    class="view-source-btn"
+                >
+                    ◉ View Source
+                </button>
+
+
+                <button
+                    type="button"
+                    class="export-btn"
+                >
+                    ⇩ Export Proof
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+
+    <!-- ===================================================== -->
+    <!-- PAGE FOOTER -->
+    <!-- ===================================================== -->
+
+    <div class="blockchain-footer">
+
+        <span>
+            © 2026 BantayBarangay. Secure Blockchain Governance.
+        </span>
+
+        <div>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms of Service
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+function showTransaction(
+    transactionId,
+    documentType,
+    blockNumber,
+    timestamp,
+    hash
+) {
+
+    // Update block number
+
+    const blockElement =
+        document.querySelector(".block-number");
+
+    if (blockElement) {
+
+        blockElement.textContent =
+            "BLOCK " + blockNumber;
+
+    }
+
+
+    // Update hash
+
+    const hashElement =
+        document.getElementById("hashValue");
+
+    if (hashElement) {
+
+        hashElement.textContent = hash;
+
+    }
+
+
+    // Highlight selected transaction
+
+    const rows =
+        document.querySelectorAll(".transaction-row");
+
+    rows.forEach(function(row) {
+
+        row.classList.remove("active-row");
+
+    });
+
+
+    event.currentTarget.classList.add(
+        "active-row"
+    );
+
+}
+
+</script>
+
+{% endblock %}

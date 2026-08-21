@@ -26,4 +26,5 @@ urlpatterns = [
     path('complaints/', include('complaints.urls')),
     path("documents/", include("documents.urls")),
     path('', include('website.urls')),
+    path('blockchain_logs/', include('blockchain_logs.urls')),
 ]
