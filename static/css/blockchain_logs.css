@@ -1,0 +1,1044 @@
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+.blockchain-page {
+    width: 100%;
+    min-height: calc(100vh - 60px);
+
+    padding: 24px 28px;
+
+    background: #eaf8ed;
+
+    color: #123d35;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.blockchain-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+
+}
+
+
+.header-left h1 {
+
+    margin: 0;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #073f36;
+
+}
+
+
+.header-left p {
+
+    margin: 5px 0 0;
+
+    font-size: 11px;
+
+    color: #64817a;
+
+}
+
+
+.header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.filter-button,
+.resync-button {
+
+    height: 32px;
+
+    padding: 0 13px;
+
+    border-radius: 7px;
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+
+.filter-button {
+
+    border: 1px solid #c7d9cd;
+
+    background: #f8fffa;
+
+    color: #234d44;
+
+}
+
+
+.filter-button:hover {
+
+    background: #ffffff;
+
+}
+
+
+.resync-button {
+
+    border: none;
+
+    background: #073f36;
+
+    color: white;
+
+}
+
+
+.resync-button:hover {
+
+    background: #0b5448;
+
+    transform: translateY(-1px);
+
+}
+
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.blockchain-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.blockchain-stat-card {
+
+    min-height: 92px;
+
+    padding: 14px;
+
+    background: #f9fffa;
+
+    border: 1px solid #d8e9dc;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 2px 8px rgba(31, 93, 64, 0.04);
+
+}
+
+
+.blockchain-stat-card.failed-card {
+
+    background: #dcefe1;
+
+}
+
+
+.stat-card-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.stat-label {
+
+    font-size: 9px;
+
+    color: #637b74;
+
+}
+
+
+.stat-icon {
+
+    font-size: 13px;
+
+    color: #4c7770;
+
+}
+
+
+.blockchain-stat-card h2 {
+
+    margin: 7px 0 2px;
+
+    font-size: 18px;
+
+    color: #123e36;
+
+}
+
+
+.stat-growth {
+
+    font-size: 8px;
+
+    color: #67817a;
+
+}
+
+
+.stat-growth.positive {
+
+    color: #47836a;
+
+}
+
+
+.stat-growth.success {
+
+    color: #41765e;
+
+}
+
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.blockchain-content {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        275px;
+
+    gap: 10px;
+
+    align-items: stretch;
+
+}
+
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.ledger-panel,
+.transaction-panel {
+
+    background: #f9fffa;
+
+    border: 1px solid #d7e8dc;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(31, 93, 64, 0.04);
+
+}
+
+
+.ledger-panel {
+
+    min-width: 0;
+
+}
+
+
+
+/* =========================================================
+   PANEL HEADER
+========================================================= */
+
+.panel-header {
+
+    height: 43px;
+
+    padding: 0 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #dcebe0;
+
+}
+
+
+.panel-header h2,
+.transaction-header h2 {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #16483e;
+
+}
+
+
+.live-status {
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    background: #e5f5e9;
+
+    color: #4a7a68;
+
+    font-size: 7px;
+
+}
+
+
+
+/* =========================================================
+   LEDGER TABLE
+========================================================= */
+
+.ledger-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.ledger-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.ledger-table thead {
+
+    background: #063d35;
+
+}
+
+
+.ledger-table th {
+
+    padding: 9px 10px;
+
+    text-align: left;
+
+    font-size: 8px;
+
+    font-weight: 500;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+
+}
+
+
+.ledger-table td {
+
+    padding: 10px;
+
+    border-bottom: 1px solid #e2eee5;
+
+    font-size: 8px;
+
+    color: #3d5952;
+
+    white-space: nowrap;
+
+}
+
+
+.transaction-row {
+
+    cursor: pointer;
+
+    transition: 0.15s ease;
+
+}
+
+
+.transaction-row:hover {
+
+    background: #f0faf2;
+
+}
+
+
+.transaction-row.active-row {
+
+    background: #eef9f1;
+
+}
+
+
+.transaction-id {
+
+    color: #1f6256;
+
+    font-weight: 600;
+
+}
+
+
+.ledger-table td small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 7px;
+
+    color: #9aaea8;
+
+}
+
+
+.document-badge {
+
+    display: inline-flex;
+
+    padding: 4px 7px;
+
+    border-radius: 20px;
+
+    background: #dcefe3;
+
+    color: #4b7c68;
+
+    font-size: 7px;
+
+}
+
+
+.status-validated {
+
+    color: #498267;
+
+    font-size: 7px;
+
+    font-weight: 600;
+
+}
+
+
+
+/* =========================================================
+   LEDGER FOOTER
+========================================================= */
+
+.ledger-footer {
+
+    min-height: 42px;
+
+    padding: 0 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    font-size: 7px;
+
+    color: #7b918a;
+
+}
+
+
+.pagination {
+
+    display: flex;
+
+    gap: 4px;
+
+}
+
+
+.pagination button {
+
+    width: 23px;
+
+    height: 23px;
+
+    border: 1px solid #d5e5da;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: #5c756e;
+
+    font-size: 8px;
+
+    cursor: pointer;
+
+}
+
+
+.pagination button:hover {
+
+    background: #edf8ef;
+
+}
+
+
+.pagination button.active {
+
+    border-color: #063d35;
+
+    background: #063d35;
+
+    color: white;
+
+}
+
+
+
+/* =========================================================
+   TRANSACTION DETAILS
+========================================================= */
+
+.transaction-panel {
+
+    padding-bottom: 10px;
+
+}
+
+
+.transaction-header {
+
+    min-height: 43px;
+
+    padding: 0 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #dcebe0;
+
+}
+
+
+.block-number {
+
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    background: #e7f4e9;
+
+    color: #648178;
+
+    font-size: 6px;
+
+}
+
+
+
+/* =========================================================
+   HASH CARD
+========================================================= */
+
+.hash-card {
+
+    margin: 10px;
+
+    padding: 10px;
+
+    text-align: center;
+
+    border: 1px solid #e0ece3;
+
+    border-radius: 7px;
+
+    background: #f8fcf9;
+
+}
+
+
+.qr-placeholder {
+
+    width: 65px;
+
+    height: 65px;
+
+    margin: 0 auto 8px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe9df;
+
+    border-radius: 5px;
+
+}
+
+
+.qr-code {
+
+    font-size: 38px;
+
+    color: #1f554b;
+
+}
+
+
+.hash-card small {
+
+    display: block;
+
+    font-size: 7px;
+
+    color: #7b918a;
+
+}
+
+
+.hash-card p {
+
+    margin: 5px 0 0;
+
+    word-break: break-all;
+
+    font-size: 6px;
+
+    line-height: 1.5;
+
+    color: #173f37;
+
+}
+
+
+
+/* =========================================================
+   INFORMATION
+========================================================= */
+
+.transaction-information {
+
+    padding: 0 12px;
+
+}
+
+
+.information-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    padding: 7px 0;
+
+    border-bottom: 1px solid #edf3ee;
+
+}
+
+
+.information-row span {
+
+    font-size: 7px;
+
+    color: #748b84;
+
+}
+
+
+.information-row strong {
+
+    text-align: right;
+
+    font-size: 7px;
+
+    color: #294e46;
+
+}
+
+
+.network-status {
+
+    color: #4b8068 !important;
+
+}
+
+
+
+/* =========================================================
+   VERIFICATION HISTORY
+========================================================= */
+
+.verification-history {
+
+    padding: 8px 12px;
+
+}
+
+
+.verification-history h3 {
+
+    margin: 5px 0 10px;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    color: #45665e;
+
+}
+
+
+.history-item {
+
+    position: relative;
+
+    display: flex;
+
+    gap: 9px;
+
+    padding-bottom: 12px;
+
+}
+
+
+.history-item:not(:last-child)::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 3px;
+
+    top: 8px;
+
+    width: 1px;
+
+    height: calc(100% - 5px);
+
+    background: #cddfd3;
+
+}
+
+
+.history-dot {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 7px;
+
+    height: 7px;
+
+    margin-top: 2px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #4d7e6c;
+
+}
+
+
+.history-item strong {
+
+    display: block;
+
+    font-size: 7px;
+
+    color: #365950;
+
+}
+
+
+.history-item small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 6px;
+
+    color: #8a9c96;
+
+}
+
+
+
+/* =========================================================
+   TRANSACTION ACTIONS
+========================================================= */
+
+.transaction-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+
+    padding: 0 10px;
+
+}
+
+
+.view-source-btn,
+.export-btn {
+
+    height: 30px;
+
+    border-radius: 7px;
+
+    font-size: 7px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+
+.view-source-btn {
+
+    border: none;
+
+    background: #063d35;
+
+    color: white;
+
+}
+
+
+.view-source-btn:hover {
+
+    background: #0a5146;
+
+}
+
+
+.export-btn {
+
+    border: 1px solid #bfd2c5;
+
+    background: #f8fcf9;
+
+    color: #4a665f;
+
+}
+
+
+.export-btn:hover {
+
+    background: #edf7ef;
+
+}
+
+
+
+/* =========================================================
+   PAGE FOOTER
+========================================================= */
+
+.blockchain-footer {
+
+    margin-top: 8px;
+
+    padding: 8px 5px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 7px;
+
+    color: #7d918b;
+
+}
+
+
+.blockchain-footer div {
+
+    display: flex;
+
+    gap: 18px;
+
+}
+
+
+.blockchain-footer a {
+
+    color: #718781;
+
+    text-decoration: underline;
+
+}
+
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .blockchain-stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .blockchain-content {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .transaction-panel {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .blockchain-page {
+
+        padding: 18px;
+
+    }
+
+
+    .blockchain-header {
+
+        flex-direction: column;
+
+        gap: 12px;
+
+    }
+
+
+    .header-actions {
+
+        width: 100%;
+
+    }
+
+
+    .filter-button,
+    .resync-button {
+
+        flex: 1;
+
+    }
+
+
+    .blockchain-stats {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .ledger-footer {
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        padding: 10px;
+
+    }
+
+
+    .blockchain-footer {
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        text-align: center;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .transaction-actions {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}

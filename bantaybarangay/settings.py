@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'documents',
     'website',
     'registration',
+    'blockchain_logs',
 ]
 
 MIDDLEWARE = [
