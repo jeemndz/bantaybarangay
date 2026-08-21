@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
 from .models import Document
+from registration.models import Resident
 
 
 def document_list(request):
@@ -14,11 +15,9 @@ def document_list(request):
     search = request.GET.get('search', '').strip()
 
     if search:
-
         documents = documents.filter(
             document_number__icontains=search
         )
-
 
     # ==========================
     # FILTER BY TYPE
@@ -30,11 +29,9 @@ def document_list(request):
     )
 
     if document_type:
-
         documents = documents.filter(
             document_type=document_type
         )
-
 
     # ==========================
     # FILTER BY STATUS
@@ -46,11 +43,9 @@ def document_list(request):
     )
 
     if status:
-
         documents = documents.filter(
             status=status
         )
-
 
     # ==========================
     # STATISTICS
@@ -66,6 +61,27 @@ def document_list(request):
         status='Pending'
     ).count()
 
+    # ==========================
+    # GET RESIDENTS
+    # ==========================
+
+    residents = Resident.objects.all()
+
+    resident_dict = {
+        resident.resident_id: resident
+        for resident in residents
+    }
+
+    # Attach resident information
+    for document in documents:
+
+        document.resident = resident_dict.get(
+            document.resident_id
+        )
+
+    # ==========================
+    # CONTEXT
+    # ==========================
 
     context = {
 
@@ -88,29 +104,6 @@ def document_list(request):
 
         'selected_status':
             status,
-    }
-
-
-    return render(
-        request,
-        'documentmodule/document_list.html',
-        context
-    )
-
-
-# =====================================================
-# DOCUMENT DETAIL
-# =====================================================
-
-def document_detail(request, document_id):
-
-    document = get_object_or_404(
-        Document,
-        document_id=document_id
-    )
-
-    context = {
-        'document': document
     }
 
     return render(

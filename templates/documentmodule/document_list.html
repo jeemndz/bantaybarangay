@@ -12,26 +12,26 @@ Document Management | BantayBarangay
 {% block content %}
 
 
-    <!-- =========================
+<!-- =========================
          PAGE HEADER
     ========================== -->
 
-    <div class="document-page-header">
+<div class="document-page-header">
 
-        <div>
-            <h1>Document Management</h1>
+    <div>
+        <h1>Document Management</h1>
 
-            <p>
-                Manage and issue blockchain-verified civic documents for your community.
-            </p>
-        </div>
-
+        <p>
+            Manage and issue blockchain-verified civic documents for your community.
+        </p>
     </div>
 
+</div>
 
-    <!-- =========================
+
+<!-- =========================
          DOCUMENT TEMPLATES
-    ========================== -->
+    ========================== -
 
     <div class="document-template-header">
 
@@ -48,599 +48,455 @@ Document Management | BantayBarangay
 
         <!-- Complaint Reports -->
 
-        <div class="document-template-card">
+<div class="document-template-card">
 
-            <div class="template-icon">
-                ⚠
-            </div>
-
-            <h3>
-                Complaint Reports
-            </h3>
-
-            <p>
-                Conflict resolution logs
-            </p>
-
-        </div>
-
-
-        <!-- Incident Reports -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
-                ◈
-            </div>
-
-            <h3>
-                Incident Reports
-            </h3>
-
-            <p>
-                Emergency tracking
-            </p>
-
-        </div>
-
-
-        <!-- Summons -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
-                ✉
-            </div>
-
-            <h3>
-                Summons
-            </h3>
-
-            <p>
-                Legal appearance notice
-            </p>
-
-        </div>
-
-
-        <!-- Certificates -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
-                ▤
-            </div>
-
-            <h3>
-                Certificates
-            </h3>
-
-            <p>
-                Residency & Clearance
-            </p>
-
-        </div>
-
-
-        <!-- Settlements -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
-                🤝
-            </div>
-
-            <h3>
-                Settlements
-            </h3>
-
-            <p>
-                Mutual agreements
-            </p>
-
-        </div>
-
+    <div class="template-icon">
+        ⚠
     </div>
 
+    <h3>
+        Complaint Reports
+    </h3>
 
-    <!-- =========================
+    <p>
+        Conflict resolution logs
+    </p>
+
+</div>
+
+
+<!-- Incident Reports -->
+
+<div class="document-template-card">
+
+    <div class="template-icon">
+        ◈
+    </div>
+
+    <h3>
+        Incident Reports
+    </h3>
+
+    <p>
+        Emergency tracking
+    </p>
+
+</div>
+
+
+<!-- Summons -->
+
+<div class="document-template-card">
+
+    <div class="template-icon">
+        ✉
+    </div>
+
+    <h3>
+        Summons
+    </h3>
+
+    <p>
+        Legal appearance notice
+    </p>
+
+</div>
+
+
+<!-- Certificates -->
+
+<div class="document-template-card">
+
+    <div class="template-icon">
+        ▤
+    </div>
+
+    <h3>
+        Certificates
+    </h3>
+
+    <p>
+        Residency & Clearance
+    </p>
+
+</div>
+
+
+<!-- Settlements -->
+
+<div class="document-template-card">
+
+    <div class="template-icon">
+        🤝
+    </div>
+
+    <h3>
+        Settlements
+    </h3>
+
+    <p>
+        Mutual agreements
+    </p>
+
+</div>
+
+</div>
+
+
+<!-- =========================
          DOCUMENT REGISTRY
     ========================== -->
 
-    <div class="document-registry">
+<div class="document-registry">
 
-        <div class="registry-header">
+    <div class="registry-header">
 
-            <h2>
-                Document Registry
-            </h2>
+        <h2>
+            Document Registry
+        </h2>
 
-            <div class="registry-actions">
+        <div class="registry-actions">
 
-                <button class="document-filter-btn">
-                    ☰ &nbsp; Filter Status
-                </button>
+            <button class="document-filter-btn">
+                ☰ &nbsp; Filter Status
+            </button>
 
-                <button class="export-btn">
-                    ↓ &nbsp; Export Registry
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- TABLE -->
-
-        <div class="document-table-wrapper">
-
-            <table class="document-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>DOCUMENT ID</th>
-
-                        <th>TYPE</th>
-
-                        <th>RESIDENT NAME</th>
-
-                        <th>DATE ISSUED</th>
-
-                        <th>STATUS</th>
-
-                        <th>QR</th>
-
-                        <th>ACTIONS</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    <!-- DOCUMENT 1 -->
-
-                    <tr
-                        class="document-row"
-                        onclick="openDocumentPanel()"
-                    >
-
-                        <td>
-                            <span class="document-id">
-                                #DOC-2024-001
-                            </span>
-                        </td>
-
-
-                        <td>
-
-                            <span class="document-type">
-                                CERTIFICATE
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="resident-document">
-
-                                <div class="resident-avatar">
-                                    MS
-                                </div>
-
-                                <span>
-                                    Maria Santos
-                                </span>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-                            May 12, 2024
-                        </td>
-
-
-                        <td>
-
-                            <span class="document-status verified">
-                                ● &nbsp; VERIFIED
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="qr-btn"
-                                onclick="event.stopPropagation()"
-                            >
-                                ▣
-                            </button>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="document-actions">
-
-                                <button
-                                    onclick="event.stopPropagation(); openDocumentPanel()"
-                                    title="View"
-                                >
-                                    ◉
-                                </button>
-
-                                <button
-                                    onclick="event.stopPropagation()"
-                                    title="Download"
-                                >
-                                    ↓
-                                </button>
-
-                                <button
-                                    onclick="event.stopPropagation()"
-                                    title="More"
-                                >
-                                    ⋮
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- DOCUMENT 2 -->
-
-                    <tr
-                        class="document-row"
-                        onclick="openDocumentPanel()"
-                    >
-
-                        <td>
-
-                            <span class="document-id">
-                                #DOC-2024-002
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="document-type">
-                                COMPLAINT
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="resident-document">
-
-                                <div class="resident-avatar avatar-blue">
-                                    RR
-                                </div>
-
-                                <span>
-                                    Ricardo Reyes
-                                </span>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-                            May 11, 2024
-                        </td>
-
-
-                        <td>
-
-                            <span class="document-status pending">
-                                ● &nbsp; PENDING
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="qr-btn"
-                                onclick="event.stopPropagation()"
-                            >
-                                ▣
-                            </button>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="document-actions">
-
-                                <button
-                                    onclick="event.stopPropagation(); openDocumentPanel()"
-                                >
-                                    ◉
-                                </button>
-
-                                <button
-                                    onclick="event.stopPropagation()"
-                                >
-                                    ↓
-                                </button>
-
-                                <button
-                                    onclick="event.stopPropagation()"
-                                >
-                                    ⋮
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- DOCUMENT 3 -->
-
-                    <tr
-                        class="document-row"
-                        onclick="openDocumentPanel()"
-                    >
-
-                        <td>
-
-                            <span class="document-id">
-                                #DOC-2024-003
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="document-type">
-                                SETTLEMENT
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="resident-document">
-
-                                <div class="resident-avatar avatar-purple">
-                                    EM
-                                </div>
-
-                                <span>
-                                    Elena Mercado
-                                </span>
-
-                            </div>
-
-                        </td>
-
-
-                        <td>
-                            May 10, 2024
-                        </td>
-
-
-                        <td>
-
-                            <span class="document-status verified">
-                                ● &nbsp; VERIFIED
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <button
-                                class="qr-btn"
-                                onclick="event.stopPropagation()"
-                            >
-                                ▣
-                            </button>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="document-actions">
-
-                                <button
-                                    onclick="event.stopPropagation(); openDocumentPanel()"
-                                >
-                                    ◉
-                                </button>
-
-                                <button
-                                    onclick="event.stopPropagation()"
-                                >
-                                    ↓
-                                </button>
-
-                                <button
-                                    onclick="event.stopPropagation()"
-                                >
-                                    ⋮
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
+            <button class="export-btn">
+                ↓ &nbsp; Export Registry
+            </button>
 
         </div>
 
     </div>
 
 
-    <!-- =========================
+    <!-- TABLE -->
+
+    <div class="document-table-wrapper">
+
+        <table class="document-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>DOCUMENT ID</th>
+
+                    <th>TYPE</th>
+
+                    <th>RESIDENT NAME</th>
+
+                    <th>DATE ISSUED</th>
+
+                    <th>STATUS</th>
+
+                    <th>QR</th>
+
+                    <th>ACTIONS</th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <!-- DOCUMENT 1 -->
+
+            <tbody>
+
+                {% for document in documents %}
+
+                <tr class="document-row" onclick="openDocumentPanel()">
+
+                    <!-- DOCUMENT ID -->
+                    <td>
+                        <span class="document-id">
+                            #DOC-{{ document.document_id }}
+                        </span>
+                    </td>
+
+
+                    <!-- DOCUMENT TYPE -->
+                    <td>
+                        <span class="document-type">
+                            {{ document.document_type|upper }}
+                        </span>
+                    </td>
+
+
+                    <!-- RESIDENT -->
+                    <td>
+
+                        <div class="resident-document">
+
+                            <div class="resident-avatar">
+
+                               {% if document.resident %}
+                                {{ document.resident.first_name|first|upper }}{{ document.resident.last_name|first|upper }}
+                                {% else %}
+                                ??
+                                {% endif %}
+                            </div>
+
+                            <span>
+
+                                {% if document.resident %}
+
+                                {{ document.resident.first_name }}
+
+                                {% if document.resident.middle_name %}
+                                {{ document.resident.middle_name }}
+                                {% endif %}
+
+                                {{ document.resident.last_name }}
+
+                                {% else %}
+
+                                Unknown Resident
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- DATE -->
+                    <td>
+
+                        {% if document.issued_at %}
+
+                        {{ document.issued_at|date:"M d, Y" }}
+
+                        {% elif document.resident and document.resident.created_at %}
+
+                        {{ document.resident.created_at|date:"M d, Y" }}
+
+                        {% else %}
+
+                        —
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- STATUS -->
+                    <td>
+
+                        {% if document.status == "Verified" %}
+
+                        <span class="document-status verified">
+                            ● &nbsp; VERIFIED
+                        </span>
+
+                        {% elif document.status == "Pending" %}
+
+                        <span class="document-status pending">
+                            ● &nbsp; PENDING
+                        </span>
+
+                        {% else %}
+
+                        <span class="document-status">
+                            ● &nbsp; {{ document.status|upper }}
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- QR -->
+                    <td>
+
+                        <button class="qr-btn" onclick="event.stopPropagation()" disabled
+                            title="QR Verification coming soon">
+                            ▣
+                        </button>
+
+                    </td>
+
+
+                    <!-- ACTIONS -->
+                    <td>
+
+                        <div class="document-actions">
+
+                            <button onclick="event.stopPropagation(); openDocumentPanel()" title="View">
+                                ◉
+                            </button>
+
+                            <button onclick="event.stopPropagation()" title="Download">
+                                ↓
+                            </button>
+
+                            <button onclick="event.stopPropagation()" title="More">
+                                ⋮
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="7" style="text-align: center; padding: 40px;">
+
+                        No documents found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
          DOCUMENT DETAIL PANEL
     ========================== -->
 
-    <div
-        class="document-overlay"
-        id="documentOverlay"
-        onclick="closeDocumentPanel()"
-    ></div>
+<div class="document-overlay" id="documentOverlay" onclick="closeDocumentPanel()"></div>
 
 
-    <aside
-        class="document-detail-panel"
-        id="documentDetailPanel"
-    >
+<aside class="document-detail-panel" id="documentDetailPanel">
 
-        <!-- PANEL HEADER -->
+    <!-- PANEL HEADER -->
 
-        <div class="detail-header">
+    <div class="detail-header">
+
+        <div>
+
+            <h2>
+                Document Detail
+            </h2>
+
+            <p>
+                #DOC-2024-001 • May 12, 2024
+            </p>
+
+        </div>
+
+        <button class="detail-close" onclick="closeDocumentPanel()">
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- DOCUMENT PREVIEW -->
+
+    <div class="document-preview">
+
+        <div class="document-preview-placeholder">
+
+            <div class="certificate-icon">
+                📄
+            </div>
+
+            <h3>
+                BARANGAY CERTIFICATE
+            </h3>
+
+            <p>
+                OF RESIDENCY
+            </p>
+
+            <div class="certificate-line"></div>
+
+            <p class="certificate-small">
+                This is to certify that the named resident
+                is a registered resident of this barangay.
+            </p>
+
+            <div class="certificate-seal">
+                ✓
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BLOCKCHAIN VERIFICATION -->
+
+    <div class="blockchain-box">
+
+        <div class="blockchain-title">
+            <span>◆</span>
+
+            <strong>
+                BLOCKCHAIN VERIFIED
+            </strong>
+        </div>
+
+        <p class="transaction-label">
+            Tx Hash:
+        </p>
+
+        <p class="transaction-hash">
+            0x82c4...e8f921a923058b72
+        </p>
+
+
+        <div class="verification-result">
+
+            <div class="qr-preview">
+                ▦
+            </div>
 
             <div>
 
-                <h2>
-                    Document Detail
-                </h2>
-
-                <p>
-                    #DOC-2024-001 • May 12, 2024
-                </p>
-
-            </div>
-
-            <button
-                class="detail-close"
-                onclick="closeDocumentPanel()"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <!-- DOCUMENT PREVIEW -->
-
-        <div class="document-preview">
-
-            <div class="document-preview-placeholder">
-
-                <div class="certificate-icon">
-                    📄
-                </div>
-
-                <h3>
-                    BARANGAY CERTIFICATE
-                </h3>
-
-                <p>
-                    OF RESIDENCY
-                </p>
-
-                <div class="certificate-line"></div>
-
-                <p class="certificate-small">
-                    This is to certify that the named resident
-                    is a registered resident of this barangay.
-                </p>
-
-                <div class="certificate-seal">
-                    ✓
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- BLOCKCHAIN VERIFICATION -->
-
-        <div class="blockchain-box">
-
-            <div class="blockchain-title">
-                <span>◆</span>
-
                 <strong>
-                    BLOCKCHAIN VERIFIED
+                    Validated
                 </strong>
-            </div>
 
-            <p class="transaction-label">
-                Tx Hash:
-            </p>
-
-            <p class="transaction-hash">
-                0x82c4...e8f921a923058b72
-            </p>
-
-
-            <div class="verification-result">
-
-                <div class="qr-preview">
-                    ▦
-                </div>
-
-                <div>
-
-                    <strong>
-                        Validated
-                    </strong>
-
-                    <span>
-                        May 12, 2024 • 14:22 PM
-                    </span>
-
-                </div>
+                <span>
+                    May 12, 2024 • 14:22 PM
+                </span>
 
             </div>
 
         </div>
 
+    </div>
 
-        <!-- ACTIONS -->
 
-        <button class="download-pdf-btn">
-            ↓ &nbsp; Download PDF
+    <!-- ACTIONS -->
+
+    <button class="download-pdf-btn">
+        ↓ &nbsp; Download PDF
+    </button>
+
+
+    <div class="detail-bottom-actions">
+
+        <button class="detail-outline-btn">
+            🖨 &nbsp; Print
         </button>
 
+        <button class="detail-outline-btn">
+            ▣ &nbsp; Ledger
+        </button>
 
-        <div class="detail-bottom-actions">
+    </div>
 
-            <button class="detail-outline-btn">
-                🖨 &nbsp; Print
-            </button>
-
-            <button class="detail-outline-btn">
-                ▣ &nbsp; Ledger
-            </button>
-
-        </div>
-
-    </aside>
+</aside>
 
 
 
@@ -651,34 +507,34 @@ Document Management | BantayBarangay
 
 <script>
 
-function openDocumentPanel() {
+    function openDocumentPanel() {
 
-    const panel =
-        document.getElementById("documentDetailPanel");
+        const panel =
+            document.getElementById("documentDetailPanel");
 
-    const overlay =
-        document.getElementById("documentOverlay");
+        const overlay =
+            document.getElementById("documentOverlay");
 
-    panel.classList.add("active");
+        panel.classList.add("active");
 
-    overlay.classList.add("active");
+        overlay.classList.add("active");
 
-}
+    }
 
 
-function closeDocumentPanel() {
+    function closeDocumentPanel() {
 
-    const panel =
-        document.getElementById("documentDetailPanel");
+        const panel =
+            document.getElementById("documentDetailPanel");
 
-    const overlay =
-        document.getElementById("documentOverlay");
+        const overlay =
+            document.getElementById("documentOverlay");
 
-    panel.classList.remove("active");
+        panel.classList.remove("active");
 
-    overlay.classList.remove("active");
+        overlay.classList.remove("active");
 
-}
+    }
 
 </script>
 

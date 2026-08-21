@@ -1,4 +1,5 @@
 from django.db import models
+from registration.models import Resident
 
 
 class Document(models.Model):
@@ -7,7 +8,12 @@ class Document(models.Model):
         primary_key=True
     )
 
-    resident_id = models.IntegerField()
+    resident = models.ForeignKey(
+        Resident,
+        db_column='resident_id',
+        on_delete=models.DO_NOTHING,
+        related_name='documents'
+    )
 
     document_type = models.CharField(
         max_length=50
