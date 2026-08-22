@@ -1,0 +1,787 @@
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #e9f9ec;
+
+    color: #173b35;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar {
+    width: 100%;
+
+    background: #f7fff8;
+
+    border-bottom: 1px solid #d9ebe0;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+}
+
+.navbar-container {
+    max-width: 1180px;
+
+    height: 70px;
+
+    margin: auto;
+
+    padding: 0 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* BRAND */
+
+.brand {
+    color: #123c35;
+
+    text-decoration: none;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+/* NAVIGATION */
+
+.nav-links {
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+}
+
+.nav-links a {
+    position: relative;
+
+    color: #526963;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    padding: 26px 0;
+
+    transition: 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: #063b33;
+}
+
+.nav-links a.active {
+    color: #063b33;
+
+    font-weight: 700;
+}
+
+.nav-links a.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: 16px;
+
+    height: 2px;
+
+    background: #063b33;
+
+    border-radius: 5px;
+}
+
+
+/* LOGIN */
+
+.login-btn {
+    padding: 10px 25px;
+
+    background: #063b33;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    border-radius: 25px;
+
+    transition: 0.2s ease;
+}
+
+.login-btn:hover {
+    background: #0b5147;
+}
+
+
+/* =====================================================
+   MAIN PAGE
+===================================================== */
+
+.complaint-page {
+    width: 100%;
+
+    min-height: calc(100vh - 70px);
+
+    padding: 55px 20px 80px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e3fae7,
+            #effff1
+        );
+}
+
+
+/* =====================================================
+   INTRO
+===================================================== */
+
+.page-intro {
+    max-width: 700px;
+
+    margin: 0 auto 35px;
+
+    text-align: center;
+}
+
+.security-badge {
+    display: inline-block;
+
+    padding: 8px 15px;
+
+    margin-bottom: 15px;
+
+    border-radius: 25px;
+
+    background: #c9eee0;
+
+    color: #508276;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.page-intro h1 {
+    margin: 0 0 8px;
+
+    color: #073b33;
+
+    font-size: 34px;
+
+    font-weight: 800;
+}
+
+.page-intro p {
+    max-width: 600px;
+
+    margin: auto;
+
+    color: #60766f;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.complaint-form {
+    width: 100%;
+
+    max-width: 720px;
+
+    margin: auto;
+}
+
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.form-card {
+    margin-bottom: 22px;
+
+    padding: 26px 28px;
+
+    background: rgba(255, 255, 255, 0.78);
+
+    border: 1px solid #dcebe0;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(49, 102, 71, 0.07);
+
+    backdrop-filter: blur(5px);
+}
+
+
+/* SECTION TITLE */
+
+.section-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #183a34;
+}
+
+.section-icon {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    background: #063b33;
+
+    color: white;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   FORM GRID
+===================================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px 16px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* =====================================================
+   FORM GROUP
+===================================================== */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 7px;
+
+    color: #334e47;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.form-group label span {
+    color: #91a19c;
+
+    font-weight: 400;
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    border: 1px solid #b6c5c0;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #30463f;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    transition: 0.2s ease;
+}
+
+.form-group input,
+.form-group select {
+    height: 40px;
+
+    padding: 0 13px;
+}
+
+.form-group textarea {
+    min-height: 90px;
+
+    padding: 13px;
+
+    resize: vertical;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9aa8a4;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #3c8272;
+
+    box-shadow:
+        0 0 0 3px rgba(60, 130, 114, 0.08);
+}
+
+
+/* =====================================================
+   SELECT
+===================================================== */
+
+.form-group select {
+    cursor: pointer;
+
+    appearance: auto;
+}
+
+
+/* =====================================================
+   LOCATION INPUT
+===================================================== */
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon span {
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #607b73;
+
+    font-size: 15px;
+
+    z-index: 2;
+}
+
+.input-with-icon input {
+    padding-left: 38px;
+}
+
+
+/* =====================================================
+   FILE UPLOAD
+===================================================== */
+
+.upload-area {
+    position: relative;
+
+    min-height: 155px;
+
+    border: 2px dashed #c2d5cd;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.45);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.upload-area:hover {
+    background: #f5fff7;
+
+    border-color: #75aa99;
+}
+
+.upload-icon {
+    width: 42px;
+    height: 42px;
+
+    margin-bottom: 10px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #c8eee1;
+
+    color: #226b5b;
+
+    font-size: 18px;
+}
+
+.upload-area label {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    cursor: pointer;
+}
+
+.upload-area strong {
+    color: #344b44;
+
+    font-size: 10px;
+}
+
+.upload-area label span {
+    color: #8b9a95;
+
+    font-size: 9px;
+}
+
+.upload-area input {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   SUBMIT BUTTON
+===================================================== */
+
+.submit-btn {
+    width: 100%;
+
+    height: 55px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #063b33;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 18px rgba(6, 59, 51, 0.15);
+
+    transition: 0.2s ease;
+}
+
+.submit-btn:hover {
+    background: #0a5146;
+
+    transform: translateY(-1px);
+}
+
+.submit-arrow {
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   TERMS
+===================================================== */
+
+.terms-text {
+    margin: 14px 0 0;
+
+    text-align: center;
+
+    color: #71837d;
+
+    font-size: 8px;
+}
+
+.terms-text a {
+    color: #397668;
+
+    text-decoration: none;
+}
+
+.terms-text a:hover {
+    text-decoration: underline;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer {
+    background: #d8efdc;
+
+    border-top: 1px solid #c8e3ce;
+
+    padding: 35px 20px;
+}
+
+.footer-container {
+    max-width: 1180px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+
+    gap: 50px;
+}
+
+
+/* FOOTER BRAND */
+
+.footer-brand h3 {
+    margin: 0 0 12px;
+
+    color: #173b35;
+
+    font-size: 16px;
+}
+
+.footer-brand p {
+    max-width: 300px;
+
+    margin: 0 0 12px;
+
+    color: #63766f;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* FOOTER COLUMNS */
+
+.footer-column {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.footer-column h4 {
+    margin: 0 0 5px;
+
+    color: #29473f;
+
+    font-size: 11px;
+}
+
+.footer-column a {
+    color: #687a74;
+
+    text-decoration: none;
+
+    font-size: 10px;
+}
+
+.footer-column a:hover {
+    color: #063b33;
+
+    text-decoration: underline;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .navbar-container {
+        height: 65px;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 10px;
+    }
+
+    .login-btn {
+        padding: 8px 18px;
+    }
+
+    .page-intro h1 {
+        font-size: 30px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 30px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .navbar-container {
+        padding: 0 18px;
+    }
+
+    .brand {
+        font-size: 16px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .complaint-page {
+        padding: 40px 15px 60px;
+    }
+
+    .page-intro h1 {
+        font-size: 26px;
+    }
+
+    .page-intro p {
+        font-size: 12px;
+    }
+
+    .form-card {
+        padding: 22px 18px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .login-btn {
+        padding: 8px 15px;
+
+        font-size: 10px;
+    }
+
+    .page-intro h1 {
+        font-size: 23px;
+    }
+
+    .security-badge {
+        font-size: 8px;
+    }
+
+    .form-card {
+        border-radius: 12px;
+    }
+
+    .submit-btn {
+        height: 50px;
+    }
+}

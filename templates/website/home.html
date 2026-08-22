@@ -11,8 +11,7 @@
 
     <title>BantayBarangay | Resident Portal</title>
 
-    <link rel="stylesheet"
-          href="{% static 'css/website.css' %}">
+    <link rel="stylesheet" href="{% static 'css/website.css' %}">
 </head>
 
 <body>
@@ -42,9 +41,7 @@
                 Home
             </a>
 
-            <a href="#">
-                Submit Complaint
-            </a>
+            <a href="{% url 'submit_complaint' %}" class="submit-complaint-btn"> Submit a Complaint </a>
 
             <a href="#">
                 Track Complaint
@@ -99,7 +96,7 @@
 
             <div class="hero-buttons">
 
-                <a href="#" class="primary-btn">
+                <a href="{% url 'submit_complaint' %}" class="primary-btn">
                     Submit a Complaint
                 </a>
 
@@ -341,6 +338,297 @@
 
 </section>
 
+<!-- =========================
+     BARANGAY PROJECTS
+========================= -->
+
+<section class="barangay-projects">
+
+    <div class="projects-container">
+
+        <!-- SECTION HEADER -->
+        <div class="projects-heading">
+
+            <div>
+                <span class="eyebrow">
+                    COMMUNITY DEVELOPMENT
+                </span>
+
+                <h2>
+                    Barangay Projects
+                </h2>
+
+                <p>
+                    Discover ongoing and completed projects that help
+                    improve our community and create a safer,
+                    better place for everyone.
+                </p>
+            </div>
+
+            <a href="#" class="view-projects-btn">
+                View All Projects →
+            </a>
+
+        </div>
+
+
+        <!-- PROJECT CARDS -->
+        <div class="project-grid">
+
+
+            <!-- PROJECT 1 -->
+            <article class="project-card">
+
+                <div class="project-image project-road">
+
+                    <span class="project-status ongoing">
+                        Ongoing
+                    </span>
+
+                </div>
+
+                <div class="project-content">
+
+                    <span class="project-category">
+                        Infrastructure
+                    </span>
+
+                    <h3>
+                        Barangay Road Improvement Project
+                    </h3>
+
+                    <p>
+                        Improvement and rehabilitation of selected
+                        barangay roads to provide safer and more
+                        accessible transportation for residents.
+                    </p>
+
+                    <div class="project-info">
+
+                        <span>
+                            📍 Zone 2
+                        </span>
+
+                        <span>
+                            📅 2026
+                        </span>
+
+                    </div>
+
+                    <div class="project-progress">
+
+                        <div class="progress-header">
+                            <span>Project Progress</span>
+                            <strong>65%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div style="width: 65%;"></div>
+                        </div>
+
+                    </div>
+
+                    <a href="#" class="project-link">
+                        View Project →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 2 -->
+            <article class="project-card">
+
+                <div class="project-image project-lighting">
+
+                    <span class="project-status ongoing">
+                        Ongoing
+                    </span>
+
+                </div>
+
+                <div class="project-content">
+
+                    <span class="project-category">
+                        Public Safety
+                    </span>
+
+                    <h3>
+                        Smart Street Lighting Initiative
+                    </h3>
+
+                    <p>
+                        Installation of energy-efficient street lights
+                        in identified areas to improve visibility and
+                        strengthen community safety.
+                    </p>
+
+                    <div class="project-info">
+
+                        <span>
+                            📍 Zone 4
+                        </span>
+
+                        <span>
+                            📅 2026
+                        </span>
+
+                    </div>
+
+                    <div class="project-progress">
+
+                        <div class="progress-header">
+                            <span>Project Progress</span>
+                            <strong>40%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div style="width: 40%;"></div>
+                        </div>
+
+                    </div>
+
+                    <a href="#" class="project-link">
+                        View Project →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 3 -->
+            <article class="project-card">
+
+                <div class="project-image project-health">
+
+                    <span class="project-status completed">
+                        Completed
+                    </span>
+
+                </div>
+
+                <div class="project-content">
+
+                    <span class="project-category">
+                        Health & Wellness
+                    </span>
+
+                    <h3>
+                        Community Health Center Enhancement
+                    </h3>
+
+                    <p>
+                        Improvement of barangay health facilities and
+                        services to provide residents with better
+                        access to basic healthcare.
+                    </p>
+
+                    <div class="project-info">
+
+                        <span>
+                            📍 Barangay Center
+                        </span>
+
+                        <span>
+                            📅 2026
+                        </span>
+
+                    </div>
+
+                    <div class="project-progress">
+
+                        <div class="progress-header">
+                            <span>Project Progress</span>
+                            <strong>100%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div style="width: 100%;"></div>
+                        </div>
+
+                    </div>
+
+                    <a href="#" class="project-link">
+                        View Project →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+
+  <!-- PROJECT STATS -->
+<div class="project-stats">
+
+    <div class="project-stat">
+
+        <strong class="counter"
+                data-target="12">
+            0
+        </strong>
+
+        <span>
+            Active Projects
+        </span>
+
+    </div>
+
+
+    <div class="project-stat">
+
+        <strong class="counter"
+                data-target="28">
+            0
+        </strong>
+
+        <span>
+            Completed Projects
+        </span>
+
+    </div>
+
+
+    <div class="project-stat">
+
+        <strong>
+            ₱<span class="counter"
+                   data-target="4.8"
+                   data-decimal="true">
+                0
+            </span>M
+        </strong>
+
+        <span>
+            Project Investment
+        </span>
+
+    </div>
+
+
+    <div class="project-stat">
+
+        <strong class="counter"
+                data-target="6240">
+            0
+        </strong>
+
+        <span>
+            Residents Benefited
+        </span>
+
+    </div>
+
+</div>
+
+    </div>
+
+</section>
+
 
 <!-- =========================
      SERVICES
@@ -453,6 +741,130 @@
 
 
 <!-- =========================
+     COMMUNITY ACTIVITIES
+========================= -->
+
+<section class="community-section">
+
+    <div class="community-container">
+
+        <div class="community-heading">
+
+            <span class="eyebrow">
+                COMMUNITY
+            </span>
+
+            <h2>
+                What's Happening in Our Barangay
+            </h2>
+
+            <p>
+                Stay updated with activities, programs, and
+                community initiatives happening around the barangay.
+            </p>
+
+        </div>
+
+
+        <div class="community-grid">
+
+            <article class="community-card">
+
+                <div class="community-icon">
+                    🌱
+                </div>
+
+                <div>
+
+                    <span>
+                        Community Program
+                    </span>
+
+                    <h3>
+                        Barangay Clean-Up Drive
+                    </h3>
+
+                    <p>
+                        Join residents in keeping our streets,
+                        waterways, and public spaces clean.
+                    </p>
+
+                    <a href="#">
+                        Learn More →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="community-card">
+
+                <div class="community-icon">
+                    🩺
+                </div>
+
+                <div>
+
+                    <span>
+                        Health Program
+                    </span>
+
+                    <h3>
+                        Free Community Health Screening
+                    </h3>
+
+                    <p>
+                        Free basic health screening and consultation
+                        for residents.
+                    </p>
+
+                    <a href="#">
+                        View Schedule →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="community-card">
+
+                <div class="community-icon">
+                    👨‍👩‍👧
+                </div>
+
+                <div>
+
+                    <span>
+                        Community Event
+                    </span>
+
+                    <h3>
+                        Family Sports Day
+                    </h3>
+
+                    <p>
+                        A community gathering promoting health,
+                        recreation, and stronger relationships.
+                    </p>
+
+                    <a href="#">
+                        View Event →
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
      FOOTER
 ========================= -->
 
@@ -554,6 +966,7 @@
     </div>
 
 </footer>
+<script src="{% static 'js/home.js' %}"></script>
 
 
 </body>

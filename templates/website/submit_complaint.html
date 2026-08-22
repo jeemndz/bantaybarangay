@@ -1,0 +1,563 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint | BantayBarangay</title>
+
+    <link rel="stylesheet" href="{% static 'css/submit_complaint.css' %}">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <div class="navbar-container">
+
+            <!-- BRAND -->
+            <a href="{% url 'home' %}" class="brand">
+                BantayBarangay
+            </a>
+
+
+            <!-- NAVIGATION -->
+            <nav class="nav-links">
+
+                <a href="{% url 'home' %}">
+                    Home
+                </a>
+
+                <a href="{% url 'submit_complaint' %}" class="active">
+                    Submit Complaint
+                </a>
+
+                <a href="#">
+                    Track Complaint
+                </a>
+
+                <a href="#">
+                    Verify Document
+                </a>
+
+                <a href="#">
+                    About
+                </a>
+
+            </nav>
+
+
+            <!-- LOGIN -->
+            <a href="{% url 'login' %}" class="login-btn">
+                Login
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="complaint-page">
+
+        <!-- PAGE INTRO -->
+
+        <section class="page-intro">
+
+            <div class="security-badge">
+                🛡 BLOCKCHAIN SECURED SUBMISSION
+            </div>
+
+            <h1>
+                Submit a Formal Complaint
+            </h1>
+
+            <p>
+                Please provide accurate details to help us address your
+                concern promptly. All submissions are secured via blockchain.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             COMPLAINT FORM
+        ================================================== -->
+
+        <form method="POST"
+              action="{% url 'submit_complaint' %}"
+              enctype="multipart/form-data"
+              class="complaint-form">
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 COMPLAINANT INFORMATION
+            ================================================== -->
+
+            <section class="form-card">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        ♙
+                    </div>
+
+                    <h2>
+                        Complainant Information
+                    </h2>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group">
+
+                        <label for="full_name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="full_name"
+                            name="full_name"
+                            placeholder="Juan Dela Cruz"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- CONTACT NUMBER -->
+
+                    <div class="form-group">
+
+                        <label for="contact_number">
+                            Contact Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contact_number"
+                            name="contact_number"
+                            placeholder="0912 345 6789"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group full-width">
+
+                        <label for="email">
+                            Email <span>(Optional)</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="juan.dc@example.com"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 COMPLAINT DETAILS
+            ================================================== -->
+
+            <section class="form-card">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        ▣
+                    </div>
+
+                    <h2>
+                        Complaint Details
+                    </h2>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <!-- CATEGORY -->
+
+                    <div class="form-group">
+
+                        <label for="category">
+                            Category
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="noise">
+                                Noise Complaint
+                            </option>
+
+                            <option value="property">
+                                Property Dispute
+                            </option>
+
+                            <option value="public_safety">
+                                Public Safety
+                            </option>
+
+                            <option value="community">
+                                Community Issue
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group">
+
+                        <label for="subject">
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            placeholder="Short summary of the issue"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group full-width">
+
+                        <label for="description">
+                            Detailed Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Please describe the incident in detail..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 INCIDENT INFORMATION
+            ================================================== -->
+
+            <section class="form-card">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        ⌖
+                    </div>
+
+                    <h2>
+                        Incident Information
+                    </h2>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group full-width">
+
+                    <label for="location">
+                        Location/Address
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <span>
+                            ⌕
+                        </span>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            placeholder="Street, Barangay, City"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label for="incident_date">
+                            Date of Incident
+                        </label>
+
+                        <input
+                            type="date"
+                            id="incident_date"
+                            name="incident_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TIME -->
+
+                    <div class="form-group">
+
+                        <label for="incident_time">
+                            Time of Incident
+                        </label>
+
+                        <input
+                            type="time"
+                            id="incident_time"
+                            name="incident_time"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 EVIDENCE
+            ================================================== -->
+
+            <section class="form-card">
+
+                <div class="section-title">
+
+                    <div class="section-icon">
+                        ☁
+                    </div>
+
+                    <h2>
+                        Evidence
+                    </h2>
+
+                </div>
+
+
+                <div class="upload-area">
+
+                    <div class="upload-icon">
+                        ▣
+                    </div>
+
+                    <label for="evidence">
+
+                        <strong>
+                            Click or drag photos, videos, or documents here
+                        </strong>
+
+                        <span>
+                            Maximum 5 files, up to 10MB each
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="file"
+                        id="evidence"
+                        name="evidence"
+                        multiple
+                        accept="image/*,video/*,.pdf,.doc,.docx"
+                    >
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SUBMIT
+            ================================================== -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+
+                <span>
+                    Submit Formal Complaint
+                </span>
+
+                <span class="submit-arrow">
+                    ➤
+                </span>
+
+            </button>
+
+
+            <p class="terms-text">
+
+                By submitting, you agree to our
+                <a href="#">Terms of Service</a>
+                and
+                <a href="#">Privacy Policy</a>.
+
+            </p>
+
+        </form>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+
+            <!-- BRAND -->
+
+            <div class="footer-brand">
+
+                <h3>
+                    BantayBarangay
+                </h3>
+
+                <p>
+                    Empowering communities through secure,
+                    transparent, and accessible digital services.
+                </p>
+
+                <p>
+                    © 2026 BantayBarangay. Secure Resident Services Portal.
+                </p>
+
+            </div>
+
+
+            <!-- QUICK LINKS -->
+
+            <div class="footer-column">
+
+                <h4>
+                    Quick Links
+                </h4>
+
+                <a href="{% url 'home' %}">
+                    Home
+                </a>
+
+                <a href="#">
+                    Verify
+                </a>
+
+                <a href="#">
+                    Track Complaint
+                </a>
+
+            </div>
+
+
+            <!-- SUPPORT -->
+
+            <div class="footer-column">
+
+                <h4>
+                    Support
+                </h4>
+
+                <a href="#">
+                    Contact Info
+                </a>
+
+                <a href="#">
+                    Accessibility
+                </a>
+
+                <a href="#">
+                    FAQ
+                </a>
+
+            </div>
+
+
+            <!-- LEGAL -->
+
+            <div class="footer-column">
+
+                <h4>
+                    Legal
+                </h4>
+
+                <a href="#">
+                    Privacy Policy
+                </a>
+
+                <a href="#">
+                    Terms of Service
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>
