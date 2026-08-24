@@ -1,51 +1,689 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Review Resident</title>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Resident Verification | BantayBarangay
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/resident_verify.css' %}"
+    >
+
 </head>
+
 
 <body>
 
-    <h1>Resident Verification</h1>
 
-    <h2>
-        {{ resident.first_name }}
-        {% if resident.middle_name %}
-            {{ resident.middle_name }}
+<div class="review-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="review-header">
+
+        <div>
+
+            <span class="eyebrow">
+                RESIDENT MANAGEMENT
+            </span>
+
+            <h1>
+                Resident Verification
+            </h1>
+
+            <p>
+                Review the resident's submitted information
+                before accepting or rejecting the registration.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'resident_list' %}"
+            class="back-button"
+        >
+
+            ← Back to Residents
+
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         STATUS BANNER
+    ====================================================== -->
+
+    <div class="
+        status-banner
+        {% if resident.verification_status == 'Pending' %}
+            pending
+        {% elif resident.verification_status == 'Verified' %}
+            verified
+        {% elif resident.verification_status == 'Rejected' %}
+            rejected
         {% endif %}
-        {{ resident.last_name }}
-    </h2>
+    ">
 
-    <p>
-        <strong>Resident ID:</strong>
-        {{ resident.resident_id }}
-    </p>
+        <div class="status-icon">
 
-    <p>
-        <strong>Email:</strong>
-        {{ resident.email }}
-    </p>
+            {% if resident.verification_status == 'Pending' %}
+                !
+            {% elif resident.verification_status == 'Verified' %}
+                ✓
+            {% else %}
+                ✕
+            {% endif %}
 
-    <p>
-        <strong>Contact Number:</strong>
-        {{ resident.contact_number }}
-    </p>
+        </div>
 
-    <p>
-        <strong>Address:</strong>
-        {{ resident.address }}
-    </p>
 
-    <p>
-        <strong>Status:</strong>
-        {{ resident.verification_status }}
-    </p>
+        <div>
 
-    <br>
+            <strong>
+                Verification Status
+            </strong>
 
-    <a href="{% url 'resident_list' %}">
-        ← Back to Resident Verification
-    </a>
+            <span>
+                {{ resident.verification_status }}
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
+
+    <main class="review-content">
+
+
+        <!-- =================================================
+             PERSONAL INFORMATION
+        ================================================== -->
+
+        <section class="information-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        PERSONAL INFORMATION
+                    </span>
+
+                    <h2>
+                        Resident Details
+                    </h2>
+
+                </div>
+
+
+                <div class="resident-avatar">
+
+                    {{ resident.first_name|first|upper }}
+
+                </div>
+
+            </div>
+
+
+            <div class="information-grid">
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Resident ID
+                    </span>
+
+                    <strong class="id-value">
+                        #{{ resident.resident_id }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        User ID
+                    </span>
+
+                    <strong class="id-value">
+                        #{{ resident.user_id }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        First Name
+                    </span>
+
+                    <strong>
+                        {{ resident.first_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Middle Name
+                    </span>
+
+                    <strong>
+                        {{ resident.middle_name|default:"—" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Last Name
+                    </span>
+
+                    <strong>
+                        {{ resident.last_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Suffix
+                    </span>
+
+                    <strong>
+                        {{ resident.suffix|default:"—" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Birth Date
+                    </span>
+
+                    <strong>
+                        {{ resident.birth_date|date:"M. d, Y" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Gender
+                    </span>
+
+                    <strong>
+                        {{ resident.gender }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item full-width">
+
+                    <span class="info-label">
+                        Civil Status
+                    </span>
+
+                    <strong>
+                        {{ resident.civil_status }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTACT INFORMATION
+        ================================================== -->
+
+        <section class="information-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        CONTACT INFORMATION
+                    </span>
+
+                    <h2>
+                        Contact Details
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="information-grid">
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Email Address
+                    </span>
+
+                    <strong>
+                        {{ resident.email }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Contact Number
+                    </span>
+
+                    <strong>
+                        {{ resident.contact_number }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ADDRESS INFORMATION
+        ================================================== -->
+
+        <section class="information-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        ADDRESS INFORMATION
+                    </span>
+
+                    <h2>
+                        Residential Address
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="information-grid">
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        House / Block / Lot
+                    </span>
+
+                    <strong>
+                        {{ resident.house_block_lot|default:"—" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Street / Purok / Sitio
+                    </span>
+
+                    <strong>
+                        {{ resident.street_purok_sitio|default:"—" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Barangay
+                    </span>
+
+                    <strong>
+                        {{ resident.barangay }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Municipality / City
+                    </span>
+
+                    <strong>
+                        {{ resident.municipality_city }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Province
+                    </span>
+
+                    <strong>
+                        {{ resident.province }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        ZIP Code
+                    </span>
+
+                    <strong>
+                        {{ resident.zip_code }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item full-width">
+
+                    <span class="info-label">
+                        Complete Address
+                    </span>
+
+                    <strong>
+                        {{ resident.address }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             VERIFICATION RECORD
+        ================================================== -->
+
+        <section class="
+            information-card
+            verification-card
+        ">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="card-eyebrow">
+                        VERIFICATION RECORD
+                    </span>
+
+                    <h2>
+                        Account Verification
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="verification-details">
+
+
+                <div class="verification-item">
+
+                    <span class="info-label">
+                        Verification Status
+                    </span>
+
+                    <span class="
+                        verification-status
+
+                        {% if resident.verification_status == 'Pending' %}
+                            status-pending
+
+                        {% elif resident.verification_status == 'Verified' %}
+                            status-verified
+
+                        {% elif resident.verification_status == 'Rejected' %}
+                            status-rejected
+                        {% endif %}
+                    ">
+
+                        {{ resident.verification_status }}
+
+                    </span>
+
+                </div>
+
+
+                <div class="verification-item">
+
+                    <span class="info-label">
+                        Verified By
+                    </span>
+
+                    <strong>
+
+                        {% if resident.verified_by %}
+                            {{ resident.verified_by }}
+                        {% else %}
+                            Not yet verified
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="verification-item">
+
+                    <span class="info-label">
+                        Registration Date
+                    </span>
+
+                    <strong>
+
+                        {{ resident.created_at|date:"M. d, Y, g:i a" }}
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ACTION CARD
+        ================================================== -->
+
+        {% if resident.verification_status == "Pending" %}
+
+        <section class="action-card">
+
+
+            <div class="action-text">
+
+                <h2>
+                    Review Registration
+                </h2>
+
+                <p>
+                    Please verify that all submitted information
+                    is accurate before approving this resident.
+                    This action will update the resident's
+                    verification status.
+                </p>
+
+            </div>
+
+
+            <div class="action-buttons">
+
+
+                <!-- ACCEPT -->
+
+                <form
+                    method="POST"
+                    action="{% url 'accept_resident' resident.resident_id %}"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="accept-button"
+                        onclick="
+                            return confirm(
+                                'Are you sure you want to accept this resident?'
+                            );
+                        "
+                    >
+
+                        <span>
+                            ✓
+                        </span>
+
+                        Accept Resident
+
+                    </button>
+
+                </form>
+
+
+
+                <!-- REJECT -->
+
+                <form
+                    method="POST"
+                    action="{% url 'reject_resident' resident.resident_id %}"
+                >
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="reject-button"
+                        onclick="
+                            return confirm(
+                                'Are you sure you want to reject this resident?'
+                            );
+                        "
+                    >
+
+                        <span>
+                            ✕
+                        </span>
+
+                        Reject Resident
+
+                    </button>
+
+                </form>
+
+
+            </div>
+
+        </section>
+
+        {% else %}
+
+        <section class="action-card reviewed-card">
+
+            <div class="action-text">
+
+                <h2>
+                    This resident has already been reviewed.
+                </h2>
+
+                <p>
+                    Current status:
+                    <strong>
+                        {{ resident.verification_status }}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'resident_list' %}"
+                class="back-button"
+            >
+
+                ← Back to Resident Verification
+
+            </a>
+
+        </section>
+
+        {% endif %}
+
+
+    </main>
+
+
+</div>
+
 
 </body>
+
 </html>

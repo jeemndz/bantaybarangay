@@ -4,103 +4,279 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>BantayBarangay | Resident Portal</title>
 
-    <link rel="stylesheet" href="{% static 'css/website.css' %}">
+    <link
+        rel="stylesheet"
+        href="{% static 'css/website.css' %}"
+    >
+
 </head>
+
 
 <body>
 
-<!-- =========================
+
+<!-- =========================================================
      NAVBAR
-========================= -->
+========================================================= -->
 
 <header class="navbar">
 
     <div class="nav-container">
 
-        <a href="/" class="brand">
+
+        <!-- BRAND -->
+
+        <a href="{% url 'home' %}" class="brand">
 
             <div class="brand-icon">
                 🛡
             </div>
 
-            <span>BantayBarangay</span>
+            <span>
+                BantayBarangay
+            </span>
 
         </a>
 
 
+
+        <!-- NAVIGATION -->
+
         <nav class="nav-links">
 
-            <a href="/" class="active">
+            <a
+                href="{% url 'home' %}"
+                class="active"
+            >
                 Home
             </a>
 
-            <a href="{% url 'submit_complaint' %}" class="submit-complaint-btn"> Submit a Complaint </a>
 
-            <a href="#">
+            <a
+                href="{% url 'submit_complaint' %}"
+                class="submit-complaint-btn"
+            >
+                Submit a Complaint
+            </a>
+
+
+            <a href="{% url 'track_complaint' %}">
                 Track Complaint
             </a>
 
-            <a href="#">
+
+            <a href="{% url 'verify_document' %}">
                 Verify Document
             </a>
 
-            <a href="#">
+
+            <a href="{% url 'about' %}">
                 About
             </a>
 
-            <a href="#">
+
+            <a href="{% url 'contact' %}">
                 Contact
             </a>
 
         </nav>
 
 
-        <a href="{% url 'login' %}" class="login-btn">
-            Login
-        </a>
+
+<!-- =====================================================
+     LOGIN / PROFILE
+====================================================== -->
+
+{% if request.session.user_id %}
+
+    <div class="profile-menu">
+
+        <button
+            type="button"
+            class="profile-button"
+            onclick="toggleProfileMenu()"
+        >
+
+            <span class="profile-icon">
+                ♙
+            </span>
+
+            <span class="profile-name">
+
+                {% if resident %}
+
+                    {{ resident.first_name }}
+
+                    {% if resident.middle_name %}
+                        {{ resident.middle_name|slice:":1" }}.
+                    {% endif %}
+
+                    {{ resident.last_name }}
+
+                    {% if resident.suffix %}
+                        {{ resident.suffix }}
+                    {% endif %}
+
+                {% else %}
+
+                    {{ request.session.username }}
+
+                {% endif %}
+
+            </span>
+
+            <span class="profile-arrow">
+                ▾
+            </span>
+
+        </button>
+
+
+        <!-- PROFILE DROPDOWN -->
+
+        <div
+            class="profile-dropdown"
+            id="profileDropdown"
+        >
+
+            <div class="profile-dropdown-header">
+
+                <div class="profile-large-icon">
+                    ♙
+                </div>
+
+                <div>
+
+                    <strong>
+
+                        {% if resident %}
+
+                            {{ resident.first_name }}
+
+                            {% if resident.middle_name %}
+                                {{ resident.middle_name|slice:":1" }}.
+                            {% endif %}
+
+                            {{ resident.last_name }}
+
+                            {% if resident.suffix %}
+                                {{ resident.suffix }}
+                            {% endif %}
+
+                        {% else %}
+
+                            {{ request.session.username }}
+
+                        {% endif %}
+
+                    </strong>
+
+                    <span>
+                        {{ request.session.role|title }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROFILE LINKS -->
+
+            <a href="#">
+                👤 My Profile
+            </a>
+
+            <a href="#">
+                📋 My Complaints
+            </a>
+
+            <a href="{% url 'logout' %}">
+                ↪ Logout
+            </a>
+
+        </div>
 
     </div>
+
+{% else %}
+
+    <!-- NOT LOGGED IN -->
+
+    <a href="{% url 'login' %}" class="login-btn">
+    Login
+</a>
+
+{% endif %}
+
+</div>
 
 </header>
 
 
-<!-- =========================
+
+<!-- =========================================================
      HERO
-========================= -->
+========================================================= -->
 
 <section class="hero">
 
     <div class="hero-container">
 
-        <div class="hero-content">
+
+        <!-- HERO CONTENT -->
+
+        <div class="hero-content scroll-reveal">
+
+            <span class="hero-eyebrow">
+                SECURE • TRANSPARENT • COMMUNITY-DRIVEN
+            </span>
+
 
             <h1>
+
                 Your Voice Matters.
-                <span>Build a Safer Community Together.</span>
+
+                <span>
+                    Build a Safer Community Together.
+                </span>
+
             </h1>
 
+
             <p>
+
                 Report concerns, track resolutions, and access
                 barangay services securely with blockchain-verified
                 transparency. We empower every resident to
                 participate in civic governance.
+
             </p>
 
 
             <div class="hero-buttons">
 
-                <a href="{% url 'submit_complaint' %}" class="primary-btn">
+                <a
+                    href="{% url 'submit_complaint' %}"
+                    class="primary-btn"
+                >
                     Submit a Complaint
                 </a>
 
-                <a href="#services" class="secondary-btn">
+
+                <a
+                    href="#services"
+                    class="secondary-btn"
+                >
                     Learn More
                 </a>
 
@@ -109,17 +285,24 @@
         </div>
 
 
-        <div class="hero-image">
+
+        <!-- HERO VISUAL -->
+
+        <div class="hero-image scroll-reveal">
 
             <div class="hero-placeholder">
 
                 <div class="block block-1"></div>
+
                 <div class="block block-2"></div>
+
                 <div class="block block-3"></div>
+
 
                 <div class="shield">
                     🛡
                 </div>
+
 
                 <span>
                     Secure Barangay
@@ -129,21 +312,26 @@
 
         </div>
 
+
     </div>
 
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================================
      QUICK SERVICES
-========================= -->
+========================================================= -->
 
 <section class="quick-services">
 
     <div class="quick-grid">
 
 
-        <div class="quick-card">
+        <a
+            href="{% url 'submit_complaint' %}"
+            class="quick-card"
+        >
 
             <div class="quick-icon">
                 ⚖
@@ -158,10 +346,14 @@
                 our secure digital filing system.
             </p>
 
-        </div>
+        </a>
 
 
-        <div class="quick-card">
+
+        <a
+            href="{% url 'submit_complaint' %}"
+            class="quick-card"
+        >
 
             <div class="quick-icon">
                 ⚠
@@ -176,10 +368,14 @@
                 hazards or community incidents.
             </p>
 
-        </div>
+        </a>
 
 
-        <div class="quick-card">
+
+        <a
+            href="{% url 'track_complaint' %}"
+            class="quick-card"
+        >
 
             <div class="quick-icon">
                 📈
@@ -194,10 +390,14 @@
                 of your submitted reports.
             </p>
 
-        </div>
+        </a>
 
 
-        <div class="quick-card">
+
+        <a
+            href="{% url 'verify_document' %}"
+            class="quick-card"
+        >
 
             <div class="quick-icon">
                 ✓
@@ -212,7 +412,7 @@
                 authentication for official use.
             </p>
 
-        </div>
+        </a>
 
 
     </div>
@@ -220,9 +420,10 @@
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================================
      ANNOUNCEMENTS
-========================= -->
+========================================================= -->
 
 <section class="announcements">
 
@@ -240,6 +441,7 @@
 
         </div>
 
+
         <a href="#">
             View All News →
         </a>
@@ -247,87 +449,129 @@
     </div>
 
 
+
     <div class="announcement-grid">
 
+
+        <!-- ANNOUNCEMENT 1 -->
 
         <article class="announcement-card">
 
             <div class="announcement-image health">
+
                 HEALTH
+
             </div>
+
 
             <div class="announcement-content">
 
                 <span>
-                    October 24, 2023
+                    October 24, 2026
                 </span>
+
 
                 <h3>
                     Quarterly Health Mission:
                     Free Medical Checkups for Seniors
                 </h3>
 
+
                 <p>
+
                     Join us this weekend for our comprehensive
                     health mission focused on providing diagnostic
-                    services...
+                    services and health assistance to senior residents.
+
                 </p>
+
+                <a href="#">
+                    Read More →
+                </a>
 
             </div>
 
         </article>
 
+
+
+        <!-- ANNOUNCEMENT 2 -->
 
         <article class="announcement-card">
 
             <div class="announcement-image digital">
+
                 DIGITAL
+
             </div>
+
 
             <div class="announcement-content">
 
                 <span>
-                    October 21, 2023
+                    October 21, 2026
                 </span>
 
+
                 <h3>
-                    BantayBarangay Portal Digital
-                    Literacy Workshop
+                    BantayBarangay Portal
+                    Digital Literacy Workshop
                 </h3>
 
+
                 <p>
-                    Our team will be conducting a hands-on
-                    session on how to utilize the new
-                    blockchain-based...
+
+                    Learn how to use the BantayBarangay portal
+                    and access digital barangay services safely
+                    and conveniently.
+
                 </p>
+
+                <a href="#">
+                    Read More →
+                </a>
 
             </div>
 
         </article>
 
 
+
+        <!-- ANNOUNCEMENT 3 -->
+
         <article class="announcement-card">
 
             <div class="announcement-image infrastructure">
+
                 INFRASTRUCTURE
+
             </div>
+
 
             <div class="announcement-content">
 
                 <span>
-                    October 18, 2023
+                    October 18, 2026
                 </span>
+
 
                 <h3>
                     Smart Lighting Initiative:
                     Enhancing Safety in Zone 4
                 </h3>
 
+
                 <p>
+
                     New motion-activated LED lighting systems
-                    are being installed across the North sector
-                    to improve...
+                    are being installed across identified areas
+                    to improve visibility and community safety.
+
                 </p>
+
+                <a href="#">
+                    Read More →
+                </a>
 
             </div>
 
@@ -338,45 +582,62 @@
 
 </section>
 
-<!-- =========================
+
+
+<!-- =========================================================
      BARANGAY PROJECTS
-========================= -->
+========================================================= -->
 
 <section class="barangay-projects">
 
     <div class="projects-container">
 
-        <!-- SECTION HEADER -->
+
+        <!-- PROJECT HEADER -->
+
         <div class="projects-heading">
 
             <div>
+
                 <span class="eyebrow">
                     COMMUNITY DEVELOPMENT
                 </span>
+
 
                 <h2>
                     Barangay Projects
                 </h2>
 
+
                 <p>
-                    Discover ongoing and completed projects that help
-                    improve our community and create a safer,
+
+                    Discover ongoing and completed projects that
+                    help improve our community and create a safer,
                     better place for everyone.
+
                 </p>
+
             </div>
 
-            <a href="#" class="view-projects-btn">
+
+            <a
+                href="#"
+                class="view-projects-btn"
+            >
                 View All Projects →
             </a>
 
         </div>
 
 
+
         <!-- PROJECT CARDS -->
+
         <div class="project-grid">
 
 
             <!-- PROJECT 1 -->
+
             <article class="project-card">
 
                 <div class="project-image project-road">
@@ -387,21 +648,27 @@
 
                 </div>
 
+
                 <div class="project-content">
 
                     <span class="project-category">
                         Infrastructure
                     </span>
 
+
                     <h3>
                         Barangay Road Improvement Project
                     </h3>
 
+
                     <p>
+
                         Improvement and rehabilitation of selected
                         barangay roads to provide safer and more
                         accessible transportation for residents.
+
                     </p>
+
 
                     <div class="project-info">
 
@@ -415,20 +682,35 @@
 
                     </div>
 
+
                     <div class="project-progress">
 
                         <div class="progress-header">
-                            <span>Project Progress</span>
-                            <strong>65%</strong>
+
+                            <span>
+                                Project Progress
+                            </span>
+
+                            <strong>
+                                65%
+                            </strong>
+
                         </div>
 
+
                         <div class="progress-bar">
+
                             <div style="width: 65%;"></div>
+
                         </div>
 
                     </div>
 
-                    <a href="#" class="project-link">
+
+                    <a
+                        href="#"
+                        class="project-link"
+                    >
                         View Project →
                     </a>
 
@@ -437,7 +719,9 @@
             </article>
 
 
+
             <!-- PROJECT 2 -->
+
             <article class="project-card">
 
                 <div class="project-image project-lighting">
@@ -448,21 +732,27 @@
 
                 </div>
 
+
                 <div class="project-content">
 
                     <span class="project-category">
                         Public Safety
                     </span>
 
+
                     <h3>
                         Smart Street Lighting Initiative
                     </h3>
 
+
                     <p>
-                        Installation of energy-efficient street lights
-                        in identified areas to improve visibility and
-                        strengthen community safety.
+
+                        Installation of energy-efficient street
+                        lights in identified areas to improve
+                        visibility and strengthen community safety.
+
                     </p>
+
 
                     <div class="project-info">
 
@@ -476,20 +766,35 @@
 
                     </div>
 
+
                     <div class="project-progress">
 
                         <div class="progress-header">
-                            <span>Project Progress</span>
-                            <strong>40%</strong>
+
+                            <span>
+                                Project Progress
+                            </span>
+
+                            <strong>
+                                40%
+                            </strong>
+
                         </div>
 
+
                         <div class="progress-bar">
+
                             <div style="width: 40%;"></div>
+
                         </div>
 
                     </div>
 
-                    <a href="#" class="project-link">
+
+                    <a
+                        href="#"
+                        class="project-link"
+                    >
                         View Project →
                     </a>
 
@@ -498,7 +803,9 @@
             </article>
 
 
+
             <!-- PROJECT 3 -->
+
             <article class="project-card">
 
                 <div class="project-image project-health">
@@ -509,21 +816,27 @@
 
                 </div>
 
+
                 <div class="project-content">
 
                     <span class="project-category">
                         Health & Wellness
                     </span>
 
+
                     <h3>
                         Community Health Center Enhancement
                     </h3>
 
+
                     <p>
-                        Improvement of barangay health facilities and
-                        services to provide residents with better
-                        access to basic healthcare.
+
+                        Improvement of barangay health facilities
+                        and services to provide residents with
+                        better access to basic healthcare.
+
                     </p>
+
 
                     <div class="project-info">
 
@@ -537,20 +850,35 @@
 
                     </div>
 
+
                     <div class="project-progress">
 
                         <div class="progress-header">
-                            <span>Project Progress</span>
-                            <strong>100%</strong>
+
+                            <span>
+                                Project Progress
+                            </span>
+
+                            <strong>
+                                100%
+                            </strong>
+
                         </div>
 
+
                         <div class="progress-bar">
+
                             <div style="width: 100%;"></div>
+
                         </div>
 
                     </div>
 
-                    <a href="#" class="project-link">
+
+                    <a
+                        href="#"
+                        class="project-link"
+                    >
                         View Project →
                     </a>
 
@@ -562,97 +890,143 @@
         </div>
 
 
-  <!-- PROJECT STATS -->
-<div class="project-stats">
 
-    <div class="project-stat">
+        <!-- =====================================================
+             PROJECT STATISTICS
+        ====================================================== -->
 
-        <strong class="counter"
-                data-target="12">
-            0
-        </strong>
-
-        <span>
-            Active Projects
-        </span>
-
-    </div>
+        <div class="project-stats">
 
 
-    <div class="project-stat">
+            <!-- ACTIVE PROJECTS -->
 
-        <strong class="counter"
-                data-target="28">
-            0
-        </strong>
+            <div class="project-stat">
 
-        <span>
-            Completed Projects
-        </span>
+                <strong
+                    class="counter"
+                    data-target="12"
+                    data-decimal="false"
+                >
+                    0
+                </strong>
 
-    </div>
+                <span>
+                    Active Projects
+                </span>
 
-
-    <div class="project-stat">
-
-        <strong>
-            ₱<span class="counter"
-                   data-target="4.8"
-                   data-decimal="true">
-                0
-            </span>M
-        </strong>
-
-        <span>
-            Project Investment
-        </span>
-
-    </div>
+            </div>
 
 
-    <div class="project-stat">
 
-        <strong class="counter"
-                data-target="6240">
-            0
-        </strong>
+            <!-- COMPLETED PROJECTS -->
 
-        <span>
-            Residents Benefited
-        </span>
+            <div class="project-stat">
 
-    </div>
+                <strong
+                    class="counter"
+                    data-target="28"
+                    data-decimal="false"
+                >
+                    0
+                </strong>
 
-</div>
+                <span>
+                    Completed Projects
+                </span>
+
+            </div>
+
+
+
+            <!-- INVESTMENT -->
+
+            <div class="project-stat">
+
+                <strong>
+
+                    ₱<span
+                        class="counter"
+                        data-target="4.8"
+                        data-decimal="true"
+                    >
+                        0.0
+                    </span>M
+
+                </strong>
+
+                <span>
+                    Project Investment
+                </span>
+
+            </div>
+
+
+
+            <!-- RESIDENTS -->
+
+            <div class="project-stat">
+
+                <strong
+                    class="counter"
+                    data-target="6240"
+                    data-decimal="false"
+                >
+                    0
+                </strong>
+
+                <span>
+                    Residents Benefited
+                </span>
+
+            </div>
+
+
+        </div>
+
 
     </div>
 
 </section>
 
 
-<!-- =========================
-     SERVICES
-========================= -->
 
-<section id="services" class="services">
+<!-- =========================================================
+     SERVICES
+========================================================= -->
+
+<section
+    id="services"
+    class="services"
+>
 
     <div class="services-heading">
+
+        <span class="eyebrow">
+            BARANGAY SERVICES
+        </span>
+
 
         <h2>
             Our Services
         </h2>
 
+
         <p>
+
             Access essential government documentation
             and community support services with just
             a few clicks.
+
         </p>
 
     </div>
 
 
+
     <div class="service-grid">
 
+
+        <!-- SERVICE 1 -->
 
         <div class="service-card">
 
@@ -660,17 +1034,22 @@
                 📄
             </div>
 
+
             <div>
 
                 <h3>
                     Barangay Clearance
                 </h3>
 
+
                 <p>
+
                     Quick processing for residency and
                     employment requirements with
                     digital copies available.
+
                 </p>
+
 
                 <a href="#">
                     Apply Now →
@@ -681,11 +1060,15 @@
         </div>
 
 
+
+        <!-- SERVICE 2 -->
+
         <div class="service-card">
 
             <div class="service-icon">
                 🏪
             </div>
+
 
             <div>
 
@@ -693,11 +1076,15 @@
                     Business Permits
                 </h3>
 
+
                 <p>
+
                     Streamlined application and renewal
                     for local micro and small enterprises
-                    within the zone.
+                    within the barangay.
+
                 </p>
+
 
                 <a href="#">
                     Start Application →
@@ -708,11 +1095,15 @@
         </div>
 
 
+
+        <!-- SERVICE 3 -->
+
         <div class="service-card">
 
             <div class="service-icon">
                 🏥
             </div>
+
 
             <div>
 
@@ -720,11 +1111,15 @@
                     Health Services
                 </h3>
 
+
                 <p>
+
                     Book appointments for vaccinations,
                     dental checkups, and general health
                     consultations.
+
                 </p>
+
 
                 <a href="#">
                     Schedule Appointment →
@@ -740,13 +1135,15 @@
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================================
      COMMUNITY ACTIVITIES
-========================= -->
+========================================================= -->
 
 <section class="community-section">
 
     <div class="community-container">
+
 
         <div class="community-heading">
 
@@ -754,19 +1151,27 @@
                 COMMUNITY
             </span>
 
+
             <h2>
                 What's Happening in Our Barangay
             </h2>
 
+
             <p>
+
                 Stay updated with activities, programs, and
                 community initiatives happening around the barangay.
+
             </p>
 
         </div>
 
 
+
         <div class="community-grid">
+
+
+            <!-- ACTIVITY 1 -->
 
             <article class="community-card">
 
@@ -774,20 +1179,26 @@
                     🌱
                 </div>
 
+
                 <div>
 
                     <span>
                         Community Program
                     </span>
 
+
                     <h3>
                         Barangay Clean-Up Drive
                     </h3>
 
+
                     <p>
+
                         Join residents in keeping our streets,
                         waterways, and public spaces clean.
+
                     </p>
+
 
                     <a href="#">
                         Learn More →
@@ -798,11 +1209,15 @@
             </article>
 
 
+
+            <!-- ACTIVITY 2 -->
+
             <article class="community-card">
 
                 <div class="community-icon">
                     🩺
                 </div>
+
 
                 <div>
 
@@ -810,14 +1225,19 @@
                         Health Program
                     </span>
 
+
                     <h3>
                         Free Community Health Screening
                     </h3>
 
+
                     <p>
-                        Free basic health screening and consultation
-                        for residents.
+
+                        Free basic health screening and
+                        consultation for residents.
+
                     </p>
+
 
                     <a href="#">
                         View Schedule →
@@ -828,11 +1248,15 @@
             </article>
 
 
+
+            <!-- ACTIVITY 3 -->
+
             <article class="community-card">
 
                 <div class="community-icon">
                     👨‍👩‍👧
                 </div>
+
 
                 <div>
 
@@ -840,14 +1264,19 @@
                         Community Event
                     </span>
 
+
                     <h3>
                         Family Sports Day
                     </h3>
 
+
                     <p>
+
                         A community gathering promoting health,
                         recreation, and stronger relationships.
+
                     </p>
+
 
                     <a href="#">
                         View Event →
@@ -857,6 +1286,7 @@
 
             </article>
 
+
         </div>
 
     </div>
@@ -864,14 +1294,16 @@
 </section>
 
 
-<!-- =========================
+<!-- =========================================================
      FOOTER
-========================= -->
+========================================================= -->
 
 <footer class="footer">
 
     <div class="footer-container">
 
+
+        <!-- BRAND -->
 
         <div class="footer-brand">
 
@@ -879,18 +1311,29 @@
                 🛡 BantayBarangay
             </h3>
 
+
             <p>
+
                 Empowering communities through secure,
                 transparent, and accessible digital
                 governance.
+
             </p>
 
+
             <div class="socials">
-                🌐 &nbsp; ✉ &nbsp; ☎
+
+                🌐 &nbsp;
+                ✉ &nbsp;
+                ☎
+
             </div>
 
         </div>
 
+
+
+        <!-- QUICK LINKS -->
 
         <div class="footer-column">
 
@@ -898,20 +1341,31 @@
                 Quick Links
             </h4>
 
-            <a href="#">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+
+            <a href="#services">
                 Services
             </a>
 
-            <a href="#">
-                Track
+
+            <a href="{% url 'track_complaint' %}">
+                Track Complaint
             </a>
 
-            <a href="#">
-                Verify
+
+            <a href="{% url 'verify_document' %}">
+                Verify Document
             </a>
 
         </div>
 
+
+
+        <!-- LEGAL -->
 
         <div class="footer-column">
 
@@ -919,13 +1373,16 @@
                 Legal
             </h4>
 
+
             <a href="#">
                 Privacy Policy
             </a>
 
+
             <a href="#">
                 Terms of Service
             </a>
+
 
             <a href="#">
                 Accessibility
@@ -934,21 +1391,27 @@
         </div>
 
 
+
+        <!-- SUPPORT -->
+
         <div class="footer-column">
 
             <h4>
                 Support
             </h4>
 
+
             <a href="#">
                 Help Center
             </a>
+
 
             <a href="#">
                 FAQ
             </a>
 
-            <a href="#">
+
+            <a href="{% url 'contact' %}">
                 Contact Us
             </a>
 
@@ -958,6 +1421,9 @@
     </div>
 
 
+
+    <!-- FOOTER BOTTOM -->
+
     <div class="footer-bottom">
 
         © 2026 BantayBarangay.
@@ -966,8 +1432,63 @@
     </div>
 
 </footer>
+
+
+
+<!-- =========================================================
+     PROFILE DROPDOWN SCRIPT
+========================================================= -->
+
+<script>
+
+function toggleProfileMenu() {
+
+    const dropdown =
+        document.getElementById("profileDropdown");
+
+    if (!dropdown) {
+        return;
+    }
+
+    dropdown.classList.toggle("show");
+
+}
+
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const profileMenu =
+            document.querySelector(".profile-menu");
+
+        const dropdown =
+            document.getElementById("profileDropdown");
+
+        if (
+            profileMenu &&
+            dropdown &&
+            !profileMenu.contains(event.target)
+        ) {
+
+            dropdown.classList.remove("show");
+
+        }
+
+    }
+);
+
+</script>
+
+
+
+<!-- =========================================================
+     HOME JAVASCRIPT
+========================================================= -->
+
 <script src="{% static 'js/home.js' %}"></script>
 
 
 </body>
+
 </html>

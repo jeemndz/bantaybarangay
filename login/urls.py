@@ -14,4 +14,5 @@ urlpatterns = [
         views.logout_view,
         name="logout"
     ),
+
 ]

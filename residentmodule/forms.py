@@ -5,6 +5,7 @@ from .models import Resident
 class ResidentForm(forms.ModelForm):
 
     class Meta:
+
         model = Resident
 
         fields = [
@@ -12,47 +13,69 @@ class ResidentForm(forms.ModelForm):
             'middle_name',
             'last_name',
             'suffix',
-            'gender',
             'birth_date',
-            'address',
+            'gender',
+            'civil_status',
+
+            'house_block_lot',
+            'street_purok_sitio',
+            'barangay',
+            'municipality_city',
+            'province',
+            'zip_code',
+
             'contact_number',
             'email',
+            'address',
         ]
 
         widgets = {
 
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'Enter first name',
-            }),
+            'birth_date': forms.DateInput(
+                attrs={
+                    'type': 'date'
+                }
+            ),
 
-            'middle_name': forms.TextInput(attrs={
-                'placeholder': 'Enter middle name',
-            }),
+            'address': forms.Textarea(
+                attrs={
+                    'rows': 3
+                }
+            ),
 
-            'last_name': forms.TextInput(attrs={
-                'placeholder': 'Enter last name',
-            }),
+            'house_block_lot': forms.TextInput(
+                attrs={
+                    'placeholder': 'House / Block / Lot'
+                }
+            ),
 
-            'suffix': forms.TextInput(attrs={
-                'placeholder': 'Jr., Sr., III',
-            }),
+            'street_purok_sitio': forms.TextInput(
+                attrs={
+                    'placeholder': 'Street / Purok / Sitio'
+                }
+            ),
 
-            'gender': forms.Select(),
+            'barangay': forms.TextInput(
+                attrs={
+                    'placeholder': 'Barangay'
+                }
+            ),
 
-            'birth_date': forms.DateInput(attrs={
-                'type': 'date',
-            }),
+            'municipality_city': forms.TextInput(
+                attrs={
+                    'placeholder': 'Municipality / City'
+                }
+            ),
 
-            'address': forms.Textarea(attrs={
-                'placeholder': 'Enter complete address',
-                'rows': 4,
-            }),
+            'province': forms.TextInput(
+                attrs={
+                    'placeholder': 'Province'
+                }
+            ),
 
-            'contact_number': forms.TextInput(attrs={
-                'placeholder': '09XXXXXXXXX',
-            }),
-
-            'email': forms.EmailInput(attrs={
-                'placeholder': 'Enter email address',
-            }),
+            'zip_code': forms.TextInput(
+                attrs={
+                    'placeholder': 'ZIP Code'
+                }
+            ),
         }

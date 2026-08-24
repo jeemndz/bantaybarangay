@@ -39,17 +39,65 @@ class Resident(models.Model):
     )
 
     gender = models.CharField(
-        max_length=10,
-        choices=[
-            ('Male', 'Male'),
-            ('Female', 'Female'),
-            ('Other', 'Other'),
-        ],
+        max_length=20,
         null=True,
         blank=True
     )
 
-    address = models.TextField()
+    civil_status = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+
+    # =============================================
+    # ADDRESS
+    # =============================================
+
+    address = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    house_block_lot = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
+
+    street_purok_sitio = models.CharField(
+        max_length=150,
+        null=True,
+        blank=True
+    )
+
+    barangay = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
+
+    municipality_city = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
+
+    province = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True
+    )
+
+    zip_code = models.CharField(
+        max_length=10,
+        null=True,
+        blank=True
+    )
+
+    # =============================================
+    # CONTACT
+    # =============================================
 
     contact_number = models.CharField(
         max_length=20,
@@ -63,9 +111,9 @@ class Resident(models.Model):
         blank=True
     )
 
-    # ---------------------------------------------
+    # =============================================
     # VERIFICATION
-    # ---------------------------------------------
+    # =============================================
 
     verification_status = models.CharField(
         max_length=30,
@@ -82,8 +130,16 @@ class Resident(models.Model):
         blank=True
     )
 
+    # =============================================
+    # TIMESTAMPS
+    # =============================================
+
     created_at = models.DateTimeField(
         auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
     )
 
     class Meta:

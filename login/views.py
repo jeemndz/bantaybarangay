@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 
 from .models import User
 
+
+# =====================================================
+# LOGIN
+# =====================================================
 
 def login_view(request):
 
@@ -12,10 +17,11 @@ def login_view(request):
         password = request.POST.get("password", "")
         remember = request.POST.get("remember")
 
+        # -------------------------------------------------
+        # EMPTY FIELDS
+        # -------------------------------------------------
 
-        # CHECK EMPTY FIELDS
         if not username or not password:
-
             messages.error(
                 request,
                 "Please enter your username and password."
@@ -26,10 +32,11 @@ def login_view(request):
                 "login/login.html"
             )
 
-
+        # -------------------------------------------------
         # FIND USER
-        try:
+        # -------------------------------------------------
 
+        try:
             user = User.objects.get(
                 username=username
             )
@@ -46,8 +53,10 @@ def login_view(request):
                 "login/login.html"
             )
 
-
+        # -------------------------------------------------
         # CHECK ACCOUNT STATUS
+        # -------------------------------------------------
+
         if not user.is_active:
 
             messages.error(
@@ -60,9 +69,35 @@ def login_view(request):
                 "login/login.html"
             )
 
+        # -------------------------------------------------
+        # CHECK PASSWORD
+        # -------------------------------------------------
 
-        # CHECK NORMAL PASSWORD
-        if password != user.password_hash:
+        password_valid = False
+
+        try:
+            password_valid = check_password(
+                password,
+                user.password_hash
+            )
+        except Exception:
+            password_valid = False
+
+        # -------------------------------------------------
+        # SUPPORT PLAIN TEXT PASSWORD
+        # -------------------------------------------------
+
+        if not password_valid:
+
+            password_valid = (
+                password == user.password_hash
+            )
+
+        # -------------------------------------------------
+        # INVALID PASSWORD
+        # -------------------------------------------------
+
+        if not password_valid:
 
             messages.error(
                 request,
@@ -74,15 +109,19 @@ def login_view(request):
                 "login/login.html"
             )
 
+        # -------------------------------------------------
+        # STORE USER SESSION
+        # -------------------------------------------------
 
-        # STORE SESSION
         request.session["user_id"] = user.user_id
         request.session["username"] = user.username
         request.session["email"] = user.email
         request.session["role"] = user.role
 
-
+        # -------------------------------------------------
         # REMEMBER ME
+        # -------------------------------------------------
+
         if remember:
 
             request.session.set_expiry(
@@ -93,17 +132,17 @@ def login_view(request):
 
             request.session.set_expiry(0)
 
+        # -------------------------------------------------
+        # ROLE REDIRECTION
+        # -------------------------------------------------
 
-        # ROLE-BASED REDIRECT
-        if user.role == "admin":
+        role = user.role.strip().lower()
+
+        if role in ["admin", "official"]:
 
             return redirect("dashboard")
 
-        elif user.role == "official":
-
-            return redirect("dashboard")
-
-        elif user.role == "resident":
+        elif role == "resident":
 
             return redirect("home")
 
@@ -111,7 +150,7 @@ def login_view(request):
 
             messages.error(
                 request,
-                "Your account has an invalid role."
+                f"Invalid account role: {user.role}"
             )
 
             request.session.flush()
@@ -121,13 +160,19 @@ def login_view(request):
                 "login/login.html"
             )
 
-
+    # -------------------------------------------------
     # GET REQUEST
+    # -------------------------------------------------
+
     return render(
         request,
         "login/login.html"
     )
 
+
+# =====================================================
+# LOGOUT
+# =====================================================
 
 def logout_view(request):
 

@@ -695,7 +695,39 @@ body {
         translateY(0);
 }
 
+/* =====================================================
+   NAVBAR LOGIN LINK
+===================================================== */
 
+.login-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+
+    color: #063d34;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.login-link:hover {
+    background: #eef7f3;
+
+    color: #0b574a;
+}
 /* =====================================================
    REGISTER
 ===================================================== */
@@ -725,6 +757,45 @@ body {
 .register-text a:hover {
 
     color: #225b4e;
+}
+
+/* =====================================================
+   BACK TO HOME BUTTON
+===================================================== */
+
+.back-button {
+    position: absolute;
+    top: 30px;
+    left: 35px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    color: #53443D;
+    background: rgba(255, 255, 255, 0.9);
+
+    border: 1px solid #DCCFB8;
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: all 0.25s ease;
+
+    z-index: 20;
+}
+
+.back-button:hover {
+    background: #53443D;
+    color: #ffffff;
+
+    transform: translateX(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
 }
 
 
