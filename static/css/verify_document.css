@@ -1,0 +1,1290 @@
+/* =====================================================
+   VERIFY DOCUMENT PAGE
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background: #eaffef;
+
+    color: #08241d;
+
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.verify-page {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding:
+        55px
+        3.5%
+        70px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eaffef 0%,
+            #e1fbe8 50%,
+            #effff3 100%
+        );
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.verify-header {
+
+    max-width: 1200px;
+
+    margin: 0 auto 45px;
+
+}
+
+
+.protocol-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        7px
+        14px;
+
+    border-radius: 30px;
+
+    background: #c7ebe0;
+
+    color: #315f57;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: .3px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.verify-header h1 {
+
+    font-size: clamp(38px, 4vw, 56px);
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -2px;
+
+    color: #061f18;
+
+    margin-bottom: 18px;
+
+}
+
+
+.verify-header p {
+
+    max-width: 780px;
+
+    color: #485951;
+
+    font-size: 18px;
+
+    line-height: 1.65;
+
+}
+
+
+/* =====================================================
+   MAIN GRID
+===================================================== */
+
+.verification-layout {
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        460px
+        1fr;
+
+    gap: 30px;
+
+    align-items: start;
+
+}
+
+
+/* =====================================================
+   LEFT COLUMN
+===================================================== */
+
+.verification-left {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+}
+
+
+/* =====================================================
+   VERIFICATION CARD
+===================================================== */
+
+.verification-card {
+
+    background: rgba(255,255,255,.82);
+
+    border: 1px solid #cddfd5;
+
+    border-radius: 15px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(20, 60, 45, .05);
+
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+.verification-tabs {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 5px;
+
+    background: #dcefe2;
+
+    padding: 5px;
+
+    border-radius: 9px;
+
+    margin-bottom: 26px;
+
+}
+
+
+.verification-tab {
+
+    border: none;
+
+    background: transparent;
+
+    min-height: 58px;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #53635c;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+}
+
+
+.verification-tab.active {
+
+    background: white;
+
+    color: #102d25;
+
+    box-shadow:
+        0 2px 7px
+        rgba(0,0,0,.05);
+
+}
+
+
+.verification-tab span {
+
+    font-size: 17px;
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.verify-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 19px;
+
+}
+
+
+.input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.input-group label {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #102d25;
+
+}
+
+
+.input-group small {
+
+    color: #596861;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+}
+
+
+.input-wrapper {
+
+    position: relative;
+
+}
+
+
+.input-icon {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #65736e;
+
+    font-weight: 700;
+
+}
+
+
+.input-wrapper input {
+
+    width: 100%;
+
+    height: 48px;
+
+    border:
+        1px solid #b9c8c1;
+
+    border-radius: 7px;
+
+    background: #fff;
+
+    padding:
+        0
+        14px
+        0
+        38px;
+
+    font-size: 15px;
+
+    color: #19362d;
+
+    outline: none;
+
+    transition: .2s ease;
+
+}
+
+
+.input-wrapper input:focus {
+
+    border-color: #275f53;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(40, 100, 85, .1);
+
+}
+
+
+/* =====================================================
+   VERIFY BUTTON
+===================================================== */
+
+.verify-button {
+
+    width: 100%;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123e34,
+            #082b24
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 9px;
+
+    transition: .2s ease;
+
+}
+
+
+.verify-button:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(8, 43, 36, .2);
+
+}
+
+
+/* =====================================================
+   SECURITY NOTE
+===================================================== */
+
+.security-note {
+
+    margin-top: 23px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #dce5e0;
+
+    display: flex;
+
+    gap: 10px;
+
+    color: #53635c;
+
+}
+
+
+.security-note-icon {
+
+    font-size: 17px;
+
+}
+
+
+.security-note p {
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.verification-stats {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+
+}
+
+
+.stat-card {
+
+    background: rgba(255,255,255,.72);
+
+    border:
+        1px solid #d0e2d7;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+}
+
+
+.stat-card span {
+
+    display: block;
+
+    color: #64736c;
+
+    font-size: 12px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.stat-card strong {
+
+    display: block;
+
+    font-size: 26px;
+
+    color: #071f18;
+
+    margin-bottom: 6px;
+
+}
+
+
+.stat-card small {
+
+    color: #567067;
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   RIGHT COLUMN
+===================================================== */
+
+.verification-right {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+}
+
+
+/* =====================================================
+   AUTHENTICATION STATUS
+===================================================== */
+
+.authentication-status {
+
+    min-height: 75px;
+
+    background: rgba(255,255,255,.92);
+
+    border:
+        1px solid #b9d3c8;
+
+    border-left:
+        6px solid #3d7466;
+
+    border-radius: 12px;
+
+    padding:
+        14px
+        20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+
+.status-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #c8eee2;
+
+    color: #174c41;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-weight: 900;
+
+}
+
+
+.status-text {
+
+    flex: 1;
+
+}
+
+
+.status-text h2 {
+
+    font-size: 19px;
+
+    margin-bottom: 4px;
+
+}
+
+
+.status-text p {
+
+    font-size: 11px;
+
+    color: #64726c;
+
+}
+
+
+.official-badge {
+
+    padding:
+        7px
+        12px;
+
+    border-radius: 20px;
+
+    background: #d2eee3;
+
+    color: #20594d;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+/* =====================================================
+   METADATA CARD
+===================================================== */
+
+.metadata-card {
+
+    background: rgba(255,255,255,.82);
+
+    border:
+        1px solid #cfdfd7;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(30,70,50,.04);
+
+}
+
+
+.metadata-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.metadata-header h2 {
+
+    font-size: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.dvc-badge {
+
+    background: #d9efe0;
+
+    color: #274f43;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    padding:
+        7px
+        10px;
+
+    border-radius: 6px;
+
+}
+
+
+.metadata-divider {
+
+    height: 1px;
+
+    background: #dfe9e4;
+
+    margin:
+        17px
+        0
+        21px;
+
+}
+
+
+/* =====================================================
+   METADATA GRID
+===================================================== */
+
+.metadata-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 45px;
+
+    row-gap: 22px;
+
+}
+
+
+.metadata-item {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+.metadata-item span {
+
+    color: #627069;
+
+    font-size: 12px;
+
+}
+
+
+.metadata-item strong {
+
+    color: #122c24;
+
+    font-size: 15px;
+
+    line-height: 1.45;
+
+}
+
+
+.valid-badge {
+
+    display: inline-block;
+
+    background: #bfe8dc;
+
+    color: #2d6558;
+
+    padding:
+        4px
+        7px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+    margin-left: 5px;
+
+    vertical-align: middle;
+
+}
+
+
+/* =====================================================
+   HASH BOX
+===================================================== */
+
+.hash-box {
+
+    margin-top: 24px;
+
+    background: #eaf8ed;
+
+    border:
+        1px solid #d1e7d6;
+
+    border-radius: 9px;
+
+    padding: 14px;
+
+}
+
+
+.hash-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 9px;
+
+    color: #52645c;
+
+    font-size: 11px;
+
+}
+
+
+.copy-button {
+
+    border: none;
+
+    background: transparent;
+
+    color: #52645c;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+}
+
+
+.hash-value {
+
+    background: white;
+
+    border:
+        1px solid #d7e2da;
+
+    border-radius: 4px;
+
+    padding: 10px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 10px;
+
+    word-break: break-all;
+
+    color: #31473f;
+
+}
+
+
+.block-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+    color: #53645d;
+
+    font-size: 11px;
+
+}
+
+
+.block-info strong {
+
+    color: #16352b;
+
+}
+
+
+/* =====================================================
+   SECURITY FEATURES
+===================================================== */
+
+.security-features {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+}
+
+
+.security-feature {
+
+    border:
+        1px solid #dfe8e3;
+
+    background: rgba(255,255,255,.75);
+
+    border-radius: 8px;
+
+    padding: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.feature-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #c7eee2;
+
+    color: #21584d;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+.security-feature span {
+
+    display: block;
+
+    font-size: 11px;
+
+    color: #65726d;
+
+    margin-bottom: 3px;
+
+}
+
+
+.security-feature strong {
+
+    font-size: 13px;
+
+    color: #17372e;
+
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.document-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+}
+
+
+.document-actions button {
+
+    min-height: 42px;
+
+    border-radius: 7px;
+
+    padding:
+        0
+        14px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.download-button {
+
+    border: none;
+
+    background: #103b31;
+
+    color: white;
+
+}
+
+
+.print-button {
+
+    background: white;
+
+    color: #17372e;
+
+    border:
+        1px solid #17372e;
+
+}
+
+
+/* =====================================================
+   AUDIT CARD
+===================================================== */
+
+.audit-card {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    background: rgba(255,255,255,.7);
+
+    border:
+        1px solid #d2e2d8;
+
+    border-radius: 13px;
+
+    padding: 17px;
+
+}
+
+
+.audit-icon {
+
+    font-size: 17px;
+
+    color: #3e6c60;
+
+}
+
+
+.audit-card p {
+
+    color: #586860;
+
+    font-size: 11px;
+
+    line-height: 1.55;
+
+}
+
+
+.audit-card strong {
+
+    color: #263f36;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1050px) {
+
+    .verification-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .verification-left {
+
+        max-width: 700px;
+
+        width: 100%;
+
+        margin: auto;
+
+    }
+
+
+    .verification-right {
+
+        max-width: 900px;
+
+        width: 100%;
+
+        margin: auto;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .verify-page {
+
+        padding:
+            35px
+            18px
+            50px;
+
+    }
+
+
+    .verify-header h1 {
+
+        font-size: 38px;
+
+        letter-spacing: -1px;
+
+    }
+
+
+    .verify-header p {
+
+        font-size: 15px;
+
+    }
+
+
+    .verification-card {
+
+        padding: 17px;
+
+    }
+
+
+    .metadata-card {
+
+        padding: 17px;
+
+    }
+
+
+    .authentication-status {
+
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .official-badge {
+
+        margin-left: 47px;
+
+    }
+
+
+    .metadata-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .metadata-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+
+    }
+
+
+    .security-features {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .document-actions {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .verification-stats {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .block-info {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .verify-header h1 {
+
+        font-size: 32px;
+
+    }
+
+
+    .verification-tabs {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .verification-tab {
+
+        min-height: 48px;
+
+    }
+
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+
+    .verify-page {
+
+        background: white;
+
+    }
+
+
+    .verification-card,
+    .document-actions,
+    .topnav,
+    .footer {
+
+        display: none !important;
+
+    }
+
+
+    .verification-layout {
+
+        display: block;
+
+    }
+
+
+    .metadata-card {
+
+        box-shadow: none;
+
+        border: 1px solid #999;
+
+    }
+
+}

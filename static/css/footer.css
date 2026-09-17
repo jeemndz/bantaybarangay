@@ -1,0 +1,329 @@
+/* =========================================================
+   BANTAYBARANGAY FOOTER
+========================================================= */
+
+.site-footer {
+
+    background: #17231f;
+
+    color: #ffffff;
+
+    margin-top: 80px;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+}
+
+
+/* =========================================================
+   FOOTER CONTAINER
+========================================================= */
+
+.footer-container {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 65px 30px 55px;
+
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        1fr
+        1fr;
+
+    gap: 50px;
+
+}
+
+
+/* =========================================================
+   FOOTER BRAND
+========================================================= */
+
+.footer-brand {
+
+    max-width: 310px;
+
+}
+
+
+.footer-logo {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    text-decoration: none;
+
+    color: #ffffff;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+
+}
+
+
+.footer-logo-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #d9a441;
+
+    border-radius: 10px;
+
+    font-size: 20px;
+
+}
+
+
+.footer-description {
+
+    color: #b9c2bd;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+    margin: 0 0 25px;
+
+}
+
+
+/* =========================================================
+   SOCIAL ICONS
+========================================================= */
+
+.footer-socials {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.footer-socials a {
+
+    width: 36px;
+
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid #405049;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+
+}
+
+
+.footer-socials a:hover {
+
+    background: #d9a441;
+
+    border-color: #d9a441;
+
+    color: #17231f;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* =========================================================
+   FOOTER COLUMNS
+========================================================= */
+
+.footer-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+}
+
+
+.footer-column h4 {
+
+    margin: 0 0 10px;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+
+.footer-column a {
+
+    width: fit-content;
+
+    color: #b9c2bd;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.footer-column a:hover {
+
+    color: #d9a441;
+
+    transform: translateX(3px);
+
+}
+
+
+/* =========================================================
+   FOOTER BOTTOM
+========================================================= */
+
+.footer-bottom {
+
+    border-top: 1px solid #34423c;
+
+}
+
+
+.footer-bottom-container {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 20px 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+.footer-bottom p {
+
+    margin: 0;
+
+    color: #8f9b95;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .footer-container {
+
+        grid-template-columns:
+            2fr
+            1fr
+            1fr;
+
+        gap: 40px;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .footer-container {
+
+        grid-template-columns: 1fr;
+
+        padding: 50px 25px 40px;
+
+        gap: 35px;
+
+    }
+
+
+    .footer-brand {
+
+        max-width: 100%;
+
+    }
+
+
+    .footer-bottom-container {
+
+        padding: 20px 25px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+
+    }
+
+}

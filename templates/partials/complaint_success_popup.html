@@ -1,0 +1,107 @@
+{% if messages %}
+
+    {% for message in messages %}
+
+        {% if message.tags == "success" %}
+
+            <div
+                class="complaint-popup-overlay"
+                id="complaintSuccessPopup"
+            >
+
+                <div class="complaint-success-popup">
+
+                    <!-- CLOSE BUTTON -->
+
+                    <button
+                        type="button"
+                        class="complaint-popup-close"
+                        onclick="closeComplaintSuccessPopup()"
+                    >
+                        ×
+                    </button>
+
+
+                    <!-- SUCCESS ICON -->
+
+                    <div class="complaint-success-icon">
+
+                        <div class="success-check">
+                            ✓
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="complaint-popup-content">
+
+                        <span class="complaint-popup-label">
+                            SUCCESS
+                        </span>
+
+                        <h2>
+                            Complaint Submitted!
+                        </h2>
+
+                        <p>
+                            Your complaint has been successfully submitted
+                            and is now being processed by the barangay.
+                        </p>
+
+
+                        <!-- STATUS -->
+
+                        <div class="complaint-status-box">
+
+                            <div class="status-icon">
+                                ✓
+                            </div>
+
+                            <div class="status-text">
+
+                                <strong>
+                                    Submission Received
+                                </strong>
+
+                                <span>
+                                    Status: Submitted
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- INFORMATION -->
+
+                        <p class="complaint-popup-note">
+
+                            Please keep your complaint details for
+                            future tracking and reference.
+
+                        </p>
+
+
+                        <!-- BUTTON -->
+
+                        <button
+                            type="button"
+                            class="complaint-popup-button"
+                            onclick="closeComplaintSuccessPopup()"
+                        >
+                            Continue
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endif %}

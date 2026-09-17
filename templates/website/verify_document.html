@@ -1,0 +1,2755 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Verify Document | BantayBarangay</title>
+
+
+<!-- =====================================================
+     TAILWIND CSS
+====================================================== -->
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+
+    tailwind.config = {
+
+        theme: {
+
+            extend: {
+
+                colors: {
+
+                    brand: {
+                        50: "#f0fdf4",
+                        100: "#dcfce7",
+                        500: "#22c55e",
+                        600: "#16a34a",
+                        700: "#15803d",
+                        800: "#166534",
+                        900: "#14532d"
+                    }
+
+                },
+
+                boxShadow: {
+
+                    soft:
+                        "0 10px 35px rgba(15, 23, 42, 0.08)"
+
+                }
+
+            }
+
+        }
+
+    }
+
+</script>
+
+
+<!-- =====================================================
+     EXISTING SITE CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/topnav.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/footer.css' %}"
+>
+
+
+<!-- =====================================================
+     QR SCANNER
+====================================================== -->
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+
+<!-- =====================================================
+     TOP NAVIGATION
+====================================================== -->
+
+{% include 'partials/topnav.html' %}
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="relative overflow-hidden">
+
+<!-- =================================================
+     HERO BACKGROUND
+================================================== -->
+
+<div
+    class="pointer-events-none absolute inset-x-0 top-0
+           -z-0 h-[390px]
+           bg-gradient-to-br from-emerald-950
+           via-emerald-800 to-slate-900"
+></div>
+
+
+<div
+    class="pointer-events-none absolute left-1/2 top-20
+           -z-0 h-80 w-80 -translate-x-1/2
+           rounded-full bg-emerald-400/10 blur-3xl"
+></div>
+
+
+
+<!-- =================================================
+     CONTENT WRAPPER
+================================================== -->
+
+<div
+    class="relative z-10 mx-auto max-w-6xl
+           px-4 pb-16 pt-10 sm:px-6 lg:px-8"
+>
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <section
+        class="mx-auto max-w-3xl text-center text-white"
+    >
+
+
+        <!-- BADGE -->
+
+        <div
+            class="mb-5 inline-flex items-center gap-2
+                   rounded-full border border-white/15
+                   bg-white/10 px-4 py-2 text-xs
+                   font-bold tracking-widest
+                   text-emerald-100 backdrop-blur"
+        >
+
+            <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+            >
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 3 5 6v5c0 4.5 2.9 8.5 7 10
+                       4.1-1.5 7-5.5 7-10V6l-7-3Z"
+                />
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m9 12 2 2 4-4"
+                />
+
+            </svg>
+
+            BLOCKCHAIN VERIFICATION PROTOCOL
+
+        </div>
+
+
+
+        <!-- TITLE -->
+
+        <h1
+            class="text-3xl font-black tracking-tight
+                   sm:text-4xl lg:text-5xl"
+        >
+
+            Verify Barangay Issued
+
+            <br class="hidden sm:block">
+
+            Documents
+
+        </h1>
+
+
+
+        <!-- DESCRIPTION -->
+
+        <p
+            class="mx-auto mt-4 max-w-2xl
+                   text-sm leading-7
+                   text-emerald-50/80 sm:text-base"
+        >
+
+            Authenticate Barangay Clearances, Certificates
+            of Residency, Indigency Certifications, and
+            Business Permits using a document verification
+            code or QR code.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         VERIFICATION LAYOUT
+    ================================================== -->
+
+    <section
+        class="mx-auto mt-10 grid max-w-6xl gap-6
+               lg:grid-cols-[360px_minmax(0,1fr)]"
+    >
+
+
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================== -->
+
+        <div class="space-y-5">
+
+
+            <!-- =================================================
+                 VERIFICATION CARD
+            ================================================== -->
+
+            <div
+                class="overflow-hidden rounded-3xl
+                       border border-slate-200 bg-white
+                       shadow-soft"
+            >
+
+
+                <!-- =================================================
+                     TABS
+                ================================================== -->
+
+                <div
+                    class="grid grid-cols-2 border-b
+                           border-slate-100 bg-slate-50"
+                >
+
+
+                    <!-- DOCUMENT CODE TAB -->
+
+                    <button
+                        type="button"
+                        id="documentTab"
+                        onclick="showVerificationTab('document')"
+                        class="verification-tab
+                               flex items-center justify-center
+                               gap-2 border-b-2
+                               border-emerald-600 bg-white
+                               px-3 py-4 text-xs font-bold
+                               text-emerald-700"
+                    >
+
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <rect
+                                x="5"
+                                y="3"
+                                width="14"
+                                height="18"
+                                rx="2"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M8 7h8M8 11h8M8 15h5"
+                            />
+
+                        </svg>
+
+
+                        <span class="text-left">
+
+                            Verify by Document
+
+                            <br>
+
+                            Code
+
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- QR TAB -->
+
+                    <button
+                        type="button"
+                        id="qrTab"
+                        onclick="showVerificationTab('qr')"
+                        class="verification-tab
+                               flex items-center justify-center
+                               gap-2 border-b-2
+                               border-transparent
+                               px-3 py-4 text-xs
+                               font-bold text-slate-500
+                               transition
+                               hover:bg-white
+                               hover:text-slate-800"
+                    >
+
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <rect
+                                x="4"
+                                y="4"
+                                width="16"
+                                height="16"
+                                rx="2"
+                            />
+
+                            <path
+                                d="M8 8h3v3H8z
+                                   M13 8h3v3h-3z
+                                   M8 13h3v3H8z"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M14 14h2v2h-2z"
+                            />
+
+                        </svg>
+
+
+                        Scan QR / Upload
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DOCUMENT CODE PANEL
+                ================================================== -->
+
+                <div id="documentPanel">
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'verify_document' %}"
+                        class="space-y-5 p-5 sm:p-6"
+                    >
+
+                        {% csrf_token %}
+
+
+
+                        <!-- DOCUMENT CODE -->
+
+                        <div>
+
+                            <label
+                                for="document_code"
+                                class="mb-2 block text-sm
+                                       font-semibold
+                                       text-slate-700"
+                            >
+
+                                Document Verification Code (DVC)
+
+                            </label>
+
+
+                            <div class="relative">
+
+                                <svg
+                                    class="pointer-events-none
+                                           absolute left-4 top-1/2
+                                           h-5 w-5
+                                           -translate-y-1/2
+                                           text-slate-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+
+                                    <path
+                                        stroke-linecap="round"
+                                        d="M7 7h10M7 12h10M7 17h6"
+                                    />
+
+                                </svg>
+
+
+                                <input
+                                    type="text"
+                                    id="document_code"
+                                    name="document_code"
+                                    value="{{ document_code|default:'' }}"
+                                    placeholder="Enter document verification code"
+                                    required
+                                    class="w-full rounded-xl
+                                           border border-slate-200
+                                           bg-white py-3 pl-12
+                                           pr-4 text-sm
+                                           text-slate-700
+                                           placeholder:text-slate-400
+                                           outline-none transition
+                                           focus:border-emerald-500
+                                           focus:ring-4
+                                           focus:ring-emerald-500/10"
+                                >
+
+                            </div>
+
+
+                            <p
+                                class="mt-2 text-xs leading-5
+                                       text-slate-400"
+                            >
+
+                                Enter the verification code printed
+                                on the barangay-issued document.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- DATE -->
+
+                        <div>
+
+                            <label
+                                for="date_issued"
+                                class="mb-2 block text-sm
+                                       font-semibold
+                                       text-slate-700"
+                            >
+
+                                Date Issued
+
+                            </label>
+
+
+                            <div class="relative">
+
+                                <svg
+                                    class="pointer-events-none
+                                           absolute left-4 top-1/2
+                                           h-5 w-5
+                                           -translate-y-1/2
+                                           text-slate-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+
+                                    <rect
+                                        x="4"
+                                        y="5"
+                                        width="16"
+                                        height="15"
+                                        rx="2"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        d="M8 3v4M16 3v4M4 10h16"
+                                    />
+
+                                </svg>
+
+
+                                <input
+                                    type="date"
+                                    id="date_issued"
+                                    name="date_issued"
+                                    value="{{ date_issued|default:'' }}"
+                                    required
+                                    class="w-full rounded-xl
+                                           border border-slate-200
+                                           bg-white py-3 pl-12
+                                           pr-4 text-sm
+                                           text-slate-700
+                                           outline-none transition
+                                           focus:border-emerald-500
+                                           focus:ring-4
+                                           focus:ring-emerald-500/10"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- VERIFY BUTTON -->
+
+                        <button
+                            type="submit"
+                            class="inline-flex w-full
+                                   items-center justify-center
+                                   gap-3 rounded-xl
+                                   bg-emerald-600 px-5 py-3.5
+                                   text-sm font-bold text-white
+                                   shadow-lg
+                                   shadow-emerald-600/20
+                                   transition
+                                   hover:-translate-y-0.5
+                                   hover:bg-emerald-500
+                                   focus:outline-none
+                                   focus:ring-4
+                                   focus:ring-emerald-500/30"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m5 12 4 4L19 6"
+                                />
+
+                            </svg>
+
+                            Verify Document Authenticity
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     QR / UPLOAD PANEL
+                ================================================== -->
+
+                <div
+                    id="qrPanel"
+                    class="hidden p-5 sm:p-6"
+                >
+
+                    <div class="space-y-5">
+
+
+                        <!-- CAMERA -->
+
+                        <div>
+
+                            <div class="mb-3">
+
+                                <h3
+                                    class="text-sm font-bold
+                                           text-slate-800"
+                                >
+
+                                    Scan Document QR Code
+
+                                </h3>
+
+
+                                <p
+                                    class="mt-1 text-xs leading-5
+                                           text-slate-400"
+                                >
+
+                                    Use your device camera to scan
+                                    the QR code printed on the
+                                    document.
+
+                                </p>
+
+                            </div>
+
+
+                            <!-- QR CAMERA -->
+
+                            <div
+                                id="qr-reader"
+                                class="min-h-[260px]
+                                       overflow-hidden rounded-2xl
+                                       border border-slate-200
+                                       bg-slate-950"
+                            ></div>
+
+
+                            <!-- CAMERA BUTTON -->
+
+                            <div class="mt-3 flex justify-center">
+
+                                <button
+                                    type="button"
+                                    id="startScanner"
+                                    onclick="startQRScanner()"
+                                    class="inline-flex
+                                           items-center gap-2
+                                           rounded-xl bg-slate-900
+                                           px-4 py-2.5 text-xs
+                                           font-bold text-white
+                                           transition
+                                           hover:bg-slate-700"
+                                >
+
+                                    <svg
+                                        class="h-4 w-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        viewBox="0 0 24 24"
+                                    >
+
+                                        <path
+                                            stroke-linecap="round"
+                                            d="M4 7V5a1 1 0 0 1 1-1h2
+                                               M20 7V5a1 1 0 0 0-1-1h-2
+                                               M4 17v2a1 1 0 0 0 1 1h2
+                                               M20 17v2a1 1 0 0 1-1 1h-2"
+                                        />
+
+                                        <rect
+                                            x="8"
+                                            y="8"
+                                            width="8"
+                                            height="8"
+                                            rx="1"
+                                        />
+
+                                    </svg>
+
+                                    Start Camera
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- DIVIDER -->
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="h-px flex-1 bg-slate-200"
+                            ></div>
+
+
+                            <span
+                                class="text-[11px] font-bold
+                                       uppercase tracking-wider
+                                       text-slate-400"
+                            >
+
+                                OR
+
+                            </span>
+
+
+                            <div
+                                class="h-px flex-1 bg-slate-200"
+                            ></div>
+
+                        </div>
+
+
+
+                        <!-- UPLOAD -->
+
+                        <div>
+
+                            <label
+                                for="qrUpload"
+                                class="group flex cursor-pointer
+                                       flex-col items-center
+                                       justify-center rounded-2xl
+                                       border-2 border-dashed
+                                       border-slate-200
+                                       bg-slate-50 px-6 py-8
+                                       text-center transition
+                                       hover:border-emerald-400
+                                       hover:bg-emerald-50/40"
+                            >
+
+                                <div
+                                    class="flex h-14 w-14
+                                           items-center
+                                           justify-center
+                                           rounded-2xl
+                                           bg-emerald-100
+                                           text-emerald-600
+                                           transition
+                                           group-hover:bg-emerald-600
+                                           group-hover:text-white"
+                                >
+
+                                    <svg
+                                        class="h-7 w-7"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        viewBox="0 0 24 24"
+                                    >
+
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M12 16V4m0 0 4 4m-4-4L8 8"
+                                        />
+
+                                        <path
+                                            stroke-linecap="round"
+                                            d="M5 14v4a2 2 0 0 0 2 2h10
+                                               a2 2 0 0 0 2-2v-4"
+                                        />
+
+                                    </svg>
+
+                                </div>
+
+
+                                <strong
+                                    class="mt-4 text-sm font-bold
+                                           text-slate-800"
+                                >
+
+                                    Upload QR Code Image
+
+                                </strong>
+
+
+                                <span
+                                    class="mt-1 text-xs
+                                           text-slate-400"
+                                >
+
+                                    PNG, JPG or WEBP
+
+                                </span>
+
+
+                                <input
+                                    type="file"
+                                    id="qrUpload"
+                                    accept="image/png,image/jpeg,image/webp"
+                                    class="hidden"
+                                >
+
+                            </label>
+
+                        </div>
+
+
+
+                        <!-- QR RESULT -->
+
+                        <div
+                            id="qrResult"
+                            class="hidden rounded-2xl
+                                   border border-emerald-200
+                                   bg-emerald-50 p-4"
+                        >
+
+                            <div class="flex gap-3">
+
+
+                                <div
+                                    class="flex h-9 w-9 shrink-0
+                                           items-center
+                                           justify-center
+                                           rounded-xl
+                                           bg-emerald-100
+                                           text-emerald-700"
+                                >
+
+                                    <svg
+                                        class="h-5 w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        viewBox="0 0 24 24"
+                                    >
+
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="m5 12 4 4L19 6"
+                                        />
+
+                                    </svg>
+
+                                </div>
+
+
+                                <div class="min-w-0">
+
+                                    <p
+                                        class="text-xs font-semibold
+                                               text-emerald-700"
+                                    >
+
+                                        QR Code Detected
+
+                                    </p>
+
+
+                                    <p
+                                        id="qrValue"
+                                        class="mt-1 break-all
+                                               font-mono text-xs
+                                               text-emerald-900"
+                                    ></p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- DATE -->
+
+                        <div>
+
+                            <label
+                                for="qr_date_issued"
+                                class="mb-2 block text-sm
+                                       font-semibold
+                                       text-slate-700"
+                            >
+
+                                Date Issued
+
+                            </label>
+
+
+                            <input
+                                type="date"
+                                id="qr_date_issued"
+                                class="w-full rounded-xl
+                                       border border-slate-200
+                                       bg-white px-4 py-3
+                                       text-sm text-slate-700
+                                       outline-none transition
+                                       focus:border-emerald-500
+                                       focus:ring-4
+                                       focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+
+
+                        <!-- VERIFY SCANNED DOCUMENT -->
+
+                        <button
+                            type="button"
+                            onclick="verifyQRDocument()"
+                            class="inline-flex w-full
+                                   items-center justify-center
+                                   gap-3 rounded-xl
+                                   bg-emerald-600 px-5 py-3.5
+                                   text-sm font-bold text-white
+                                   shadow-lg
+                                   shadow-emerald-600/20
+                                   transition
+                                   hover:bg-emerald-500"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m5 12 4 4L19 6"
+                                />
+
+                            </svg>
+
+                            Verify Scanned Document
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SECURITY NOTE
+                ================================================== -->
+
+                <div
+                    class="border-t border-slate-100
+                           bg-slate-50/70 px-5 py-4
+                           sm:px-6"
+                >
+
+                    <div class="flex gap-3">
+
+
+                        <div
+                            class="flex h-9 w-9 shrink-0
+                                   items-center justify-center
+                                   rounded-xl bg-emerald-100
+                                   text-emerald-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 3 5 6v5c0 4.5 2.9 8.5 7 10
+                                       4.1-1.5 7-5.5 7-10V6l-7-3Z"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <p
+                            class="text-xs leading-5 text-slate-500"
+                        >
+
+                            Your verification request is securely
+                            processed through the barangay document
+                            registry.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 OPTIONAL STATISTICS
+            ================================================== -->
+
+            {% if registry_uptime or todays_verifications %}
+
+            <div
+                class="grid gap-4 sm:grid-cols-2
+                       lg:grid-cols-1"
+            >
+
+
+                {% if registry_uptime %}
+
+                <div
+                    class="rounded-2xl border border-slate-200
+                           bg-white p-5 shadow-soft"
+                >
+
+                    <span
+                        class="text-xs font-semibold uppercase
+                               tracking-wide text-slate-400"
+                    >
+
+                        Registry Uptime
+
+                    </span>
+
+
+                    <strong
+                        class="mt-1 block text-3xl
+                               font-black text-slate-900"
+                    >
+
+                        {{ registry_uptime }}
+
+                    </strong>
+
+
+                    {% if active_nodes %}
+
+                    <div
+                        class="mt-2 flex items-center gap-2
+                               text-xs font-semibold
+                               text-emerald-600"
+                    >
+
+                        <span
+                            class="h-2 w-2 rounded-full
+                                   bg-emerald-500"
+                        ></span>
+
+                        {{ active_nodes }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+
+                {% if todays_verifications %}
+
+                <div
+                    class="rounded-2xl border border-slate-200
+                           bg-white p-5 shadow-soft"
+                >
+
+                    <span
+                        class="text-xs font-semibold uppercase
+                               tracking-wide text-slate-400"
+                    >
+
+                        Today's Verifications
+
+                    </span>
+
+
+                    <strong
+                        class="mt-1 block text-3xl
+                               font-black text-slate-900"
+                    >
+
+                        {{ todays_verifications }}
+
+                    </strong>
+
+
+                    {% if fraudulent_passes %}
+
+                    <div
+                        class="mt-2 text-xs font-semibold
+                               text-emerald-600"
+                    >
+
+                        {{ fraudulent_passes }}
+
+                        fraudulent verification attempts
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div class="space-y-5">
+
+
+            <!-- =================================================
+                 SUCCESS RESULT
+            ================================================== -->
+
+            {% if document %}
+
+
+            <!-- AUTHENTICATION STATUS -->
+
+            <div
+                class="flex flex-col gap-4 rounded-3xl
+                       border border-emerald-200
+                       bg-emerald-50 p-5 shadow-soft
+                       sm:flex-row sm:items-center sm:p-6"
+            >
+
+
+                <div
+                    class="flex h-14 w-14 shrink-0
+                           items-center justify-center
+                           rounded-2xl bg-emerald-600
+                           text-white shadow-lg
+                           shadow-emerald-600/20"
+                >
+
+                    <svg
+                        class="h-7 w-7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m5 12 4 4L19 6"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div class="min-w-0 flex-1">
+
+                    <h2
+                        class="text-lg font-black
+                               text-emerald-950
+                               sm:text-xl"
+                    >
+
+                        Document Authenticated &amp;
+                        Tamper-Proof
+
+                    </h2>
+
+
+                    {% if document.verified_at %}
+
+                    <p
+                        class="mt-1 text-sm
+                               text-emerald-800/70"
+                    >
+
+                        Blockchain Verified on
+
+                        {{ document.verified_at|date:"F d, Y" }}
+
+                        at
+
+                        {{ document.verified_at|date:"H:i:s" }}
+
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <span
+                    class="inline-flex shrink-0
+                           items-center gap-2 self-start
+                           rounded-full bg-white px-3 py-2
+                           text-xs font-bold
+                           text-emerald-700 shadow-sm"
+                >
+
+                    <span
+                        class="h-2 w-2 rounded-full
+                               bg-emerald-500"
+                    ></span>
+
+                    Official Record
+
+                </span>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 METADATA CARD
+            ================================================== -->
+
+            <div
+                class="overflow-hidden rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+
+                <!-- HEADER -->
+
+                <div
+                    class="flex flex-col gap-4 border-b
+                           border-slate-100
+                           bg-slate-50/70 px-5 py-5
+                           sm:flex-row sm:items-center
+                           sm:justify-between sm:px-7"
+                >
+
+
+                    <h2
+                        class="flex items-center gap-3
+                               text-lg font-bold
+                               text-slate-900"
+                    >
+
+                        <span
+                            class="flex h-10 w-10
+                                   items-center justify-center
+                                   rounded-xl bg-blue-100
+                                   text-blue-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <rect
+                                    x="5"
+                                    y="3"
+                                    width="14"
+                                    height="18"
+                                    rx="2"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="M8 7h8M8 11h8M8 15h5"
+                                />
+
+                            </svg>
+
+                        </span>
+
+                        Document Metadata
+
+                    </h2>
+
+
+                    {% if document.verification_code %}
+
+                    <span
+                        class="w-fit max-w-full
+                               rounded-full bg-emerald-100
+                               px-3 py-1.5 text-xs
+                               font-bold text-emerald-700
+                               break-all"
+                    >
+
+                        DVC:
+
+                        {{ document.verification_code }}
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     METADATA GRID
+                ================================================== -->
+
+                <div
+                    class="grid gap-x-8 gap-y-6 p-5
+                           sm:grid-cols-2 sm:p-7"
+                >
+
+
+                    {% if document.document_type %}
+
+                    <div>
+
+                        <span
+                            class="block text-xs
+                                   font-semibold uppercase
+                                   tracking-wide
+                                   text-slate-400"
+                        >
+
+                            Document Type
+
+                        </span>
+
+
+                        <strong
+                            class="mt-1 block text-sm
+                                   leading-6 text-slate-800"
+                        >
+
+                            {{ document.document_type }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    {% if document.issued_to %}
+
+                    <div>
+
+                        <span
+                            class="block text-xs
+                                   font-semibold uppercase
+                                   tracking-wide
+                                   text-slate-400"
+                        >
+
+                            Issued To
+
+                        </span>
+
+
+                        <strong
+                            class="mt-1 block text-sm
+                                   leading-6 text-slate-800"
+                        >
+
+                            {{ document.issued_to }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    {% if document.resident_id %}
+
+                    <div>
+
+                        <span
+                            class="block text-xs
+                                   font-semibold uppercase
+                                   tracking-wide
+                                   text-slate-400"
+                        >
+
+                            Resident ID
+
+                        </span>
+
+
+                        <strong
+                            class="mt-1 block text-sm
+                                   text-slate-800"
+                        >
+
+                            {{ document.resident_id }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    {% if document.authorized_signatory %}
+
+                    <div>
+
+                        <span
+                            class="block text-xs
+                                   font-semibold uppercase
+                                   tracking-wide
+                                   text-slate-400"
+                        >
+
+                            Authorized Signatory
+
+                        </span>
+
+
+                        <strong
+                            class="mt-1 block text-sm
+                                   leading-6 text-slate-800"
+                        >
+
+                            {{ document.authorized_signatory }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    {% if document.date_issued %}
+
+                    <div>
+
+                        <span
+                            class="block text-xs
+                                   font-semibold uppercase
+                                   tracking-wide
+                                   text-slate-400"
+                        >
+
+                            Date of Issuance
+
+                        </span>
+
+
+                        <strong
+                            class="mt-1 block text-sm
+                                   text-slate-800"
+                        >
+
+                            {{ document.date_issued|date:"F d, Y" }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    {% if document.expiration_date %}
+
+                    <div>
+
+                        <span
+                            class="block text-xs
+                                   font-semibold uppercase
+                                   tracking-wide
+                                   text-slate-400"
+                        >
+
+                            Expiration Date
+
+                        </span>
+
+
+                        <strong
+                            class="mt-1 flex flex-wrap
+                                   items-center gap-2
+                                   text-sm text-slate-800"
+                        >
+
+                            {{ document.expiration_date|date:"F d, Y" }}
+
+
+                            {% if document.is_valid %}
+
+                            <span
+                                class="rounded-full
+                                       bg-emerald-100 px-2
+                                       py-0.5 text-[11px]
+                                       font-bold
+                                       text-emerald-700"
+                            >
+
+                                Valid
+
+                            </span>
+
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- =================================================
+                     HASH
+                ================================================== -->
+
+                {% if document.document_hash %}
+
+                <div
+                    class="mx-5 mb-5 rounded-2xl
+                           border border-slate-200
+                           bg-slate-950 p-4
+                           sm:mx-7 sm:mb-7"
+                >
+
+
+                    <div
+                        class="flex flex-col gap-3
+                               sm:flex-row sm:items-center
+                               sm:justify-between"
+                    >
+
+                        <span
+                            class="flex items-center gap-2
+                                   text-xs font-semibold
+                                   text-slate-300"
+                        >
+
+                            <svg
+                                class="h-4 w-4
+                                       text-emerald-400"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 3 5 6v5c0 4.5 2.9 8.5 7 10
+                                       4.1-1.5 7-5.5 7-10V6l-7-3Z"
+                                />
+
+                            </svg>
+
+                            Document Hash (SHA-256)
+
+                        </span>
+
+
+                        <button
+                            type="button"
+                            onclick="copyHash()"
+                            class="copy-button inline-flex
+                                   w-fit items-center gap-2
+                                   rounded-lg border
+                                   border-slate-700 px-3
+                                   py-1.5 text-xs font-bold
+                                   text-slate-300 transition
+                                   hover:bg-slate-800
+                                   hover:text-white"
+                        >
+
+                            <svg
+                                class="h-3.5 w-3.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <rect
+                                    x="9"
+                                    y="9"
+                                    width="11"
+                                    height="11"
+                                    rx="2"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="M5 15H4a2 2 0 0 1-2-2V4a2
+                                       2 0 0 1 2-2h9a2 2 0 0 1
+                                       2 2v1"
+                                />
+
+                            </svg>
+
+                            Copy
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div
+                        id="documentHash"
+                        class="mt-4 break-all
+                               rounded-xl bg-slate-900
+                               px-4 py-3 font-mono
+                               text-xs leading-6
+                               text-emerald-300"
+                    >
+
+                        {{ document.document_hash }}
+
+                    </div>
+
+
+
+                    {% if document.block_id %}
+
+                    <div
+                        class="mt-4 flex flex-col gap-1
+                               border-t border-slate-800
+                               pt-4 text-xs sm:flex-row
+                               sm:items-center
+                               sm:justify-between"
+                    >
+
+                        <span class="text-slate-500">
+
+                            Smart Contract / Block ID:
+
+                        </span>
+
+
+                        <strong class="text-slate-300">
+
+                            {{ document.block_id }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     SECURITY FEATURES
+                ================================================== -->
+
+                {% if document.digital_watermark or document.tamper_status %}
+
+                <div
+                    class="grid border-t
+                           border-slate-100 sm:grid-cols-2"
+                >
+
+
+                    {% if document.digital_watermark %}
+
+                    <div
+                        class="flex gap-3 border-b
+                               border-slate-100 p-5
+                               sm:border-b-0
+                               sm:border-r sm:p-6"
+                    >
+
+                        <div
+                            class="flex h-10 w-10 shrink-0
+                                   items-center justify-center
+                                   rounded-xl bg-violet-100
+                                   text-violet-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="M12 3 5 7l7 4 7-4-7-4Z"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="m5 12 7 4 7-4"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="m5 17 7 4 7-4"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span
+                                class="block text-xs
+                                       font-semibold
+                                       text-slate-400"
+                            >
+
+                                Digital Watermark
+
+                            </span>
+
+
+                            <strong
+                                class="mt-1 block text-sm
+                                       text-slate-800"
+                            >
+
+                                {{ document.digital_watermark }}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+                    {% if document.tamper_status %}
+
+                    <div
+                        class="flex gap-3 p-5 sm:p-6"
+                    >
+
+                        <div
+                            class="flex h-10 w-10 shrink-0
+                                   items-center justify-center
+                                   rounded-xl bg-emerald-100
+                                   text-emerald-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m5 12 4 4L19 6"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span
+                                class="block text-xs
+                                       font-semibold
+                                       text-slate-400"
+                            >
+
+                                Tamper Detection
+
+                            </span>
+
+
+                            <strong
+                                class="mt-1 block text-sm
+                                       text-emerald-700"
+                            >
+
+                                {{ document.tamper_status }}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     ACTIONS
+                ================================================== -->
+
+                <div
+                    class="flex flex-col gap-3 border-t
+                           border-slate-100
+                           bg-slate-50/70 p-5
+                           sm:flex-row sm:p-6"
+                >
+
+
+                    {% if document.authenticated_copy %}
+
+                    <a
+                        href="{{ document.authenticated_copy }}"
+                        class="inline-flex flex-1
+                               items-center justify-center
+                               gap-2 rounded-xl
+                               bg-emerald-600 px-5 py-3
+                               text-sm font-bold
+                               text-white transition
+                               hover:bg-emerald-500"
+                    >
+
+                        <svg
+                            class="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <path
+                                stroke-linecap="round"
+                                d="M12 3v12m0 0 4-4m-4 4-4-4"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M5 21h14"
+                            />
+
+                        </svg>
+
+                        Download Authenticated Copy
+
+                    </a>
+
+                    {% endif %}
+
+
+
+                    <button
+                        type="button"
+                        onclick="window.print()"
+                        class="inline-flex flex-1
+                               items-center justify-center
+                               gap-2 rounded-xl border
+                               border-slate-200 bg-white
+                               px-5 py-3 text-sm
+                               font-bold text-slate-700
+                               transition
+                               hover:border-emerald-300
+                               hover:text-emerald-700"
+                    >
+
+                        <svg
+                            class="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <path
+                                stroke-linecap="round"
+                                d="M6 9V3h12v6"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M6 18H4a2 2 0 0 1-2-2v-5a2
+                                   2 0 0 1 2-2h16a2 2 0 0 1
+                                   2 2v5a2 2 0 0 1-2 2h-2"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M6 14h12v7H6z"
+                            />
+
+                        </svg>
+
+                        Print Verification Certificate
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 AUDIT INFORMATION
+            ================================================== -->
+
+            <div
+                class="rounded-3xl border border-blue-100
+                       bg-blue-50/70 p-5 sm:p-6"
+            >
+
+                <div class="flex gap-4">
+
+
+                    <div
+                        class="flex h-10 w-10 shrink-0
+                               items-center justify-center
+                               rounded-xl bg-blue-100
+                               text-blue-700"
+                    >
+
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M12 11v5"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                d="M12 8h.01"
+                            />
+
+                        </svg>
+
+                    </div>
+
+
+                    <p
+                        class="text-xs leading-6
+                               text-blue-900/70"
+                    >
+
+                        <strong
+                            class="font-bold text-blue-950"
+                        >
+
+                            Public Registry Audit:
+
+                        </strong>
+
+                        Verification information is securely
+                        recorded in the civic document registry.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            {% elif request.method == "POST" %}
+
+
+            <!-- =================================================
+                 FAILED VERIFICATION
+            ================================================== -->
+
+            <div
+                class="rounded-3xl border border-red-200
+                       bg-red-50 p-6 shadow-soft sm:p-8"
+            >
+
+                <div class="flex gap-4">
+
+
+                    <div
+                        class="flex h-12 w-12 shrink-0
+                               items-center justify-center
+                               rounded-2xl bg-red-100
+                               text-red-600"
+                    >
+
+                        <svg
+                            class="h-6 w-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 6l12 12M18 6 6 18"
+                            />
+
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2
+                            class="text-lg font-black
+                                   text-red-900"
+                        >
+
+                            Document Could Not Be Verified
+
+                        </h2>
+
+
+                        <p
+                            class="mt-2 text-sm leading-6
+                                   text-red-800/70"
+                        >
+
+                            The submitted document information could
+                            not be matched with a valid registry
+                            record.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+</div>
+```
+
+</main>
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+{% include 'partials/footer.html' %}
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+
+/* =====================================================
+   GLOBAL QR SCANNER
+===================================================== */
+
+let qrScanner = null;
+
+let scannedQRValue = "";
+
+
+
+/* =====================================================
+   SWITCH VERIFICATION TAB
+===================================================== */
+
+function showVerificationTab(tab) {
+
+    const documentPanel =
+        document.getElementById("documentPanel");
+
+    const qrPanel =
+        document.getElementById("qrPanel");
+
+    const documentTab =
+        document.getElementById("documentTab");
+
+    const qrTab =
+        document.getElementById("qrTab");
+
+
+    if (
+        !documentPanel ||
+        !qrPanel ||
+        !documentTab ||
+        !qrTab
+    ) {
+        return;
+    }
+
+
+    if (tab === "qr") {
+
+
+        /* SHOW QR */
+
+        documentPanel.classList.add("hidden");
+
+        qrPanel.classList.remove("hidden");
+
+
+        /* DOCUMENT TAB */
+
+        documentTab.classList.remove(
+            "border-emerald-600",
+            "bg-white",
+            "text-emerald-700"
+        );
+
+        documentTab.classList.add(
+            "border-transparent",
+            "text-slate-500"
+        );
+
+
+        /* QR TAB */
+
+        qrTab.classList.remove(
+            "border-transparent",
+            "text-slate-500"
+        );
+
+        qrTab.classList.add(
+            "border-emerald-600",
+            "bg-white",
+            "text-emerald-700"
+        );
+
+
+    } else {
+
+
+        /* SHOW DOCUMENT */
+
+        qrPanel.classList.add("hidden");
+
+        documentPanel.classList.remove("hidden");
+
+
+        /* QR TAB */
+
+        qrTab.classList.remove(
+            "border-emerald-600",
+            "bg-white",
+            "text-emerald-700"
+        );
+
+        qrTab.classList.add(
+            "border-transparent",
+            "text-slate-500"
+        );
+
+
+        /* DOCUMENT TAB */
+
+        documentTab.classList.remove(
+            "border-transparent",
+            "text-slate-500"
+        );
+
+        documentTab.classList.add(
+            "border-emerald-600",
+            "bg-white",
+            "text-emerald-700"
+        );
+
+
+        stopQRScanner();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   START QR CAMERA
+===================================================== */
+
+function startQRScanner() {
+
+
+    if (qrScanner) {
+        return;
+    }
+
+
+    if (typeof Html5Qrcode === "undefined") {
+
+        alert(
+            "QR scanner library could not be loaded."
+        );
+
+        return;
+
+    }
+
+
+    const reader =
+        document.getElementById("qr-reader");
+
+
+    if (!reader) {
+        return;
+    }
+
+
+    qrScanner =
+        new Html5Qrcode("qr-reader");
+
+
+    qrScanner.start(
+
+        {
+            facingMode: "environment"
+        },
+
+        {
+            fps: 10,
+
+            qrbox: {
+                width: 220,
+                height: 220
+            }
+
+        },
+
+        function(decodedText) {
+
+
+            /* SAVE QR VALUE */
+
+            scannedQRValue =
+                decodedText;
+
+
+            /* DISPLAY RESULT */
+
+            const qrValue =
+                document.getElementById("qrValue");
+
+            const qrResult =
+                document.getElementById("qrResult");
+
+
+            if (qrValue) {
+                qrValue.innerText =
+                    decodedText;
+            }
+
+
+            if (qrResult) {
+                qrResult.classList.remove(
+                    "hidden"
+                );
+            }
+
+
+            /*
+             * Put scanned QR value
+             * into DVC field.
+             */
+
+            const documentCode =
+                document.getElementById(
+                    "document_code"
+                );
+
+
+            if (documentCode) {
+
+                documentCode.value =
+                    decodedText;
+
+            }
+
+
+            stopQRScanner();
+
+        },
+
+        function(errorMessage) {
+
+            /*
+             * The scanner continuously
+             * reports decoding failures while
+             * searching for a QR code.
+             *
+             * No action required here.
+             */
+
+        }
+
+    ).catch(function(error) {
+
+
+        console.error(
+            "Camera error:",
+            error
+        );
+
+
+        qrScanner = null;
+
+
+        alert(
+            "Unable to access the camera. " +
+            "Please allow camera permission " +
+            "or upload a QR image instead."
+        );
+
+    });
+
+}
+
+
+
+/* =====================================================
+   STOP QR CAMERA
+===================================================== */
+
+function stopQRScanner() {
+
+
+    if (!qrScanner) {
+        return;
+    }
+
+
+    qrScanner
+        .stop()
+        .then(function() {
+
+
+            qrScanner.clear();
+
+            qrScanner = null;
+
+
+        })
+        .catch(function(error) {
+
+
+            console.error(
+                "Scanner stop error:",
+                error
+            );
+
+
+            qrScanner = null;
+
+        });
+
+}
+
+
+
+/* =====================================================
+   HANDLE QR IMAGE UPLOAD
+===================================================== */
+
+const qrUpload =
+    document.getElementById("qrUpload");
+
+
+if (qrUpload) {
+
+
+    qrUpload.addEventListener(
+        "change",
+        function(event) {
+
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            if (
+                typeof Html5Qrcode ===
+                "undefined"
+            ) {
+
+                alert(
+                    "QR scanner library could not be loaded."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Temporary scanner used to
+             * decode uploaded image.
+             */
+
+            const uploadScanner =
+                new Html5Qrcode(
+                    "qr-reader"
+                );
+
+
+            uploadScanner
+                .scanFile(file, true)
+
+
+                .then(function(decodedText) {
+
+
+                    scannedQRValue =
+                        decodedText;
+
+
+                    const qrValue =
+                        document.getElementById(
+                            "qrValue"
+                        );
+
+
+                    const qrResult =
+                        document.getElementById(
+                            "qrResult"
+                        );
+
+
+                    if (qrValue) {
+
+                        qrValue.innerText =
+                            decodedText;
+
+                    }
+
+
+                    if (qrResult) {
+
+                        qrResult.classList.remove(
+                            "hidden"
+                        );
+
+                    }
+
+
+                    /*
+                     * Populate DVC.
+                     */
+
+                    const documentCode =
+                        document.getElementById(
+                            "document_code"
+                        );
+
+
+                    if (documentCode) {
+
+                        documentCode.value =
+                            decodedText;
+
+                    }
+
+
+                    uploadScanner.clear();
+
+                })
+
+
+                .catch(function(error) {
+
+
+                    console.error(
+                        "QR upload error:",
+                        error
+                    );
+
+
+                    alert(
+                        "No QR code was detected " +
+                        "in this image. Please upload " +
+                        "a clearer QR image."
+                    );
+
+
+                    uploadScanner.clear();
+
+                });
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   VERIFY SCANNED DOCUMENT
+===================================================== */
+
+function verifyQRDocument() {
+
+
+    if (!scannedQRValue) {
+
+        alert(
+            "Please scan or upload a QR code first."
+        );
+
+        return;
+
+    }
+
+
+    const qrDate =
+        document.getElementById(
+            "qr_date_issued"
+        );
+
+
+    if (!qrDate || !qrDate.value) {
+
+        alert(
+            "Please select the document issue date."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Copy QR value to normal DVC input.
+     */
+
+    const documentCode =
+        document.getElementById(
+            "document_code"
+        );
+
+
+    if (documentCode) {
+
+        documentCode.value =
+            scannedQRValue;
+
+    }
+
+
+    /*
+     * Copy date to normal date field.
+     */
+
+    const normalDate =
+        document.getElementById(
+            "date_issued"
+        );
+
+
+    if (normalDate) {
+
+        normalDate.value =
+            qrDate.value;
+
+    }
+
+
+    /*
+     * Submit the existing Django
+     * verification form.
+     */
+
+    const verificationForm =
+        document.querySelector(
+            "#documentPanel form"
+        );
+
+
+    if (verificationForm) {
+
+        verificationForm.submit();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   COPY DOCUMENT HASH
+===================================================== */
+
+function copyHash() {
+
+
+    const hashElement =
+        document.getElementById(
+            "documentHash"
+        );
+
+
+    if (!hashElement) {
+        return;
+    }
+
+
+    const hash =
+        hashElement.innerText.trim();
+
+
+    if (
+        !navigator.clipboard
+    ) {
+
+        alert(
+            "Copying is not supported by this browser."
+        );
+
+        return;
+
+    }
+
+
+    navigator.clipboard
+        .writeText(hash)
+
+
+        .then(function() {
+
+
+            const button =
+                document.querySelector(
+                    ".copy-button"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const originalText =
+                button.innerHTML;
+
+
+            button.innerHTML =
+                "✓ Copied";
+
+
+            setTimeout(
+                function() {
+
+                    button.innerHTML =
+                        originalText;
+
+                },
+                2000
+            );
+
+        })
+
+
+        .catch(function(error) {
+
+
+            console.error(
+                "Copy failed:",
+                error
+            );
+
+        });
+
+}
+
+
+
+/* =====================================================
+   CLEAN UP CAMERA WHEN LEAVING PAGE
+===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        stopQRScanner();
+
+    }
+);
+
+</script>
+
+<!-- =====================================================
+     PRINT STYLES
+====================================================== -->
+
+<style>
+
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    header,
+    nav,
+    footer,
+    #documentPanel,
+    #qrPanel,
+    .verification-tab,
+    button {
+        display: none !important;
+    }
+
+    main {
+        background: white !important;
+    }
+
+    .shadow-soft {
+        box-shadow: none !important;
+    }
+
+}
+
+</style>
+
+</body>
+
+</html>
