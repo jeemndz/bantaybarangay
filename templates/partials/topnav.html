@@ -1,395 +1,269 @@
-{% load static %}
+    {% load static %}
 
-<!-- =========================================================
-     BANTAYBARANGAY TOP NAVIGATION
-========================================================= -->
+    <!-- =========================================================
+        BANTAYBARANGAY TOP NAVIGATION
+    ========================================================= -->
 
-<header class="sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+    <header class="sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
 
-    <div class="mx-auto flex h-[82px] max-w-[1500px] items-center justify-between px-6 lg:px-10">
+        <div class="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-5 lg:px-8">
 
-        <!-- =====================================================
-             BRAND
-        ====================================================== -->
+            <!-- =================================================
+                BRAND
+            ================================================== -->
 
-        <a href="{% url 'home' %}"
-           class="group flex shrink-0 items-center gap-3">
+            <a href="{% url 'home' %}" class="group flex items-center gap-3">
 
-            <!-- Logo -->
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#073b35] transition duration-200 group-hover:scale-105">
+                <!-- Logo -->
+                <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#073b35] shadow-sm transition-transform duration-200 group-hover:scale-105">
 
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="1.8"
-                     class="h-6 w-6 text-[#f5b72c]">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        class="h-6 w-6 text-white"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"
+                        />
 
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12l2 2 4-4"
+                        />
+                    </svg>
 
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9 12l2 2 4-4"/>
+                </div>
 
-                </svg>
+                <!-- Brand Text -->
+                <div class="leading-tight">
 
-            </div>
+                    <span class="block text-[17px] font-bold tracking-tight text-[#082f2b]">
+                        BantayBarangay
+                    </span>
 
-            <!-- Brand Text -->
-            <div class="leading-tight">
+                    <span class="hidden text-[10px] font-medium tracking-[0.15em] text-slate-400 sm:block">
+                        CIVIC PORTAL
+                    </span>
 
-                <span class="block text-[18px] font-bold tracking-tight text-[#17233d]">
-                    BantayBarangay
-                </span>
-
-                <span class="mt-0.5 block text-[10px] font-medium uppercase tracking-[0.14em] text-slate-400">
-                    Official Digital Services Portal
-                </span>
-
-            </div>
-
-        </a>
-
-
-        <!-- =====================================================
-             DESKTOP NAVIGATION
-        ====================================================== -->
-
-        <nav class="hidden items-center gap-1 lg:flex">
-
-            <!-- HOME -->
-
-            <a href="{% url 'home' %}"
-               class="flex items-center rounded-lg px-4 py-3 text-[15px] font-medium text-[#263451] transition duration-200 hover:bg-[#f2f8f5] hover:text-[#073b35]">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="1.8"
-                     class="mr-2 h-[18px] w-[18px]">
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M3 11.5L12 4l9 7.5"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M5.5 10.5V20h13v-9.5"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9.5 20v-5h5v5"/>
-
-                </svg>
-
-                Home
+                </div>
 
             </a>
 
 
             <!-- =================================================
-                 COMPLAINTS DROPDOWN
+                DESKTOP NAVIGATION
             ================================================== -->
 
-            <div class="group relative">
+            <nav class="hidden items-center gap-1 lg:flex">
 
-                <button type="button"
-                        class="flex items-center rounded-lg px-4 py-3 text-[15px] font-medium text-[#263451] transition duration-200 hover:bg-[#f2f8f5] hover:text-[#073b35]">
+                <!-- =================================================
+                    HOME
+                ================================================== -->
 
-                    <!-- Clipboard Icon -->
+                <a
+                    href="{% url 'home' %}"
+                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[15px] font-medium text-[#172b4d] transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
 
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="mr-2 h-[18px] w-[18px]">
+                    <!-- Home -->
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-[19px] w-[19px]"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.25 12l9.75-9 9.75 9"
+                        />
 
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9 5h6"/>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4.5 10.5V21h15V10.5"
+                        />
 
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9 3h6a2 2 0 012 2v1h1a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h1V5a2 2 0 012-2z"/>
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M8 11h8M8 15h6"/>
-
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 21v-6h6v6"
+                        />
                     </svg>
 
-                    Complaints
+                    <span>Home</span>
 
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="ml-2 h-4 w-4 transition duration-200 group-hover:rotate-180">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 9l6 6 6-6"/>
-
-                    </svg>
-
-                </button>
+                </a>
 
 
-                <!-- COMPLAINT DROPDOWN -->
+                <!-- =================================================
+                    COMPLAINTS
+                ================================================== -->
 
-                <div class="invisible absolute left-1/2 top-full z-50 w-[350px] -translate-x-1/2 translate-y-3 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <div class="relative">
 
-                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+                    <button
+                        type="button"
+                        onclick="toggleDropdown('complaintsDropdown')"
+                        class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[15px] font-medium text-[#172b4d] transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                    >
 
-                        <!-- Dropdown Header -->
+                        <!-- Clipboard -->
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-[19px] w-[19px]"
+                        >
+                            <rect
+                                x="5"
+                                y="4"
+                                width="14"
+                                height="17"
+                                rx="2"
+                            />
 
-                        <div class="border-b border-slate-100 px-4 py-3">
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 4V3h6v1"
+                            />
 
-                            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d49a18]">
-                                Citizen Concerns
-                            </p>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8.5 10h7M8.5 14h7M8.5 18h4"
+                            />
+                        </svg>
 
-                            <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                                Submit and monitor concerns raised within your barangay.
-                            </p>
+                        <span>Complaints</span>
 
-                        </div>
+                        <!-- Chevron -->
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            class="h-4 w-4"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 9l6 6 6-6"
+                            />
+                        </svg>
 
+                    </button>
+
+
+                    <!-- Complaints Dropdown -->
+
+                    <div
+                        id="complaintsDropdown"
+                        class="hidden absolute left-0 top-full mt-2 w-[290px] rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+                    >
 
                         <!-- Submit Complaint -->
 
-                        <a href="{% url 'submit_complaint' %}"
-                           class="group/item flex gap-3 rounded-xl p-3 transition duration-200 hover:bg-[#f2f8f5]">
-
-                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e5f3ed] text-[#073b35] transition group-hover/item:bg-[#073b35] group-hover/item:text-[#f5b72c]">
-
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     class="h-5 w-5">
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M12 5v14M5 12h14"/>
-
-                                </svg>
-
-                            </div>
-
-                            <div class="min-w-0">
-
-                                <p class="text-sm font-semibold text-[#17233d]">
-                                    Submit a Complaint
-                                </p>
-
-                                <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                                    Report a concern or issue affecting your community.
-                                </p>
-
-                            </div>
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="1.8"
-                                 class="ml-auto mt-1 h-4 w-4 shrink-0 text-slate-300 transition group-hover/item:translate-x-1 group-hover/item:text-[#073b35]">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M5 12h14M13 6l6 6-6 6"/>
-
-                            </svg>
-
-                        </a>
-
-
-                        <!-- Track Complaint -->
-
-                        <a href="{% url 'track_complaint' %}"
-                           class="group/item flex gap-3 rounded-xl p-3 transition duration-200 hover:bg-[#f2f8f5]">
-
-                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e5f3ed] text-[#073b35] transition group-hover/item:bg-[#073b35] group-hover/item:text-[#f5b72c]">
-
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     class="h-5 w-5">
-
-                                    <circle cx="12"
-                                            cy="12"
-                                            r="8"/>
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M12 8v4l2.5 2"/>
-
-                                </svg>
-
-                            </div>
-
-                            <div class="min-w-0">
-
-                                <p class="text-sm font-semibold text-[#17233d]">
-                                    Track a Complaint
-                                </p>
-
-                                <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                                    Check the current status of your submitted report.
-                                </p>
-
-                            </div>
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="1.8"
-                                 class="ml-auto mt-1 h-4 w-4 shrink-0 text-slate-300 transition group-hover/item:translate-x-1 group-hover/item:text-[#073b35]">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M5 12h14M13 6l6 6-6 6"/>
-
-                            </svg>
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 DOCUMENTS DROPDOWN
-            ================================================== -->
-
-            <div class="group relative">
-
-                <button type="button"
-                        class="flex items-center rounded-lg px-4 py-3 text-[15px] font-medium text-[#263451] transition duration-200 hover:bg-[#f2f8f5] hover:text-[#073b35]">
-
-                    <!-- Document Icon -->
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="mr-2 h-[18px] w-[18px]">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 3h8l5 5v13H6V3z"/>
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M14 3v6h5"/>
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9 13h6M9 17h6"/>
-
-                    </svg>
-
-                    Documents
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="ml-2 h-4 w-4 transition duration-200 group-hover:rotate-180">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 9l6 6 6-6"/>
-
-                    </svg>
-
-                </button>
-
-
-                <!-- DOCUMENT DROPDOWN -->
-
-                <div class="invisible absolute left-1/2 top-full z-50 w-[350px] -translate-x-1/2 translate-y-3 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-
-                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
-
-                        <div class="border-b border-slate-100 px-4 py-3">
-
-                            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d49a18]">
-                                Official Documents
-                            </p>
-
-                            <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                                Access and verify official barangay documents securely.
-                            </p>
-
-                        </div>
-
-
-                        <!-- Verify Document -->
-
-                        <a href="{% url 'verify_document' %}"
-                           class="group/item flex gap-3 rounded-xl p-3 transition duration-200 hover:bg-[#f2f8f5]">
-
-                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e5f3ed] text-[#073b35] transition group-hover/item:bg-[#073b35] group-hover/item:text-[#f5b72c]">
-
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     class="h-5 w-5">
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/>
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M9 12l2 2 4-4"/>
-
+                        <a
+                            href="{% url 'submit_complaint' %}"
+                            class="group flex items-start gap-3 rounded-lg px-3 py-3 transition hover:bg-[#eef8f4]"
+                        >
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5f5ef] text-[#073b35]">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 5v14M5 12h14"
+                                    />
                                 </svg>
 
                             </div>
 
                             <div>
 
-                                <p class="text-sm font-semibold text-[#17233d]">
-                                    Verify a Document
+                                <p class="text-sm font-semibold text-slate-800 group-hover:text-[#073b35]">
+                                    Submit Complaint
                                 </p>
 
-                                <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                                    Authenticate official barangay documents and records.
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Report a concern or community issue.
                                 </p>
 
                             </div>
 
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="1.8"
-                                 class="ml-auto mt-1 h-4 w-4 shrink-0 text-slate-300 transition group-hover/item:translate-x-1 group-hover/item:text-[#073b35]">
+                        </a>
 
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M5 12h14M13 6l6 6-6 6"/>
 
-                            </svg>
+                        <!-- Track Complaint -->
+
+                        <a
+                            href="{% url 'track_complaint' %}"
+                            class="group flex items-start gap-3 rounded-lg px-3 py-3 transition hover:bg-[#eef8f4]"
+                        >
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5f5ef] text-[#073b35]">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M4 12h16"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 4v16"
+                                    />
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-semibold text-slate-800 group-hover:text-[#073b35]">
+                                    Track Complaint
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Check the status of your report.
+                                </p>
+
+                            </div>
 
                         </a>
 
@@ -397,648 +271,1025 @@
 
                 </div>
 
-            </div>
 
+                <!-- =================================================
+                    DOCUMENTS
+                ================================================== -->
 
-            <!-- =================================================
-                 ABOUT
-            ================================================== -->
+                <div class="relative">
 
-            <a href="{% url 'about' %}"
-               class="flex items-center rounded-lg px-4 py-3 text-[15px] font-medium text-[#263451] transition duration-200 hover:bg-[#f2f8f5] hover:text-[#073b35]">
+                    <button
+                        type="button"
+                        onclick="toggleDropdown('documentsDropdown')"
+                        class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[15px] font-medium text-[#172b4d] transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                    >
 
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="1.8"
-                     class="mr-2 h-[18px] w-[18px]">
+                        <!-- Document -->
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-[19px] w-[19px]"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 3h8l5 5v13H6V3z"
+                            />
 
-                    <circle cx="12"
-                            cy="12"
-                            r="9"/>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M14 3v6h5"
+                            />
 
-                    <path stroke-linecap="round"
-                          d="M12 11v5"/>
-
-                    <path stroke-linecap="round"
-                          d="M12 8h.01"/>
-
-                </svg>
-
-                About
-
-            </a>
-
-
-            <!-- =================================================
-                 CONTACT
-            ================================================== -->
-
-            <a href="{% url 'contact' %}"
-               class="flex items-center rounded-lg px-4 py-3 text-[15px] font-medium text-[#263451] transition duration-200 hover:bg-[#f2f8f5] hover:text-[#073b35]">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="1.8"
-                     class="mr-2 h-[18px] w-[18px]">
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 11.5a8.4 8.4 0 01-9 8.5 8.8 8.8 0 01-4-.9L3 21l1.9-4.5A8.5 8.5 0 113 11.5"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8 11h.01M12 11h.01M16 11h.01"/>
-
-                </svg>
-
-                Contact
-
-            </a>
-
-        </nav>
-
-
-        <!-- =====================================================
-             RIGHT SIDE
-        ====================================================== -->
-
-        <div class="flex items-center gap-2">
-
-            <!-- Help -->
-
-            <button type="button"
-                    title="Help"
-                    class="hidden h-10 w-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-[#f2f8f5] hover:text-[#073b35] sm:flex">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="1.8"
-                     class="h-5 w-5">
-
-                    <circle cx="12"
-                            cy="12"
-                            r="9"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9.5 9a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.5"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M12 16h.01"/>
-
-                </svg>
-
-            </button>
-
-
-            <!-- Notifications -->
-
-            <button type="button"
-                    title="Notifications"
-                    class="relative hidden h-10 w-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-[#f2f8f5] hover:text-[#073b35] sm:flex">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="1.8"
-                     class="h-5 w-5">
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M10 21h4"/>
-
-                </svg>
-
-                <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
-
-            </button>
-
-
-            <!-- =================================================
-                 USER ACCOUNT DROPDOWN
-            ================================================== -->
-
-            <div class="group relative">
-
-                <button type="button"
-                        class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-sm font-semibold text-[#17233d] transition duration-200 hover:border-[#b8dcd0] hover:bg-[#f8fbfa]">
-
-                    <!-- User Icon -->
-
-                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#073b35] text-white">
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor"
-                             stroke-width="1.8"
-                             class="h-4 w-4">
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M4.5 21a7.5 7.5 0 0115 0"/>
-
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 13h6M9 17h6"
+                            />
                         </svg>
 
-                    </span>
+                        <span>Documents</span>
 
-                    <span class="hidden max-w-[110px] truncate md:block">
-                        {{ username|default:"Account" }}
-                    </span>
+                        <!-- Chevron -->
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            class="h-4 w-4"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 9l6 6 6-6"
+                            />
+                        </svg>
 
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="h-4 w-4 text-slate-400 transition duration-200 group-hover:rotate-180">
+                    </button>
 
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 9l6 6 6-6"/>
 
+                    <!-- Documents Dropdown -->
+
+                    <div
+                        id="documentsDropdown"
+                        class="hidden absolute left-0 top-full mt-2 w-[290px] rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+                    >
+
+                        <!-- Verify Document -->
+
+                        <a
+                            href="{% url 'verify_document' %}"
+                            class="group flex items-start gap-3 rounded-lg px-3 py-3 transition hover:bg-[#eef8f4]"
+                        >
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5f5ef] text-[#073b35]">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9 12l2 2 4-4"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-semibold text-slate-800 group-hover:text-[#073b35]">
+                                    Verify Document
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Authenticate official barangay documents.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- Request Document -->
+
+                        <a
+                            href="#"
+                            class="group flex items-start gap-3 rounded-lg px-3 py-3 transition hover:bg-[#eef8f4]"
+                        >
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5f5ef] text-[#073b35]">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9 8h6M9 12h6M9 16h4"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-semibold text-slate-800 group-hover:text-[#073b35]">
+                                    Document Services
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-slate-500">
+                                    Access available barangay documents.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                    ABOUT
+                ================================================== -->
+
+                <a
+                    href="{% url 'about' %}"
+                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[15px] font-medium text-[#172b4d] transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-[19px] w-[19px]"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 11v5"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 8h.01"
+                        />
+                    </svg>
+
+                    <span>About</span>
+
+                </a>
+
+
+                <!-- =================================================
+                    CONTACT
+                ================================================== -->
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[15px] font-medium text-[#172b4d] transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <!-- Proper Chat / Message Icon -->
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-[19px] w-[19px]"
+                    >
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M20 11.5a7.5 7.5 0 01-7.8 7.5 8 8 0 01-3.5-.8L4 20l1.8-4.1A7.5 7.5 0 1120 11.5z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"
+                        />
+
+                    </svg>
+
+                    <span>Contact</span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- =================================================
+                RIGHT SIDE
+            ================================================== -->
+
+            <div class="flex items-center gap-2">
+
+                <!-- Help -->
+
+                <button
+                    type="button"
+                    class="hidden h-10 w-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-[#073b35] sm:flex"
+                    title="Help"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9.5 9a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 3.5"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 16h.01"
+                        />
                     </svg>
 
                 </button>
 
 
-                <!-- USER DROPDOWN -->
+                <!-- Notifications -->
 
-                <div class="invisible absolute right-0 top-full z-50 w-[290px] translate-y-3 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <button
+                    type="button"
+                    class="relative hidden h-10 w-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-[#073b35] sm:flex"
+                    title="Notifications"
+                >
 
-                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                        />
 
-                        <!-- Account Header -->
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M10 21h4"
+                        />
+                    </svg>
 
-                        <div class="rounded-xl bg-[#f2f8f5] px-4 py-4">
+                    <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
 
-                            <p class="text-sm font-semibold text-[#17233d]">
-                                {{ username|default:"Guest User" }}
-                            </p>
-
-                            <p class="mt-1 truncate text-xs text-slate-500">
-                                {{ email|default:"" }}
-                            </p>
-
-                        </div>
-
-
-                        <!-- Profile -->
-
-                        <a href="#"
-                           class="mt-2 flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-600 transition hover:bg-[#f2f8f5] hover:text-[#073b35]">
-
-                            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100">
-
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     class="h-4 w-4">
-
-                                    <circle cx="12"
-                                            cy="8"
-                                            r="3"/>
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M5 21a7 7 0 0114 0"/>
-
-                                </svg>
-
-                            </span>
-
-                            <span>
-
-                                <span class="block font-medium text-slate-700">
-                                    My Profile
-                                </span>
-
-                                <span class="block text-xs text-slate-400">
-                                    Manage your account
-                                </span>
-
-                            </span>
-
-                        </a>
+                </button>
 
 
-                        <!-- Settings -->
+    <!-- =================================================
+     ACCOUNT / LOGIN
+================================================= -->
 
-                        <a href="#"
-                           class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-600 transition hover:bg-[#f2f8f5] hover:text-[#073b35]">
+{% if request.session.user_id %}
 
-                            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100">
+    <!-- LOGGED-IN ACCOUNT -->
 
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     class="h-4 w-4">
+    <div class="group relative">
 
-                                    <circle cx="12"
-                                            cy="12"
-                                            r="3"/>
+        <button
+            type="button"
+            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-[#073b35] shadow-sm transition hover:border-[#b8dcd0] hover:bg-[#f6fbf9]"
+        >
 
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6v.1h-2.4v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1-1.7-1.7.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H6v-2.4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1L9 6.9l.1.1a1.7 1.7 0 001.9.3 1.7 1.7 0 001-1.6v-.1h2.4v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1 1.7 1.7-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.6 1h.1V14h-.1a1.7 1.7 0 00-1.6 1z"/>
+            <!-- USER ICON -->
 
-                                </svg>
+            <span
+                class="flex h-7 w-7 items-center justify-center rounded-lg bg-[#073b35] text-white"
+            >
 
-                            </span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                    class="h-4 w-4"
+                >
 
-                            <span>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                    />
 
-                                <span class="block font-medium text-slate-700">
-                                    Settings
-                                </span>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4.5 21a7.5 7.5 0 0115 0"
+                    />
 
-                                <span class="block text-xs text-slate-400">
-                                    Account preferences
-                                </span>
+                </svg>
 
-                            </span>
-
-                        </a>
+            </span>
 
 
-                        <!-- Logout -->
+            <!-- USERNAME -->
 
-                        <div class="my-1 border-t border-slate-100"></div>
+            <span class="hidden max-w-[120px] truncate md:block">
 
-                        <a href="{% url 'login' %}"
-                           class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-red-600 transition hover:bg-red-50">
+                {{ request.session.username }}
 
-                            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50">
+            </span>
 
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.8"
-                                     class="h-4 w-4">
 
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M15 12H3"/>
+            <!-- CHEVRON -->
 
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M10 7l5 5-5 5"/>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="h-4 w-4 transition group-hover:rotate-180"
+            >
 
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M21 3v18"/>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 9l6 6 6-6"
+                />
 
-                                </svg>
+            </svg>
 
-                            </span>
+        </button>
 
-                            Logout
 
-                        </a>
+        <!-- USER DROPDOWN -->
+
+        <div
+            class="invisible absolute right-0 top-full mt-2 w-64 translate-y-2 rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+        >
+
+            <!-- ACCOUNT INFORMATION -->
+
+            <div class="border-b border-slate-100 px-3 py-3">
+
+                <div class="flex items-center gap-3">
+
+                    <div
+                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#073b35] text-white"
+                    >
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-5 w-5"
+                        >
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4.5 21a7.5 7.5 0 0115 0"
+                            />
+
+                        </svg>
 
                     </div>
+
+
+                    <div class="min-w-0">
+
+                        <p class="truncate text-sm font-semibold text-slate-800">
+
+                            {{ request.session.username }}
+
+                        </p>
+
+                        <p class="truncate text-xs text-slate-500">
+
+                            {{ request.session.email }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROLE -->
+
+                <div class="mt-3">
+
+                    <span
+                        class="inline-flex rounded-full bg-[#eef8f4] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#073b35]"
+                    >
+
+                        {{ request.session.role }}
+
+                    </span>
 
                 </div>
 
             </div>
 
 
-            <!-- =================================================
-                 MOBILE MENU BUTTON
-            ================================================== -->
+            <!-- PROFILE -->
 
-            <button id="mobileNavButton"
-                    type="button"
-                    onclick="toggleTopnav()"
-                    aria-label="Open navigation"
-                    aria-expanded="false"
-                    class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:bg-slate-100 lg:hidden">
+            <a
+                href="#"
+                class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-600 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+            >
 
-                <svg id="mobileMenuIcon"
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     class="h-5 w-5">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                    class="h-5 w-5"
+                >
 
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M4 6h16M4 12h16M4 18h16"/>
+                    <circle
+                        cx="12"
+                        cy="8"
+                        r="3"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 21a7 7 0 0114 0"
+                    />
 
                 </svg>
 
-            </button>
+                My Profile
+
+            </a>
+
+
+            <!-- SETTINGS -->
+
+            <a
+                href="#"
+                class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-600 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+            >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                    class="h-5 w-5"
+                >
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6v.1h-2.4v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1-1.7-1.7.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H6v-2.4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1L9 6.9l.1.1a1.7 1.7 0 001.9.3 1.7 1.7 0 001-1.6v-.1h2.4v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1 1.7 1.7-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.6 1h.1V14h-.1a1.7 1.7 0 00-1.6 1z"
+                    />
+
+                </svg>
+
+                Settings
+
+            </a>
+
+
+            <div class="my-1 border-t border-slate-100"></div>
+
+
+            <!-- LOGOUT -->
+
+            <a
+                href="{% url 'logout' %}"
+                class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+            >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                    class="h-5 w-5"
+                >
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 12H3"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10 7l5 5-5 5"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M21 3v18"
+                    />
+
+                </svg>
+
+                Logout
+
+            </a>
 
         </div>
 
     </div>
 
 
-    <!-- =========================================================
-         MOBILE NAVIGATION
-    ========================================================== -->
-
-    <div id="topnavLinks"
-         class="hidden border-t border-slate-100 bg-white lg:hidden">
-
-        <div class="mx-auto max-w-[1500px] px-5 py-4">
-
-            <!-- Mobile Home -->
-
-            <a href="{% url 'home' %}"
-               class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#f2f8f5] hover:text-[#073b35]">
-
-                <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f3ed] text-[#073b35]">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="h-4 w-4">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M3 11.5L12 4l9 7.5"/>
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M5.5 10.5V20h13v-9.5"/>
-
-                    </svg>
-
-                </span>
-
-                Home
-
-            </a>
-
-
-            <!-- Mobile Complaint Group -->
-
-            <div class="mt-1 rounded-xl bg-slate-50 p-2">
-
-                <p class="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#d49a18]">
-                    Complaints
-                </p>
-
-                <a href="{% url 'submit_complaint' %}"
-                   class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-white">
-
-                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e5f3ed] text-[#073b35]">
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor"
-                             stroke-width="1.8"
-                             class="h-4 w-4">
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M12 5v14M5 12h14"/>
-
-                        </svg>
-
-                    </span>
-
-                    <span>
-                        <span class="block font-medium">
-                            Submit Complaint
-                        </span>
-
-                        <span class="text-xs text-slate-400">
-                            Report a barangay concern
-                        </span>
-                    </span>
-
-                </a>
-
-
-                <a href="{% url 'track_complaint' %}"
-                   class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-white">
-
-                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e5f3ed] text-[#073b35]">
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor"
-                             stroke-width="1.8"
-                             class="h-4 w-4">
-
-                            <circle cx="12"
-                                    cy="12"
-                                    r="8"/>
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M12 8v4l2.5 2"/>
-
-                        </svg>
-
-                    </span>
-
-                    <span>
-                        <span class="block font-medium">
-                            Track Complaint
-                        </span>
-
-                        <span class="text-xs text-slate-400">
-                            Check complaint status
-                        </span>
-                    </span>
-
-                </a>
-
-            </div>
-
-
-            <!-- Mobile Documents -->
-
-            <div class="mt-1 rounded-xl bg-slate-50 p-2">
-
-                <p class="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#d49a18]">
-                    Documents
-                </p>
-
-                <a href="{% url 'verify_document' %}"
-                   class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-white">
-
-                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e5f3ed] text-[#073b35]">
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor"
-                             stroke-width="1.8"
-                             class="h-4 w-4">
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/>
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M9 12l2 2 4-4"/>
-
-                        </svg>
-
-                    </span>
-
-                    <span>
-                        <span class="block font-medium">
-                            Verify Document
-                        </span>
-
-                        <span class="text-xs text-slate-400">
-                            Authenticate official documents
-                        </span>
-                    </span>
-
-                </a>
-
-            </div>
-
-
-            <!-- About -->
-
-            <a href="{% url 'about' %}"
-               class="mt-1 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-[#f2f8f5] hover:text-[#073b35]">
-
-                <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f3ed] text-[#073b35]">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="1.8"
-                         class="h-4 w-4">
-
-                        <circle cx="12"
-                                cy="12"
-                                r="9"/>
-
-                        <path stroke-linecap="round"
-                              d="M12 11v5"/>
-
-                        <path stroke-linecap="round"
-                              d="M12 8h.01"/>
-
-                    </svg>
-
-                </span>
-
-                About
-
-            </a>
-
-
-
-<!-- CONTACT -->
-
-<a
-    href="{% url 'contact' %}"
-    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
->
-    <!-- Contact / Message Icon -->
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.8"
-        stroke="currentColor"
-        class="h-[18px] w-[18px]"
+{% else %}
+
+    <!-- =================================================
+         NOT LOGGED IN
+    ================================================== -->
+
+    <a
+        href="{% url 'login' %}"
+        class="flex items-center gap-2 rounded-xl bg-[#073b35] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0a4d45] hover:shadow-md"
     >
-        <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M20.25 11.5c0 4.28-3.69 7.75-8.25 7.75a9.1 9.1 0 01-3.82-.83L4 19.75l1.42-3.48A7.35 7.35 0 013.75 11.5C3.75 7.22 7.44 3.75 12 3.75s8.25 3.47 8.25 7.75z"
-        />
 
-        <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"
-        />
-    </svg>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-[18px] w-[18px]"
+        >
 
-    Contact
-</a>
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 12H3"
+            />
+
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10 7l5 5-5 5"
+            />
+
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 3v18"
+            />
+
+        </svg>
+
+        Login
+
+    </a>
+
+{% endif %}
+
+                <!-- =================================================
+                    MOBILE MENU BUTTON
+                ================================================== -->
+
+                <button
+                    id="mobileNavButton"
+                    type="button"
+                    onclick="toggleMobileNav()"
+                    class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-100 hover:text-[#073b35] lg:hidden"
+                    aria-label="Open navigation"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
+                    </svg>
+
+                </button>
+
+            </div>
 
         </div>
 
-    </div>
 
-</header>
+        <!-- =========================================================
+            MOBILE NAVIGATION
+        ========================================================== -->
+
+        <div
+            id="mobileNav"
+            class="hidden border-t border-slate-100 bg-white px-5 py-4 lg:hidden"
+        >
+
+            <div class="mx-auto max-w-[1400px] space-y-1">
 
 
-<!-- =========================================================
-     MOBILE MENU SCRIPT
-========================================================= -->
+                <!-- Home -->
 
-<script>
+                <a
+                    href="{% url 'home' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
 
-function toggleTopnav() {
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.25 12l9.75-9 9.75 9"
+                        />
 
-    const menu = document.getElementById("topnavLinks");
-    const button = document.getElementById("mobileNavButton");
-    const icon = document.getElementById("mobileMenuIcon");
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4.5 10.5V21h15V10.5"
+                        />
 
-    const isHidden = menu.classList.contains("hidden");
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 21v-6h6v6"
+                        />
+                    </svg>
 
-    if (isHidden) {
+                    Home
 
-        menu.classList.remove("hidden");
+                </a>
 
-        button.setAttribute("aria-expanded", "true");
 
-        icon.innerHTML = `
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6 6l12 12M18 6L6 18"
-            />
-        `;
+                <!-- Submit Complaint -->
 
-    } else {
+                <a
+                    href="{% url 'submit_complaint' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
 
-        menu.classList.add("hidden");
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 5v14M5 12h14"
+                        />
+                    </svg>
 
-        button.setAttribute("aria-expanded", "false");
+                    Submit Complaint
 
-        icon.innerHTML = `
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-            />
-        `;
+                </a>
 
-    }
 
-}
+                <!-- Track Complaint -->
 
-</script>
+                <a
+                    href="{% url 'track_complaint' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 7v5l3 2"
+                        />
+                    </svg>
+
+                    Track Complaint
+
+                </a>
+
+
+                <!-- Verify Document -->
+
+                <a
+                    href="{% url 'verify_document' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12l2 2 4-4"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"
+                        />
+                    </svg>
+
+                    Verify Document
+
+                </a>
+
+
+                <!-- About -->
+
+                <a
+                    href="{% url 'about' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 11v5"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 8h.01"
+                        />
+                    </svg>
+
+                    About
+
+                </a>
+
+
+                <!-- Contact -->
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M20 11.5a7.5 7.5 0 01-7.8 7.5 8 8 0 01-3.5-.8L4 20l1.8-4.1A7.5 7.5 0 1120 11.5z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"
+                        />
+                    </svg>
+
+                    Contact
+
+                </a>
+
+
+                <!-- =================================================
+                    MOBILE AUTH
+                ================================================== -->
+
+                {% if user.is_authenticated %}
+
+                    <div class="mt-3 border-t border-slate-100 pt-3">
+
+                        <div class="mb-2 flex items-center gap-3 px-4 py-2">
+
+                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#073b35] text-white">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <circle
+                                        cx="12"
+                                        cy="8"
+                                        r="3"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M5 21a7 7 0 0114 0"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div class="min-w-0">
+
+                                <p class="truncate text-sm font-semibold text-slate-800">
+                                    {{ user.get_username }}
+                                </p>
+
+                                {% if user.email %}
+                                    <p class="truncate text-xs text-slate-500">
+                                        {{ user.email }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="#"
+                            class="block rounded-lg px-4 py-3 text-sm font-medium text-slate-700 hover:bg-[#eef8f4]"
+                        >
+                            My Profile
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="block rounded-lg px-4 py-3 text-sm font-medium text-slate-700 hover:bg-[#eef8f4]"
+                        >
+                            Settings
+                        </a>
+
+
+                        <a
+                            href="{% url 'logout' %}"
+                            class="block rounded-lg px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50"
+                        >
+                            Logout
+                        </a>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="mt-3 border-t border-slate-100 pt-3">
+
+                        <a
+                            href="{% url 'login' %}"
+                            class="flex items-center justify-center gap-2 rounded-lg bg-[#073b35] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0a5148]"
+                        >
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12H3"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M10 7l5 5-5 5"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M21 3v18"
+                                />
+                            </svg>
+
+                            Login
+
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </header>

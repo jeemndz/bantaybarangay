@@ -2,38 +2,94 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         {% block title %}BantayBarangay{% endblock %}
     </title>
 
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <!-- ================================= -->
+    <!-- TAILWIND CSS -->
+    <!-- ================================= -->
 
-    <link rel="stylesheet" href="{% static 'css/topbar.css' %}">
-    
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- ================================= -->
+    <!-- CUSTOM CSS -->
+    <!-- ================================= -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base.css' %}"
+    >
+
+    <!--
+        Sidebar is now styled using Tailwind,
+        so sidebar.css is no longer required.
+    -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/topbar.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/dashboard.css' %}"
+    >
+
+
     {% block extra_css %}
     {% endblock %}
 
 </head>
 
-<body>
+
+<body class="min-h-screen bg-slate-50">
+
+
+    <!-- ================================= -->
+    <!-- SIDEBAR -->
+    <!-- ================================= -->
 
     {% include 'partials/sidebar.html' %}
 
-    <div class="main-content">
+
+    <!-- ================================= -->
+    <!-- MAIN APPLICATION AREA -->
+    <!-- ================================= -->
+
+    <div
+        class="min-h-screen transition-all duration-300
+               lg:ml-72"
+    >
+
+
+        <!-- ================================= -->
+        <!-- TOPBAR -->
+        <!-- ================================= -->
 
         {% include 'partials/topbar.html' %}
 
-        <main class="page-content">
+
+        <!-- ================================= -->
+        <!-- PAGE CONTENT -->
+        <!-- ================================= -->
+
+        <main
+            class="min-h-[calc(100vh-4rem)] p-4
+                   sm:p-6 lg:p-8"
+        >
 
             {% block content %}
             {% endblock %}
@@ -42,8 +98,23 @@
 
     </div>
 
+
+    <!-- ================================= -->
+    <!-- SIDEBAR JAVASCRIPT -->
+    <!-- ================================= -->
+
+    <script src="{% static 'js/sidebar.js' %}"></script>
+    <script src="{% static 'js/topbar.js' %}"></script>
+
+
+    <!-- ================================= -->
+    <!-- PAGE-SPECIFIC JAVASCRIPT -->
+    <!-- ================================= -->
+
     {% block extra_js %}
     {% endblock %}
 
+
 </body>
 </html>
+
