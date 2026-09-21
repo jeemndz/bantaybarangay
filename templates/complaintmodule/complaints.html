@@ -129,91 +129,136 @@ Complaint Management | BantayBarangay
     </div>
 
 
-    <!-- FILTERS -->
+ <!-- FILTERS -->
 
-    <div class="complaint-filters">
+<form method="GET"
+      action="{% url 'complaints' %}"
+      class="complaint-filters">
 
+    <!-- CATEGORY -->
 
-        <!-- CATEGORY -->
+    <div class="filter-group">
 
-        <div class="filter-group">
+        <label>
+            Category:
+        </label>
 
-            <label>
-                Category:
-            </label>
+        <select
+            name="category"
+            onchange="this.form.submit()">
 
-            <select>
+            <option
+                value=""
+                {% if not selected_category %}selected{% endif %}>
+                All Types
+            </option>
 
-                <option>
-                    All Types
-                </option>
+            <option
+                value="Property Dispute"
+                {% if selected_category == "Property Dispute" %}selected{% endif %}>
+                Property Dispute
+            </option>
 
-                <option>
-                    Property Dispute
-                </option>
+            <option
+                value="Noise Complaint"
+                {% if selected_category == "Noise Complaint" %}selected{% endif %}>
+                Noise Complaint
+            </option>
 
-                <option>
-                    Noise Complaint
-                </option>
+            <option
+                value="Illegal Parking"
+                {% if selected_category == "Illegal Parking" %}selected{% endif %}>
+                Illegal Parking
+            </option>
 
-                <option>
-                    Illegal Parking
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <!-- STATUS -->
-
-        <div class="filter-group">
-
-            <label>
-                Status:
-            </label>
-
-            <select>
-
-                <option>
-                    All Status
-                </option>
-
-                <option>
-                    New
-                </option>
-
-                <option>
-                    Under Investigation
-                </option>
-
-                <option>
-                    Resolved
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <button
-            type="button"
-            class="date-filter">
-
-            📅 Last 30 Days
-
-        </button>
-
-
-        <button
-            type="button"
-            class="advanced-filter">
-
-            ☰ Advanced Filters
-
-        </button>
+        </select>
 
     </div>
+
+
+    <!-- STATUS -->
+
+    <div class="filter-group">
+
+        <label>
+            Status:
+        </label>
+
+        <select
+            name="status"
+            onchange="this.form.submit()">
+
+            <option
+                value=""
+                {% if not selected_status %}selected{% endif %}>
+                All Status
+            </option>
+
+            <option
+                value="Submitted"
+                {% if selected_status == "Submitted" %}selected{% endif %}>
+                Submitted
+            </option>
+
+            <option
+                value="Under Review"
+                {% if selected_status == "Under Review" %}selected{% endif %}>
+                Under Review
+            </option>
+
+            <option
+                value="Under Investigation"
+                {% if selected_status == "Under Investigation" %}selected{% endif %}>
+                Under Investigation
+            </option>
+
+            <option
+                value="Resolved"
+                {% if selected_status == "Resolved" %}selected{% endif %}>
+                Resolved
+            </option>
+
+            <option
+                value="Rejected"
+                {% if selected_status == "Rejected" %}selected{% endif %}>
+                Rejected
+            </option>
+
+            <option
+                value="Closed"
+                {% if selected_status == "Closed" %}selected{% endif %}>
+                Closed
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- LAST 30 DAYS -->
+
+    <button
+        type="submit"
+        name="date_range"
+        value="30"
+        class="date-filter">
+
+        📅 Last 30 Days
+
+    </button>
+
+
+    <!-- CLEAR FILTERS -->
+
+    <a
+        href="{% url 'complaints' %}"
+        class="advanced-filter">
+
+        ☰ Clear Filters
+
+    </a>
+
+</form>
 
 
     <!-- COMPLAINT TABLE -->
