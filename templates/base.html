@@ -1,49 +1,212 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
+
 <head>
+
+    <!-- ================================= -->
+    <!-- META -->
+    <!-- ================================= -->
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="color-scheme"
+        content="light"
+    >
+
+    <meta
+        name="theme-color"
+        content="#064e3b"
+    >
+
+
+    <!-- ================================= -->
+    <!-- TITLE -->
+    <!-- ================================= -->
 
     <title>
         {% block title %}BantayBarangay{% endblock %}
     </title>
 
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <!-- ================================= -->
+    <!-- FAVICON -->
+    <!-- ================================= -->
 
-    <link rel="stylesheet" href="{% static 'css/topbar.css' %}">
-    
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'images/logo.png' %}"
+    >
+
+
+    <!-- ================================= -->
+    <!-- TAILWIND CSS -->
+    <!-- ================================= -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- ================================= -->
+    <!-- TAILWIND CONFIG -->
+    <!-- ================================= -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: [
+                            "Inter",
+                            "Arial",
+                            "Helvetica",
+                            "sans-serif"
+                        ]
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <!-- ================================= -->
+    <!-- SHARED CSS -->
+    <!-- ================================= -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/topbar.css' %}"
+    >
+
+
+    <!-- ================================= -->
+    <!-- PAGE-SPECIFIC CSS -->
+    <!-- ================================= -->
+
     {% block extra_css %}
     {% endblock %}
 
 </head>
 
-<body>
 
-    {% include 'partials/sidebar.html' %}
+<body
+    class="min-h-full overflow-x-hidden
+           bg-slate-50 font-sans
+           text-slate-800 antialiased"
+>
 
-    <div class="main-content">
 
-        {% include 'partials/topbar.html' %}
+    <!-- ================================= -->
+    <!-- APPLICATION -->
+    <!-- ================================= -->
 
-        <main class="page-content">
+    <div
+        id="app"
+        class="relative min-h-screen w-full"
+    >
 
-            {% block content %}
-            {% endblock %}
 
-        </main>
+        <!-- ================================= -->
+        <!-- GLOBAL SIDEBAR -->
+        <!--
+            Do NOT include sidebar.html
+            inside individual modules.
+        -->
+        <!-- ================================= -->
+
+        {% include 'partials/sidebar.html' %}
+
+
+
+        <!-- ================================= -->
+        <!-- MAIN APPLICATION AREA -->
+        <!-- ================================= -->
+
+        <div
+            id="main-content"
+            class="main-content
+                   min-h-screen
+                   w-full
+                   transition-all
+                   duration-300
+                   ease-in-out
+                   lg:ml-64
+                   lg:w-[calc(100%-16rem)]"
+        >
+
+
+            <!-- ================================= -->
+            <!-- GLOBAL TOPBAR -->
+            <!-- ================================= -->
+
+            <div
+                id="topbar-container"
+                class="sticky top-0 z-40 w-full"
+            >
+
+                {% include 'partials/topbar.html' %}
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- PAGE CONTENT -->
+            <!-- ================================= -->
+
+            <main
+                id="page-content"
+                class="page-content
+                       min-h-[calc(100vh-5rem)]
+                       w-full
+                       overflow-x-hidden"
+            >
+
+                {% block content %}
+                {% endblock %}
+
+            </main>
+
+
+        </div>
 
     </div>
+
+
+    <!-- ================================= -->
+    <!-- GLOBAL JAVASCRIPT -->
+    <!-- ================================= -->
+
+    <script
+        src="{% static 'js/sidebar.js' %}"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'js/topbar.js' %}"
+        defer
+    ></script>
+
+
+    <!-- ================================= -->
+    <!-- PAGE-SPECIFIC JAVASCRIPT -->
+    <!-- ================================= -->
 
     {% block extra_js %}
     {% endblock %}
 
+
 </body>
+
 </html>

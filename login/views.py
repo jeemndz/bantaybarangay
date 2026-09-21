@@ -22,6 +22,7 @@ def login_view(request):
         # -------------------------------------------------
 
         if not username or not password:
+
             messages.error(
                 request,
                 "Please enter your username and password."
@@ -37,6 +38,7 @@ def login_view(request):
         # -------------------------------------------------
 
         try:
+
             user = User.objects.get(
                 username=username
             )
@@ -76,11 +78,14 @@ def login_view(request):
         password_valid = False
 
         try:
+
             password_valid = check_password(
                 password,
                 user.password_hash
             )
+
         except Exception:
+
             password_valid = False
 
         # -------------------------------------------------
@@ -109,14 +114,87 @@ def login_view(request):
                 "login/login.html"
             )
 
+        # =================================================
+        # LOGIN SUCCESSFUL
+        # =================================================
+
+        # Clear any previous session
+        request.session.flush()
+
+        # -------------------------------------------------
+        # GET USER INFORMATION
+        # -------------------------------------------------
+
+        first_name = getattr(
+            user,
+            "first_name",
+            ""
+        ) or ""
+
+        last_name = getattr(
+            user,
+            "last_name",
+            ""
+        ) or ""
+
+        email = getattr(
+            user,
+            "email",
+            ""
+        ) or ""
+
+        role = getattr(
+            user,
+            "role",
+            ""
+        ) or ""
+
+        # Full name
+        full_name = f"{first_name} {last_name}".strip()
+
+        if not full_name:
+            full_name = user.username
+
+        # -------------------------------------------------
+        # GENERATE INITIALS
+        # -------------------------------------------------
+
+        if first_name and last_name:
+
+            initials = (
+                first_name[0] +
+                last_name[0]
+            ).upper()
+
+        elif first_name:
+
+            initials = first_name[:2].upper()
+
+        else:
+
+            initials = user.username[:2].upper()
+
         # -------------------------------------------------
         # STORE USER SESSION
         # -------------------------------------------------
 
+        request.session["is_logged_in"] = True
+
         request.session["user_id"] = user.user_id
+
         request.session["username"] = user.username
-        request.session["email"] = user.email
-        request.session["role"] = user.role
+
+        request.session["first_name"] = first_name
+
+        request.session["last_name"] = last_name
+
+        request.session["full_name"] = full_name
+
+        request.session["email"] = email
+
+        request.session["role"] = role
+
+        request.session["initials"] = initials
 
         # -------------------------------------------------
         # REMEMBER ME
@@ -124,25 +202,30 @@ def login_view(request):
 
         if remember:
 
+            # 14 days
             request.session.set_expiry(
                 60 * 60 * 24 * 14
             )
 
         else:
 
+            # Session expires when browser closes
             request.session.set_expiry(0)
 
         # -------------------------------------------------
         # ROLE REDIRECTION
         # -------------------------------------------------
 
-        role = user.role.strip().lower()
+        normalized_role = role.strip().lower()
 
-        if role in ["admin", "official"]:
+        if normalized_role in [
+            "admin",
+            "official"
+        ]:
 
             return redirect("dashboard")
 
-        elif role == "resident":
+        elif normalized_role == "resident":
 
             return redirect("home")
 
@@ -150,7 +233,7 @@ def login_view(request):
 
             messages.error(
                 request,
-                f"Invalid account role: {user.role}"
+                f"Invalid account role: {role}"
             )
 
             request.session.flush()
@@ -160,9 +243,9 @@ def login_view(request):
                 "login/login.html"
             )
 
-    # -------------------------------------------------
+    # =====================================================
     # GET REQUEST
-    # -------------------------------------------------
+    # =====================================================
 
     return render(
         request,
@@ -176,6 +259,12 @@ def login_view(request):
 
 def logout_view(request):
 
+    # Completely remove the logged-in session
     request.session.flush()
+
+    messages.success(
+        request,
+        "You have been successfully signed out."
+    )
 
     return redirect("login")

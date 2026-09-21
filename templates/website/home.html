@@ -12,215 +12,153 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>BantayBarangay | Resident Portal</title>
+    <title>BantayBarangay | Official Resident Portal</title>
+
+    <!-- Existing styles -->
+    <link rel="stylesheet" href="{% static 'css/submit_complaint.css' %}">
+    <link rel="stylesheet" href="{% static 'css/topnav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/complaint_success_popup.css' %}">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+
+                        government: {
+                            50: '#f4f8f6',
+                            100: '#e5eee9',
+                            200: '#c8dcd3',
+                            300: '#9fc1b2',
+                            400: '#6d9f8a',
+                            500: '#39765f',
+                            600: '#28634f',
+                            700: '#1d503f',
+                            800: '#153f32',
+                            900: '#0c2d24',
+                            950: '#071e18'
+                        },
+
+                        gold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#d9a441',
+                            600: '#b88725',
+                            700: '#936b1c'
+                        }
+
+                    },
+
+                    fontFamily: {
+
+                        sans: [
+                            'Inter',
+                            'ui-sans-serif',
+                            'system-ui',
+                            'sans-serif'
+                        ],
+
+                        serif: [
+                            'Georgia',
+                            'Cambria',
+                            'Times New Roman',
+                            'serif'
+                        ]
+
+                    },
+
+                    boxShadow: {
+
+                        government:
+                            '0 8px 30px rgba(12,45,36,0.08)',
+
+                        official:
+                            '0 16px 40px rgba(12,45,36,0.12)'
+
+                    }
+
+                }
+            }
+        };
+    </script>
+
+    <!-- Google Font -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap"
         rel="stylesheet"
-        href="{% static 'css/website.css' %}"
     >
 
 </head>
 
 
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+
+{% include 'partials/topnav.html' %}
 
 
 <!-- =========================================================
-     NAVBAR
+     OFFICIAL GOVERNMENT STRIP
 ========================================================= -->
 
-<header class="navbar">
+<div class="border-b border-government-800 bg-government-900 text-white">
 
-    <div class="nav-container">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-2 text-xs sm:px-6 lg:px-8">
 
+        <div class="flex items-center gap-2">
 
-        <!-- BRAND -->
-
-        <a href="{% url 'home' %}" class="brand">
-
-            <div class="brand-icon">
-                🛡
-            </div>
-
-            <span>
-                BantayBarangay
-            </span>
-
-        </a>
-
-
-
-        <!-- NAVIGATION -->
-
-        <nav class="nav-links">
-
-            <a
-                href="{% url 'home' %}"
-                class="active"
+            <svg
+                class="h-4 w-4 text-gold-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
             >
-                Home
-            </a>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                />
 
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9.5 12l1.7 1.7L14.8 10"
+                />
+            </svg>
 
-            <a
-                href="{% url 'submit_complaint' %}"
-                class="submit-complaint-btn"
-            >
-                Submit a Complaint
-            </a>
-
-
-            <a href="{% url 'track_complaint' %}">
-                Track Complaint
-            </a>
-
-
-            <a href="{% url 'verify_document' %}">
-                Verify Document
-            </a>
-
-
-            <a href="{% url 'about' %}">
-                About
-            </a>
-
-
-            <a href="{% url 'contact' %}">
-                Contact
-            </a>
-
-        </nav>
-
-
-
-<!-- =====================================================
-     LOGIN / PROFILE
-====================================================== -->
-
-{% if request.session.user_id %}
-
-    <div class="profile-menu">
-
-        <button
-            type="button"
-            class="profile-button"
-            onclick="toggleProfileMenu()"
-        >
-
-            <span class="profile-icon">
-                ♙
+            <span class="font-medium tracking-wide">
+                OFFICIAL BARANGAY DIGITAL SERVICES PORTAL
             </span>
-
-            <span class="profile-name">
-
-                {% if resident %}
-
-                    {{ resident.first_name }}
-
-                    {% if resident.middle_name %}
-                        {{ resident.middle_name|slice:":1" }}.
-                    {% endif %}
-
-                    {{ resident.last_name }}
-
-                    {% if resident.suffix %}
-                        {{ resident.suffix }}
-                    {% endif %}
-
-                {% else %}
-
-                    {{ request.session.username }}
-
-                {% endif %}
-
-            </span>
-
-            <span class="profile-arrow">
-                ▾
-            </span>
-
-        </button>
-
-
-        <!-- PROFILE DROPDOWN -->
-
-        <div
-            class="profile-dropdown"
-            id="profileDropdown"
-        >
-
-            <div class="profile-dropdown-header">
-
-                <div class="profile-large-icon">
-                    ♙
-                </div>
-
-                <div>
-
-                    <strong>
-
-                        {% if resident %}
-
-                            {{ resident.first_name }}
-
-                            {% if resident.middle_name %}
-                                {{ resident.middle_name|slice:":1" }}.
-                            {% endif %}
-
-                            {{ resident.last_name }}
-
-                            {% if resident.suffix %}
-                                {{ resident.suffix }}
-                            {% endif %}
-
-                        {% else %}
-
-                            {{ request.session.username }}
-
-                        {% endif %}
-
-                    </strong>
-
-                    <span>
-                        {{ request.session.role|title }}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- PROFILE LINKS -->
-
-            <a href="#">
-                👤 My Profile
-            </a>
-
-            <a href="#">
-                📋 My Complaints
-            </a>
-
-            <a href="{% url 'logout' %}">
-                ↪ Logout
-            </a>
 
         </div>
 
+
+        <span class="hidden text-slate-300 sm:block">
+            Secure • Transparent • Accountable
+        </span>
+
     </div>
 
-{% else %}
-
-    <!-- NOT LOGGED IN -->
-
-    <a href="{% url 'login' %}" class="login-btn">
-    Login
-</a>
-
-{% endif %}
-
 </div>
-
-</header>
 
 
 
@@ -228,90 +166,280 @@
      HERO
 ========================================================= -->
 
-<section class="hero">
+<section class="relative overflow-hidden border-b border-slate-200 bg-white">
 
-    <div class="hero-container">
+    <!-- Decorative background -->
 
+    <div class="absolute inset-0 pointer-events-none">
 
-        <!-- HERO CONTENT -->
+        <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-government-50"></div>
 
-        <div class="hero-content scroll-reveal">
+        <div class="absolute -bottom-48 -left-32 h-96 w-96 rounded-full bg-gold-50"></div>
 
-            <span class="hero-eyebrow">
-                SECURE • TRANSPARENT • COMMUNITY-DRIVEN
-            </span>
+        <div
+            class="absolute inset-0 opacity-[0.025]"
+            style="
+                background-image:
+                linear-gradient(#0c2d24 1px, transparent 1px),
+                linear-gradient(90deg, #0c2d24 1px, transparent 1px);
+                background-size: 40px 40px;
+            "
+        ></div>
 
-
-            <h1>
-
-                Your Voice Matters.
-
-                <span>
-                    Build a Safer Community Together.
-                </span>
-
-            </h1>
+    </div>
 
 
-            <p>
+    <div class="relative mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
 
-                Report concerns, track resolutions, and access
-                barangay services securely with blockchain-verified
-                transparency. We empower every resident to
-                participate in civic governance.
-
-            </p>
+        <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
 
 
-            <div class="hero-buttons">
+            <!-- HERO CONTENT -->
 
-                <a
-                    href="{% url 'submit_complaint' %}"
-                    class="primary-btn"
-                >
-                    Submit a Complaint
-                </a>
+            <div class="max-w-3xl">
 
+                <div class="mb-6 inline-flex items-center gap-3 border-l-4 border-gold-500 bg-government-50 px-4 py-2.5">
 
-                <a
-                    href="#services"
-                    class="secondary-btn"
-                >
-                    Learn More
-                </a>
+                    <svg
+                        class="h-5 w-5 text-government-700"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                        />
+                    </svg>
 
-            </div>
+                    <span class="text-xs font-bold tracking-[0.18em] text-government-800">
+                        SECURE • TRANSPARENT • COMMUNITY-DRIVEN
+                    </span>
 
-        </div>
-
-
-
-        <!-- HERO VISUAL -->
-
-        <div class="hero-image scroll-reveal">
-
-            <div class="hero-placeholder">
-
-                <div class="block block-1"></div>
-
-                <div class="block block-2"></div>
-
-                <div class="block block-3"></div>
-
-
-                <div class="shield">
-                    🛡
                 </div>
 
 
-                <span>
-                    Secure Barangay
-                </span>
+                <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-government-600">
+                    BantayBarangay Digital Governance
+                </p>
+
+
+                <h1 class="font-serif text-4xl font-bold leading-[1.12] text-government-950 sm:text-5xl lg:text-6xl">
+
+                    Your Voice Matters.
+
+                    <span class="mt-2 block text-government-700">
+                        Together, We Build a Safer Barangay.
+                    </span>
+
+                </h1>
+
+
+                <p class="mt-7 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+
+                    BantayBarangay provides residents with secure digital
+                    access to complaint reporting, case tracking, official
+                    document verification, barangay services, and community
+                    information.
+
+                </p>
+
+
+                <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+
+                    <a
+                        href="{% url 'submit_complaint' %}"
+                        class="inline-flex items-center justify-center gap-3 bg-government-800 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-government-900/10 transition hover:bg-government-900"
+                    >
+
+                        <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 3v17M7 20h10M5 7h14"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 7l-3 6a3 3 0 006 0L5 7zM19 7l-3 6a3 3 0 006 0l-3-6z"
+                            />
+                        </svg>
+
+                        Submit a Complaint
+
+                    </a>
+
+
+                    <a
+                        href="#services"
+                        class="inline-flex items-center justify-center gap-2 border border-government-300 bg-white px-6 py-3.5 text-sm font-bold text-government-800 transition hover:border-government-500 hover:bg-government-50"
+                    >
+
+                        Explore Services
+
+                        <svg
+                            class="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 12h14M13 6l6 6-6 6"
+                            />
+                        </svg>
+
+                    </a>
+
+                </div>
+
+
+                <!-- Trust indicators -->
+
+                <div class="mt-10 grid max-w-xl grid-cols-3 border-y border-slate-200 py-5">
+
+                    <div class="border-r border-slate-200 pr-4">
+
+                        <strong class="block text-lg font-bold text-government-800">
+                            Secure
+                        </strong>
+
+                        <span class="text-xs text-slate-500">
+                            Digital Services
+                        </span>
+
+                    </div>
+
+
+                    <div class="border-r border-slate-200 px-4">
+
+                        <strong class="block text-lg font-bold text-government-800">
+                            Verified
+                        </strong>
+
+                        <span class="text-xs text-slate-500">
+                            Official Records
+                        </span>
+
+                    </div>
+
+
+                    <div class="pl-4">
+
+                        <strong class="block text-lg font-bold text-government-800">
+                            Citizen
+                        </strong>
+
+                        <span class="text-xs text-slate-500">
+                            Focused
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HERO VISUAL -->
+
+            <div class="relative mx-auto w-full max-w-md">
+
+                <div class="absolute -inset-5 border border-gold-300/40"></div>
+
+                <div class="relative overflow-hidden border border-government-200 bg-government-900 p-8 shadow-official sm:p-10">
+
+                    <div class="absolute right-0 top-0 h-24 w-24 border-l border-b border-gold-500/30"></div>
+
+                    <div class="absolute bottom-0 left-0 h-20 w-20 border-r border-t border-gold-500/30"></div>
+
+
+                    <div class="relative">
+
+                        <div class="mb-8 flex items-center justify-between">
+
+                            <span class="text-xs font-bold tracking-[0.2em] text-gold-400">
+                                CIVIC DIGITAL HUB
+                            </span>
+
+                            <svg
+                                class="h-6 w-6 text-gold-400"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                                />
+                            </svg>
+
+                        </div>
+
+
+                        <div class="flex justify-center py-8">
+
+                            <div class="flex h-32 w-32 items-center justify-center border border-gold-400/50 bg-government-800">
+
+                                <svg
+                                    class="h-20 w-20 text-gold-400"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9.5 12l1.7 1.7L14.8 10"
+                                    />
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="border-t border-white/10 pt-6 text-center">
+
+                            <h2 class="font-serif text-2xl font-bold text-white">
+                                Secure Barangay
+                            </h2>
+
+                            <p class="mt-2 text-sm leading-6 text-slate-300">
+                                Digital governance designed around
+                                transparency, accountability, and public service.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
-
 
     </div>
 
@@ -323,97 +451,223 @@
      QUICK SERVICES
 ========================================================= -->
 
-<section class="quick-services">
+<section class="border-b border-slate-200 bg-government-50">
 
-    <div class="quick-grid">
+    <div class="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
 
+        <div class="mb-6 flex items-end justify-between">
 
-        <a
-            href="{% url 'submit_complaint' %}"
-            class="quick-card"
-        >
+            <div>
 
-            <div class="quick-icon">
-                ⚖
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-government-600">
+                    Citizen Services
+                </p>
+
+                <h2 class="mt-1 font-serif text-2xl font-bold text-government-950">
+                    Quick Access
+                </h2>
+
             </div>
 
-            <h3>
-                Submit Complaint
-            </h3>
-
-            <p>
-                Formalize your concerns through
-                our secure digital filing system.
-            </p>
-
-        </a>
+        </div>
 
 
+        <div class="grid gap-px overflow-hidden border border-government-200 bg-government-200 sm:grid-cols-2 lg:grid-cols-4">
 
-        <a
-            href="{% url 'submit_complaint' %}"
-            class="quick-card"
-        >
+            <!-- CARD 1 -->
 
-            <div class="quick-icon">
-                ⚠
-            </div>
+            <a
+                href="{% url 'submit_complaint' %}"
+                class="group bg-white p-6 transition hover:bg-government-900"
+            >
 
-            <h3>
-                Report Incident
-            </h3>
+                <div class="mb-5 flex h-11 w-11 items-center justify-center border border-government-200 bg-government-50 text-government-700 group-hover:border-gold-500/40 group-hover:bg-government-800 group-hover:text-gold-400">
 
-            <p>
-                Immediate reporting for safety
-                hazards or community incidents.
-            </p>
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            d="M12 3v17M7 20h10M5 7h14"
+                        />
 
-        </a>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M5 7l-3 6a3 3 0 006 0L5 7zM19 7l-3 6a3 3 0 006 0l-3-6z"
+                        />
+                    </svg>
+
+                </div>
 
 
+                <h3 class="font-serif text-lg font-bold text-government-900 group-hover:text-white">
+                    Submit Complaint
+                </h3>
 
-        <a
-            href="{% url 'track_complaint' %}"
-            class="quick-card"
-        >
 
-            <div class="quick-icon">
-                📈
-            </div>
+                <p class="mt-2 text-sm leading-6 text-slate-500 group-hover:text-slate-300">
+                    File a formal concern through the secure digital reporting system.
+                </p>
 
-            <h3>
-                Track Status
-            </h3>
 
-            <p>
-                Real-time updates on the progress
-                of your submitted reports.
-            </p>
+                <span class="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-government-600 group-hover:text-gold-400">
+                    File a Report
+                    →
+                </span>
 
-        </a>
+            </a>
 
 
 
-        <a
-            href="{% url 'verify_document' %}"
-            class="quick-card"
-        >
+            <!-- CARD 2 -->
 
-            <div class="quick-icon">
-                ✓
-            </div>
+            <a
+                href="{% url 'submit_complaint' %}"
+                class="group bg-white p-6 transition hover:bg-government-900"
+            >
 
-            <h3>
-                Verify Documents
-            </h3>
+                <div class="mb-5 flex h-11 w-11 items-center justify-center border border-government-200 bg-government-50 text-government-700 group-hover:border-gold-500/40 group-hover:bg-government-800 group-hover:text-gold-400">
 
-            <p>
-                Blockchain-verified document
-                authentication for official use.
-            </p>
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M10.3 4.6L2.2 18a2 2 0 001.7 3h16.2a2 2 0 001.7-3L13.7 4.6a2 2 0 00-3.4 0z"
+                        />
 
-        </a>
+                        <path
+                            stroke-linecap="round"
+                            d="M12 9v4M12 17h.01"
+                        />
+                    </svg>
 
+                </div>
+
+
+                <h3 class="font-serif text-lg font-bold text-government-900 group-hover:text-white">
+                    Report an Incident
+                </h3>
+
+
+                <p class="mt-2 text-sm leading-6 text-slate-500 group-hover:text-slate-300">
+                    Report safety concerns, hazards, and community incidents.
+                </p>
+
+
+                <span class="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-government-600 group-hover:text-gold-400">
+                    Report Incident
+                    →
+                </span>
+
+            </a>
+
+
+
+            <!-- CARD 3 -->
+
+            <a
+                href="{% url 'track_complaint' %}"
+                class="group bg-white p-6 transition hover:bg-government-900"
+            >
+
+                <div class="mb-5 flex h-11 w-11 items-center justify-center border border-government-200 bg-government-50 text-government-700 group-hover:border-gold-500/40 group-hover:bg-government-800 group-hover:text-gold-400">
+
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            d="M4 19V5M4 19h16"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M7 15l4-4 3 2 5-6"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <h3 class="font-serif text-lg font-bold text-government-900 group-hover:text-white">
+                    Track Complaint
+                </h3>
+
+
+                <p class="mt-2 text-sm leading-6 text-slate-500 group-hover:text-slate-300">
+                    Check the current status and progress of a submitted complaint.
+                </p>
+
+
+                <span class="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-government-600 group-hover:text-gold-400">
+                    Track Status
+                    →
+                </span>
+
+            </a>
+
+
+
+            <!-- CARD 4 -->
+
+            <a
+                href="{% url 'verify_document' %}"
+                class="group bg-white p-6 transition hover:bg-government-900"
+            >
+
+                <div class="mb-5 flex h-11 w-11 items-center justify-center border border-government-200 bg-government-50 text-government-700 group-hover:border-gold-500/40 group-hover:bg-government-800 group-hover:text-gold-400">
+
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M5 12.5l4.2 4.2L19 7"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <h3 class="font-serif text-lg font-bold text-government-900 group-hover:text-white">
+                    Verify Documents
+                </h3>
+
+
+                <p class="mt-2 text-sm leading-6 text-slate-500 group-hover:text-slate-300">
+                    Authenticate barangay-issued documents and digital records.
+                </p>
+
+
+                <span class="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-government-600 group-hover:text-gold-400">
+                    Verify Record
+                    →
+                </span>
+
+            </a>
+
+        </div>
 
     </div>
 
@@ -425,158 +679,212 @@
      ANNOUNCEMENTS
 ========================================================= -->
 
-<section class="announcements">
+<section class="bg-white">
 
-    <div class="section-heading">
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
 
-        <div>
 
-            <span class="eyebrow">
-                UPDATES
-            </span>
+        <div class="mb-10 flex flex-col justify-between gap-5 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
 
-            <h2>
-                Recent Announcements
-            </h2>
+            <div>
+
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-government-600">
+                    Public Information
+                </p>
+
+                <h2 class="mt-2 font-serif text-3xl font-bold text-government-950">
+                    Official Announcements
+                </h2>
+
+                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                    Stay informed about programs, services, public advisories,
+                    and community developments.
+                </p>
+
+            </div>
+
+
+            <a
+                href="#"
+                class="inline-flex items-center gap-2 text-sm font-bold text-government-700 hover:text-government-900"
+            >
+                View All Announcements
+
+                <span>→</span>
+            </a>
 
         </div>
 
 
-        <a href="#">
-            View All News →
-        </a>
 
-    </div>
+        <div class="grid gap-6 lg:grid-cols-3">
 
 
+            <!-- ANNOUNCEMENT 1 -->
 
-    <div class="announcement-grid">
+            <article class="overflow-hidden border border-slate-200 bg-white shadow-government transition hover:-translate-y-1">
 
+                <div class="flex h-40 items-end bg-government-800 p-6">
 
-        <!-- ANNOUNCEMENT 1 -->
+                    <div>
 
-        <article class="announcement-card">
+                        <span class="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">
+                            Health
+                        </span>
 
-            <div class="announcement-image health">
+                        <div class="mt-2 text-sm font-medium text-white">
+                            Public Advisory
+                        </div>
 
-                HEALTH
+                    </div>
 
-            </div>
-
-
-            <div class="announcement-content">
-
-                <span>
-                    October 24, 2026
-                </span>
-
-
-                <h3>
-                    Quarterly Health Mission:
-                    Free Medical Checkups for Seniors
-                </h3>
+                </div>
 
 
-                <p>
+                <div class="p-6">
 
-                    Join us this weekend for our comprehensive
-                    health mission focused on providing diagnostic
-                    services and health assistance to senior residents.
-
-                </p>
-
-                <a href="#">
-                    Read More →
-                </a>
-
-            </div>
-
-        </article>
+                    <time class="text-xs font-semibold text-slate-400">
+                        October 24, 2026
+                    </time>
 
 
-
-        <!-- ANNOUNCEMENT 2 -->
-
-        <article class="announcement-card">
-
-            <div class="announcement-image digital">
-
-                DIGITAL
-
-            </div>
+                    <h3 class="mt-3 font-serif text-xl font-bold leading-7 text-government-950">
+                        Quarterly Health Mission:
+                        Free Medical Checkups for Seniors
+                    </h3>
 
 
-            <div class="announcement-content">
-
-                <span>
-                    October 21, 2026
-                </span>
-
-
-                <h3>
-                    BantayBarangay Portal
-                    Digital Literacy Workshop
-                </h3>
+                    <p class="mt-3 text-sm leading-6 text-slate-500">
+                        Residents are invited to participate in the community
+                        health mission providing basic diagnostic services,
+                        consultations, and health assistance for senior citizens.
+                    </p>
 
 
-                <p>
+                    <a
+                        href="#"
+                        class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-government-700 hover:text-government-900"
+                    >
+                        Read Full Announcement
+                        →
+                    </a>
 
-                    Learn how to use the BantayBarangay portal
-                    and access digital barangay services safely
-                    and conveniently.
+                </div>
 
-                </p>
-
-                <a href="#">
-                    Read More →
-                </a>
-
-            </div>
-
-        </article>
+            </article>
 
 
 
-        <!-- ANNOUNCEMENT 3 -->
+            <!-- ANNOUNCEMENT 2 -->
 
-        <article class="announcement-card">
+            <article class="overflow-hidden border border-slate-200 bg-white shadow-government transition hover:-translate-y-1">
 
-            <div class="announcement-image infrastructure">
+                <div class="flex h-40 items-end bg-government-700 p-6">
 
-                INFRASTRUCTURE
+                    <div>
 
-            </div>
+                        <span class="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">
+                            Digital Services
+                        </span>
 
+                        <div class="mt-2 text-sm font-medium text-white">
+                            Community Training
+                        </div>
 
-            <div class="announcement-content">
+                    </div>
 
-                <span>
-                    October 18, 2026
-                </span>
-
-
-                <h3>
-                    Smart Lighting Initiative:
-                    Enhancing Safety in Zone 4
-                </h3>
+                </div>
 
 
-                <p>
+                <div class="p-6">
 
-                    New motion-activated LED lighting systems
-                    are being installed across identified areas
-                    to improve visibility and community safety.
+                    <time class="text-xs font-semibold text-slate-400">
+                        October 21, 2026
+                    </time>
 
-                </p>
 
-                <a href="#">
-                    Read More →
-                </a>
+                    <h3 class="mt-3 font-serif text-xl font-bold leading-7 text-government-950">
+                        BantayBarangay Portal
+                        Digital Literacy Workshop
+                    </h3>
 
-            </div>
 
-        </article>
+                    <p class="mt-3 text-sm leading-6 text-slate-500">
+                        Learn how to access digital barangay services,
+                        submit reports, track complaints, and use the
+                        portal safely and conveniently.
+                    </p>
 
+
+                    <a
+                        href="#"
+                        class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-government-700 hover:text-government-900"
+                    >
+                        Read Full Announcement
+                        →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- ANNOUNCEMENT 3 -->
+
+            <article class="overflow-hidden border border-slate-200 bg-white shadow-government transition hover:-translate-y-1">
+
+                <div class="flex h-40 items-end bg-government-600 p-6">
+
+                    <div>
+
+                        <span class="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">
+                            Infrastructure
+                        </span>
+
+                        <div class="mt-2 text-sm font-medium text-white">
+                            Community Development
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="p-6">
+
+                    <time class="text-xs font-semibold text-slate-400">
+                        October 18, 2026
+                    </time>
+
+
+                    <h3 class="mt-3 font-serif text-xl font-bold leading-7 text-government-950">
+                        Smart Lighting Initiative:
+                        Enhancing Safety in Zone 4
+                    </h3>
+
+
+                    <p class="mt-3 text-sm leading-6 text-slate-500">
+                        Energy-efficient motion-activated lighting systems
+                        are being installed in identified areas to improve
+                        visibility and public safety.
+                    </p>
+
+
+                    <a
+                        href="#"
+                        class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-government-700 hover:text-government-900"
+                    >
+                        Read Full Announcement
+                        →
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        </div>
 
     </div>
 
@@ -588,33 +896,32 @@
      BARANGAY PROJECTS
 ========================================================= -->
 
-<section class="barangay-projects">
+<section class="border-y border-slate-200 bg-slate-50">
 
-    <div class="projects-container">
-
-
-        <!-- PROJECT HEADER -->
-
-        <div class="projects-heading">
-
-            <div>
-
-                <span class="eyebrow">
-                    COMMUNITY DEVELOPMENT
-                </span>
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
 
 
-                <h2>
-                    Barangay Projects
+        <!-- HEADER -->
+
+        <div class="flex flex-col justify-between gap-6 border-b border-slate-200 pb-8 lg:flex-row lg:items-end">
+
+            <div class="max-w-3xl">
+
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-government-600">
+                    Transparency & Accountability
+                </p>
+
+
+                <h2 class="mt-2 font-serif text-3xl font-bold text-government-950 sm:text-4xl">
+                    Barangay Development Projects
                 </h2>
 
 
-                <p>
-
-                    Discover ongoing and completed projects that
-                    help improve our community and create a safer,
-                    better place for everyone.
-
+                <p class="mt-4 text-sm leading-7 text-slate-600">
+                    View ongoing and completed projects, project locations,
+                    implementation status, and community investment.
+                    Public access to project information promotes transparency
+                    and responsible local governance.
                 </p>
 
             </div>
@@ -622,9 +929,10 @@
 
             <a
                 href="#"
-                class="view-projects-btn"
+                class="inline-flex shrink-0 items-center justify-center gap-2 border border-government-300 bg-white px-5 py-3 text-sm font-bold text-government-800 transition hover:bg-government-800 hover:text-white"
             >
-                View All Projects →
+                View All Projects
+                →
             </a>
 
         </div>
@@ -633,74 +941,126 @@
 
         <!-- PROJECT CARDS -->
 
-        <div class="project-grid">
+        <div class="mt-10 grid gap-6 lg:grid-cols-3">
 
 
             <!-- PROJECT 1 -->
 
-            <article class="project-card">
+            <article class="border border-slate-200 bg-white shadow-government">
 
-                <div class="project-image project-road">
+                <div class="relative flex h-48 items-end bg-government-800 p-5">
 
-                    <span class="project-status ongoing">
+                    <span class="absolute right-4 top-4 border border-gold-400/40 bg-government-900 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gold-400">
                         Ongoing
                     </span>
+
+
+                    <div>
+
+                        <span class="text-xs font-bold uppercase tracking-wider text-gold-400">
+                            Infrastructure
+                        </span>
+
+                        <h3 class="mt-1 font-serif text-xl font-bold text-white">
+                            Barangay Road Improvement Project
+                        </h3>
+
+                    </div>
 
                 </div>
 
 
-                <div class="project-content">
+                <div class="p-6">
 
-                    <span class="project-category">
-                        Infrastructure
-                    </span>
-
-
-                    <h3>
-                        Barangay Road Improvement Project
-                    </h3>
-
-
-                    <p>
-
-                        Improvement and rehabilitation of selected
-                        barangay roads to provide safer and more
-                        accessible transportation for residents.
-
+                    <p class="text-sm leading-6 text-slate-500">
+                        Improvement and rehabilitation of selected barangay
+                        roads to provide safer and more accessible transportation
+                        for residents.
                     </p>
 
 
-                    <div class="project-info">
+                    <div class="mt-5 flex gap-5 border-y border-slate-100 py-4 text-xs font-medium text-slate-500">
 
-                        <span>
-                            📍 Zone 2
+                        <span class="inline-flex items-center gap-1.5">
+
+                            <svg
+                                class="h-4 w-4 text-government-600"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1116 0z"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="10"
+                                    r="2.5"
+                                />
+
+                            </svg>
+
+                            Zone 2
+
                         </span>
 
-                        <span>
-                            📅 2026
+
+                        <span class="inline-flex items-center gap-1.5">
+
+                            <svg
+                                class="h-4 w-4 text-government-600"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <rect
+                                    x="3"
+                                    y="4.5"
+                                    width="18"
+                                    height="17"
+                                    rx="2"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="M16 2.5v4M8 2.5v4M3 9h18"
+                                />
+
+                            </svg>
+
+                            2026
+
                         </span>
 
                     </div>
 
 
-                    <div class="project-progress">
+                    <div class="mt-5">
 
-                        <div class="progress-header">
+                        <div class="mb-2 flex justify-between text-xs">
 
-                            <span>
+                            <span class="font-semibold text-slate-500">
                                 Project Progress
                             </span>
 
-                            <strong>
+                            <strong class="text-government-700">
                                 65%
                             </strong>
 
                         </div>
 
 
-                        <div class="progress-bar">
+                        <div class="h-2 bg-slate-100">
 
-                            <div style="width: 65%;"></div>
+                            <div
+                                class="h-full bg-government-700"
+                                style="width:65%"
+                            ></div>
 
                         </div>
 
@@ -709,9 +1069,9 @@
 
                     <a
                         href="#"
-                        class="project-link"
+                        class="mt-5 inline-flex text-sm font-bold text-government-700 hover:text-government-900"
                     >
-                        View Project →
+                        View Project Details →
                     </a>
 
                 </div>
@@ -722,69 +1082,73 @@
 
             <!-- PROJECT 2 -->
 
-            <article class="project-card">
+            <article class="border border-slate-200 bg-white shadow-government">
 
-                <div class="project-image project-lighting">
+                <div class="relative flex h-48 items-end bg-government-700 p-5">
 
-                    <span class="project-status ongoing">
+                    <span class="absolute right-4 top-4 border border-gold-400/40 bg-government-900 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gold-400">
                         Ongoing
                     </span>
+
+
+                    <div>
+
+                        <span class="text-xs font-bold uppercase tracking-wider text-gold-400">
+                            Public Safety
+                        </span>
+
+                        <h3 class="mt-1 font-serif text-xl font-bold text-white">
+                            Smart Street Lighting Initiative
+                        </h3>
+
+                    </div>
 
                 </div>
 
 
-                <div class="project-content">
+                <div class="p-6">
 
-                    <span class="project-category">
-                        Public Safety
-                    </span>
-
-
-                    <h3>
-                        Smart Street Lighting Initiative
-                    </h3>
-
-
-                    <p>
-
-                        Installation of energy-efficient street
-                        lights in identified areas to improve
-                        visibility and strengthen community safety.
-
+                    <p class="text-sm leading-6 text-slate-500">
+                        Installation of energy-efficient street lighting
+                        systems in identified areas to improve visibility
+                        and strengthen community safety.
                     </p>
 
 
-                    <div class="project-info">
+                    <div class="mt-5 flex gap-5 border-y border-slate-100 py-4 text-xs font-medium text-slate-500">
 
                         <span>
-                            📍 Zone 4
+                            Zone 4
                         </span>
 
                         <span>
-                            📅 2026
+                            2026
                         </span>
 
                     </div>
 
 
-                    <div class="project-progress">
+                    <div class="mt-5">
 
-                        <div class="progress-header">
+                        <div class="mb-2 flex justify-between text-xs">
 
-                            <span>
+                            <span class="font-semibold text-slate-500">
                                 Project Progress
                             </span>
 
-                            <strong>
+                            <strong class="text-government-700">
                                 40%
                             </strong>
 
                         </div>
 
 
-                        <div class="progress-bar">
+                        <div class="h-2 bg-slate-100">
 
-                            <div style="width: 40%;"></div>
+                            <div
+                                class="h-full bg-government-700"
+                                style="width:40%"
+                            ></div>
 
                         </div>
 
@@ -793,9 +1157,9 @@
 
                     <a
                         href="#"
-                        class="project-link"
+                        class="mt-5 inline-flex text-sm font-bold text-government-700"
                     >
-                        View Project →
+                        View Project Details →
                     </a>
 
                 </div>
@@ -806,69 +1170,72 @@
 
             <!-- PROJECT 3 -->
 
-            <article class="project-card">
+            <article class="border border-slate-200 bg-white shadow-government">
 
-                <div class="project-image project-health">
+                <div class="relative flex h-48 items-end bg-government-600 p-5">
 
-                    <span class="project-status completed">
+                    <span class="absolute right-4 top-4 border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
                         Completed
                     </span>
+
+
+                    <div>
+
+                        <span class="text-xs font-bold uppercase tracking-wider text-gold-400">
+                            Health & Wellness
+                        </span>
+
+                        <h3 class="mt-1 font-serif text-xl font-bold text-white">
+                            Community Health Center Enhancement
+                        </h3>
+
+                    </div>
 
                 </div>
 
 
-                <div class="project-content">
+                <div class="p-6">
 
-                    <span class="project-category">
-                        Health & Wellness
-                    </span>
-
-
-                    <h3>
-                        Community Health Center Enhancement
-                    </h3>
-
-
-                    <p>
-
-                        Improvement of barangay health facilities
-                        and services to provide residents with
-                        better access to basic healthcare.
-
+                    <p class="text-sm leading-6 text-slate-500">
+                        Improvement of barangay health facilities and services
+                        to provide residents with better access to basic healthcare.
                     </p>
 
 
-                    <div class="project-info">
+                    <div class="mt-5 flex gap-5 border-y border-slate-100 py-4 text-xs font-medium text-slate-500">
 
                         <span>
-                            📍 Barangay Center
+                            Barangay Center
                         </span>
 
                         <span>
-                            📅 2026
+                            2026
                         </span>
 
                     </div>
 
 
-                    <div class="project-progress">
+                    <div class="mt-5">
 
-                        <div class="progress-header">
+                        <div class="mb-2 flex justify-between text-xs">
 
-                            <span>
+                            <span class="font-semibold text-slate-500">
                                 Project Progress
                             </span>
 
-                            <strong>
+                            <strong class="text-government-700">
                                 100%
                             </strong>
 
                         </div>
 
 
-                        <div class="progress-bar">
+                        <div class="h-2 bg-slate-100">
 
-                            <div style="width: 100%;"></div>
+                            <div
+                                class="h-full bg-government-700"
+                                style="width:100%"
+                            ></div>
 
                         </div>
 
@@ -877,72 +1244,60 @@
 
                     <a
                         href="#"
-                        class="project-link"
+                        class="mt-5 inline-flex text-sm font-bold text-government-700"
                     >
-                        View Project →
+                        View Project Details →
                     </a>
 
                 </div>
 
             </article>
 
-
         </div>
 
 
 
-        <!-- =====================================================
-             PROJECT STATISTICS
-        ====================================================== -->
+        <!-- PROJECT STATISTICS -->
 
-        <div class="project-stats">
+        <div class="mt-10 grid border border-government-200 bg-white sm:grid-cols-2 lg:grid-cols-4">
 
-
-            <!-- ACTIVE PROJECTS -->
-
-            <div class="project-stat">
+            <div class="border-b border-government-200 p-6 text-center sm:border-r lg:border-b-0">
 
                 <strong
-                    class="counter"
+                    class="counter block text-3xl font-bold text-government-800"
                     data-target="12"
                     data-decimal="false"
                 >
                     0
                 </strong>
 
-                <span>
+                <span class="mt-1 block text-xs font-bold uppercase tracking-wider text-slate-500">
                     Active Projects
                 </span>
 
             </div>
 
 
-
-            <!-- COMPLETED PROJECTS -->
-
-            <div class="project-stat">
+            <div class="border-b border-government-200 p-6 text-center lg:border-b-0 lg:border-r">
 
                 <strong
-                    class="counter"
+                    class="counter block text-3xl font-bold text-government-800"
                     data-target="28"
                     data-decimal="false"
                 >
                     0
                 </strong>
 
-                <span>
+                <span class="mt-1 block text-xs font-bold uppercase tracking-wider text-slate-500">
                     Completed Projects
                 </span>
 
             </div>
 
 
+            <div class="border-b border-government-200 p-6 text-center sm:border-r lg:border-b-0">
 
-            <!-- INVESTMENT -->
-
-            <div class="project-stat">
-
-                <strong>
+                <strong class="block text-3xl font-bold text-government-800">
 
                     ₱<span
                         class="counter"
@@ -954,35 +1309,30 @@
 
                 </strong>
 
-                <span>
+                <span class="mt-1 block text-xs font-bold uppercase tracking-wider text-slate-500">
                     Project Investment
                 </span>
 
             </div>
 
 
-
-            <!-- RESIDENTS -->
-
-            <div class="project-stat">
+            <div class="p-6 text-center">
 
                 <strong
-                    class="counter"
+                    class="counter block text-3xl font-bold text-government-800"
                     data-target="6240"
                     data-decimal="false"
                 >
                     0
                 </strong>
 
-                <span>
+                <span class="mt-1 block text-xs font-bold uppercase tracking-wider text-slate-500">
                     Residents Benefited
                 </span>
 
             </div>
 
-
         </div>
-
 
     </div>
 
@@ -996,139 +1346,194 @@
 
 <section
     id="services"
-    class="services"
+    class="bg-government-900"
 >
 
-    <div class="services-heading">
-
-        <span class="eyebrow">
-            BARANGAY SERVICES
-        </span>
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
 
 
-        <h2>
-            Our Services
-        </h2>
+        <div class="max-w-2xl">
+
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">
+                Barangay Services
+            </p>
 
 
-        <p>
-
-            Access essential government documentation
-            and community support services with just
-            a few clicks.
-
-        </p>
-
-    </div>
+            <h2 class="mt-2 font-serif text-3xl font-bold text-white sm:text-4xl">
+                Essential Public Services
+            </h2>
 
 
+            <p class="mt-4 text-sm leading-7 text-slate-300">
+                Access commonly requested barangay documents and
+                community services through a secure and convenient
+                digital platform.
+            </p>
 
-    <div class="service-grid">
-
-
-        <!-- SERVICE 1 -->
-
-        <div class="service-card">
-
-            <div class="service-icon">
-                📄
-            </div>
+        </div>
 
 
-            <div>
 
-                <h3>
+        <div class="mt-10 grid gap-px border border-white/10 bg-white/10 lg:grid-cols-3">
+
+
+            <!-- SERVICE 1 -->
+
+            <div class="bg-government-900 p-7 transition hover:bg-government-800">
+
+                <div class="mb-6 flex h-12 w-12 items-center justify-center border border-gold-500/30 text-gold-400">
+
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M7 3h7l4 4v14H7a2 2 0 01-2-2V5a2 2 0 012-2z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            d="M14 3v5h5M9 12h6M9 16h6"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h3 class="font-serif text-xl font-bold text-white">
                     Barangay Clearance
                 </h3>
 
 
-                <p>
-
-                    Quick processing for residency and
-                    employment requirements with
-                    digital copies available.
-
+                <p class="mt-3 text-sm leading-7 text-slate-300">
+                    Apply for barangay clearance required for employment,
+                    residency, identification, and other official purposes.
                 </p>
 
 
-                <a href="#">
-                    Apply Now →
+                <a
+                    href="#"
+                    class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-gold-400"
+                >
+                    Apply for Clearance
+                    →
                 </a>
 
             </div>
 
-        </div>
 
 
+            <!-- SERVICE 2 -->
 
-        <!-- SERVICE 2 -->
+            <div class="bg-government-900 p-7 transition hover:bg-government-800">
 
-        <div class="service-card">
+                <div class="mb-6 flex h-12 w-12 items-center justify-center border border-gold-500/30 text-gold-400">
 
-            <div class="service-icon">
-                🏪
-            </div>
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4 10v10h16V10M3 10l2-6h14l2 6"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 10a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0M9 20v-5h6v5"
+                        />
+
+                    </svg>
+
+                </div>
 
 
-            <div>
-
-                <h3>
+                <h3 class="font-serif text-xl font-bold text-white">
                     Business Permits
                 </h3>
 
 
-                <p>
-
-                    Streamlined application and renewal
-                    for local micro and small enterprises
-                    within the barangay.
-
+                <p class="mt-3 text-sm leading-7 text-slate-300">
+                    Access streamlined application and renewal services
+                    for businesses operating within the barangay.
                 </p>
 
 
-                <a href="#">
-                    Start Application →
+                <a
+                    href="#"
+                    class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-gold-400"
+                >
+                    Start Application
+                    →
                 </a>
 
             </div>
 
-        </div>
 
 
+            <!-- SERVICE 3 -->
 
-        <!-- SERVICE 3 -->
+            <div class="bg-government-900 p-7 transition hover:bg-government-800">
 
-        <div class="service-card">
+                <div class="mb-6 flex h-12 w-12 items-center justify-center border border-gold-500/30 text-gold-400">
 
-            <div class="service-icon">
-                🏥
-            </div>
+                    <svg
+                        class="h-6 w-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 21s-7-4.7-9.3-9.3C.7 7.7 3.1 4 6.7 4c2.1 0 3.5 1.2 5.3 3.1C13.8 5.2 15.2 4 17.3 4c3.6 0 6 3.7 4 7.7C19 16.3 12 21 12 21z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            d="M12 8v6M9 11h6"
+                        />
+
+                    </svg>
+
+                </div>
 
 
-            <div>
-
-                <h3>
+                <h3 class="font-serif text-xl font-bold text-white">
                     Health Services
                 </h3>
 
 
-                <p>
-
-                    Book appointments for vaccinations,
-                    dental checkups, and general health
-                    consultations.
-
+                <p class="mt-3 text-sm leading-7 text-slate-300">
+                    Access information about barangay health programs,
+                    consultations, screenings, and community wellness activities.
                 </p>
 
 
-                <a href="#">
-                    Schedule Appointment →
+                <a
+                    href="#"
+                    class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-gold-400"
+                >
+                    View Health Services
+                    →
                 </a>
 
             </div>
 
-        </div>
 
+        </div>
 
     </div>
 
@@ -1137,74 +1542,89 @@
 
 
 <!-- =========================================================
-     COMMUNITY ACTIVITIES
+     COMMUNITY
 ========================================================= -->
 
-<section class="community-section">
+<section class="bg-white">
 
-    <div class="community-container">
-
-
-        <div class="community-heading">
-
-            <span class="eyebrow">
-                COMMUNITY
-            </span>
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
 
 
-            <h2>
+        <div class="mb-10 max-w-2xl">
+
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-government-600">
+                Community Engagement
+            </p>
+
+
+            <h2 class="mt-2 font-serif text-3xl font-bold text-government-950">
                 What's Happening in Our Barangay
             </h2>
 
 
-            <p>
-
-                Stay updated with activities, programs, and
-                community initiatives happening around the barangay.
-
+            <p class="mt-3 text-sm leading-7 text-slate-500">
+                Stay informed about community programs, public activities,
+                health initiatives, and events that bring residents together.
             </p>
 
         </div>
 
 
 
-        <div class="community-grid">
+        <div class="grid gap-6 md:grid-cols-3">
 
 
             <!-- ACTIVITY 1 -->
 
-            <article class="community-card">
+            <article class="border-l-4 border-government-700 bg-slate-50 p-6">
 
-                <div class="community-icon">
-                    🌱
-                </div>
+                <div class="mb-5 text-government-700">
 
+                    <svg
+                        class="h-7 w-7"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M20 4C10 4 5 8.2 5 14c0 3.3 2.3 5 5 5 6 0 10-5 10-15z"
+                        />
 
-                <div>
+                        <path
+                            stroke-linecap="round"
+                            d="M4 21c3-5 6-8 11-11"
+                        />
 
-                    <span>
-                        Community Program
-                    </span>
-
-
-                    <h3>
-                        Barangay Clean-Up Drive
-                    </h3>
-
-
-                    <p>
-
-                        Join residents in keeping our streets,
-                        waterways, and public spaces clean.
-
-                    </p>
-
-
-                    <a href="#">
-                        Learn More →
-                    </a>
+                    </svg>
 
                 </div>
+
+
+                <span class="text-xs font-bold uppercase tracking-wider text-government-600">
+                    Community Program
+                </span>
+
+
+                <h3 class="mt-2 font-serif text-xl font-bold text-government-950">
+                    Barangay Clean-Up Drive
+                </h3>
+
+
+                <p class="mt-3 text-sm leading-6 text-slate-500">
+                    Join fellow residents in maintaining clean streets,
+                    waterways, and public spaces.
+                </p>
+
+
+                <a
+                    href="#"
+                    class="mt-5 inline-flex text-sm font-bold text-government-700"
+                >
+                    Learn More →
+                </a>
 
             </article>
 
@@ -1212,38 +1632,55 @@
 
             <!-- ACTIVITY 2 -->
 
-            <article class="community-card">
+            <article class="border-l-4 border-gold-500 bg-slate-50 p-6">
 
-                <div class="community-icon">
-                    🩺
-                </div>
+                <div class="mb-5 text-government-700">
 
+                    <svg
+                        class="h-7 w-7"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 21s-7-4.7-9.3-9.3C.7 7.7 3.1 4 6.7 4c2.1 0 3.5 1.2 5.3 3.1C13.8 5.2 15.2 4 17.3 4c3.6 0 6 3.7 4 7.7C19 16.3 12 21 12 21z"
+                        />
 
-                <div>
+                        <path
+                            stroke-linecap="round"
+                            d="M12 8v6M9 11h6"
+                        />
 
-                    <span>
-                        Health Program
-                    </span>
-
-
-                    <h3>
-                        Free Community Health Screening
-                    </h3>
-
-
-                    <p>
-
-                        Free basic health screening and
-                        consultation for residents.
-
-                    </p>
-
-
-                    <a href="#">
-                        View Schedule →
-                    </a>
+                    </svg>
 
                 </div>
+
+
+                <span class="text-xs font-bold uppercase tracking-wider text-government-600">
+                    Health Program
+                </span>
+
+
+                <h3 class="mt-2 font-serif text-xl font-bold text-government-950">
+                    Free Community Health Screening
+                </h3>
+
+
+                <p class="mt-3 text-sm leading-6 text-slate-500">
+                    Free basic health screening and consultation
+                    for qualified barangay residents.
+                </p>
+
+
+                <a
+                    href="#"
+                    class="mt-5 inline-flex text-sm font-bold text-government-700"
+                >
+                    View Schedule →
+                </a>
 
             </article>
 
@@ -1251,38 +1688,62 @@
 
             <!-- ACTIVITY 3 -->
 
-            <article class="community-card">
+            <article class="border-l-4 border-government-400 bg-slate-50 p-6">
 
-                <div class="community-icon">
-                    👨‍👩‍👧
+                <div class="mb-5 text-government-700">
+
+                    <svg
+                        class="h-7 w-7"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="3"
+                        />
+
+                        <circle
+                            cx="17"
+                            cy="9"
+                            r="2.5"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 20c.5-4 2.5-6 6-6s5.5 2 6 6M15 14c3.2.2 5 2 5.5 5"
+                        />
+
+                    </svg>
+
                 </div>
 
 
-                <div>
-
-                    <span>
-                        Community Event
-                    </span>
+                <span class="text-xs font-bold uppercase tracking-wider text-government-600">
+                    Community Event
+                </span>
 
 
-                    <h3>
-                        Family Sports Day
-                    </h3>
+                <h3 class="mt-2 font-serif text-xl font-bold text-government-950">
+                    Family Sports Day
+                </h3>
 
 
-                    <p>
-
-                        A community gathering promoting health,
-                        recreation, and stronger relationships.
-
-                    </p>
+                <p class="mt-3 text-sm leading-6 text-slate-500">
+                    A community gathering promoting health, recreation,
+                    participation, and stronger relationships.
+                </p>
 
 
-                    <a href="#">
-                        View Event →
-                    </a>
-
-                </div>
+                <a
+                    href="#"
+                    class="mt-5 inline-flex text-sm font-bold text-government-700"
+                >
+                    View Event →
+                </a>
 
             </article>
 
@@ -1294,149 +1755,86 @@
 </section>
 
 
+
+<!-- =========================================================
+     OFFICIAL CALL TO ACTION
+========================================================= -->
+
+<section class="border-y border-government-800 bg-government-950">
+
+    <div class="mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8">
+
+        <div class="flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-center">
+
+            <div class="max-w-3xl">
+
+                <p class="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">
+                    Citizen Participation
+                </p>
+
+
+                <h2 class="mt-2 font-serif text-2xl font-bold text-white sm:text-3xl">
+                    Your participation strengthens local governance.
+                </h2>
+
+
+                <p class="mt-3 text-sm leading-6 text-slate-300">
+                    Report concerns, stay informed, and help us build a
+                    safer, more responsive, and transparent barangay.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'submit_complaint' %}"
+                class="inline-flex shrink-0 items-center justify-center gap-3 bg-gold-500 px-6 py-3.5 text-sm font-bold text-government-950 transition hover:bg-gold-400"
+            >
+
+                Submit a Complaint
+
+                <svg
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 12h14M13 6l6 6-6 6"
+                    />
+                </svg>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SUCCESS POPUP
+========================================================= -->
+
+{% include 'partials/complaint_success_popup.html' %}
+
+
+
 <!-- =========================================================
      FOOTER
 ========================================================= -->
 
-<footer class="footer">
-
-    <div class="footer-container">
-
-
-        <!-- BRAND -->
-
-        <div class="footer-brand">
-
-            <h3>
-                🛡 BantayBarangay
-            </h3>
-
-
-            <p>
-
-                Empowering communities through secure,
-                transparent, and accessible digital
-                governance.
-
-            </p>
-
-
-            <div class="socials">
-
-                🌐 &nbsp;
-                ✉ &nbsp;
-                ☎
-
-            </div>
-
-        </div>
-
-
-
-        <!-- QUICK LINKS -->
-
-        <div class="footer-column">
-
-            <h4>
-                Quick Links
-            </h4>
-
-
-            <a href="{% url 'home' %}">
-                Home
-            </a>
-
-
-            <a href="#services">
-                Services
-            </a>
-
-
-            <a href="{% url 'track_complaint' %}">
-                Track Complaint
-            </a>
-
-
-            <a href="{% url 'verify_document' %}">
-                Verify Document
-            </a>
-
-        </div>
-
-
-
-        <!-- LEGAL -->
-
-        <div class="footer-column">
-
-            <h4>
-                Legal
-            </h4>
-
-
-            <a href="#">
-                Privacy Policy
-            </a>
-
-
-            <a href="#">
-                Terms of Service
-            </a>
-
-
-            <a href="#">
-                Accessibility
-            </a>
-
-        </div>
-
-
-
-        <!-- SUPPORT -->
-
-        <div class="footer-column">
-
-            <h4>
-                Support
-            </h4>
-
-
-            <a href="#">
-                Help Center
-            </a>
-
-
-            <a href="#">
-                FAQ
-            </a>
-
-
-            <a href="{% url 'contact' %}">
-                Contact Us
-            </a>
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- FOOTER BOTTOM -->
-
-    <div class="footer-bottom">
-
-        © 2026 BantayBarangay.
-        Secure Resident Services Portal.
-
-    </div>
-
-</footer>
+{% include 'partials/footer.html' %}
 
 
 
 <!-- =========================================================
-     PROFILE DROPDOWN SCRIPT
+     EXISTING JAVASCRIPT
 ========================================================= -->
 
 <script>
@@ -1481,12 +1879,11 @@ document.addEventListener(
 </script>
 
 
-
-<!-- =========================================================
-     HOME JAVASCRIPT
-========================================================= -->
-
 <script src="{% static 'js/home.js' %}"></script>
+
+<script src="{% static 'js/topnav.js' %}"></script>
+
+<script src="{% static 'js/complaint_success_popup.js' %}"></script>
 
 
 </body>
