@@ -30,6 +30,7 @@ urlpatterns = [
     path("documents/", include("documents.urls")),
     path("",include("website.urls")),
     path('blockchain_logs/', include('blockchain_logs.urls')),
+    path('evidence/', include('evidencemodule.urls')),
 ]
 
 if settings.DEBUG:

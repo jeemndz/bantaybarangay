@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'website',
     'registration',
     'blockchain_logs',
+    'evidencemodule',
 ]
 
 MIDDLEWARE = [

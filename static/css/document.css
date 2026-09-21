@@ -5,10 +5,141 @@
 .document-page {
     width: 100%;
     min-height: calc(100vh - 70px);
-    background: #ffffff;
-    padding: 32px 28px 70px;
+
+    background: transparent;
+
+    /* Reduced spacing on all sides */
+    padding: 12px 14px 24px;
+
     box-sizing: border-box;
     position: relative;
+}
+
+
+/* =====================================================
+   DOCUMENT REGISTRY
+===================================================== */
+
+.document-registry {
+    width: 100%;
+    max-width: none;
+
+    margin-top: 20px;
+
+    /* Remove white card/container */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   REGISTRY HEADER
+===================================================== */
+
+.registry-header {
+    width: 100%;
+    min-height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 0 14px;
+
+    /* Remove container-style border */
+    border-bottom: none;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.document-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    /* Keep only the table itself visually contained */
+    border: 1px solid #dce7e2;
+    border-radius: 10px;
+}
+
+.document-table {
+    width: 100%;
+    min-width: 900px;
+
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    background: transparent;
+}
+
+
+/* Table rows */
+
+.document-table tbody {
+    background: transparent;
+}
+
+.document-table td {
+    padding: 14px 18px;
+
+    border-bottom: 1px solid #e5eee9;
+
+    color: #25433d;
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+
+/* =====================================================
+   TEMPLATE CARDS
+===================================================== */
+
+.document-template-card {
+    flex: 1 1 0;
+
+    min-width: 160px;
+    height: 72px;
+
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+
+    column-gap: 10px;
+    align-items: center;
+
+    padding: 10px 12px;
+
+    /* Softer card instead of solid white */
+    background: rgba(255, 255, 255, 0.35);
+
+    border: 1px solid #d7e5dd;
+    border-radius: 10px;
+
+    box-sizing: border-box;
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.document-template-card:hover {
+    transform: translateY(-2px);
+    background: #f4faf5;
+    border-color: #b9d4c7;
+
+    box-shadow: 0 4px 12px rgba(25, 71, 57, 0.08);
 }
 
 
@@ -20,7 +151,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 34px;
+    margin-bottom: 24px;
 }
 
 .document-page-header h1 {
@@ -31,156 +162,221 @@
 }
 
 .document-page-header p {
-    margin-top: 5px;
+    margin: 5px 0 0;
     color: #60766e;
     font-size: 14px;
 }
 
 
-/* =====================================================
-   TEMPLATE HEADER
-===================================================== */
+/* PAGE HEADER */
+
+.document-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+
+/* TEMPLATE HEADER */
 
 .document-template-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 14px;
-}
 
-.document-template-header h3 {
-    margin: 0;
-    color: #50645e;
-    font-size: 13px;
-    letter-spacing: 1px;
-    font-weight: 600;
-}
-
-.view-all-link {
-    color: #1d6256;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.view-all-link:hover {
-    text-decoration: underline;
+    margin-bottom: 8px;
 }
 
 
-/* =====================================================
-   DOCUMENT TEMPLATE CARDS
-===================================================== */
+/* TEMPLATE CARDS */
 
 .document-templates {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 28px;
-    margin-bottom: 40px;
-}
-
-.document-template-card {
-    min-height: 170px;
-    background: rgba(255, 255, 255, 0.65);
-    border: 1px solid rgba(182, 211, 195, 0.8);
-    border-radius: 17px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 20px;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-}
-
-.document-template-card:hover {
-    transform: translateY(-3px);
-    background: #f4faf5;
-    box-shadow: 0 8px 20px rgba(25, 71, 57, 0.08);
-}
-
-.template-icon {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background: #e2f1ea;
-    color: #245d51;
-
-    font-size: 19px;
-
-    margin-bottom: 16px;
-}
-
-.document-template-card h3 {
-    margin: 0;
-    color: #153b34;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.document-template-card p {
-    margin: 8px 0 0;
-
-    color: #71817b;
-    font-size: 11px;
-}
-
-
-/* =========================
-   DOCUMENT REGISTRY
-========================= */
-
-.document-registry {
     width: 100%;
-    max-width: none;
-    margin-top: 40px;
 
-    background: #ffffff;
-    border: 1px solid #dce7e2;
-    border-radius: 16px;
+    display: flex;
+    align-items: stretch;
 
-    overflow: hidden;
+    gap: 8px;
+
+    margin-bottom: 14px;
+    padding: 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
     box-sizing: border-box;
 }
 
-/* Registry Header */
+
+/* DOCUMENT REGISTRY */
+
+.document-registry {
+    width: 100%;
+
+    margin-top: 10px;
+
+    background: transparent;
+    border: none;
+    border-radius: 0;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* REGISTRY HEADER */
 
 .registry-header {
     width: 100%;
-    padding: 16px 20px;
+    min-height: 48px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    padding: 6px 0 10px;
+
+    border-bottom: none;
+
     box-sizing: border-box;
 }
 
-.registry-header h2 {
-    margin: 0;
+/* Individual Card */
 
-    font-size: 16px;
-    font-weight: 500;
-    color: #183f37;
+.document-template-card {
+    flex: 1 1 0;
+
+    min-width: 160px;
+    height: 72px;
+
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+
+    column-gap: 10px;
+
+    align-items: center;
+
+    padding: 10px 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #d7e5dd;
+    border-radius: 10px;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
-.registry-actions {
+.document-template-card:hover {
+    transform: translateY(-2px);
+
+    background: #f4faf5;
+    border-color: #b9d4c7;
+
+    box-shadow: 0 4px 12px rgba(25, 71, 57, 0.08);
+}
+
+
+/* Template Icon */
+
+.template-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+
+    width: 36px;
+    height: 36px;
+
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+
+    margin: 0;
+
+    border-radius: 8px;
+
+    background: #e2f1ea;
+    color: #245d51;
+
+    font-size: 16px;
+
+    flex-shrink: 0;
+}
+
+
+/* Template Title */
+
+.document-template-card h3 {
+    grid-column: 2;
+    grid-row: 1;
+
+    align-self: end;
+
+    margin: 0 0 2px;
+
+    color: #153b34;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Template Description */
+
+.document-template-card p {
+    grid-column: 2;
+    grid-row: 2;
+
+    align-self: start;
+
+    margin: 0;
+
+    color: #71817b;
+
+    font-size: 10px;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   DOCUMENT REGISTRY
+===================================================== */
+
+.document-registry {
+    width: 100%;
+    max-width: none;
+
+    margin-top: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce7e2;
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
 }
 
 
@@ -189,6 +385,7 @@
 ===================================================== */
 
 .registry-header {
+    width: 100%;
     min-height: 60px;
 
     display: flex;
@@ -198,6 +395,8 @@
     padding: 12px 20px;
 
     border-bottom: 1px solid #d5e5da;
+
+    box-sizing: border-box;
 }
 
 .registry-header h2 {
@@ -211,22 +410,31 @@
 
 .registry-actions {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
+
+
+/* =====================================================
+   REGISTRY BUTTONS
+===================================================== */
 
 .document-filter-btn,
 .export-btn {
     height: 34px;
 
-    border-radius: 8px;
-
     padding: 0 14px;
 
+    border-radius: 8px;
+
     font-size: 12px;
+    font-family: inherit;
 
     cursor: pointer;
 
-    font-family: inherit;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .document-filter-btn {
@@ -244,7 +452,7 @@
 .export-btn {
     background: #1b5b50;
 
-    color: white;
+    color: #ffffff;
 
     border: 1px solid #1b5b50;
 
@@ -253,31 +461,36 @@
 
 .export-btn:hover {
     background: #134b41;
+    border-color: #134b41;
 }
 
 
-/* =========================
+/* =====================================================
    TABLE WRAPPER
-========================= */
+===================================================== */
 
 .document-table-wrapper {
     width: 100%;
+
     overflow-x: auto;
 }
 
-/* =========================
+
+/* =====================================================
    TABLE
-========================= */
+===================================================== */
 
 .document-table {
     width: 100%;
     min-width: 900px;
 
     border-collapse: collapse;
+
     table-layout: fixed;
 }
 
-/* Header */
+
+/* Table Header */
 
 .document-table thead {
     background: #06483e;
@@ -289,16 +502,19 @@
     text-align: left;
 
     color: #ffffff;
+
     font-size: 11px;
     font-weight: 700;
 
     letter-spacing: 0.3px;
+
     text-transform: uppercase;
 
     white-space: nowrap;
 }
 
-/* Cells */
+
+/* Table Cells */
 
 .document-table td {
     padding: 16px 18px;
@@ -306,26 +522,34 @@
     border-bottom: 1px solid #e5eee9;
 
     color: #25433d;
+
     font-size: 13px;
 
     vertical-align: middle;
 }
 
-/* Remove border from last row */
+
+/* Last Row */
 
 .document-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Hover */
+
+/* Row Hover */
+
+.document-table tbody tr {
+    transition: background 0.2s ease;
+}
 
 .document-table tbody tr:hover {
     background: #f5faf7;
 }
 
-/* =========================
+
+/* =====================================================
    COLUMN WIDTHS
-========================= */
+===================================================== */
 
 .document-table th:nth-child(1),
 .document-table td:nth-child(1) {
@@ -384,7 +608,6 @@
 
 .document-type {
     display: inline-flex;
-
     align-items: center;
 
     padding: 5px 9px;
@@ -416,6 +639,8 @@
 .resident-avatar {
     width: 32px;
     height: 32px;
+
+    min-width: 32px;
 
     display: flex;
     align-items: center;
@@ -460,15 +685,19 @@
     font-size: 9px;
 
     font-weight: 700;
+
+    white-space: nowrap;
 }
 
 .document-status.verified {
     background: #d9eee2;
+
     color: #286354;
 }
 
 .document-status.pending {
     background: #e8eee9;
+
     color: #536760;
 }
 
@@ -490,10 +719,17 @@
     color: #41675e;
 
     cursor: pointer;
+
+    transition: background 0.2s ease;
 }
 
 .qr-btn:hover {
     background: #edf6f1;
+}
+
+.qr-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 
@@ -505,6 +741,7 @@
     display: flex;
 
     align-items: center;
+    justify-content: center;
 
     gap: 5px;
 }
@@ -524,10 +761,15 @@
     cursor: pointer;
 
     font-size: 13px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
 .document-actions button:hover {
     background: #dceee5;
+
     color: #174d42;
 }
 
@@ -591,8 +833,7 @@
 
     transform: translateX(100%);
 
-    transition:
-        transform 0.3s ease;
+    transition: transform 0.3s ease;
 
     z-index: 100;
 }
@@ -625,7 +866,7 @@
 }
 
 .detail-header p {
-    margin-top: 5px;
+    margin: 5px 0 0;
 
     color: #71817b;
 
@@ -740,6 +981,7 @@
     border-radius: 50%;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -816,7 +1058,7 @@
 
     border-radius: 7px;
 
-    background: white;
+    background: #ffffff;
 
     border: 1px solid #c9d9d0;
 
@@ -861,7 +1103,7 @@
 
     background: #123f37;
 
-    color: white;
+    color: #ffffff;
 
     font-family: inherit;
 
@@ -872,6 +1114,8 @@
     cursor: pointer;
 
     margin-bottom: 10px;
+
+    transition: background 0.2s ease;
 }
 
 .download-pdf-btn:hover {
@@ -909,6 +1153,8 @@
     font-weight: 600;
 
     cursor: pointer;
+
+    transition: background 0.2s ease;
 }
 
 .detail-outline-btn:hover {
@@ -917,13 +1163,13 @@
 
 
 /* =====================================================
-   RESPONSIVE
+   RESPONSIVE - LARGE TABLET
 ===================================================== */
 
 @media (max-width: 1200px) {
 
-    .document-templates {
-        grid-template-columns: repeat(3, 1fr);
+    .document-template-card {
+        flex: 0 0 175px;
     }
 
     .document-registry {
@@ -933,6 +1179,10 @@
 }
 
 
+/* =====================================================
+   RESPONSIVE - TABLET
+===================================================== */
+
 @media (max-width: 900px) {
 
     .document-page {
@@ -940,7 +1190,11 @@
     }
 
     .document-templates {
-        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .document-template-card {
+        flex: 0 0 170px;
     }
 
     .document-table {
@@ -950,18 +1204,87 @@
 }
 
 
+/* =====================================================
+   RESPONSIVE - MOBILE
+===================================================== */
+
 @media (max-width: 650px) {
+
+    .document-page {
+        padding: 20px 14px 40px;
+    }
+
+
+    /* Page Header */
 
     .document-page-header {
         flex-direction: column;
 
         align-items: flex-start;
 
-        gap: 15px;
+        gap: 10px;
+
+        margin-bottom: 20px;
     }
 
+    .document-page-header h1 {
+        font-size: 21px;
+    }
+
+    .document-page-header p {
+        font-size: 12px;
+    }
+
+
+    /* Template Header */
+
+    .document-template-header {
+        margin-bottom: 10px;
+    }
+
+
+    /* Horizontal scroll cards */
+
     .document-templates {
-        grid-template-columns: 1fr;
+        gap: 8px;
+
+        margin-bottom: 18px;
+
+        padding-bottom: 8px;
+    }
+
+    .document-template-card {
+        flex: 0 0 165px;
+
+        min-width: 165px;
+
+        height: 68px;
+
+        padding: 9px 10px;
+    }
+
+    .template-icon {
+        width: 34px;
+        height: 34px;
+
+        font-size: 15px;
+    }
+
+    .document-template-card h3 {
+        font-size: 11px;
+    }
+
+    .document-template-card p {
+        font-size: 9px;
+    }
+
+
+    /* Registry */
+
+    .document-registry {
+        margin-top: 18px;
+
+        border-radius: 12px;
     }
 
     .registry-header {
@@ -970,6 +1293,8 @@
         align-items: flex-start;
 
         gap: 12px;
+
+        padding: 14px;
     }
 
     .registry-actions {
@@ -981,8 +1306,169 @@
         flex: 1;
     }
 
+
+    /* Detail Panel */
+
     .document-detail-panel {
         width: 100%;
+
+        padding: 16px;
+    }
+
+}
+
+
+/* =====================================================
+   EXTRA SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+    .document-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .document-template-card {
+        flex: 0 0 155px;
+
+        min-width: 155px;
+
+        height: 66px;
+    }
+
+    .registry-actions {
+        flex-direction: column;
+    }
+
+    .document-filter-btn,
+    .export-btn {
+        width: 100%;
+    }
+
+}
+
+/* =====================================================
+   LUCIDE ICONS
+===================================================== */
+
+.template-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 1.8;
+}
+
+.registry-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.registry-actions button svg {
+    width: 14px;
+    height: 14px;
+}
+
+.document-status svg {
+    width: 11px;
+    height: 11px;
+}
+
+.qr-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qr-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.document-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.document-actions button svg {
+    width: 15px;
+    height: 15px;
+}
+
+.detail-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.certificate-icon {
+    display: flex;
+    justify-content: center;
+}
+
+.certificate-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.certificate-seal svg {
+    width: 18px;
+    height: 18px;
+}
+
+.blockchain-title svg {
+    width: 16px;
+    height: 16px;
+}
+
+.qr-preview svg {
+    width: 28px;
+    height: 28px;
+}
+
+.download-pdf-btn,
+.detail-outline-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.download-pdf-btn svg,
+.detail-outline-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+@media (max-width: 900px) {
+
+    .document-page {
+        padding: 10px 12px 20px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .document-page {
+        padding: 10px;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .document-page {
+        padding: 8px;
     }
 
 }
