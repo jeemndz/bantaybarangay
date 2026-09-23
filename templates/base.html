@@ -77,6 +77,39 @@
 
 
     <!-- ================================= -->
+    <!-- GLOBAL SCROLLBAR UTILITIES -->
+    <!-- ================================= -->
+
+    <style>
+
+        /*
+        ==========================================
+        HIDE SIDEBAR SCROLLBAR
+        ==========================================
+        The sidebar can still be scrolled using:
+        - Mouse wheel
+        - Touchpad
+        - Touch screen
+        - Keyboard
+        */
+
+        .sidebar,
+        .sidebar-nav {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar::-webkit-scrollbar,
+        .sidebar-nav::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+    </style>
+
+
+    <!-- ================================= -->
     <!-- SHARED CSS -->
     <!-- ================================= -->
 
@@ -120,14 +153,9 @@
 
         <!-- ================================= -->
         <!-- GLOBAL SIDEBAR -->
-        <!--
-            Do NOT include sidebar.html
-            inside individual modules.
-        -->
         <!-- ================================= -->
 
         {% include 'partials/sidebar.html' %}
-
 
 
         <!-- ================================= -->

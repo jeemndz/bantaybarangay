@@ -1,0 +1,844 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Evidence Management | BantayBarangay
+{% endblock %}
+
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/evidence_management.css' %}"
+>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="evidence-page">
+
+    <div class="evidence-workspace">
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+        <section class="evidence-content">
+
+            <!-- =================================================
+                 BREADCRUMB
+            ================================================== -->
+            <div class="evidence-breadcrumb">
+
+                <span class="text-xs font-medium text-slate-400">
+                    Root
+                </span>
+
+                <i class="fa-solid fa-chevron-right text-[8px] text-slate-300"></i>
+
+                <strong class="text-xs font-semibold text-slate-500">
+                    Evidence Repository
+                </strong>
+
+            </div>
+
+
+            <!-- =================================================
+                 PAGE HEADER
+            ================================================== -->
+            <div class="evidence-page-header">
+
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-slate-900">
+                        All Evidence
+                    </h1>
+                </div>
+
+
+                <div class="evidence-page-actions">
+
+                    <!-- VIEW SWITCHER -->
+                    <div class="evidence-view-controls">
+
+                        <button
+                            id="gridViewButton"
+                            class="evidence-view-button active"
+                            type="button"
+                            title="Grid View"
+                            aria-label="Grid View"
+                        >
+                            <i class="fa-solid fa-table-cells-large text-sm"></i>
+                        </button>
+
+
+                        <button
+                            id="listViewButton"
+                            class="evidence-view-button"
+                            type="button"
+                            title="List View"
+                            aria-label="List View"
+                        >
+                            <i class="fa-solid fa-list text-sm"></i>
+                        </button>
+
+                    </div>
+
+
+                    <!-- UPLOAD BUTTON -->
+                    <button
+                        id="uploadEvidenceButton"
+                        class="evidence-upload-button"
+                        type="button"
+                    >
+
+                        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+
+                        <span class="text-xs font-semibold">
+                            Upload Evidence
+                        </span>
+
+                    </button>
+
+
+                    <input
+                        id="fileInput"
+                        name="file"
+                        type="file"
+                        multiple
+                        hidden
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CATEGORIES
+            ================================================== -->
+            <section class="evidence-categories">
+
+                <div class="evidence-section-header">
+
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        Categories
+                    </h2>
+
+
+                    <button
+                        id="showAllCategories"
+                        class="evidence-see-all"
+                        type="button"
+                    >
+                        See All
+                    </button>
+
+                </div>
+
+
+                <div class="evidence-category-grid">
+
+                    <!-- PHOTOS -->
+                    <button
+                        class="evidence-category-card"
+                        data-category="photos"
+                        type="button"
+                    >
+
+                        <span class="evidence-category-icon">
+                            <i class="fa-solid fa-image text-sm"></i>
+                        </span>
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Photos
+                        </strong>
+
+                        <small class="text-[10px] font-medium text-slate-400">
+                            <span id="photoCount">0</span>
+                            Files
+                        </small>
+
+                    </button>
+
+
+                    <!-- VIDEOS -->
+                    <button
+                        class="evidence-category-card"
+                        data-category="videos"
+                        type="button"
+                    >
+
+                        <span class="evidence-category-icon">
+                            <i class="fa-solid fa-video text-sm"></i>
+                        </span>
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Videos
+                        </strong>
+
+                        <small class="text-[10px] font-medium text-slate-400">
+                            <span id="videoCount">0</span>
+                            Files
+                        </small>
+
+                    </button>
+
+
+                    <!-- AUDIO -->
+                    <button
+                        class="evidence-category-card"
+                        data-category="audio"
+                        type="button"
+                    >
+
+                        <span class="evidence-category-icon">
+                            <i class="fa-solid fa-volume-high text-sm"></i>
+                        </span>
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Audio
+                        </strong>
+
+                        <small class="text-[10px] font-medium text-slate-400">
+                            <span id="audioCount">0</span>
+                            Files
+                        </small>
+
+                    </button>
+
+
+                    <!-- DOCUMENTS -->
+                    <button
+                        class="evidence-category-card"
+                        data-category="documents"
+                        type="button"
+                    >
+
+                        <span class="evidence-category-icon">
+                            <i class="fa-solid fa-file-lines text-sm"></i>
+                        </span>
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Documents
+                        </strong>
+
+                        <small class="text-[10px] font-medium text-slate-400">
+                            <span id="documentCount">0</span>
+                            Files
+                        </small>
+
+                    </button>
+
+
+                    <!-- COMPLAINTS -->
+                    <button
+                        class="evidence-category-card"
+                        data-category="complaints"
+                        type="button"
+                    >
+
+                        <span class="evidence-category-icon">
+                            <i class="fa-solid fa-gavel text-sm"></i>
+                        </span>
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Complaints
+                        </strong>
+
+                        <small class="text-[10px] font-medium text-slate-400">
+                            Verified cases
+                        </small>
+
+                    </button>
+
+
+                    <!-- INCIDENTS -->
+                    <button
+                        class="evidence-category-card"
+                        data-category="incidents"
+                        type="button"
+                    >
+
+                        <span class="evidence-category-icon">
+                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                        </span>
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Incidents
+                        </strong>
+
+                        <small class="text-[10px] font-medium text-slate-400">
+                            Active logs
+                        </small>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RECENT UPLOADS
+            ================================================== -->
+            <section class="evidence-recent">
+
+                <div class="evidence-section-header">
+
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        Recent Uploads
+                    </h2>
+
+
+                    <div class="evidence-sort">
+
+                        <label
+                            for="sortEvidence"
+                            class="text-[10px] font-medium text-slate-500"
+                        >
+                            Sort by:
+                        </label>
+
+
+                        <select
+                            id="sortEvidence"
+                            class="text-[10px] font-medium"
+                        >
+
+                            <option value="newest">
+                                Newest First
+                            </option>
+
+                            <option value="oldest">
+                                Oldest First
+                            </option>
+
+                            <option value="name">
+                                File Name
+                            </option>
+
+                            <option value="size">
+                                File Size
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DROP ZONE
+                ================================================== -->
+                <div
+                    id="dropZone"
+                    class="evidence-drop-zone"
+                    tabindex="0"
+                >
+
+                    <div
+                        class="flex h-9 w-9 items-center justify-center
+                               rounded-lg bg-emerald-50 text-emerald-600
+                               mb-2"
+                    >
+
+                        <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+
+                    </div>
+
+
+                    <div class="flex flex-wrap items-center justify-center gap-1">
+
+                        <strong class="text-xs font-semibold text-slate-700">
+                            Drag and drop files here
+                        </strong>
+
+                        <span class="text-xs text-slate-400">
+                            or
+                        </span>
+
+                        <button
+                            id="browseFiles"
+                            type="button"
+                            class="text-xs font-semibold text-emerald-700
+                                   hover:text-emerald-800"
+                        >
+                            browse
+                        </button>
+
+                    </div>
+
+
+                    <small class="mt-1 text-[9px] font-medium text-slate-400">
+                        Maximum file size: 500MB
+                        (Encrypted transfer active)
+                    </small>
+
+                </div>
+
+
+                <!-- =================================================
+                     FILE GRID
+                ================================================== -->
+                <div
+                    id="evidenceGrid"
+                    class="evidence-file-grid"
+                >
+
+                    {% for item in evidence %}
+
+                    <article
+                        class="evidence-file-card"
+                        data-id="{{ item.evidence_id }}"
+                        data-name="{{ item.file_name|default:'' }}"
+                        data-date="{{ item.uploaded_at|date:'Y-m-d' }}"
+                        data-size="{{ item.file_size|default:'0' }}"
+                        data-category="{{ item.file_type|default:'documents'|lower }}"
+                    >
+
+                        <!-- =========================================
+                             FILE PREVIEW
+                        ========================================== -->
+                        <div
+                            class="
+                                evidence-file-preview
+
+                                {% if 'video' in item.file_type|lower %}
+                                    evidence-video-preview
+                                {% elif 'pdf' in item.file_type|lower or 'document' in item.file_type|lower %}
+                                    evidence-document-preview
+                                {% endif %}
+                            "
+                        >
+
+                            <!-- IMAGE -->
+                            {% if 'image' in item.file_type|lower or 'photo' in item.file_type|lower %}
+
+                                {% if item.file_path %}
+
+                                    <img
+                                        src="{{ item.file_path }}"
+                                        alt="{{ item.file_name }}"
+                                        loading="lazy"
+                                    >
+
+                                {% else %}
+
+                                    <i class="fa-solid fa-image text-4xl text-slate-300"></i>
+
+                                {% endif %}
+
+
+                            <!-- VIDEO -->
+                            {% elif 'video' in item.file_type|lower %}
+
+                                <i class="fa-solid fa-video text-4xl text-slate-300"></i>
+
+
+                            <!-- AUDIO -->
+                            {% elif 'audio' in item.file_type|lower %}
+
+                                <i class="fa-solid fa-volume-high text-4xl text-slate-300"></i>
+
+
+                            <!-- PDF -->
+                            {% elif 'pdf' in item.file_type|lower %}
+
+                                <i class="fa-solid fa-file-pdf text-4xl text-slate-300"></i>
+
+
+                            <!-- DOCUMENT -->
+                            {% else %}
+
+                                <i class="fa-solid fa-file-lines text-4xl text-slate-300"></i>
+
+                            {% endif %}
+
+
+                            <!-- VERIFICATION STATUS -->
+                            {% if item.file_hash %}
+
+                                <span class="evidence-status verified">
+
+                                    <i class="fa-solid fa-shield-halved"></i>
+
+                                    VERIFIED
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="evidence-status pending">
+
+                                    <i class="fa-solid fa-clock"></i>
+
+                                    PENDING
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =========================================
+                             FILE INFORMATION
+                        ========================================== -->
+                        <div class="evidence-file-info">
+
+                            <strong
+                                class="block truncate text-[10px]
+                                       font-semibold text-slate-700"
+                                title="{{ item.file_name }}"
+                            >
+                                {{ item.file_name|default:"Unnamed Evidence" }}
+                            </strong>
+
+
+                            <div class="evidence-file-meta">
+
+                                <span>
+                                    {% if item.file_size %}
+                                        {{ item.file_size }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </span>
+
+
+                                <span>
+                                    {% if item.uploaded_at %}
+                                        {{ item.uploaded_at|date:"M d, Y" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    {% empty %}
+
+                    <!-- =================================================
+                         DATABASE EMPTY STATE
+                    ================================================== -->
+                    <div
+                        id="databaseEmptyState"
+                        class="col-span-full flex min-h-[180px]
+                               flex-col items-center justify-center
+                               rounded-lg border border-dashed
+                               border-slate-200 bg-white px-6 py-10
+                               text-center"
+                    >
+
+                        <div
+                            class="mb-3 flex h-11 w-11 items-center
+                                   justify-center rounded-xl
+                                   bg-slate-100 text-slate-400"
+                        >
+                            <i class="fa-regular fa-folder-open text-lg"></i>
+                        </div>
+
+
+                        <h3 class="text-sm font-semibold text-slate-700">
+                            No evidence uploaded
+                        </h3>
+
+
+                        <p class="mt-1 text-[11px] text-slate-400">
+                            Uploaded evidence will appear here.
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- =================================================
+                     FILTER EMPTY STATE
+                ================================================== -->
+                <div
+                    id="evidenceEmptyState"
+                    class="evidence-empty-state"
+                    hidden
+                >
+
+                    <i class="fa-regular fa-folder-open"></i>
+
+                    <h3>
+                        No evidence found
+                    </h3>
+
+                    <p>
+                        Try another category or search query.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- =====================================================
+             FILE DETAILS PANEL
+        ====================================================== -->
+        <aside
+            id="evidenceDetailsPanel"
+            class="evidence-details-panel closed"
+        >
+
+            <!-- =================================================
+                 DETAILS HEADER
+            ================================================== -->
+            <div class="evidence-details-header">
+
+                <h2 class="text-sm font-bold text-slate-900">
+                    File Details
+                </h2>
+
+
+                <button
+                    id="closeEvidenceDetails"
+                    type="button"
+                    title="Close"
+                    aria-label="Close file details"
+                >
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 PREVIEW
+            ================================================== -->
+            <div class="evidence-details-preview">
+
+                <div
+                    id="detailPreviewFallback"
+                    class="flex h-full w-full items-center
+                           justify-center bg-slate-100
+                           text-slate-300"
+                >
+                    <i class="fa-solid fa-file-shield text-4xl"></i>
+                </div>
+
+
+                <img
+                    id="detailImage"
+                    src=""
+                    alt="Selected evidence"
+                    hidden
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 FILE NAME
+            ================================================== -->
+            <div class="evidence-details-name">
+
+                <h3
+                    id="detailName"
+                    class="text-xs font-bold text-slate-800"
+                >
+                    Select an evidence file
+                </h3>
+
+
+                <p
+                    id="detailModified"
+                    class="text-[9px] font-medium text-slate-400"
+                >
+                    File information will appear here.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 METADATA
+            ================================================== -->
+            <div class="evidence-details-metadata">
+
+                <div>
+
+                    <span>Type</span>
+
+                    <strong id="detailType">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>Size</span>
+
+                    <strong id="detailSize">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>Uploader</span>
+
+                    <strong id="detailUploader">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SHA-256
+            ================================================== -->
+            <div class="evidence-hash-card">
+
+                <div class="mb-2 flex items-center justify-between gap-2">
+
+                    <h4 class="m-0">
+                        SHA-256 FINGERPRINT
+                    </h4>
+
+
+                    <span
+                        class="inline-flex items-center gap-1 rounded
+                               bg-emerald-50 px-2 py-1
+                               text-[7px] font-bold uppercase
+                               tracking-wide text-emerald-700"
+                    >
+
+                        <i class="fa-solid fa-fingerprint"></i>
+
+                        Integrity
+
+                    </span>
+
+                </div>
+
+
+                <code id="detailHash">
+                    Select an evidence file to view its fingerprint.
+                </code>
+
+            </div>
+
+
+            <!-- =================================================
+                 ASSOCIATED RECORD
+            ================================================== -->
+            <div class="evidence-associated">
+
+                <h4>
+                    ASSOCIATED RECORD
+                </h4>
+
+
+                <button
+                    class="evidence-record-card"
+                    type="button"
+                >
+
+                    <span class="evidence-record-icon">
+
+                        <i class="fa-solid fa-gavel"></i>
+
+                    </span>
+
+
+                    <span class="evidence-record-text">
+
+                        <strong id="detailComplaint">
+                            No record selected
+                        </strong>
+
+                        <small>
+                            Complaint Evidence
+                        </small>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 BLOCKCHAIN / INTEGRITY STATUS
+            ================================================== -->
+            <div class="evidence-ledger-card">
+
+                <div class="evidence-ledger-label">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <span>
+                        IMMUTABLE LEDGER
+                    </span>
+
+                </div>
+
+
+                <h3 id="detailLedgerStatus">
+                    Verification Status
+                </h3>
+
+
+                <p id="detailLedgerBlock">
+                    Select evidence to view ledger information.
+                </p>
+
+
+                <div class="evidence-ledger-status">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+
+                    <div>
+
+                        <strong>
+                            Evidence Integrity
+                        </strong>
+
+                        <small>
+                            SHA-256 verification information
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/evidence_management.js' %}"
+></script>
+
+{% endblock %}

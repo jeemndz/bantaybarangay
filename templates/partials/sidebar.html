@@ -47,7 +47,10 @@
     <!-- NAVIGATION -->
     <!-- ================================================= -->
 
-    <nav class="sidebar-nav flex-1 overflow-y-auto px-4 py-5">
+    <nav class="sidebar-nav flex-1 overflow-y-auto px-4 py-5
+            [scrollbar-width:none] [-ms-overflow-style:none]
+            [&::-webkit-scrollbar]:hidden">
+
 
         <!-- ================================================= -->
         <!-- MAIN -->
@@ -70,6 +73,7 @@
                 class="nav-item group mb-1 flex items-center gap-3
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
+
                        {% if request.resolver_match.url_name == 'dashboard' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
@@ -80,16 +84,19 @@
 
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
+
                            {% if request.resolver_match.url_name == 'dashboard' %}
                                text-white
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-300
+                               group-hover:text-white
                            {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <rect
                         x="3"
                         y="3"
@@ -121,7 +128,9 @@
                         height="7"
                         rx="1"
                     ></rect>
+
                 </svg>
+
 
                 <span>
                     Dashboard
@@ -139,6 +148,7 @@
                 class="nav-item group mb-1 flex items-center gap-3
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
+
                        {% if request.resolver_match.url_name == 'complaints' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
@@ -149,22 +159,27 @@
 
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
+
                            {% if request.resolver_match.url_name == 'complaints' %}
                                text-white
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-300
+                               group-hover:text-white
                            {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="M12 9v3.5m0 3h.01M10.3 4.8L2.9 18a1.5 1.5 0 001.3 2.25h15.6A1.5 1.5 0 0021.1 18L13.7 4.8a1.95 1.95 0 00-3.4 0z"
                     />
+
                 </svg>
+
 
                 <span>
                     Complaints
@@ -178,10 +193,11 @@
             <!-- ================================================= -->
 
             <a
-                href="#"
+                href="{% url 'evidencemodule:evidence_list' %}"
                 class="nav-item group mb-1 flex items-center gap-3
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
+
                        {% if request.resolver_match.url_name == 'evidence_list' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
@@ -191,18 +207,22 @@
             >
 
                 <!-- Evidence Folder Icon -->
+
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
+
                            {% if request.resolver_match.url_name == 'evidence_list' %}
                                text-white
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-300
+                               group-hover:text-white
                            {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -214,7 +234,9 @@
                         stroke-linejoin="round"
                         d="M8 13l2.5 2.5L16 10"
                     />
+
                 </svg>
+
 
                 <span>
                     Evidence Management
@@ -232,6 +254,7 @@
                 class="nav-item group mb-1 flex items-center gap-3
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
+
                        {% if request.resolver_match.url_name == 'resident_list' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
@@ -242,16 +265,19 @@
 
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
+
                            {% if request.resolver_match.url_name == 'resident_list' %}
                                text-white
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-300
+                               group-hover:text-white
                            {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -269,7 +295,9 @@
                         stroke-linejoin="round"
                         d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
                     />
+
                 </svg>
+
 
                 <span>
                     Residents
@@ -287,6 +315,7 @@
                 class="nav-item group mb-1 flex items-center gap-3
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
+
                        {% if request.resolver_match.url_name == 'document_list' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
@@ -297,16 +326,19 @@
 
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
+
                            {% if request.resolver_match.url_name == 'document_list' %}
                                text-white
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-300
+                               group-hover:text-white
                            {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -318,7 +350,9 @@
                         stroke-linejoin="round"
                         d="M14 2v6h6M8 13h8M8 17h6"
                     />
+
                 </svg>
+
 
                 <span>
                     Documents
@@ -336,6 +370,7 @@
                 class="nav-item group mb-1 flex items-center gap-3
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
+
                        {% if request.resolver_match.url_name == 'blockchain_logs' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
@@ -346,16 +381,19 @@
 
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
+
                            {% if request.resolver_match.url_name == 'blockchain_logs' %}
                                text-white
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-300
+                               group-hover:text-white
                            {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <rect
                         x="4"
                         y="3"
@@ -369,7 +407,9 @@
                         stroke-linejoin="round"
                         d="M9 7h6M9 12h6M9 17h6"
                     />
+
                 </svg>
+
 
                 <span>
                     Blockchain Logs
@@ -399,6 +439,7 @@
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -410,7 +451,9 @@
                         stroke-linejoin="round"
                         d="M8 16v-5M12 16V8M16 16v-8M20 16v-11"
                     />
+
                 </svg>
+
 
                 <span>
                     Reports &amp; Analytics
@@ -434,148 +477,264 @@
 
 
             <!-- ================================================= -->
-            <!-- AUDIT LOGS -->
+            <!-- SETTINGS DROPDOWN -->
             <!-- ================================================= -->
 
-            <a
-                href="#"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-                       {% if request.resolver_match.url_name == 'audit_logs' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
-            >
+            <div class="group/settings">
 
-                <!-- Audit / History Icon -->
-                <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-                           {% if request.resolver_match.url_name == 'audit_logs' %}
-                               text-white
+                <!-- ================================================= -->
+                <!-- SETTINGS BUTTON -->
+                <!-- ================================================= -->
+
+                <button
+                    type="button"
+                    class="nav-item flex w-full items-center gap-3
+                           rounded-xl px-3 py-3 text-left
+                           text-sm font-medium
+                           transition-all duration-200
+
+                           {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                               bg-emerald-700 text-white shadow-sm
                            {% else %}
-                               text-emerald-300 group-hover:text-white
+                               text-emerald-100
+                               hover:bg-emerald-800 hover:text-white
                            {% endif %}"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.8"
                 >
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                    ></circle>
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 7v5l3 2"
-                    />
+                    <!-- Settings Icon -->
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3 12a9 9 0 019-9"
-                    />
-                </svg>
+                    <svg
+                        class="h-5 w-5 shrink-0 transition-colors
 
-                <span>
-                    Audit Logs
-                </span>
+                               {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                                   text-white
+                               {% else %}
+                                   text-emerald-300
+                                   group-hover/settings:text-white
+                               {% endif %}"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                    >
 
-            </a>
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="3"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19.4 15a1.7 1.7 0 00.34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 00-1.88-.34 1.7 1.7 0 00-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 00-1.03-1.56 1.7 1.7 0 00-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 008.46 15a1.7 1.7 0 00-1.56-1.03H6v-2.4h.9a1.7 1.7 0 001.56-1.03 1.7 1.7 0 00-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 001.88.34A1.7 1.7 0 0012.73 5V4h2.4v1a1.7 1.7 0 001.03 1.56 1.7 1.7 0 001.88-.34l.06-.06 1.7 1.7-.06.06a1.7 1.7 0 00-.34 1.88A1.7 1.7 0 0020.97 11H22v2.4h-1.03A1.7 1.7 0 0019.4 15z"
+                        />
+
+                    </svg>
 
 
-            <!-- ================================================= -->
-            <!-- SETTINGS -->
-            <!-- ================================================= -->
+                    <!-- Settings Text -->
 
-            <a
-                href="#"
-                class="settings-toggle nav-item group mb-1
-                       flex items-center gap-3 rounded-xl
-                       px-3 py-3 text-sm font-medium
-                       text-emerald-100
-                       transition-all duration-200
-                       hover:bg-emerald-800 hover:text-white"
-            >
+                    <span class="flex-1">
+                        Settings
+                    </span>
 
-                <svg
-                    class="h-5 w-5 shrink-0 text-emerald-300
-                           transition-colors group-hover:text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.8"
+
+                    <!-- Dropdown Arrow -->
+
+                    <svg
+                        class="h-4 w-4 shrink-0
+                               text-emerald-300
+                               transition-transform duration-300
+                               group-hover/settings:rotate-180
+                               group-hover/settings:text-white
+
+                               {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                                   rotate-180 text-white
+                               {% endif %}"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                    >
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m6 9 6 6 6-6"
+                        />
+
+                    </svg>
+
+                </button>
+
+
+                <!-- ================================================= -->
+                <!-- SETTINGS SUBMENU -->
+                <!-- ================================================= -->
+
+                <div
+                    class="settings-menu grid overflow-hidden
+                           transition-all duration-300 ease-in-out
+
+                           {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                               grid-rows-[1fr] opacity-100
+                           {% else %}
+                               grid-rows-[0fr] opacity-0
+                               group-hover/settings:grid-rows-[1fr]
+                               group-hover/settings:opacity-100
+                           {% endif %}"
                 >
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="3"
-                    ></circle>
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M19.4 15a1.7 1.7 0 00.34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 00-1.88-.34 1.7 1.7 0 00-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 00-1.03-1.56 1.7 1.7 0 00-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 008.46 15a1.7 1.7 0 00-1.56-1.03H6v-2.4h.9a1.7 1.7 0 001.56-1.03 1.7 1.7 0 00-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 001.88.34A1.7 1.7 0 0012.73 5V4h2.4v1a1.7 1.7 0 001.03 1.56 1.7 1.7 0 001.88-.34l.06-.06 1.7 1.7-.06.06a1.7 1.7 0 00-.34 1.88A1.7 1.7 0 0020.97 11H22v2.4h-1.03A1.7 1.7 0 0019.4 15z"
-                    />
-                </svg>
+                    <div class="min-h-0 overflow-hidden">
 
-                <span>
-                    Settings
-                </span>
-
-            </a>
+                        <div
+                            class="ml-5 mt-1 border-l
+                                   border-emerald-700
+                                   pb-1 pl-3"
+                        >
 
 
-            <!-- ================================================= -->
-            <!-- USER MANAGEMENT -->
-            <!-- ================================================= -->
+                            <!-- ================================================= -->
+                            <!-- USER MANAGEMENT -->
+                            <!-- ================================================= -->
 
-            <a
-                href="#"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       text-emerald-100
-                       transition-all duration-200
-                       hover:bg-emerald-800 hover:text-white"
-            >
+                            <a
+                                href="#"
+                                class="nav-item group/user mb-1
+                                       flex items-center gap-3
+                                       rounded-xl px-3 py-2.5
+                                       text-sm font-medium
+                                       transition-all duration-200
 
-                <svg
-                    class="h-5 w-5 shrink-0 text-emerald-300
-                           transition-colors group-hover:text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.8"
-                >
-                    <circle
-                        cx="9"
-                        cy="7"
-                        r="4"
-                    ></circle>
+                                       {% if request.resolver_match.url_name == 'user_management' %}
+                                           bg-emerald-700 text-white
+                                       {% else %}
+                                           text-emerald-200
+                                           hover:bg-emerald-800
+                                           hover:text-white
+                                       {% endif %}"
+                            >
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3 21v-2a6 6 0 016-6h0a6 6 0 016 6v2"
-                    />
+                                <!-- User Management Icon -->
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M16 11a4 4 0 100-8M21 21v-2a6 6 0 00-4-5.65"
-                    />
-                </svg>
+                                <svg
+                                    class="h-4 w-4 shrink-0
+                                           transition-colors
 
-                <span>
-                    User Management
-                </span>
+                                           {% if request.resolver_match.url_name == 'user_management' %}
+                                               text-white
+                                           {% else %}
+                                               text-emerald-400
+                                               group-hover/user:text-white
+                                           {% endif %}"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                >
 
-            </a>
+                                    <circle
+                                        cx="9"
+                                        cy="7"
+                                        r="4"
+                                    ></circle>
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M3 21v-2a6 6 0 016-6h0a6 6 0 016 6v2"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M16 11a4 4 0 100-8M21 21v-2a6 6 0 00-4-5.65"
+                                    />
+
+                                </svg>
+
+
+                                <span>
+                                    User Management
+                                </span>
+
+                            </a>
+
+
+                            <!-- ================================================= -->
+                            <!-- AUDIT LOGS -->
+                            <!-- ================================================= -->
+
+                            <a
+                                href="#"
+                                class="nav-item group/audit mb-1
+                                       flex items-center gap-3
+                                       rounded-xl px-3 py-2.5
+                                       text-sm font-medium
+                                       transition-all duration-200
+
+                                       {% if request.resolver_match.url_name == 'audit_logs' %}
+                                           bg-emerald-700 text-white
+                                       {% else %}
+                                           text-emerald-200
+                                           hover:bg-emerald-800
+                                           hover:text-white
+                                       {% endif %}"
+                            >
+
+                                <!-- Audit Logs Icon -->
+
+                                <svg
+                                    class="h-4 w-4 shrink-0
+                                           transition-colors
+
+                                           {% if request.resolver_match.url_name == 'audit_logs' %}
+                                               text-white
+                                           {% else %}
+                                               text-emerald-400
+                                               group-hover/audit:text-white
+                                           {% endif %}"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                >
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                    ></circle>
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 7v5l3 2"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M3 12a9 9 0 019-9"
+                                    />
+
+                                </svg>
+
+
+                                <span>
+                                    Audit Logs
+                                </span>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -611,6 +770,7 @@
                 viewBox="0 0 24 24"
                 stroke-width="1.8"
             >
+
                 <circle
                     cx="12"
                     cy="12"
@@ -622,7 +782,9 @@
                     stroke-linejoin="round"
                     d="M9.5 9a2.5 2.5 0 115 0c0 1.7-2.5 2-2.5 3.5M12 16h.01"
                 />
+
             </svg>
+
 
             <span>
                 Help &amp; Support
@@ -641,17 +803,20 @@
                    rounded-xl px-3 py-3 text-sm font-medium
                    text-emerald-100
                    transition-all duration-200
-                   hover:bg-red-500/20 hover:text-red-300"
+                   hover:bg-red-500/20
+                   hover:text-red-300"
         >
 
             <svg
                 class="h-5 w-5 shrink-0 text-emerald-300
-                       transition-colors group-hover:text-red-300"
+                       transition-colors
+                       group-hover:text-red-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 stroke-width="1.8"
             >
+
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -669,7 +834,9 @@
                     stroke-linejoin="round"
                     d="M21 19V5a2 2 0 00-2-2h-6"
                 />
+
             </svg>
+
 
             <span>
                 Sign Out
