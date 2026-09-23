@@ -1,31 +1,81 @@
 /* =========================================================
-   BANTAYBARANGAY TOPNAV
+   BANTAYBARANGAY TOP NAVIGATION
 ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    initializeTopNavigation();
+
+});
 
 
 /* =========================================================
-   DROPDOWN
+   INITIALIZE
 ========================================================= */
 
-function toggleDropdown(id) {
+function initializeTopNavigation() {
 
-    const dropdown = document.getElementById(id);
+    closeAllDropdowns();
+    closeMobileNav();
+    updateMobileMenuIcon();
 
-    if (!dropdown) {
-        return;
+}
+
+
+/* =========================================================
+   TOGGLE DROPDOWN
+========================================================= */
+
+function toggleDropdown(id, event) {
+
+    if (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
     }
 
-    // Close other dropdowns
-    document.querySelectorAll('[id$="Dropdown"]').forEach(function(menu) {
+    const dropdown =
+        document.getElementById(id);
 
-        if (menu.id !== id) {
-            menu.classList.add("hidden");
-        }
+    if (!dropdown) {
 
-    });
+        console.warn(
+            "Dropdown not found:",
+            id
+        );
 
-    // Toggle selected dropdown
-    dropdown.classList.toggle("hidden");
+        return;
+
+    }
+
+    const shouldOpen =
+        dropdown.classList.contains("hidden");
+
+    closeAllDropdowns();
+
+    if (shouldOpen) {
+
+        dropdown.classList.remove("hidden");
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE ALL DROPDOWNS
+========================================================= */
+
+function closeAllDropdowns() {
+
+    document
+        .querySelectorAll('[id$="Dropdown"]')
+        .forEach(function (dropdown) {
+
+            dropdown.classList.add("hidden");
+
+        });
 
 }
 
@@ -34,7 +84,14 @@ function toggleDropdown(id) {
    MOBILE NAVIGATION
 ========================================================= */
 
-function toggleMobileNav() {
+function toggleMobileNav(event) {
+
+    if (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+    }
 
     const mobileNav =
         document.getElementById("mobileNav");
@@ -43,36 +100,191 @@ function toggleMobileNav() {
         return;
     }
 
+    closeAllDropdowns();
+
     mobileNav.classList.toggle("hidden");
+
+    updateMobileMenuIcon();
 
 }
 
 
 /* =========================================================
-   CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
+   CLOSE MOBILE NAVIGATION
 ========================================================= */
 
-document.addEventListener("click", function(event) {
+function closeMobileNav() {
 
-    const clickedButton =
-        event.target.closest("button");
+    const mobileNav =
+        document.getElementById("mobileNav");
 
-    const clickedDropdown =
-        event.target.closest('[id$="Dropdown"]');
+    if (!mobileNav) {
+        return;
+    }
+
+    mobileNav.classList.add("hidden");
+
+    updateMobileMenuIcon();
+
+}
+
+
+/* =========================================================
+   MOBILE MENU ICON
+========================================================= */
+
+function updateMobileMenuIcon() {
+
+    const mobileNav =
+        document.getElementById("mobileNav");
+
+    const openIcon =
+        document.getElementById(
+            "mobileMenuOpenIcon"
+        );
+
+    const closeIcon =
+        document.getElementById(
+            "mobileMenuCloseIcon"
+        );
 
     if (
-        !clickedButton &&
-        !clickedDropdown
+        !mobileNav ||
+        !openIcon ||
+        !closeIcon
     ) {
+        return;
+    }
 
-        document
-            .querySelectorAll('[id$="Dropdown"]')
-            .forEach(function(menu) {
+    const isHidden =
+        mobileNav.classList.contains("hidden");
 
-                menu.classList.add("hidden");
+    openIcon.classList.toggle(
+        "hidden",
+        !isHidden
+    );
 
-            });
+    closeIcon.classList.toggle(
+        "hidden",
+        isHidden
+    );
+
+}
+
+
+/* =========================================================
+   DOCUMENT CLICK HANDLER
+========================================================= */
+
+document.addEventListener("click", function (event) {
+
+    /*
+     * If user clicks inside a dropdown,
+     * don't immediately close it.
+     */
+    const dropdown =
+        event.target.closest(
+            '[id$="Dropdown"]'
+        );
+
+    if (dropdown) {
+
+        /*
+         * Links inside dropdowns should
+         * navigate normally.
+         */
+        if (event.target.closest("a")) {
+
+            return;
+
+        }
+
+        event.stopPropagation();
+
+        return;
 
     }
+
+
+    /*
+     * Don't close the dropdown when clicking
+     * the button that opened it.
+     */
+    const dropdownButton =
+        event.target.closest(
+            "[data-dropdown-button]"
+        );
+
+    if (dropdownButton) {
+
+        return;
+
+    }
+
+
+    closeAllDropdowns();
+
+});
+
+
+/* =========================================================
+   MOBILE LINK CLICK
+========================================================= */
+
+document.addEventListener("click", function (event) {
+
+    const mobileLink =
+        event.target.closest(
+            "#mobileNav a"
+        );
+
+    if (!mobileLink) {
+        return;
+    }
+
+    closeMobileNav();
+
+});
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener("keydown", function (event) {
+
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    closeAllDropdowns();
+    closeMobileNav();
+
+});
+
+
+/* =========================================================
+   RESPONSIVE RESET
+========================================================= */
+
+window.addEventListener("resize", function () {
+
+    if (window.innerWidth >= 1024) {
+
+        closeMobileNav();
+
+    }
+
+});
+
+
+/* =========================================================
+   PAGE SHOW RESET
+========================================================= */
+
+window.addEventListener("pageshow", function () {
+
+    closeAllDropdowns();
+    updateMobileMenuIcon();
 
 });

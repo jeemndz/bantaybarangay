@@ -5,19 +5,80 @@ from datetime import datetime
 
 
 # =====================================================
+# HELPER: SESSION CONTEXT
+# =====================================================
+
+def get_session_context(request):
+    """
+    Returns the common logged-in user information
+    stored in the Django session.
+    """
+
+    return {
+        "user_id": request.session.get("user_id"),
+        "username": request.session.get("username", ""),
+        "email": request.session.get("email", ""),
+        "role": request.session.get("role", ""),
+    }
+
+
+# =====================================================
+# HELPER: GET RESIDENT
+# =====================================================
+
+def get_resident_by_user_id(user_id):
+    """
+    Finds the resident record connected to the
+    currently logged-in user.
+    """
+
+    if not user_id:
+        return None
+
+    with connection.cursor() as cursor:
+
+        cursor.execute(
+            """
+            SELECT
+                resident_id,
+                first_name,
+                middle_name,
+                last_name,
+                suffix,
+                email,
+                contact_number,
+                address
+            FROM residents
+            WHERE user_id = %s
+            LIMIT 1
+            """,
+            [user_id]
+        )
+
+        row = cursor.fetchone()
+
+    if not row:
+        return None
+
+    return {
+        "resident_id": row[0],
+        "first_name": row[1],
+        "middle_name": row[2],
+        "last_name": row[3],
+        "suffix": row[4],
+        "email": row[5],
+        "contact_number": row[6],
+        "address": row[7],
+    }
+
+
+# =====================================================
 # HOME
 # =====================================================
 
 def home(request):
 
-    user_id = request.session.get("user_id")
-
-    context = {
-        "user_id": user_id,
-        "username": request.session.get("username", ""),
-        "email": request.session.get("email", ""),
-        "role": request.session.get("role", ""),
-    }
+    context = get_session_context(request)
 
     return render(
         request,
@@ -32,9 +93,12 @@ def home(request):
 
 def dashboard(request):
 
+    context = get_session_context(request)
+
     return render(
         request,
-        "website/dashboard.html"
+        "website/dashboard.html",
+        context
     )
 
 
@@ -84,56 +148,7 @@ def submit_complaint(request):
     # FIND RESIDENT
     # =================================================
 
-    resident = None
-
-    with connection.cursor() as cursor:
-
-        cursor.execute(
-            """
-            SELECT
-                resident_id,
-                first_name,
-                middle_name,
-                last_name,
-                suffix,
-                email,
-                contact_number,
-                address
-            FROM residents
-            WHERE user_id = %s
-            LIMIT 1
-            """,
-            [user_id]
-        )
-
-        row = cursor.fetchone()
-
-
-    # =================================================
-    # CREATE RESIDENT DATA
-    # =================================================
-
-    if row:
-
-        resident = {
-
-            "resident_id": row[0],
-
-            "first_name": row[1],
-
-            "middle_name": row[2],
-
-            "last_name": row[3],
-
-            "suffix": row[4],
-
-            "email": row[5],
-
-            "contact_number": row[6],
-
-            "address": row[7],
-
-        }
+    resident = get_resident_by_user_id(user_id)
 
 
     # =================================================
@@ -148,6 +163,19 @@ def submit_complaint(request):
         )
 
         return redirect("home")
+
+
+    # =================================================
+    # BASE CONTEXT
+    # =================================================
+
+    context = {
+        "user_id": user_id,
+        "username": username,
+        "email": email,
+        "role": role,
+        "resident": resident,
+    }
 
 
     # =================================================
@@ -197,6 +225,21 @@ def submit_complaint(request):
 
 
         # =================================================
+        # KEEP FORM DATA
+        # =================================================
+
+        context["form_data"] = {
+            "complaint_type": complaint_type,
+            "subject": subject,
+            "description": description,
+            "location": location,
+            "incident_date": incident_date,
+            "incident_time": incident_time,
+            "priority": priority,
+        }
+
+
+        # =================================================
         # VALIDATION
         # =================================================
 
@@ -210,13 +253,7 @@ def submit_complaint(request):
             return render(
                 request,
                 "website/submit_complaint.html",
-                {
-                    "user_id": user_id,
-                    "username": username,
-                    "email": email,
-                    "role": role,
-                    "resident": resident,
-                }
+                context
             )
 
 
@@ -230,13 +267,7 @@ def submit_complaint(request):
             return render(
                 request,
                 "website/submit_complaint.html",
-                {
-                    "user_id": user_id,
-                    "username": username,
-                    "email": email,
-                    "role": role,
-                    "resident": resident,
-                }
+                context
             )
 
 
@@ -250,13 +281,7 @@ def submit_complaint(request):
             return render(
                 request,
                 "website/submit_complaint.html",
-                {
-                    "user_id": user_id,
-                    "username": username,
-                    "email": email,
-                    "role": role,
-                    "resident": resident,
-                }
+                context
             )
 
 
@@ -270,13 +295,7 @@ def submit_complaint(request):
             return render(
                 request,
                 "website/submit_complaint.html",
-                {
-                    "user_id": user_id,
-                    "username": username,
-                    "email": email,
-                    "role": role,
-                    "resident": resident,
-                }
+                context
             )
 
 
@@ -314,13 +333,7 @@ def submit_complaint(request):
                 return render(
                     request,
                     "website/submit_complaint.html",
-                    {
-                        "user_id": user_id,
-                        "username": username,
-                        "email": email,
-                        "role": role,
-                        "resident": resident,
-                    }
+                    context
                 )
 
 
@@ -388,60 +401,26 @@ def submit_complaint(request):
             return render(
                 request,
                 "website/submit_complaint.html",
-                {
-                    "user_id": user_id,
-                    "username": username,
-                    "email": email,
-                    "role": role,
-                    "resident": resident,
-                }
+                context
             )
 
 
-        # -------------------------------------------------
+        # =================================================
         # SUCCESS
-        # -------------------------------------------------
+        # =================================================
 
         messages.success(
             request,
             "Your complaint has been submitted successfully."
         )
 
-        return render(
-            request,
-            "website/submit_complaint.html",
-            {
-                "user_id": user_id,
-                "username": username,
-                "email": email,
-                "role": role,
-                "resident": resident,
-            }
-        )
+        # Prevent duplicate submission if page is refreshed
+        return redirect("submit_complaint")
+
 
     # =================================================
     # DISPLAY FORM
     # =================================================
-
-    context = {
-
-        "user_id":
-            user_id,
-
-        "username":
-            username,
-
-        "email":
-            email,
-
-        "role":
-            role,
-
-        "resident":
-            resident,
-
-    }
-
 
     return render(
         request,
@@ -456,9 +435,12 @@ def submit_complaint(request):
 
 def track_complaint(request):
 
+    context = get_session_context(request)
+
     return render(
         request,
-        "website/track_complaint.html"
+        "website/track_complaint.html",
+        context
     )
 
 
@@ -468,9 +450,71 @@ def track_complaint(request):
 
 def verify_document(request):
 
+    context = get_session_context(request)
+
     return render(
         request,
-        "website/verify_document.html"
+        "website/verify_document.html",
+        context
+    )
+
+
+# =====================================================
+# REQUEST DOCUMENT
+# =====================================================
+
+def request_document(request):
+
+    # =================================================
+    # CHECK LOGIN
+    # =================================================
+
+    user_id = request.session.get("user_id")
+
+    if not user_id:
+
+        messages.error(
+            request,
+            "Please log in first before requesting a document."
+        )
+
+        return redirect("login")
+
+
+    # =================================================
+    # SESSION INFORMATION
+    # =================================================
+
+    context = get_session_context(request)
+
+
+    # =================================================
+    # FIND RESIDENT
+    # =================================================
+
+    resident = get_resident_by_user_id(user_id)
+
+    if not resident:
+
+        messages.error(
+            request,
+            "Your resident profile could not be found."
+        )
+
+        return redirect("home")
+
+
+    context["resident"] = resident
+
+
+    # =================================================
+    # DISPLAY DOCUMENT REQUEST PAGE
+    # =================================================
+
+    return render(
+        request,
+        "website/request_document.html",
+        context
     )
 
 
@@ -480,9 +524,12 @@ def verify_document(request):
 
 def about(request):
 
+    context = get_session_context(request)
+
     return render(
         request,
-        "website/about.html"
+        "website/about.html",
+        context
     )
 
 
@@ -492,7 +539,10 @@ def about(request):
 
 def contact(request):
 
+    context = get_session_context(request)
+
     return render(
         request,
-        "website/contact.html"
+        "website/contact.html",
+        context
     )
