@@ -24,7 +24,7 @@ class Complaint(models.Model):
         blank=True
     )
 
-    incident_date = models.DateTimeField(
+    incident_date = models.DateField(
         null=True,
         blank=True
     )

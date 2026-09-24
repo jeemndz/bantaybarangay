@@ -85,28 +85,101 @@ Evidence Management | BantayBarangay
 
 
                     <!-- UPLOAD BUTTON -->
-                    <button
-                        id="uploadEvidenceButton"
-                        class="evidence-upload-button"
-                        type="button"
-                    >
+                    <form
+    method="POST"
+    action="{% url 'evidencemodule:evidence_create' %}"
+    enctype="multipart/form-data"
+    id="evidenceUploadForm"
+>
 
-                        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+```
+{% csrf_token %}
 
-                        <span class="text-xs font-semibold">
-                            Upload Evidence
-                        </span>
+<div class="flex gap-2 items-center">
 
-                    </button>
+    <!-- =========================================
+         RESIDENT SEARCH
+    ========================================== -->
+    <div class="relative">
+
+        <input
+            type="text"
+            id="residentSearchInput"
+            placeholder="Search resident name..."
+            autocomplete="off"
+            required
+        >
+
+        <!-- Hidden Resident ID -->
+        <input
+            type="hidden"
+            id="residentIdInput"
+            name="resident_id"
+        >
+
+        <!-- Reactive Search Results -->
+        <div
+            id="residentSearchResults"
+            class="absolute z-50 mt-1 hidden
+                   w-full min-w-[220px]
+                   rounded-lg border border-slate-200
+                   bg-white shadow-lg"
+        >
+        </div>
+
+    </div>
 
 
-                    <input
-                        id="fileInput"
-                        name="file"
-                        type="file"
-                        multiple
-                        hidden
-                    >
+    <!-- =========================================
+         COMPLAINT
+         Populated after resident selection
+    ========================================== -->
+    <select
+        id="complaintSelect"
+        name="complaint_id"
+        required
+        disabled
+    >
+
+        <option value="">
+            Select Complaint
+        </option>
+
+    </select>
+
+
+    <!-- =========================================
+         FILE
+    ========================================== -->
+    <input
+        id="fileInput"
+        name="file"
+        type="file"
+        required
+    >
+
+
+    <!-- =========================================
+         UPLOAD BUTTON
+    ========================================== -->
+    <button
+        class="evidence-upload-button"
+        type="submit"
+    >
+
+        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+
+        <span class="text-xs font-semibold">
+            Upload Evidence
+        </span>
+
+    </button>
+
+</div>
+```
+
+</form>
+
 
                 </div>
 
@@ -836,9 +909,21 @@ Evidence Management | BantayBarangay
 
 
 {% block extra_js %}
+<div id="residentData" style="display: none;">
+    {% for resident in residents %}
+        <span
+            class="resident-data"
+            data-id="{{ resident.resident_id }}"
+            data-first-name="{{ resident.first_name }}"
+            data-middle-name="{{ resident.middle_name|default:'' }}"
+            data-last-name="{{ resident.last_name }}"
+            data-suffix="{{ resident.suffix|default:'' }}"
+        ></span>
+    {% endfor %}
+</div>
+<script>
+    window.bantayResidents = [];
+</script>
 
-<script
-    src="{% static 'js/evidence_management.js' %}"
-></script>
-
+<script src="{% static 'js/evidence_management.js' %}"></script>
 {% endblock %}

@@ -166,14 +166,17 @@ document.addEventListener("DOMContentLoaded", function () {
        FILTER EVIDENCE
     ====================================================== */
 
-    function filterEvidence() {
+ function filterEvidence() {
 
-        const query =
-            searchInput.value.trim().toLowerCase();
+    const query =
+        searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : "";
 
-        let visibleCount = 0;
+    let visibleCount = 0;
 
-        evidenceCards.forEach(function (card) {
+    evidenceGrid.querySelectorAll(".evidence-card")
+        .forEach(function (card) {
 
             const fileName =
                 (card.dataset.name || "").toLowerCase();
@@ -201,13 +204,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-
-        if (emptyState) {
-            emptyState.hidden = visibleCount !== 0;
-        }
-
+    if (emptyState) {
+        emptyState.hidden = visibleCount !== 0;
     }
 
+}
 
     /* =====================================================
        GRID VIEW
@@ -408,9 +409,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       DRAG ENTER
-    ====================================================== */
+  /* =====================================================
+   DRAG AND DROP
+====================================================== */
+
+if (dropZone) {
 
     dropZone.addEventListener("dragenter", function (event) {
 
@@ -421,10 +424,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    /* =====================================================
-       DRAG OVER
-    ====================================================== */
-
     dropZone.addEventListener("dragover", function (event) {
 
         event.preventDefault();
@@ -432,6 +431,32 @@ document.addEventListener("DOMContentLoaded", function () {
         dropZone.classList.add("drag-active");
 
     });
+
+
+    dropZone.addEventListener("dragleave", function (event) {
+
+        event.preventDefault();
+
+        dropZone.classList.remove("drag-active");
+
+    });
+
+
+    dropZone.addEventListener("drop", function (event) {
+
+        event.preventDefault();
+
+        dropZone.classList.remove("drag-active");
+
+        const files = event.dataTransfer.files;
+
+        if (files.length) {
+            handleFiles(files);
+        }
+
+    });
+
+}
 
 
     /* =====================================================
@@ -882,6 +907,385 @@ document.addEventListener("DOMContentLoaded", function () {
         cards.forEach(function (card) {
             evidenceGrid.appendChild(card);
         });
+
+    }
+       /* =====================================================
+       RESIDENT SEARCH
+    ====================================================== */
+
+    const residentSearchInput =
+        document.getElementById("residentSearchInput");
+
+    const residentIdInput =
+        document.getElementById("residentIdInput");
+
+    const residentSearchResults =
+        document.getElementById("residentSearchResults");
+
+    const complaintSelect =
+        document.getElementById("complaintSelect");
+
+    const evidenceUploadForm =
+        document.getElementById("evidenceUploadForm");
+
+    const residents = [];
+
+document.querySelectorAll(".resident-data").forEach(
+    function (element) {
+
+        residents.push({
+            id: element.dataset.id,
+            firstName: element.dataset.firstName || "",
+            middleName: element.dataset.middleName || "",
+            lastName: element.dataset.lastName || "",
+            suffix: element.dataset.suffix || ""
+        });
+
+    }
+);
+
+
+    /* =====================================================
+       RESIDENT SEARCH
+    ===================================================== */
+
+    if (
+        residentSearchInput &&
+        residentIdInput &&
+        residentSearchResults &&
+        complaintSelect
+    ) {
+
+        residentSearchInput.addEventListener(
+            "input",
+            function () {
+
+                const search =
+                    this.value
+                        .trim()
+                        .toLowerCase();
+
+                residentIdInput.value = "";
+
+                complaintSelect.innerHTML =
+                    '<option value="">Select Complaint</option>';
+
+                complaintSelect.disabled = true;
+
+
+                if (!search) {
+
+                    residentSearchResults.innerHTML = "";
+
+                    residentSearchResults.classList.add(
+                        "hidden"
+                    );
+
+                    return;
+                }
+
+
+                /* =========================================
+                   FILTER RESIDENTS
+                ========================================== */
+
+                const filteredResidents =
+                    residents.filter(function (resident) {
+
+                        const fullName =
+                            [
+                                resident.firstName,
+                                resident.middleName,
+                                resident.lastName,
+                                resident.suffix
+                            ]
+                            .filter(Boolean)
+                            .join(" ")
+                            .toLowerCase();
+
+                        return fullName.includes(search);
+
+                    });
+
+
+                /* =========================================
+                   NO RESULTS
+                ========================================== */
+
+                if (filteredResidents.length === 0) {
+
+                    residentSearchResults.innerHTML =
+                        '<div class="px-3 py-2 text-sm text-slate-500">' +
+                        'No residents found' +
+                        '</div>';
+
+                    residentSearchResults.classList.remove(
+                        "hidden"
+                    );
+
+                    return;
+                }
+
+
+                /* =========================================
+                   DISPLAY RESULTS
+                ========================================== */
+
+                residentSearchResults.innerHTML = "";
+
+
+                filteredResidents.forEach(
+                    function (resident) {
+
+                        const fullName =
+                            [
+                                resident.firstName,
+                                resident.middleName,
+                                resident.lastName,
+                                resident.suffix
+                            ]
+                            .filter(Boolean)
+                            .join(" ");
+
+
+                        const result =
+                            document.createElement("button");
+
+                        result.type = "button";
+
+                        result.className =
+                            "block w-full px-3 py-2 text-left text-sm hover:bg-slate-100";
+
+
+                        result.textContent =
+                            fullName;
+
+
+                        result.addEventListener(
+                            "click",
+                            function () {
+
+                                selectResident(
+                                    resident,
+                                    fullName
+                                );
+
+                            }
+                        );
+
+
+                        residentSearchResults.appendChild(
+                            result
+                        );
+
+                    }
+                );
+
+
+                residentSearchResults.classList.remove(
+                    "hidden"
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           SELECT RESIDENT
+        ================================================= */
+
+        function selectResident(
+            resident,
+            fullName
+        ) {
+
+            residentSearchInput.value =
+                fullName;
+
+            residentIdInput.value =
+                resident.id;
+
+            residentSearchResults.innerHTML = "";
+
+            residentSearchResults.classList.add(
+                "hidden"
+            );
+
+
+            loadResidentComplaints(
+                resident.id
+            );
+
+        }
+
+
+        /* =================================================
+           LOAD RESIDENT COMPLAINTS
+        ================================================= */
+
+        function loadResidentComplaints(
+            residentId
+        ) {
+
+            complaintSelect.innerHTML =
+                '<option value="">Loading complaints...</option>';
+
+            complaintSelect.disabled = true;
+
+
+            const url =
+                "/evidence/resident/" +
+                residentId +
+                "/complaints/";
+
+
+            fetch(url)
+                .then(function (response) {
+
+                    if (!response.ok) {
+                        throw new Error(
+                            "Failed to load complaints."
+                        );
+                    }
+
+                    return response.json();
+
+                })
+                .then(function (data) {
+
+                    complaintSelect.innerHTML =
+                        '<option value="">Select Complaint</option>';
+
+
+                    if (
+                        !data.complaints ||
+                        data.complaints.length === 0
+                    ) {
+
+                        complaintSelect.innerHTML =
+                            '<option value="">No complaints found</option>';
+
+                        complaintSelect.disabled = true;
+
+                        return;
+                    }
+
+
+                    data.complaints.forEach(
+                        function (complaint) {
+
+                            const option =
+                                document.createElement("option");
+
+                            option.value =
+                                complaint.complaint_id;
+
+                            option.textContent =
+                                "#" +
+                                complaint.complaint_id +
+                                " - " +
+                                complaint.subject +
+                                " (" +
+                                complaint.status +
+                                ")";
+
+
+                            complaintSelect.appendChild(
+                                option
+                            );
+
+                        }
+                    );
+
+
+                    complaintSelect.disabled = false;
+
+                })
+                .catch(function (error) {
+
+                    console.error(
+                        "Complaint loading error:",
+                        error
+                    );
+
+                    complaintSelect.innerHTML =
+                        '<option value="">Unable to load complaints</option>';
+
+                    complaintSelect.disabled = true;
+
+                });
+
+        }
+
+
+        /* =================================================
+           HIDE RESULTS WHEN CLICKING OUTSIDE
+        ================================================= */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !residentSearchInput.contains(
+                        event.target
+                    ) &&
+                    !residentSearchResults.contains(
+                        event.target
+                    )
+                ) {
+
+                    residentSearchResults.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           FORM VALIDATION
+        ================================================= */
+
+        if (evidenceUploadForm) {
+
+            evidenceUploadForm.addEventListener(
+                "submit",
+                function (event) {
+
+                    if (!residentIdInput.value) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Please select a resident."
+                        );
+
+                        residentSearchInput.focus();
+
+                        return;
+                    }
+
+
+                    if (!complaintSelect.value) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Please select a complaint."
+                        );
+
+                        complaintSelect.focus();
+
+                        return;
+                    }
+
+                }
+            );
+
+        }
 
     }
 

@@ -14,21 +14,28 @@ urlpatterns = [
         name="evidence_list"
     ),
 
-    # Create
+    # Create Evidence
     path(
         "create/",
         views.evidence_create,
         name="evidence_create"
     ),
 
-    # Detail
+    # Get Complaints for Selected Resident
+    path(
+        "resident/<int:resident_id>/complaints/",
+        views.resident_complaints,
+        name="resident_complaints"
+    ),
+
+    # Evidence Detail
     path(
         "<int:evidence_id>/",
         views.evidence_detail,
         name="evidence_detail"
     ),
 
-    # Delete
+    # Delete Evidence
     path(
         "<int:evidence_id>/delete/",
         views.evidence_delete,
