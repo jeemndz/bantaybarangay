@@ -1,6 +1,11 @@
-/* =========================================
+/* =========================================================
+   BANTAYBARANGAY SIDEBAR
+========================================================= */
+
+
+/* =========================================================
    SIDEBAR
-========================================= */
+========================================================= */
 
 .sidebar {
     position: fixed;
@@ -9,217 +14,644 @@
 
     width: 245px;
     height: 100vh;
-
-    background: #063f35;
-    color: #ffffff;
+    height: 100dvh;
 
     display: flex;
     flex-direction: column;
 
-    padding: 24px 16px;
+    padding: 0;
 
     box-sizing: border-box;
 
+    background: #063f35;
+    color: #ffffff;
+
     z-index: 1000;
+
+    overflow: hidden;
+
+    font-family: inherit;
 }
 
 
-/* =========================================
+/* =========================================================
    LOGO
-========================================= */
+========================================================= */
 
 .sidebar-logo {
     display: flex;
     align-items: center;
 
+    min-height: 80px;
+
+    padding: 16px 20px;
+
     gap: 12px;
 
-    padding: 8px 10px 22px;
+    box-sizing: border-box;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 
-    margin-bottom: 28px;
+    flex-shrink: 0;
 }
 
+
 .sidebar-logo img {
-    width: 45px;
-    height: 45px;
+    width: 44px;
+    height: 44px;
 
     object-fit: contain;
 
     flex-shrink: 0;
 }
 
+
 .sidebar-logo h2 {
     margin: 0;
 
     color: #ffffff;
 
-    font-size: 18px;
-    font-weight: 700;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
 
     line-height: 1.2;
 }
 
+
 .sidebar-logo span {
     display: block;
 
-    margin-top: 4px;
+    margin-top: 3px;
 
-    color: #b8d6cf;
+    color: #9fc9c0;
 
+    font-family: inherit;
     font-size: 10px;
+    font-weight: 400;
+
+    line-height: 1.3;
 }
 
 
-/* =========================================
-   NAVIGATION
-========================================= */
+/* =========================================================
+   NAVIGATION CONTAINER
+========================================================= */
 
 .sidebar-nav {
     display: flex;
+    flex: 1;
     flex-direction: column;
 
-    gap: 24px;
+    gap: 22px;
 
-    flex: 1;
+    padding: 20px 16px;
 
+    box-sizing: border-box;
+
+    overflow-x: hidden;
     overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255, 255, 255, 0.15)
+        transparent;
 }
 
 
-/* =========================================
+/* =========================================================
    NAVIGATION SECTION
-========================================= */
+========================================================= */
 
 .nav-section {
     display: flex;
     flex-direction: column;
 
-    gap: 5px;
+    gap: 4px;
 }
+
 
 .nav-title {
     display: block;
 
     margin: 0 10px 8px;
 
-    color: #8ebbb2;
+    color: #83b8ad;
 
+    font-family: inherit;
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 600;
 
-    letter-spacing: 1px;
+    line-height: 1.2;
+
+    letter-spacing: 1.1px;
 
     text-transform: uppercase;
 }
 
 
-/* =========================================
-   NAV ITEMS
-========================================= */
+/* =========================================================
+   NAVIGATION ITEMS
+========================================================= */
 
-.nav-item {
+.sidebar .nav-item {
+    width: 100%;
+    min-height: 42px;
+
     display: flex;
     align-items: center;
 
-    width: 100%;
+    gap: 11px;
+
+    padding: 10px 12px;
 
     box-sizing: border-box;
 
-    padding: 11px 12px;
+    border: 0;
+    border-radius: 9px;
 
-    border-radius: 8px;
+    background: transparent;
 
-    color: #d7ebe7;
+    color: #cfe6e1;
 
     text-decoration: none;
 
-    font-size: 13px;
-    font-weight: 500;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-style: normal !important;
 
-    gap: 11px;
+    /*
+       IMPORTANT:
+       Use regular weight on every page.
+    */
+    font-weight: 400 !important;
+
+    line-height: 1.25;
+
+    cursor: pointer;
 
     transition:
-        background 0.2s ease,
+        background-color 0.2s ease,
         color 0.2s ease;
 }
 
-.nav-item span {
-    width: 18px;
 
-    text-align: center;
+/* =========================================================
+   NAVIGATION TEXT
+========================================================= */
 
-    font-size: 14px;
+.sidebar .nav-item > span {
+    width: auto;
 
-    flex-shrink: 0;
+    flex: 1;
+
+    text-align: left;
+
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+
+    line-height: 1.25;
 }
 
 
-/* HOVER */
+/* =========================================================
+   NAVIGATION ICONS
+========================================================= */
 
-.nav-item:hover {
+.sidebar .nav-item svg {
+    width: 18px;
+    height: 18px;
+
+    min-width: 18px;
+
+    flex-shrink: 0;
+
+    color: #8fc1b7;
+
+    stroke-width: 1.8;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* =========================================================
+   NAVIGATION HOVER
+========================================================= */
+
+.sidebar .nav-item:hover {
     background: rgba(255, 255, 255, 0.08);
 
     color: #ffffff;
 
     text-decoration: none;
+
+    font-weight: 400 !important;
 }
 
 
-/* ACTIVE */
+.sidebar .nav-item:hover > span {
+    font-weight: 400 !important;
+}
 
-.nav-item.active {
-    background: #2f9b70;
+
+.sidebar .nav-item:hover svg {
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   NAVIGATION FOCUS
+========================================================= */
+
+.sidebar .nav-item:focus {
+    color: #ffffff;
+
+    outline: none;
+
+    text-decoration: none;
+
+    font-weight: 400 !important;
+}
+
+
+.sidebar .nav-item:focus > span {
+    font-weight: 400 !important;
+}
+
+
+.sidebar .nav-item:focus-visible {
+    outline: 2px solid rgba(167, 243, 208, 0.7);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   ACTIVE NAVIGATION
+========================================================= */
+
+.sidebar .nav-item.active {
+    background: #078a68;
 
     color: #ffffff;
 
-    font-weight: 600;
+    font-weight: 400 !important;
 }
 
 
-/* =========================================
+.sidebar .nav-item.active > span {
+    font-weight: 400 !important;
+}
+
+
+.sidebar .nav-item.active svg {
+    color: #ffffff;
+}
+
+
+/*
+   Clicking a button/link should NOT temporarily
+   make its text heavier.
+*/
+
+.sidebar .nav-item:active {
+    font-weight: 400 !important;
+}
+
+
+.sidebar .nav-item:active > span {
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   TAILWIND ACTIVE STATE SUPPORT
+========================================================= */
+
+/*
+   sidebar.html currently uses bg-emerald-700 for active
+   Django navigation states.
+
+   Keep only the background/color difference.
+*/
+
+.sidebar .nav-item.bg-emerald-700,
+.sidebar .bg-emerald-700.nav-item {
+    font-weight: 400 !important;
+}
+
+
+.sidebar .nav-item.bg-emerald-700 > span,
+.sidebar .bg-emerald-700.nav-item > span {
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+#settingsNavigation {
+    width: 100%;
+}
+
+
+.sidebar #settingsMenuButton {
+    appearance: none;
+    -webkit-appearance: none;
+
+    text-align: left;
+
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+
+.sidebar #settingsMenuButton > span {
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+
+/* Settings active */
+
+.sidebar #settingsMenuButton.bg-emerald-700 {
+    font-weight: 400 !important;
+}
+
+
+.sidebar #settingsMenuButton.bg-emerald-700 > span {
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   SETTINGS ARROW
+========================================================= */
+
+#settingsMenuArrow {
+    width: 16px;
+    height: 16px;
+
+    min-width: 16px;
+
+    margin-left: auto;
+
+    flex-shrink: 0;
+
+    transition:
+        transform 0.3s ease,
+        color 0.2s ease;
+}
+
+
+/* =========================================================
+   SETTINGS SUBMENU
+========================================================= */
+
+.settings-menu {
+    width: 100%;
+
+    transition:
+        grid-template-rows 0.3s ease,
+        opacity 0.25s ease;
+}
+
+
+.settings-menu > div {
+    min-height: 0;
+}
+
+
+.sidebar .settings-menu .nav-item {
+    min-height: 38px;
+
+    padding: 9px 11px;
+
+    font-family: inherit !important;
+    font-size: 12.5px !important;
+    font-weight: 400 !important;
+}
+
+
+.sidebar .settings-menu .nav-item > span {
+    font-family: inherit !important;
+    font-size: 12.5px !important;
+    font-weight: 400 !important;
+}
+
+
+.sidebar .settings-menu .nav-item svg {
+    width: 16px;
+    height: 16px;
+
+    min-width: 16px;
+}
+
+
+/* =========================================================
+   USER MANAGEMENT
+========================================================= */
+
+/*
+   User Management must use exactly the same font weight
+   whether active or inactive.
+*/
+
+.sidebar .settings-menu a[href*="users"],
+.sidebar .settings-menu a[href*="users"]:link,
+.sidebar .settings-menu a[href*="users"]:visited,
+.sidebar .settings-menu a[href*="users"]:hover,
+.sidebar .settings-menu a[href*="users"]:focus,
+.sidebar .settings-menu a[href*="users"]:active {
+    font-family: inherit !important;
+    font-weight: 400 !important;
+}
+
+
+.sidebar .settings-menu a[href*="users"] > span,
+.sidebar .settings-menu a[href*="users"]:hover > span,
+.sidebar .settings-menu a[href*="users"]:focus > span,
+.sidebar .settings-menu a[href*="users"]:active > span {
+    font-family: inherit !important;
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   AUDIT LOGS
+========================================================= */
+
+.sidebar .settings-menu .nav-item,
+.sidebar .settings-menu .nav-item:link,
+.sidebar .settings-menu .nav-item:visited,
+.sidebar .settings-menu .nav-item:hover,
+.sidebar .settings-menu .nav-item:focus,
+.sidebar .settings-menu .nav-item:active {
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   SIDEBAR BUTTON RESET
+========================================================= */
+
+.sidebar button {
+    font-family: inherit !important;
+}
+
+
+.sidebar button.nav-item,
+.sidebar button.nav-item:hover,
+.sidebar button.nav-item:focus,
+.sidebar button.nav-item:active {
+    font-weight: 400 !important;
+}
+
+
+.sidebar button.nav-item > span,
+.sidebar button.nav-item:hover > span,
+.sidebar button.nav-item:focus > span,
+.sidebar button.nav-item:active > span {
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   SIDEBAR LINKS
+========================================================= */
+
+.sidebar a {
+    text-decoration: none;
+}
+
+
+.sidebar a:link,
+.sidebar a:visited,
+.sidebar a:hover,
+.sidebar a:focus,
+.sidebar a:active {
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   FORCE CONSISTENT SIDEBAR TYPOGRAPHY
+========================================================= */
+
+/*
+   This protects the shared sidebar from page-specific
+   stylesheets and Tailwind utility classes.
+*/
+
+.sidebar nav a,
+.sidebar nav button {
+    font-family: inherit !important;
+    font-weight: 400 !important;
+}
+
+
+.sidebar nav a > span,
+.sidebar nav button > span {
+    font-family: inherit !important;
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
    SIDEBAR BOTTOM
-========================================= */
+========================================================= */
 
 .sidebar-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-
-    padding-top: 18px;
-
     margin-top: auto;
 
     display: flex;
     flex-direction: column;
 
-    gap: 5px;
+    gap: 4px;
+
+    padding: 16px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+
+    background: rgba(0, 0, 0, 0.05);
+
+    flex-shrink: 0;
 }
 
 
-/* LOGOUT */
+/* =========================================================
+   HELP & SUPPORT
+========================================================= */
 
-.sidebar-bottom .logout {
-    color: #ffb2aa;
-}
-
-.sidebar-bottom .logout:hover {
-    background: rgba(255, 255, 255, 0.08);
-
-    color: #ffd1cc;
+.sidebar-bottom .nav-item {
+    font-weight: 400 !important;
 }
 
 
-/* =========================================
+.sidebar-bottom .nav-item > span {
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.sidebar .logout {
+    color: #f7c0bb;
+
+    font-weight: 400 !important;
+}
+
+
+.sidebar .logout > span {
+    font-weight: 400 !important;
+}
+
+
+.sidebar .logout svg {
+    color: #e5aaa5;
+}
+
+
+.sidebar .logout:hover {
+    background: rgba(239, 68, 68, 0.14);
+
+    color: #fecaca;
+
+    font-weight: 400 !important;
+}
+
+
+.sidebar .logout:hover > span {
+    font-weight: 400 !important;
+}
+
+
+.sidebar .logout:hover svg {
+    color: #fecaca;
+}
+
+
+/* =========================================================
    SCROLLBAR
-========================================= */
+========================================================= */
 
 .sidebar-nav::-webkit-scrollbar {
     width: 4px;
 }
 
+
 .sidebar-nav::-webkit-scrollbar-track {
     background: transparent;
 }
+
 
 .sidebar-nav::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.15);
@@ -228,46 +660,106 @@
 }
 
 
-/* =========================================
-   MAIN CONTENT
-========================================= */
-
-.main-content {
-    margin-left: 230px;
-
-    min-height: 100vh;
-
-    box-sizing: border-box;
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main-content {
+    margin-left: 245px;
+
+    width: calc(100% - 245px);
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    box-sizing: border-box;
+
+    transition:
+        margin-left 0.3s ease,
+        width 0.3s ease;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1024px) {
+
+    .sidebar {
+        width: 230px;
+    }
+
+
+    .main-content {
+        margin-left: 230px;
+
+        width: calc(100% - 230px);
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 900px) {
 
     .sidebar {
-        width: 210px;
+        width: 245px;
+
+        transform: translateX(-100%);
+
+        transition: transform 0.3s ease;
     }
 
-    .main-content {
-        margin-left: 210px;
+
+    .sidebar.show,
+    .sidebar.sidebar-open {
+        transform: translateX(0);
     }
-}
 
-
-@media (max-width: 700px) {
-
-    .sidebar {
-        width: 0;
-
-        padding: 0;
-
-        overflow: hidden;
-    }
 
     .main-content {
         margin-left: 0;
+
+        width: 100%;
     }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .sidebar {
+        width: min(280px, 85vw);
+    }
+
+
+    .sidebar-nav {
+        padding: 16px 12px;
+    }
+
+
+    .sidebar .nav-item {
+        padding: 10px 11px;
+
+        font-size: 12.5px !important;
+    }
+
+
+    .sidebar .nav-item > span {
+        font-size: 12.5px !important;
+    }
+
 }

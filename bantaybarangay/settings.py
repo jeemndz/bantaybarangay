@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'registration',
     'blockchain_logs',
     'evidencemodule',
+    'usermanagement',
+    'auditlogs',
 ]
 
 MIDDLEWARE = [

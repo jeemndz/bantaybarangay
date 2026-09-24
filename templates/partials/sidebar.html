@@ -4,7 +4,11 @@
     id="sidebar"
     class="sidebar fixed inset-y-0 left-0 z-50
            flex h-screen w-64 shrink-0 flex-col
-           bg-emerald-900 text-white shadow-xl
+           bg-gradient-to-b
+           from-emerald-800
+           via-emerald-900
+           to-green-950
+           text-white shadow-xl
            transition-transform duration-300 ease-in-out
            -translate-x-full
            lg:h-[100dvh] lg:translate-x-0"
@@ -48,8 +52,8 @@
     <!-- ================================================= -->
 
     <nav class="sidebar-nav flex-1 overflow-y-auto px-4 py-5
-            [scrollbar-width:none] [-ms-overflow-style:none]
-            [&::-webkit-scrollbar]:hidden">
+                [scrollbar-width:none] [-ms-overflow-style:none]
+                [&::-webkit-scrollbar]:hidden">
 
 
         <!-- ================================================= -->
@@ -97,40 +101,12 @@
                     stroke-width="1.8"
                 >
 
-                    <rect
-                        x="3"
-                        y="3"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    ></rect>
-
-                    <rect
-                        x="14"
-                        y="3"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    ></rect>
-
-                    <rect
-                        x="3"
-                        y="14"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    ></rect>
-
-                    <rect
-                        x="14"
-                        y="14"
-                        width="7"
-                        height="7"
-                        rx="1"
-                    ></rect>
+                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
 
                 </svg>
-
 
                 <span>
                     Dashboard
@@ -180,7 +156,6 @@
 
                 </svg>
 
-
                 <span>
                     Complaints
                 </span>
@@ -198,7 +173,7 @@
                        rounded-xl px-3 py-3 text-sm font-medium
                        transition-all duration-200
 
-                       {% if request.resolver_match.url_name == 'evidence_list' %}
+                       {% if request.resolver_match.namespace == 'evidencemodule' %}
                            bg-emerald-700 text-white shadow-sm
                        {% else %}
                            text-emerald-100
@@ -206,12 +181,10 @@
                        {% endif %}"
             >
 
-                <!-- Evidence Folder Icon -->
-
                 <svg
                     class="h-5 w-5 shrink-0 transition-colors
 
-                           {% if request.resolver_match.url_name == 'evidence_list' %}
+                           {% if request.resolver_match.namespace == 'evidencemodule' %}
                                text-white
                            {% else %}
                                text-emerald-300
@@ -236,7 +209,6 @@
                     />
 
                 </svg>
-
 
                 <span>
                     Evidence Management
@@ -284,11 +256,7 @@
                         d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"
                     />
 
-                    <circle
-                        cx="9"
-                        cy="7"
-                        r="4"
-                    ></circle>
+                    <circle cx="9" cy="7" r="4"></circle>
 
                     <path
                         stroke-linecap="round"
@@ -297,7 +265,6 @@
                     />
 
                 </svg>
-
 
                 <span>
                     Residents
@@ -352,7 +319,6 @@
                     />
 
                 </svg>
-
 
                 <span>
                     Documents
@@ -410,7 +376,6 @@
 
                 </svg>
 
-
                 <span>
                     Blockchain Logs
                 </span>
@@ -454,7 +419,6 @@
 
                 </svg>
 
-
                 <span>
                     Reports &amp; Analytics
                 </span>
@@ -480,20 +444,26 @@
             <!-- SETTINGS DROPDOWN -->
             <!-- ================================================= -->
 
-            <div class="group/settings">
+            <div
+                id="settingsNavigation"
+                class="group/settings"
+            >
 
-                <!-- ================================================= -->
+                <!-- ============================================= -->
                 <!-- SETTINGS BUTTON -->
-                <!-- ================================================= -->
+                <!-- ============================================= -->
 
                 <button
                     type="button"
+                    id="settingsMenuButton"
+                    aria-expanded="{% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}true{% else %}false{% endif %}"
+                    aria-controls="settingsSubmenu"
                     class="nav-item flex w-full items-center gap-3
                            rounded-xl px-3 py-3 text-left
                            text-sm font-medium
                            transition-all duration-200
 
-                           {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                           {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
                                bg-emerald-700 text-white shadow-sm
                            {% else %}
                                text-emerald-100
@@ -501,16 +471,15 @@
                            {% endif %}"
                 >
 
-                    <!-- Settings Icon -->
+                    <!-- SETTINGS ICON -->
 
                     <svg
                         class="h-5 w-5 shrink-0 transition-colors
 
-                               {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                               {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
                                    text-white
                                {% else %}
                                    text-emerald-300
-                                   group-hover/settings:text-white
                                {% endif %}"
                         fill="none"
                         stroke="currentColor"
@@ -533,23 +502,20 @@
                     </svg>
 
 
-                    <!-- Settings Text -->
-
                     <span class="flex-1">
                         Settings
                     </span>
 
 
-                    <!-- Dropdown Arrow -->
+                    <!-- ARROW -->
 
                     <svg
+                        id="settingsMenuArrow"
                         class="h-4 w-4 shrink-0
                                text-emerald-300
                                transition-transform duration-300
-                               group-hover/settings:rotate-180
-                               group-hover/settings:text-white
 
-                               {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                               {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
                                    rotate-180 text-white
                                {% endif %}"
                         fill="none"
@@ -569,20 +535,19 @@
                 </button>
 
 
-                <!-- ================================================= -->
+                <!-- ============================================= -->
                 <!-- SETTINGS SUBMENU -->
-                <!-- ================================================= -->
+                <!-- ============================================= -->
 
                 <div
+                    id="settingsSubmenu"
                     class="settings-menu grid overflow-hidden
                            transition-all duration-300 ease-in-out
 
-                           {% if request.resolver_match.url_name == 'audit_logs' or request.resolver_match.url_name == 'user_management' %}
+                           {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
                                grid-rows-[1fr] opacity-100
                            {% else %}
                                grid-rows-[0fr] opacity-0
-                               group-hover/settings:grid-rows-[1fr]
-                               group-hover/settings:opacity-100
                            {% endif %}"
                 >
 
@@ -595,34 +560,32 @@
                         >
 
 
-                            <!-- ================================================= -->
+                            <!-- ================================= -->
                             <!-- USER MANAGEMENT -->
-                            <!-- ================================================= -->
+                            <!-- ================================= -->
 
                             <a
-                                href="#"
+                                href="{% url 'usermanagement:user_list' %}"
                                 class="nav-item group/user mb-1
-                                       flex items-center gap-3
-                                       rounded-xl px-3 py-2.5
-                                       text-sm font-medium
-                                       transition-all duration-200
+                                    flex items-center gap-3
+                                    rounded-xl px-3 py-2.5
+                                    text-sm !font-medium
+                                    transition-all duration-200
 
-                                       {% if request.resolver_match.url_name == 'user_management' %}
-                                           bg-emerald-700 text-white
-                                       {% else %}
-                                           text-emerald-200
-                                           hover:bg-emerald-800
-                                           hover:text-white
-                                       {% endif %}"
+                                    {% if request.resolver_match.namespace == 'usermanagement' %}
+                                        bg-emerald-700 text-white
+                                    {% else %}
+                                        text-emerald-200
+                                        hover:bg-emerald-800
+                                        hover:text-white
+                                    {% endif %}"
                             >
-
-                                <!-- User Management Icon -->
 
                                 <svg
                                     class="h-4 w-4 shrink-0
                                            transition-colors
 
-                                           {% if request.resolver_match.url_name == 'user_management' %}
+                                           {% if request.resolver_match.namespace == 'usermanagement' %}
                                                text-white
                                            {% else %}
                                                text-emerald-400
@@ -662,9 +625,9 @@
                             </a>
 
 
-                            <!-- ================================================= -->
+                            <!-- ================================= -->
                             <!-- AUDIT LOGS -->
-                            <!-- ================================================= -->
+                            <!-- ================================= -->
 
                             <a
                                 href="#"
@@ -682,8 +645,6 @@
                                            hover:text-white
                                        {% endif %}"
                             >
-
-                                <!-- Audit Logs Icon -->
 
                                 <svg
                                     class="h-4 w-4 shrink-0
@@ -847,3 +808,112 @@
     </div>
 
 </aside>
+
+
+<!-- =========================================================
+     SETTINGS DROPDOWN SCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const settingsButton =
+        document.getElementById("settingsMenuButton");
+
+    const settingsMenu =
+        document.getElementById("settingsSubmenu");
+
+    const settingsArrow =
+        document.getElementById("settingsMenuArrow");
+
+
+    if (
+        !settingsButton ||
+        !settingsMenu ||
+        !settingsArrow
+    ) {
+        return;
+    }
+
+
+    /* =====================================================
+       DETERMINE INITIAL STATE
+    ====================================================== */
+
+    let settingsOpen =
+        settingsButton.getAttribute("aria-expanded") === "true";
+
+
+    /* =====================================================
+       UPDATE SETTINGS MENU
+    ====================================================== */
+
+    function updateSettingsMenu() {
+
+        settingsButton.setAttribute(
+            "aria-expanded",
+            settingsOpen ? "true" : "false"
+        );
+
+
+        if (settingsOpen) {
+
+            settingsMenu.classList.remove(
+                "grid-rows-[0fr]",
+                "opacity-0"
+            );
+
+            settingsMenu.classList.add(
+                "grid-rows-[1fr]",
+                "opacity-100"
+            );
+
+
+            settingsArrow.classList.add(
+                "rotate-180"
+            );
+
+        } else {
+
+            settingsMenu.classList.remove(
+                "grid-rows-[1fr]",
+                "opacity-100"
+            );
+
+            settingsMenu.classList.add(
+                "grid-rows-[0fr]",
+                "opacity-0"
+            );
+
+
+            settingsArrow.classList.remove(
+                "rotate-180"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SETTINGS BUTTON
+    ====================================================== */
+
+    settingsButton.addEventListener(
+        "click",
+        function () {
+
+            settingsOpen = !settingsOpen;
+
+            updateSettingsMenu();
+
+        }
+    );
+
+
+    updateSettingsMenu();
+
+});
+
+</script>

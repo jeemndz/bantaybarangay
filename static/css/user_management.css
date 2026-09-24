@@ -1,0 +1,2130 @@
+/* =========================================================
+   BANTAYBARANGAY USER MANAGEMENT
+
+   IMPORTANT:
+   All page styles are scoped to .user-management-page
+   so this file cannot modify:
+   - shared topbar
+   - shared sidebar
+   - other modules
+========================================================= */
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.user-management-page {
+    --bb-primary: #064e3b;
+    --bb-primary-dark: #043c2f;
+    --bb-primary-light: #08745a;
+
+    --bb-page-bg: #f8fafc;
+    --bb-white: #ffffff;
+
+    --bb-border: #dce5e2;
+    --bb-border-soft: #e8efec;
+
+    --bb-text: #1e3530;
+    --bb-muted: #71817c;
+    --bb-muted-light: #94a39e;
+
+    --bb-success: #287a5c;
+    --bb-success-bg: #e4f2eb;
+
+    --bb-danger: #d54c4c;
+    --bb-danger-bg: #fdebea;
+
+    --bb-shadow:
+        0 1px 3px rgba(15, 23, 42, 0.04);
+
+    width: 100%;
+    min-height: calc(100vh - 80px);
+
+    margin: 0;
+
+    padding: 30px 30px 40px;
+
+    box-sizing: border-box;
+
+    background: transparent;
+
+    color: var(--bb-text);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.user-management-page .page-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin: 0 0 20px;
+}
+
+
+.user-management-page .page-header-content {
+    min-width: 0;
+}
+
+
+.user-management-page .page-title {
+    margin: 0;
+
+    color: var(--bb-primary-dark);
+
+    font-size: 24px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.user-management-page .page-subtitle {
+    margin: 6px 0 0;
+
+    color: var(--bb-muted);
+
+    font-size: 13px;
+    font-weight: 400;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.user-management-page .btn-primary,
+.user-management-page .btn-danger,
+.user-management-page .btn-cancel {
+    min-height: 40px;
+
+    padding: 0 17px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.user-management-page .btn-primary {
+    border: 1px solid var(--bb-primary);
+
+    background: var(--bb-primary);
+
+    color: #ffffff;
+}
+
+
+.user-management-page .btn-primary:hover {
+    border-color: var(--bb-primary-light);
+
+    background: var(--bb-primary-light);
+}
+
+
+.user-management-page .btn-danger {
+    border: 1px solid var(--bb-danger);
+
+    background: var(--bb-danger);
+
+    color: #ffffff;
+}
+
+
+.user-management-page .btn-danger:hover {
+    border-color: #bd3e3e;
+
+    background: #bd3e3e;
+}
+
+
+.user-management-page .btn-cancel {
+    border: 1px solid var(--bb-border);
+
+    background: #ffffff;
+
+    color: var(--bb-text);
+}
+
+
+.user-management-page .btn-cancel:hover {
+    background: #f8faf9;
+}
+
+
+.user-management-page .btn-primary svg,
+.user-management-page .btn-danger svg,
+.user-management-page .btn-cancel svg {
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MANAGEMENT TOOLBAR
+========================================================= */
+
+.user-management-page .management-toolbar {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   USER SEARCH
+========================================================= */
+
+.user-management-page .search-box {
+    position: relative;
+
+    width: min(100%, 430px);
+}
+
+
+.user-management-page .search-box svg {
+    position: absolute;
+
+    top: 50%;
+    left: 14px;
+
+    width: 17px;
+    height: 17px;
+
+    transform: translateY(-50%);
+
+    color: #82958f;
+
+    pointer-events: none;
+}
+
+
+.user-management-page .search-box input {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 15px 0 42px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--bb-border);
+    border-radius: 21px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: var(--bb-text);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.user-management-page .search-box input::placeholder {
+    color: #94a3a0;
+}
+
+
+.user-management-page .search-box input:focus {
+    border-color: #86aa9e;
+
+    box-shadow:
+        0 0 0 3px rgba(6, 78, 59, 0.06);
+}
+
+
+/* =========================================================
+   TOOLBAR ACTIONS
+========================================================= */
+
+.user-management-page .toolbar-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.user-management-page .toolbar-select {
+    height: 40px;
+
+    padding: 0 32px 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--bb-border);
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: var(--bb-text);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+
+.user-management-page .toolbar-select:focus {
+    border-color: #86aa9e;
+
+    box-shadow:
+        0 0 0 3px rgba(6, 78, 59, 0.05);
+}
+
+
+/* =========================================================
+   ICON BUTTONS
+========================================================= */
+
+.user-management-page .icon-button {
+    width: 38px;
+    height: 38px;
+
+    padding: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #60736d;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.user-management-page .icon-button:hover {
+    background: #edf4f1;
+
+    color: var(--bb-primary);
+}
+
+
+.user-management-page .icon-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================================================
+   STATISTICS GRID
+========================================================= */
+
+.user-management-page .statistics-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(150px, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+
+.user-management-page .stat-card {
+    position: relative;
+
+    min-height: 105px;
+
+    padding: 16px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bb-border);
+    border-radius: 12px;
+
+    box-shadow: var(--bb-shadow);
+}
+
+
+.user-management-page .stat-content {
+    min-width: 0;
+}
+
+
+.user-management-page .stat-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #60736d;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 0.06em;
+
+    text-transform: uppercase;
+}
+
+
+.user-management-page .stat-value {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #172e29;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+.user-management-page .stat-description {
+    display: block;
+
+    color: var(--bb-muted-light);
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+.user-management-page .stat-success {
+    color: #5b967e;
+}
+
+
+.user-management-page .stat-danger {
+    color: #df6666;
+}
+
+
+.user-management-page .stat-icon {
+    flex-shrink: 0;
+
+    color: #91b9aa;
+}
+
+
+.user-management-page .stat-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+
+.user-management-page .stat-icon.danger {
+    color: #e98b85;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.user-management-page .user-management-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        310px;
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   DIRECTORY + PROFILE CARDS
+========================================================= */
+
+.user-management-page .directory-card,
+.user-management-page .user-profile-card {
+    min-width: 0;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bb-border);
+    border-radius: 12px;
+
+    box-shadow: var(--bb-shadow);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   DIRECTORY HEADER
+========================================================= */
+
+.user-management-page .directory-header {
+    min-height: 62px;
+
+    padding: 12px 18px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid var(--bb-border-soft);
+}
+
+
+.user-management-page .directory-heading {
+    min-width: 0;
+}
+
+
+.user-management-page .directory-header h2 {
+    margin: 0;
+
+    color: #405850;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.user-management-page .directory-header p {
+    margin: 4px 0 0;
+
+    color: #8a9995;
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+.user-management-page .directory-header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 2px;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.user-management-page .table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   USERS TABLE
+========================================================= */
+
+.user-management-page .users-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+
+    font-size: 12px;
+}
+
+
+.user-management-page .users-table thead {
+    background: var(--bb-primary);
+
+    color: #ffffff;
+}
+
+
+.user-management-page .users-table th {
+    padding: 14px 17px;
+
+    text-align: left;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+.user-management-page .users-table th.actions-column {
+    text-align: right;
+}
+
+
+.user-management-page .users-table td {
+    padding: 13px 17px;
+
+    border-bottom: 1px solid var(--bb-border-soft);
+
+    color: #566762;
+
+    vertical-align: middle;
+}
+
+
+.user-management-page .users-table tbody tr {
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease;
+}
+
+
+.user-management-page .users-table tbody tr:hover {
+    background: #f7faf8;
+}
+
+
+.user-management-page .users-table tbody tr.selected {
+    background: #edf6f2;
+}
+
+
+.user-management-page .users-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   TABLE USER
+========================================================= */
+
+.user-management-page .table-user {
+    min-width: 155px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.user-management-page .table-avatar {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #cbe6d9;
+
+    color: var(--bb-primary);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.user-management-page .table-user-information {
+    min-width: 0;
+}
+
+
+.user-management-page .table-user strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #243c36;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.user-management-page .table-user span {
+    display: block;
+
+    color: #8a9995;
+
+    font-size: 9px;
+    font-weight: 400;
+}
+
+
+.user-management-page .email-cell {
+    max-width: 180px;
+
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ROLE BADGES
+========================================================= */
+
+.user-management-page .role-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 8px;
+
+    border-radius: 5px;
+
+    background: #e5efea;
+
+    color: #587066;
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+.user-management-page .role-admin,
+.user-management-page .role-administrator {
+    background: #d4eee3;
+
+    color: #34705d;
+}
+
+
+.user-management-page .role-official,
+.user-management-page .role-officer {
+    background: #e0eee4;
+
+    color: #517253;
+}
+
+
+.user-management-page .role-resident,
+.user-management-page .role-staff {
+    background: #edf2ef;
+
+    color: #627068;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.user-management-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    border-radius: 15px;
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+.user-management-page .status-badge .status-dot,
+.user-management-page .status-badge > span {
+    width: 5px;
+    height: 5px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+
+.user-management-page .status-active {
+    border: 1px solid #c9e0d5;
+
+    background: var(--bb-success-bg);
+
+    color: #4c6e60;
+}
+
+
+.user-management-page .status-active .status-dot,
+.user-management-page .status-active > span {
+    background: #3c8167;
+}
+
+
+.user-management-page .status-disabled {
+    border: 1px solid #f1c8c3;
+
+    background: var(--bb-danger-bg);
+
+    color: #c6504b;
+}
+
+
+.user-management-page .status-disabled .status-dot,
+.user-management-page .status-disabled > span {
+    background: #dc4b43;
+}
+
+
+/* =========================================================
+   TABLE ACTIONS
+========================================================= */
+
+.user-management-page .table-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 3px;
+}
+
+
+.user-management-page .table-actions button {
+    width: 29px;
+    height: 29px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #71827d;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.user-management-page .table-actions button:hover {
+    background: #edf4f1;
+
+    color: var(--bb-primary);
+}
+
+
+.user-management-page .table-actions svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   DIRECTORY FOOTER
+========================================================= */
+
+.user-management-page .directory-footer {
+    min-height: 52px;
+
+    padding: 10px 18px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-top: 1px solid var(--bb-border-soft);
+
+    background: #ffffff;
+
+    color: #687873;
+
+    font-size: 11px;
+}
+
+
+.user-management-page .directory-count {
+    color: #687873;
+}
+
+
+.user-management-page .pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.user-management-page .pagination a,
+.user-management-page .pagination span {
+    width: 29px;
+    height: 29px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    color: #62716d;
+
+    text-decoration: none;
+}
+
+
+.user-management-page .pagination a:hover {
+    background: #edf4f1;
+}
+
+
+.user-management-page .pagination .pagination-active {
+    background: var(--bb-primary);
+
+    color: #ffffff;
+}
+
+
+.user-management-page .pagination .disabled {
+    opacity: 0.4;
+
+    cursor: default;
+}
+
+
+.user-management-page .pagination svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
+
+.user-management-page .user-profile-card {
+    min-height: 370px;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   EMPTY PROFILE
+========================================================= */
+
+.user-management-page .profile-empty {
+    min-height: 370px;
+
+    padding: 40px 25px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.user-management-page .profile-empty-icon {
+    width: 65px;
+    height: 65px;
+
+    margin-bottom: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #edf4f1;
+
+    color: #719387;
+}
+
+
+.user-management-page .profile-empty-icon svg {
+    width: 29px;
+    height: 29px;
+}
+
+
+.user-management-page .profile-empty h3 {
+    margin: 0 0 6px;
+
+    color: #334c45;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+.user-management-page .profile-empty p {
+    max-width: 210px;
+
+    margin: 0;
+
+    color: #8a9995;
+
+    font-size: 11px;
+    font-weight: 400;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   PROFILE CONTENT
+========================================================= */
+
+.user-management-page .profile-content {
+    padding: 20px;
+}
+
+
+.user-management-page .profile-header {
+    padding: 4px 0 20px;
+
+    text-align: center;
+}
+
+
+.user-management-page .profile-avatar-wrapper {
+    position: relative;
+
+    width: fit-content;
+
+    margin: auto;
+}
+
+
+.user-management-page .profile-avatar {
+    width: 67px;
+    height: 67px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+
+    background: #cbe6d9;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.08);
+
+    color: var(--bb-primary);
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+.user-management-page .profile-status-indicator {
+    position: absolute;
+
+    right: 2px;
+    bottom: 3px;
+
+    width: 14px;
+    height: 14px;
+
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+
+    background: #45816c;
+}
+
+
+.user-management-page .profile-status-indicator.disabled {
+    background: #d35a52;
+}
+
+
+.user-management-page .profile-header h3 {
+    margin: 10px 0 3px;
+
+    color: #334940;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.user-management-page .profile-header p {
+    margin: 0;
+
+    color: #557169;
+
+    font-size: 11px;
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   PROFILE INFORMATION
+========================================================= */
+
+.user-management-page .profile-information {
+    padding: 18px 0 13px;
+
+    border-top: 1px solid var(--bb-border-soft);
+}
+
+
+.user-management-page .profile-information h4 {
+    margin: 0 0 13px;
+
+    color: #596b66;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.user-management-page .information-row {
+    padding: 8px 0;
+
+    display: flex;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-bottom: 1px dashed var(--bb-border-soft);
+
+    font-size: 10px;
+}
+
+
+.user-management-page .information-row span {
+    color: #899792;
+}
+
+
+.user-management-page .information-row strong {
+    max-width: 175px;
+
+    overflow: hidden;
+
+    color: #41544f;
+
+    font-weight: 500;
+
+    text-align: right;
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PROFILE ACTIONS
+========================================================= */
+
+.user-management-page .profile-actions {
+    margin-top: 8px;
+}
+
+
+.user-management-page .reset-password-button {
+    width: 100%;
+    height: 41px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--bb-primary);
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+
+.user-management-page .reset-password-button:hover {
+    background: var(--bb-primary-light);
+}
+
+
+.user-management-page .profile-secondary-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+
+    margin-top: 7px;
+}
+
+
+.user-management-page .edit-profile-button,
+.user-management-page .disable-account-button {
+    min-height: 37px;
+
+    padding: 0 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+
+.user-management-page .edit-profile-button {
+    border: 1px solid #b9d0c3;
+
+    color: #426258;
+}
+
+
+.user-management-page .edit-profile-button:hover {
+    background: #f2f8f5;
+}
+
+
+.user-management-page .disable-account-button {
+    border: 1px solid #efb5b0;
+
+    color: #d64d48;
+}
+
+
+.user-management-page .disable-account-button:hover {
+    background: #fff7f6;
+}
+
+
+.user-management-page .disable-account-button.enable {
+    border-color: #a7d0b8;
+
+    color: #337657;
+}
+
+
+.user-management-page .profile-actions svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+/* =========================================================
+   EMPTY TABLE
+========================================================= */
+
+.user-management-page .empty-users {
+    padding: 50px 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    text-align: center;
+}
+
+
+.user-management-page .empty-users-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.user-management-page .empty-users svg {
+    width: 32px;
+    height: 32px;
+
+    color: #93aaa1;
+}
+
+
+.user-management-page .empty-users strong {
+    color: #52645f;
+}
+
+
+.user-management-page .empty-users span {
+    color: #8d9b97;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   MODALS
+
+   These are outside .user-management-page in your HTML,
+   so they are scoped using their modal IDs instead.
+========================================================= */
+
+#createUserModal,
+#editUserModal,
+#resetPasswordModal,
+#disableUserModal {
+    --bb-primary: #064e3b;
+    --bb-primary-dark: #043c2f;
+    --bb-primary-light: #08745a;
+
+    --bb-border: #dce5e2;
+    --bb-border-soft: #e8efec;
+
+    --bb-text: #1e3530;
+    --bb-muted: #71817c;
+
+    --bb-danger: #d54c4c;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    padding: 20px;
+
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    background: rgba(2, 32, 28, 0.55);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+
+/*
+   IMPORTANT:
+   Your HTML uses "modal-overlay hidden".
+   When JavaScript removes .hidden, this restores flex.
+*/
+
+#createUserModal:not(.hidden),
+#editUserModal:not(.hidden),
+#resetPasswordModal:not(.hidden),
+#disableUserModal:not(.hidden) {
+    display: flex;
+}
+
+
+/* =========================================================
+   MODAL CARD
+========================================================= */
+
+#createUserModal .modal-card,
+#editUserModal .modal-card,
+#resetPasswordModal .modal-card,
+#disableUserModal .modal-card {
+    width: min(100%, 520px);
+
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    border: 1px solid #e5ebe8;
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.22);
+}
+
+
+#resetPasswordModal .modal-small,
+#disableUserModal .modal-small {
+    width: min(100%, 420px);
+}
+
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+#createUserModal .modal-header,
+#editUserModal .modal-header,
+#resetPasswordModal .modal-header {
+    padding: 20px;
+
+    display: flex;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-bottom: 1px solid #edf1ee;
+}
+
+
+#createUserModal .modal-header h2,
+#editUserModal .modal-header h2,
+#resetPasswordModal .modal-header h2 {
+    margin: 0;
+
+    color: var(--bb-primary);
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+#createUserModal .modal-header p,
+#editUserModal .modal-header p,
+#resetPasswordModal .modal-header p {
+    margin: 4px 0 0;
+
+    color: #87958f;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   MODAL CLOSE
+========================================================= */
+
+#createUserModal .modal-close,
+#editUserModal .modal-close,
+#resetPasswordModal .modal-close {
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #6c7b76;
+
+    cursor: pointer;
+}
+
+
+#createUserModal .modal-close:hover,
+#editUserModal .modal-close:hover,
+#resetPasswordModal .modal-close:hover {
+    background: #edf4ef;
+}
+
+
+#createUserModal .modal-close svg,
+#editUserModal .modal-close svg,
+#resetPasswordModal .modal-close svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================================================
+   MODAL BODY
+========================================================= */
+
+#createUserModal .modal-body,
+#editUserModal .modal-body,
+#resetPasswordModal .modal-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+#createUserModal .modal-footer,
+#editUserModal .modal-footer,
+#resetPasswordModal .modal-footer,
+#disableUserModal .modal-footer {
+    padding: 15px 20px;
+
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    border-top: 1px solid #edf1ee;
+}
+
+
+/* =========================================================
+   MODAL BUTTONS
+========================================================= */
+
+#createUserModal .btn-primary,
+#createUserModal .btn-cancel,
+#editUserModal .btn-primary,
+#editUserModal .btn-cancel,
+#resetPasswordModal .btn-primary,
+#resetPasswordModal .btn-cancel,
+#disableUserModal .btn-danger,
+#disableUserModal .btn-cancel {
+    min-height: 40px;
+
+    padding: 0 17px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+#createUserModal .btn-primary,
+#editUserModal .btn-primary,
+#resetPasswordModal .btn-primary {
+    border: 1px solid var(--bb-primary);
+
+    background: var(--bb-primary);
+
+    color: #ffffff;
+}
+
+
+#createUserModal .btn-primary:hover,
+#editUserModal .btn-primary:hover,
+#resetPasswordModal .btn-primary:hover {
+    background: var(--bb-primary-light);
+
+    border-color: var(--bb-primary-light);
+}
+
+
+#disableUserModal .btn-danger {
+    border: 1px solid var(--bb-danger);
+
+    background: var(--bb-danger);
+
+    color: #ffffff;
+}
+
+
+#disableUserModal .btn-danger:hover {
+    border-color: #bd3e3e;
+
+    background: #bd3e3e;
+}
+
+
+#createUserModal .btn-cancel,
+#editUserModal .btn-cancel,
+#resetPasswordModal .btn-cancel,
+#disableUserModal .btn-cancel {
+    border: 1px solid var(--bb-border);
+
+    background: #ffffff;
+
+    color: var(--bb-text);
+}
+
+
+#createUserModal .btn-cancel:hover,
+#editUserModal .btn-cancel:hover,
+#resetPasswordModal .btn-cancel:hover,
+#disableUserModal .btn-cancel:hover {
+    background: #f8faf9;
+}
+
+
+#createUserModal .btn-primary svg,
+#editUserModal .btn-primary svg,
+#resetPasswordModal .btn-primary svg,
+#disableUserModal .btn-danger svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+#createUserModal .form-grid,
+#editUserModal .form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+#createUserModal .form-group,
+#editUserModal .form-group,
+#resetPasswordModal .form-group {
+    margin-bottom: 15px;
+}
+
+
+#createUserModal .form-group:last-child,
+#editUserModal .form-group:last-child,
+#resetPasswordModal .form-group:last-child {
+    margin-bottom: 0;
+}
+
+
+#createUserModal .form-group label,
+#editUserModal .form-group label,
+#resetPasswordModal .form-group label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #445c55;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   FORM SELECTS
+========================================================= */
+
+#createUserModal .form-group select,
+#editUserModal .form-group select {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d7e2db;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    outline: none;
+
+    color: #354943;
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+
+#createUserModal .form-group select:focus,
+#editUserModal .form-group select:focus {
+    border-color: #6b9e89;
+
+    box-shadow:
+        0 0 0 3px rgba(6, 60, 53, 0.06);
+}
+
+
+/* =========================================================
+   INPUT WITH ICON
+========================================================= */
+
+#createUserModal .input-with-icon,
+#createUserModal .password-input,
+#editUserModal .input-with-icon,
+#resetPasswordModal .password-input {
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    border: 1px solid #d7e2db;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+
+#createUserModal .input-with-icon:focus-within,
+#createUserModal .password-input:focus-within,
+#editUserModal .input-with-icon:focus-within,
+#resetPasswordModal .password-input:focus-within {
+    border-color: #6b9e89;
+
+    box-shadow:
+        0 0 0 3px rgba(6, 60, 53, 0.06);
+}
+
+
+#createUserModal .input-with-icon > svg,
+#createUserModal .password-input > svg,
+#editUserModal .input-with-icon > svg,
+#resetPasswordModal .password-input > svg {
+    width: 16px;
+    height: 16px;
+
+    margin-left: 12px;
+
+    flex-shrink: 0;
+
+    color: #8ba098;
+}
+
+
+#createUserModal .input-with-icon input,
+#createUserModal .password-input input,
+#editUserModal .input-with-icon input,
+#resetPasswordModal .password-input input {
+    min-width: 0;
+    height: 100%;
+
+    flex: 1;
+
+    padding: 0 10px;
+
+    border: none;
+
+    background: transparent;
+
+    outline: none;
+
+    color: #354943;
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PASSWORD BUTTON
+========================================================= */
+
+#createUserModal .password-input button,
+#resetPasswordModal .password-input button {
+    width: 42px;
+    height: 100%;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    background: transparent;
+
+    color: #788b84;
+
+    cursor: pointer;
+}
+
+
+#createUserModal .password-input button:hover,
+#resetPasswordModal .password-input button:hover {
+    background: #f4f7f5;
+}
+
+
+#createUserModal .password-input button svg,
+#resetPasswordModal .password-input button svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================================================
+   FORM ERROR
+========================================================= */
+
+#createUserModal .form-error,
+#editUserModal .form-error,
+#resetPasswordModal .form-error {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #d6504a;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   CONFIRMATION
+========================================================= */
+
+#disableUserModal .confirmation-content {
+    padding: 30px 25px 20px;
+
+    text-align: center;
+}
+
+
+#disableUserModal .confirmation-icon {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+}
+
+
+#disableUserModal .confirmation-icon.danger {
+    background: #fde9e6;
+
+    color: #d9534f;
+}
+
+
+#disableUserModal .confirmation-icon svg {
+    width: 25px;
+    height: 25px;
+}
+
+
+#disableUserModal .confirmation-content h2 {
+    margin: 0 0 7px;
+
+    color: #334943;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+#disableUserModal .confirmation-content p {
+    max-width: 320px;
+
+    margin: auto;
+
+    color: #7d8c87;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   USER MANAGEMENT VISIBILITY
+
+   Do NOT define a global .hidden rule here.
+   Tailwind already provides .hidden.
+
+   This prevents User Management CSS from modifying
+   unrelated elements in the shared topbar.
+========================================================= */
+
+.user-management-page .hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE - LARGE TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .user-management-page .statistics-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+
+    .user-management-page .user-management-grid {
+        grid-template-columns:
+            minmax(0, 1fr)
+            270px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .user-management-page .user-management-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .user-management-page .user-profile-card {
+        min-height: auto;
+    }
+
+
+    .user-management-page .profile-empty {
+        min-height: 250px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .user-management-page {
+        padding: 20px 14px 30px;
+    }
+
+
+    .user-management-page .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .user-management-page .page-header .btn-primary {
+        width: 100%;
+    }
+
+
+    .user-management-page .management-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .user-management-page .search-box {
+        width: 100%;
+        max-width: none;
+    }
+
+
+    .user-management-page .toolbar-actions {
+        width: 100%;
+    }
+
+
+    .user-management-page .toolbar-select {
+        min-width: 0;
+
+        flex: 1;
+    }
+
+
+    .user-management-page .statistics-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    #createUserModal .form-grid,
+    #editUserModal .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .user-management-page .directory-header {
+        align-items: flex-start;
+    }
+
+
+    .user-management-page .directory-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .user-management-page {
+        padding: 16px 10px 25px;
+    }
+
+
+    .user-management-page .page-title {
+        font-size: 21px;
+    }
+
+
+    .user-management-page .statistics-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .user-management-page .toolbar-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .user-management-page .toolbar-select,
+    .user-management-page #clearFilters {
+        width: 100%;
+    }
+
+
+    .user-management-page .profile-secondary-actions {
+        grid-template-columns: 1fr;
+    }
+
+
+    #createUserModal,
+    #editUserModal,
+    #resetPasswordModal,
+    #disableUserModal {
+        padding: 10px;
+    }
+
+
+    #createUserModal .modal-footer,
+    #editUserModal .modal-footer,
+    #resetPasswordModal .modal-footer,
+    #disableUserModal .modal-footer {
+        flex-direction: column-reverse;
+    }
+
+
+    #createUserModal .modal-footer button,
+    #editUserModal .modal-footer button,
+    #resetPasswordModal .modal-footer button,
+    #disableUserModal .modal-footer button {
+        width: 100%;
+    }
+
+}

@@ -1,0 +1,1596 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+User Management | BantayBarangay
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/user_management.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="user-management-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <header class="page-header">
+
+        <div class="page-header-content">
+
+            <h1 class="page-title">
+                User Management
+            </h1>
+
+            <p class="page-subtitle">
+                Manage administrative access, barangay officials,
+                and resident accounts.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn-primary create-user-button"
+            onclick="openCreateUserModal()"
+        >
+            <i data-lucide="user-plus"></i>
+
+            <span>
+                Create New User
+            </span>
+        </button>
+
+    </header>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <section class="management-toolbar">
+
+        <div class="search-box">
+
+            <i data-lucide="search"></i>
+
+            <input
+                id="userSearchInput"
+                type="search"
+                autocomplete="off"
+                placeholder="Search users, roles, email, or status..."
+            >
+
+        </div>
+
+
+        <div class="toolbar-actions">
+
+            <select
+                id="roleFilter"
+                class="toolbar-select"
+                aria-label="Filter users by role"
+            >
+                <option value="">All Roles</option>
+                <option value="admin">Administrator</option>
+                <option value="official">Barangay Official</option>
+                <option value="resident">Resident</option>
+            </select>
+
+
+            <select
+                id="statusFilter"
+                class="toolbar-select"
+                aria-label="Filter users by status"
+            >
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="disabled">Disabled</option>
+            </select>
+
+
+            <button
+                type="button"
+                id="clearFilters"
+                class="icon-button"
+                title="Clear filters"
+                aria-label="Clear filters"
+            >
+                <i data-lucide="rotate-ccw"></i>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="statistics-grid">
+
+
+        <!-- TOTAL USERS -->
+
+        <article class="stat-card">
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Total Users
+                </span>
+
+                <strong class="stat-value">
+                    {{ total_users|default:0 }}
+                </strong>
+
+                <span class="stat-description">
+                    Registered accounts
+                </span>
+
+            </div>
+
+            <div class="stat-icon">
+                <i data-lucide="users"></i>
+            </div>
+
+        </article>
+
+
+        <!-- ACTIVE USERS -->
+
+        <article class="stat-card">
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Active Users
+                </span>
+
+                <strong class="stat-value">
+                    {{ active_users|default:0 }}
+                </strong>
+
+                <span class="stat-description stat-success">
+                    Enabled accounts
+                </span>
+
+            </div>
+
+            <div class="stat-icon">
+                <i data-lucide="circle-check"></i>
+            </div>
+
+        </article>
+
+
+        <!-- ADMINISTRATORS -->
+
+        <article class="stat-card">
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Administrators
+                </span>
+
+                <strong class="stat-value">
+                    {{ administrators|default:0 }}
+                </strong>
+
+                <span class="stat-description">
+                    Administrative access
+                </span>
+
+            </div>
+
+            <div class="stat-icon">
+                <i data-lucide="shield-check"></i>
+            </div>
+
+        </article>
+
+
+        <!-- BARANGAY OFFICIALS -->
+
+        <article class="stat-card">
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Barangay Officials
+                </span>
+
+                <strong class="stat-value">
+                    {{ barangay_officials|default:0 }}
+                </strong>
+
+                <span class="stat-description">
+                    Official accounts
+                </span>
+
+            </div>
+
+            <div class="stat-icon">
+                <i data-lucide="briefcase-business"></i>
+            </div>
+
+        </article>
+
+
+        <!-- DISABLED -->
+
+        <article class="stat-card">
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Disabled
+                </span>
+
+                <strong class="stat-value">
+                    {{ disabled_users|default:0 }}
+                </strong>
+
+                <span class="stat-description stat-danger">
+                    Disabled accounts
+                </span>
+
+            </div>
+
+            <div class="stat-icon danger">
+                <i data-lucide="circle-slash"></i>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ====================================================== -->
+
+    <section class="user-management-grid">
+
+
+        <!-- =================================================
+             DIRECTORY
+        ================================================== -->
+
+        <div class="directory-card">
+
+
+            <!-- DIRECTORY HEADER -->
+
+            <div class="directory-header">
+
+                <div class="directory-heading">
+
+                    <h2>
+                        System User Directory
+                    </h2>
+
+                    <p>
+                        Manage registered BantayBarangay users.
+                    </p>
+
+                </div>
+
+
+                <div class="directory-header-actions">
+
+                    <button
+                        type="button"
+                        class="icon-button"
+                        title="Filter users"
+                        aria-label="Filter users"
+                    >
+                        <i data-lucide="list-filter"></i>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="icon-button"
+                        title="Export users"
+                        aria-label="Export users"
+                        onclick="exportUsers()"
+                    >
+                        <i data-lucide="download"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 USERS TABLE
+            ================================================== -->
+
+            <div class="table-wrapper">
+
+                <table class="users-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Email</th>
+                            <th>Created</th>
+
+                            <th class="actions-column">
+                                Actions
+                            </th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="usersTableBody">
+
+                        {% for user in users %}
+
+                        <tr
+                            class="user-row"
+                            data-user-id="{{ user.user_id }}"
+                            data-username="{{ user.username|default:''|lower }}"
+                            data-email="{{ user.email|default:''|lower }}"
+                            data-role="{{ user.role|default:''|lower }}"
+                            data-status="{% if user.is_active %}active{% else %}disabled{% endif %}"
+                        >
+
+
+                            <!-- USER -->
+
+                            <td
+                                class="user-select-cell"
+                                onclick="selectUserFromElement(this)"
+                            >
+
+                                <div class="table-user">
+
+                                    <div class="table-avatar">
+                                        {{ user.username|slice:":1"|upper }}
+                                    </div>
+
+
+                                    <div class="table-user-information">
+
+                                        <strong>
+                                            {{ user.username }}
+                                        </strong>
+
+                                        <span>
+                                            ID: {{ user.user_id }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- ROLE -->
+
+                            <td onclick="selectUserFromElement(this)">
+
+                                <span class="role-badge role-{{ user.role|lower }}">
+
+                                    {% if user.role == "admin" %}
+
+                                        Administrator
+
+                                    {% elif user.role == "official" %}
+
+                                        Official
+
+                                    {% elif user.role == "resident" %}
+
+                                        Resident
+
+                                    {% else %}
+
+                                        {{ user.role|title }}
+
+                                    {% endif %}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td onclick="selectUserFromElement(this)">
+
+                                {% if user.is_active %}
+
+                                <span class="status-badge status-active">
+
+                                    <span class="status-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status-badge status-disabled">
+
+                                    <span class="status-dot"></span>
+
+                                    Disabled
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td onclick="selectUserFromElement(this)">
+
+                                <span
+                                    class="email-cell"
+                                    title="{{ user.email|default:'No email' }}"
+                                >
+                                    {{ user.email|default:"No email" }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- CREATED -->
+
+                            <td onclick="selectUserFromElement(this)">
+
+                                {% if user.created_at %}
+
+                                    {{ user.created_at|date:"M d, Y" }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <div class="table-actions">
+
+
+                                    <!-- VIEW -->
+
+                                    <button
+                                        type="button"
+                                        title="View user"
+                                        aria-label="View user"
+                                        onclick="viewUserFromButton(event, this)"
+                                    >
+                                        <i data-lucide="eye"></i>
+                                    </button>
+
+
+                                    <!-- EDIT -->
+
+                                    <button
+                                        type="button"
+                                        title="Edit user"
+                                        aria-label="Edit user"
+                                        onclick="editUserFromButton(event, this)"
+                                    >
+                                        <i data-lucide="square-pen"></i>
+                                    </button>
+
+
+                                    <!-- MORE -->
+
+                                    <button
+                                        type="button"
+                                        title="More actions"
+                                        aria-label="More actions"
+                                        onclick="moreUserActions(event, this)"
+                                    >
+                                        <i data-lucide="ellipsis"></i>
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                <div class="empty-users">
+
+                                    <div class="empty-users-icon">
+                                        <i data-lucide="users"></i>
+                                    </div>
+
+                                    <strong>
+                                        No users found
+                                    </strong>
+
+                                    <span>
+                                        There are currently no registered users.
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =================================================
+                 DIRECTORY FOOTER
+            ================================================== -->
+
+            <div class="directory-footer">
+
+                <span class="directory-count">
+
+                    Showing {{ users|length }}
+                    of {{ total_users|default:0 }} users
+
+                </span>
+
+
+                {% if page_obj %}
+
+                <nav
+                    class="pagination"
+                    aria-label="User directory pagination"
+                >
+
+
+                    <!-- PREVIOUS -->
+
+                    {% if page_obj.has_previous %}
+
+                    <a
+                        href="?page={{ page_obj.previous_page_number }}"
+                        class="pagination-button"
+                        aria-label="Previous page"
+                    >
+                        <i data-lucide="chevron-left"></i>
+                    </a>
+
+                    {% else %}
+
+                    <span
+                        class="pagination-button disabled"
+                        aria-hidden="true"
+                    >
+                        <i data-lucide="chevron-left"></i>
+                    </span>
+
+                    {% endif %}
+
+
+                    <!-- PAGE NUMBERS -->
+
+                    {% for number in page_obj.paginator.page_range %}
+
+                        {% if number == page_obj.number %}
+
+                        <span class="pagination-active">
+                            {{ number }}
+                        </span>
+
+                        {% elif number >= page_obj.number|add:"-2" and number <= page_obj.number|add:"2" %}
+
+                        <a
+                            href="?page={{ number }}"
+                            class="pagination-number"
+                        >
+                            {{ number }}
+                        </a>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+
+                    <!-- NEXT -->
+
+                    {% if page_obj.has_next %}
+
+                    <a
+                        href="?page={{ page_obj.next_page_number }}"
+                        class="pagination-button"
+                        aria-label="Next page"
+                    >
+                        <i data-lucide="chevron-right"></i>
+                    </a>
+
+                    {% else %}
+
+                    <span
+                        class="pagination-button disabled"
+                        aria-hidden="true"
+                    >
+                        <i data-lucide="chevron-right"></i>
+                    </span>
+
+                    {% endif %}
+
+                </nav>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             USER PROFILE PANEL
+        ================================================== -->
+
+        <aside
+            class="user-profile-card"
+            id="userProfileCard"
+        >
+
+
+            <!-- EMPTY -->
+
+            <div
+                class="profile-empty"
+                id="profileEmpty"
+            >
+
+                <div class="profile-empty-icon">
+                    <i data-lucide="user-round"></i>
+                </div>
+
+                <h3>
+                    Select a user
+                </h3>
+
+                <p>
+                    Select a user from the directory to view
+                    account information.
+                </p>
+
+            </div>
+
+
+            <!-- SELECTED USER -->
+
+            <div
+                class="profile-content hidden"
+                id="profileContent"
+            >
+
+
+                <div class="profile-header">
+
+                    <div class="profile-avatar-wrapper">
+
+                        <div
+                            class="profile-avatar"
+                            id="profileAvatar"
+                        >
+                            U
+                        </div>
+
+                        <span
+                            class="profile-status-indicator"
+                            id="profileStatusIndicator"
+                        ></span>
+
+                    </div>
+
+
+                    <h3 id="profileUsername">
+                        User
+                    </h3>
+
+                    <p id="profileRole">
+                        Role
+                    </p>
+
+                </div>
+
+
+                <!-- ACCOUNT INFORMATION -->
+
+                <div class="profile-information">
+
+                    <h4>
+                        Account Information
+                    </h4>
+
+
+                    <div class="information-row">
+
+                        <span>User ID</span>
+
+                        <strong id="profileUserId">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-row">
+
+                        <span>Email</span>
+
+                        <strong id="profileEmail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-row">
+
+                        <span>Status</span>
+
+                        <strong id="profileStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-row">
+
+                        <span>Created</span>
+
+                        <strong id="profileCreated">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFILE ACTIONS -->
+
+                <div class="profile-actions">
+
+                    <button
+                        type="button"
+                        class="reset-password-button"
+                        onclick="openResetPasswordModal()"
+                    >
+                        <i data-lucide="key-round"></i>
+
+                        <span>
+                            Reset Password
+                        </span>
+                    </button>
+
+
+                    <div class="profile-secondary-actions">
+
+                        <button
+                            type="button"
+                            class="edit-profile-button"
+                            onclick="editSelectedUser()"
+                        >
+                            <i data-lucide="pencil"></i>
+
+                            <span>
+                                Edit Profile
+                            </span>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="disable-account-button"
+                            id="disableAccountButton"
+                            onclick="openDisableModal()"
+                        >
+                            <i data-lucide="user-x"></i>
+
+                            <span id="disableAccountText">
+                                Disable Account
+                            </span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     CREATE USER MODAL
+========================================================= -->
+
+<div
+    id="createUserModal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="createUserModalTitle"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="createUserModalTitle">
+                    Create New User
+                </h2>
+
+                <p>
+                    Add a new BantayBarangay system account.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeCreateUserModal()"
+                aria-label="Close create user dialog"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+
+        <form
+            id="createUserForm"
+            method="post"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="modal-body">
+
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label for="createUsername">
+                        Username
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i data-lucide="user"></i>
+
+                        <input
+                            id="createUsername"
+                            name="username"
+                            type="text"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="createEmail">
+                        Email
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i data-lucide="mail"></i>
+
+                        <input
+                            id="createEmail"
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROLE + STATUS -->
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="createRole">
+                            Role
+                        </label>
+
+                        <select
+                            id="createRole"
+                            name="role"
+                            required
+                        >
+                            <option value="resident">
+                                Resident
+                            </option>
+
+                            <option value="official">
+                                Barangay Official
+                            </option>
+
+                            <option value="admin">
+                                Administrator
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="createStatus">
+                            Status
+                        </label>
+
+                        <select
+                            id="createStatus"
+                            name="is_active"
+                        >
+                            <option value="1">
+                                Active
+                            </option>
+
+                            <option value="0">
+                                Disabled
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="createPassword">
+                        Password
+                    </label>
+
+                    <div class="password-input">
+
+                        <i data-lucide="lock-keyhole"></i>
+
+                        <input
+                            id="createPassword"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            aria-label="Show or hide password"
+                            onclick="togglePassword('createPassword', this)"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="closeCreateUserModal()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    <i data-lucide="user-plus"></i>
+
+                    <span>
+                        Create User
+                    </span>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     EDIT USER MODAL
+========================================================= -->
+
+<div
+    id="editUserModal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="editUserModalTitle"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="editUserModalTitle">
+                    Edit User
+                </h2>
+
+                <p>
+                    Update the selected user account.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeEditUserModal()"
+                aria-label="Close edit user dialog"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+
+        <form
+            id="editUserForm"
+            method="post"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                id="editUserId"
+                name="user_id"
+            >
+
+
+            <div class="modal-body">
+
+
+                <div class="form-group">
+
+                    <label for="editUsername">
+                        Username
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i data-lucide="user"></i>
+
+                        <input
+                            id="editUsername"
+                            name="username"
+                            type="text"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="editEmail">
+                        Email
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i data-lucide="mail"></i>
+
+                        <input
+                            id="editEmail"
+                            name="email"
+                            type="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="editRole">
+                            Role
+                        </label>
+
+                        <select
+                            id="editRole"
+                            name="role"
+                            required
+                        >
+                            <option value="resident">
+                                Resident
+                            </option>
+
+                            <option value="official">
+                                Barangay Official
+                            </option>
+
+                            <option value="admin">
+                                Administrator
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editStatus">
+                            Status
+                        </label>
+
+                        <select
+                            id="editStatus"
+                            name="is_active"
+                        >
+                            <option value="1">
+                                Active
+                            </option>
+
+                            <option value="0">
+                                Disabled
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="closeEditUserModal()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    <i data-lucide="save"></i>
+
+                    <span>
+                        Save Changes
+                    </span>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     RESET PASSWORD MODAL
+========================================================= -->
+
+<div
+    id="resetPasswordModal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="resetPasswordModalTitle"
+>
+
+    <div class="modal-card modal-small">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="resetPasswordModalTitle">
+                    Reset Password
+                </h2>
+
+                <p>
+                    Enter a new password for this user.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeResetPasswordModal()"
+                aria-label="Close reset password dialog"
+            >
+                <i data-lucide="x"></i>
+            </button>
+
+        </div>
+
+
+        <form
+            id="resetPasswordForm"
+            method="post"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="modal-body">
+
+                <div class="form-group">
+
+                    <label for="newPassword">
+                        New Password
+                    </label>
+
+                    <div class="password-input">
+
+                        <i data-lucide="lock-keyhole"></i>
+
+                        <input
+                            id="newPassword"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            aria-label="Show or hide password"
+                            onclick="togglePassword('newPassword', this)"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="closeResetPasswordModal()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    <i data-lucide="key-round"></i>
+
+                    <span>
+                        Reset Password
+                    </span>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DISABLE / ENABLE USER MODAL
+========================================================= -->
+
+<div
+    id="disableUserModal"
+    class="modal-overlay hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="disableModalTitle"
+>
+
+    <div class="modal-card modal-small">
+
+        <div class="confirmation-content">
+
+            <div class="confirmation-icon danger">
+                <i data-lucide="triangle-alert"></i>
+            </div>
+
+
+            <h2 id="disableModalTitle">
+                Disable Account?
+            </h2>
+
+
+            <p id="disableModalDescription">
+                This user will no longer be able to access
+                BantayBarangay until their account is enabled again.
+            </p>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                class="btn-cancel"
+                onclick="closeDisableModal()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="btn-danger"
+                id="confirmDisableButton"
+                onclick="confirmToggleUserStatus()"
+            >
+                <i data-lucide="user-x"></i>
+
+                <span id="confirmDisableText">
+                    Disable Account
+                </span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<!-- Lucide -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+
+<!-- =========================================================
+     SAFE TABLE ACTION HELPERS
+
+     Django variables are NOT inserted inside JavaScript.
+     The user ID is read from data-user-id on the <tr>.
+========================================================= -->
+
+<script>
+
+    function getUserIdFromElement(element) {
+
+        if (!element) {
+            return null;
+        }
+
+        const row = element.closest(".user-row");
+
+        if (!row) {
+            return null;
+        }
+
+        const userId = row.dataset.userId;
+
+        if (!userId) {
+            return null;
+        }
+
+        return Number(userId);
+    }
+
+
+    function selectUserFromElement(element) {
+
+        const userId = getUserIdFromElement(element);
+
+        if (!userId) {
+            return;
+        }
+
+        if (typeof selectUser === "function") {
+            selectUser(userId);
+        }
+
+    }
+
+
+    function viewUserFromButton(event, button) {
+
+        if (event) {
+            event.stopPropagation();
+        }
+
+        const userId = getUserIdFromElement(button);
+
+        if (!userId) {
+            return;
+        }
+
+        if (typeof selectUser === "function") {
+            selectUser(userId);
+        }
+
+    }
+
+
+    function editUserFromButton(event, button) {
+
+        if (event) {
+            event.stopPropagation();
+        }
+
+        const userId = getUserIdFromElement(button);
+
+        if (!userId) {
+            return;
+        }
+
+        if (typeof selectUser === "function") {
+            selectUser(userId);
+        }
+
+        /*
+         Give selectUser() a chance to finish updating
+         the selected-user state before opening Edit.
+        */
+
+        window.setTimeout(function () {
+
+            if (typeof editSelectedUser === "function") {
+                editSelectedUser();
+            }
+
+        }, 0);
+
+    }
+
+
+    function moreUserActions(event, button) {
+
+        if (event) {
+            event.stopPropagation();
+        }
+
+        const userId = getUserIdFromElement(button);
+
+        if (!userId) {
+            return;
+        }
+
+        if (typeof selectUser === "function") {
+            selectUser(userId);
+        }
+
+    }
+
+</script>
+
+
+<!-- User Management JS -->
+<script
+    src="{% static 'js/user_management.js' %}"
+    defer
+></script>
+
+
+<!-- Initialize Lucide -->
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            if (
+                window.lucide &&
+                typeof window.lucide.createIcons === "function"
+            ) {
+                window.lucide.createIcons();
+            }
+
+        }
+    );
+
+</script>
+
+{% endblock %}

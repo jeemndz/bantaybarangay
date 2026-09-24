@@ -31,6 +31,8 @@ urlpatterns = [
     path("",include("website.urls")),
     path('blockchain_logs/', include('blockchain_logs.urls')),
     path('evidence/', include('evidencemodule.urls')),
+    path('usermanagement/', include('usermanagement.urls')),
+    path('auditlogs/', include('auditlogs.urls')),
 ]
 
 if settings.DEBUG:
