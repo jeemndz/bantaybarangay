@@ -1,0 +1,1242 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Audit Logs | BantayBarangay{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/audit_logs.css' %}"
+>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="audit-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <section class="audit-header">
+
+        <div class="audit-heading">
+
+            <h1>Audit Logs</h1>
+
+            <p>
+                Monitor and track all system activities and
+                administrative actions.
+            </p>
+
+        </div>
+
+
+        <div class="audit-header-actions">
+
+            <button
+                type="button"
+                id="exportLogsBtn"
+                class="audit-button audit-button-primary"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3v12m0 0 4-4m-4 4-4-4"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 17v3h14v-3"
+                    />
+                </svg>
+
+                <span>Export Logs</span>
+
+            </button>
+
+
+            <button
+                type="button"
+                id="refreshLogsBtn"
+                class="audit-button audit-button-secondary"
+            >
+
+                <svg
+                    id="refreshIcon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M20 6v5h-5"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M18.5 15a7 7 0 10-1.6 2"
+                    />
+                </svg>
+
+                <span>Refresh</span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="audit-stats">
+
+        <!-- TOTAL ACTIVITIES -->
+
+        <article class="audit-stat-card">
+
+            <div class="audit-stat-icon audit-stat-icon-teal">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 12a9 9 0 109-9"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 4v6h6"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 7v5l3 2"
+                    />
+                </svg>
+
+            </div>
+
+
+            <div class="audit-stat-content">
+
+                <span class="audit-stat-label">
+                    TOTAL ACTIVITIES
+                </span>
+
+                <strong>
+                    {{ total_logs|default:"0" }}
+                </strong>
+
+                <small>
+                    Recorded audit events
+                </small>
+
+            </div>
+
+        </article>
+
+
+        <!-- TODAY -->
+
+        <article class="audit-stat-card">
+
+            <div class="audit-stat-icon audit-stat-icon-blue">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2"
+                    />
+
+                    <path d="M8 3v4M16 3v4M3 10h18" />
+
+                </svg>
+
+            </div>
+
+
+            <div class="audit-stat-content">
+
+                <span class="audit-stat-label">
+                    TODAY'S ACTIVITIES
+                </span>
+
+                <strong>
+                    {{ today_logs|default:"0" }}
+                </strong>
+
+                <small>
+                    Activities recorded today
+                </small>
+
+            </div>
+
+        </article>
+
+
+        <!-- USERS -->
+
+        <article class="audit-stat-card">
+
+            <div class="audit-stat-icon audit-stat-icon-green">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <circle cx="9" cy="7" r="4" />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 21v-2a6 6 0 016-6"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M16 11a4 4 0 100-8M21 21v-2a6 6 0 00-4-5.65"
+                    />
+                </svg>
+
+            </div>
+
+
+            <div class="audit-stat-content">
+
+                <span class="audit-stat-label">
+                    ACTIVE USERS
+                </span>
+
+                <strong>
+                    {{ active_users|default:"0" }}
+                </strong>
+
+                <small>
+                    Users represented in logs
+                </small>
+
+            </div>
+
+        </article>
+
+
+        <!-- MODULES -->
+
+        <article class="audit-stat-card">
+
+            <div class="audit-stat-icon audit-stat-icon-purple">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <rect
+                        x="3"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    />
+
+                    <rect
+                        x="14"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    />
+
+                    <rect
+                        x="3"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    />
+
+                    <rect
+                        x="14"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    />
+                </svg>
+
+            </div>
+
+
+            <div class="audit-stat-content">
+
+                <span class="audit-stat-label">
+                    MODULES
+                </span>
+
+                <strong>
+                    {{ module_count|default:"0" }}
+                </strong>
+
+                <small>
+                    Modules with recorded activity
+                </small>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ====================================================== -->
+
+    <section class="audit-main-grid">
+
+
+        <!-- =================================================
+             LOG TABLE
+        ================================================== -->
+
+        <div class="audit-table-card">
+
+
+            <!-- =============================================
+                 FILTER BAR
+            ============================================== -->
+
+            <div class="audit-filter-bar">
+
+
+                <!-- SEARCH -->
+
+                <div class="audit-search">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle
+                            cx="11"
+                            cy="11"
+                            r="7"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            d="m20 20-4-4"
+                        />
+                    </svg>
+
+
+                    <input
+                        type="search"
+                        id="auditSearch"
+                        placeholder="Search audit logs..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- MODULE FILTER -->
+
+                <select
+                    id="moduleFilter"
+                    class="audit-select"
+                >
+                    <option value="">
+                        All Modules
+                    </option>
+
+                    {% for module in modules %}
+
+                        <option value="{{ module|lower }}">
+                            {{ module }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <!-- DATE FILTER -->
+
+                <select
+                    id="dateFilter"
+                    class="audit-select"
+                >
+
+                    <option value="all">
+                        All Dates
+                    </option>
+
+                    <option value="today">
+                        Today
+                    </option>
+
+                    <option value="week">
+                        Last 7 Days
+                    </option>
+
+                    <option value="month">
+                        Last 30 Days
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="button"
+                    id="clearFiltersBtn"
+                    class="clear-filter-button"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+
+            <!-- =============================================
+                 TABLE INFO
+            ============================================== -->
+
+            <div class="audit-table-info">
+
+                <div>
+
+                    <h2>System Activity</h2>
+
+                    <p>
+                        Click an activity to view its details.
+                    </p>
+
+                </div>
+
+
+                <span id="visibleLogCount">
+
+                    {% if page_obj %}
+
+                        Showing
+                        {{ page_obj.start_index }}
+                        -
+                        {{ page_obj.end_index }}
+                        of
+                        {{ page_obj.paginator.count }}
+
+                    {% else %}
+
+                        {{ audit_logs|length }}
+                        activities
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- =============================================
+                 TABLE
+            ============================================== -->
+
+            <div class="audit-table-wrapper">
+
+                <table class="audit-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>User</th>
+
+                            <th>Module</th>
+
+                            <th>Action</th>
+
+                            <th>IP Address</th>
+
+                            <th>Date / Time</th>
+
+                            <th></th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="auditTableBody">
+
+                        {% for log in audit_logs %}
+
+                            <tr
+                                class="audit-row"
+
+                                data-id="{{ log.audit_id }}"
+
+                                data-user-id="{{ log.user_id|default:'' }}"
+
+                                data-user="{% if log.user %}{{ log.user }}{% else %}User #{{ log.user_id }}{% endif %}"
+
+                                data-module="{{ log.module|default:'System' }}"
+
+                                data-action="{{ log.action|default:'Activity' }}"
+
+                                data-description="{{ log.description|default:'No description available.' }}"
+
+                                data-ip="{{ log.ip_address|default:'Not available' }}"
+
+                                data-date="{{ log.created_at|date:'c' }}"
+                            >
+
+                                <!-- USER -->
+
+                                <td>
+
+                                    <div class="audit-user">
+
+                                        <div class="audit-avatar">
+
+                                            {% if log.user %}
+
+                                                {{ log.user|slice:":1"|upper }}
+
+                                            {% else %}
+
+                                                U
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <strong>
+
+                                                {% if log.user %}
+
+                                                    {{ log.user }}
+
+                                                {% else %}
+
+                                                    User #{{ log.user_id }}
+
+                                                {% endif %}
+
+                                            </strong>
+
+                                            <span>
+                                                ID: {{ log.user_id }}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- MODULE -->
+
+                                <td>
+
+                                    <span
+                                        class="module-badge"
+                                        data-module-badge
+                                    >
+                                        {{ log.module|default:"System" }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    <div class="audit-action">
+
+                                        <strong>
+                                            {{ log.action|default:"Activity" }}
+                                        </strong>
+
+                                        <span>
+                                            Audit #{{ log.audit_id }}
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- IP -->
+
+                                <td>
+
+                                    <span class="audit-ip">
+                                        {{ log.ip_address|default:"—" }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- DATE -->
+
+                                <td>
+
+                                    <div class="audit-date">
+
+                                        <strong>
+                                            {{ log.created_at|date:"M d, Y" }}
+                                        </strong>
+
+                                        <span>
+                                            {{ log.created_at|date:"h:i:s A" }}
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ARROW -->
+
+                                <td>
+
+                                    <button
+                                        type="button"
+                                        class="audit-row-button"
+                                        aria-label="View activity details"
+                                    >
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="m9 18 6-6-6-6"
+                                            />
+                                        </svg>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr class="audit-empty-row">
+
+                                <td colspan="6">
+
+                                    <div class="audit-empty-state">
+
+                                        <div class="audit-empty-icon">
+
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.6"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M9 12h6M9 16h4M7 3h7l5 5v13H7z"
+                                                />
+
+                                                <path d="M14 3v5h5" />
+
+                                            </svg>
+
+                                        </div>
+
+                                        <strong>
+                                            No audit logs found
+                                        </strong>
+
+                                        <p>
+                                            System activities will appear here
+                                            once they are recorded.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =============================================
+                 CLIENT FILTER EMPTY STATE
+            ============================================== -->
+
+            <div
+                id="filterEmptyState"
+                class="filter-empty-state"
+                hidden
+            >
+
+                <strong>No matching activities</strong>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+            </div>
+
+
+            <!-- =============================================
+                 PAGINATION
+            ============================================== -->
+
+            {% if page_obj and page_obj.paginator.num_pages > 1 %}
+
+                <div class="audit-pagination">
+
+
+                    <!-- PREVIOUS -->
+
+                    {% if page_obj.has_previous %}
+
+                        <a
+                            href="?page={{ page_obj.previous_page_number }}"
+                            class="pagination-arrow"
+                            aria-label="Previous page"
+                        >
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m15 18-6-6 6-6"
+                                />
+                            </svg>
+
+                        </a>
+
+                    {% else %}
+
+                        <span
+                            class="pagination-arrow disabled"
+                        >
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m15 18-6-6 6-6"
+                                />
+                            </svg>
+
+                        </span>
+
+                    {% endif %}
+
+
+                    <!-- PAGE NUMBERS -->
+
+                    <div class="pagination-pages">
+
+                        {% for number in page_obj.paginator.page_range %}
+
+                            {% if number == page_obj.number %}
+
+                                <span
+                                    class="pagination-page active"
+                                >
+                                    {{ number }}
+                                </span>
+
+                            {% elif number >= page_obj.number|add:"-2" and number <= page_obj.number|add:"2" %}
+
+                                <a
+                                    href="?page={{ number }}"
+                                    class="pagination-page"
+                                >
+                                    {{ number }}
+                                </a>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- NEXT -->
+
+                    {% if page_obj.has_next %}
+
+                        <a
+                            href="?page={{ page_obj.next_page_number }}"
+                            class="pagination-arrow"
+                            aria-label="Next page"
+                        >
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m9 18 6-6-6-6"
+                                />
+                            </svg>
+
+                        </a>
+
+                    {% else %}
+
+                        <span
+                            class="pagination-arrow disabled"
+                        >
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m9 18 6-6-6-6"
+                                />
+                            </svg>
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             DETAILS PANEL
+        ================================================== -->
+
+        <aside class="audit-details-card">
+
+            <div class="audit-details-header">
+
+                <div>
+
+                    <span class="details-eyebrow">
+                        SELECTED ACTIVITY
+                    </span>
+
+                    <h2>Activity Details</h2>
+
+                </div>
+
+
+                <div class="immutable-badge">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m9 12 2 2 4-4"
+                        />
+                    </svg>
+
+                    AUDIT RECORD
+
+                </div>
+
+            </div>
+
+
+            <!-- EMPTY DETAILS -->
+
+            <div
+                id="detailsEmpty"
+                class="details-empty"
+            >
+
+                <div class="details-empty-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 7v5l3 2"
+                        />
+                    </svg>
+
+                </div>
+
+                <strong>
+                    Select an activity
+                </strong>
+
+                <p>
+                    Click a row from the audit log table to view
+                    its complete information.
+                </p>
+
+            </div>
+
+
+            <!-- SELECTED DETAILS -->
+
+            <div
+                id="detailsContent"
+                class="details-content"
+                hidden
+            >
+
+
+                <!-- USER -->
+
+                <div class="details-user">
+
+                    <div
+                        id="detailsAvatar"
+                        class="details-avatar"
+                    >
+                        U
+                    </div>
+
+
+                    <div>
+
+                        <strong id="detailsUser">
+                            User
+                        </strong>
+
+                        <span id="detailsUserId">
+                            User ID
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="details-section">
+
+                    <label>
+                        ACTION DESCRIPTION
+                    </label>
+
+                    <div
+                        id="detailsDescription"
+                        class="details-description"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMATION -->
+
+                <div class="details-section">
+
+                    <label>
+                        ACTIVITY INFORMATION
+                    </label>
+
+
+                    <div class="details-grid">
+
+                        <div class="detail-box">
+
+                            <span>Audit ID</span>
+
+                            <strong id="detailsId">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span>Module</span>
+
+                            <strong id="detailsModule">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span>Action</span>
+
+                            <strong id="detailsAction">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span>IP Address</span>
+
+                            <strong id="detailsIp">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TIMESTAMP -->
+
+                <div class="details-section">
+
+                    <label>
+                        TIMESTAMP
+                    </label>
+
+                    <div class="timestamp-card">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 7v5l3 2"
+                            />
+                        </svg>
+
+
+                        <div>
+
+                            <strong id="detailsDate">
+                                —
+                            </strong>
+
+                            <span id="detailsTime">
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECORD NOTICE -->
+
+                <div class="audit-record-notice">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m9 12 2 2 4-4"
+                        />
+                    </svg>
+
+
+                    <div>
+
+                        <strong>
+                            AUDIT RECORD
+                        </strong>
+
+                        <p>
+                            This entry represents a recorded
+                            system activity.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+
+    <!-- =====================================================
+         AUTO AUDIT STATUS
+    ====================================================== -->
+
+    <section class="auto-audit-status">
+
+        <div class="auto-audit-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"
+                />
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m9 12 2 2 4-4"
+                />
+            </svg>
+
+        </div>
+
+
+        <div>
+
+            <strong>
+                Audit Logging Active
+            </strong>
+
+            <p>
+                System activity is being recorded for
+                accountability and security monitoring.
+            </p>
+
+        </div>
+
+
+        <span class="status-indicator">
+            Active
+        </span>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/audit_logs.js' %}"
+    defer
+></script>
+
+{% endblock %}

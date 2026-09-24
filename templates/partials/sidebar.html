@@ -108,9 +108,7 @@
 
                 </svg>
 
-                <span>
-                    Dashboard
-                </span>
+                <span>Dashboard</span>
 
             </a>
 
@@ -156,9 +154,7 @@
 
                 </svg>
 
-                <span>
-                    Complaints
-                </span>
+                <span>Complaints</span>
 
             </a>
 
@@ -210,9 +206,7 @@
 
                 </svg>
 
-                <span>
-                    Evidence Management
-                </span>
+                <span>Evidence Management</span>
 
             </a>
 
@@ -266,9 +260,7 @@
 
                 </svg>
 
-                <span>
-                    Residents
-                </span>
+                <span>Residents</span>
 
             </a>
 
@@ -320,9 +312,7 @@
 
                 </svg>
 
-                <span>
-                    Documents
-                </span>
+                <span>Documents</span>
 
             </a>
 
@@ -376,9 +366,7 @@
 
                 </svg>
 
-                <span>
-                    Blockchain Logs
-                </span>
+                <span>Blockchain Logs</span>
 
             </a>
 
@@ -419,9 +407,7 @@
 
                 </svg>
 
-                <span>
-                    Reports &amp; Analytics
-                </span>
+                <span>Reports &amp; Analytics</span>
 
             </a>
 
@@ -567,18 +553,18 @@
                             <a
                                 href="{% url 'usermanagement:user_list' %}"
                                 class="nav-item group/user mb-1
-                                    flex items-center gap-3
-                                    rounded-xl px-3 py-2.5
-                                    text-sm !font-medium
-                                    transition-all duration-200
+                                       flex items-center gap-3
+                                       rounded-xl px-3 py-2.5
+                                       text-sm !font-medium
+                                       transition-all duration-200
 
-                                    {% if request.resolver_match.namespace == 'usermanagement' %}
-                                        bg-emerald-700 text-white
-                                    {% else %}
-                                        text-emerald-200
-                                        hover:bg-emerald-800
-                                        hover:text-white
-                                    {% endif %}"
+                                       {% if request.resolver_match.namespace == 'usermanagement' %}
+                                           bg-emerald-700 text-white
+                                       {% else %}
+                                           text-emerald-200
+                                           hover:bg-emerald-800
+                                           hover:text-white
+                                       {% endif %}"
                             >
 
                                 <svg
@@ -617,7 +603,6 @@
 
                                 </svg>
 
-
                                 <span>
                                     User Management
                                 </span>
@@ -630,7 +615,7 @@
                             <!-- ================================= -->
 
                             <a
-                                href="#"
+                                href="{% url 'audit_logs' %}"
                                 class="nav-item group/audit mb-1
                                        flex items-center gap-3
                                        rounded-xl px-3 py-2.5
@@ -681,7 +666,6 @@
                                     />
 
                                 </svg>
-
 
                                 <span>
                                     Audit Logs
@@ -746,7 +730,6 @@
 
             </svg>
 
-
             <span>
                 Help &amp; Support
             </span>
@@ -797,7 +780,6 @@
                 />
 
             </svg>
-
 
             <span>
                 Sign Out
@@ -911,6 +893,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     );
 
+
+    /* =====================================================
+       INITIALIZE
+    ====================================================== */
 
     updateSettingsMenu();
 
