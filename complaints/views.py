@@ -1,4 +1,5 @@
 from datetime import timedelta
+from pathlib import Path
 
 from django.shortcuts import (
     render,
@@ -78,12 +79,554 @@ ALLOWED_EVIDENCE_EXTENSIONS = {
     ".wav",
     ".ogg",
     ".m4a",
+    ".aac",
 
     ".pdf",
     ".doc",
     ".docx",
     ".txt",
 }
+
+
+# =========================================================
+# RESIDENT NAME HELPERS
+# =========================================================
+
+def get_resident_field(
+    resident,
+    *field_names
+):
+
+    """
+    Return the first available value from the supplied
+    Resident model field names.
+
+    This allows the complaint module to work with common
+    Resident naming conventions such as:
+
+        first_name
+        firstname
+
+        middle_name
+        middlename
+
+        last_name
+        lastname
+
+        suffix
+        suffix_name
+    """
+
+    for field_name in field_names:
+
+        if hasattr(
+            resident,
+            field_name
+        ):
+
+            value = getattr(
+                resident,
+                field_name
+            )
+
+            if value:
+
+                return str(
+                    value
+                ).strip()
+
+
+    return ""
+
+
+# =========================================================
+# GET RESIDENT FULL NAME
+# =========================================================
+
+def get_resident_full_name(
+    resident
+):
+
+    """
+    Build the resident's display name.
+
+    If the Resident model already has a full_name field
+    or property, that value is used first.
+    """
+
+    if not resident:
+
+        return "Unknown Resident"
+
+
+    # =====================================================
+    # EXISTING FULL NAME FIELD / PROPERTY
+    # =====================================================
+
+    full_name = get_resident_field(
+        resident,
+        "full_name",
+        "fullname",
+        "resident_name",
+        "name",
+    )
+
+
+    if full_name:
+
+        return full_name
+
+
+    # =====================================================
+    # INDIVIDUAL NAME PARTS
+    # =====================================================
+
+    first_name = get_resident_field(
+        resident,
+        "first_name",
+        "firstname",
+        "given_name",
+    )
+
+
+    middle_name = get_resident_field(
+        resident,
+        "middle_name",
+        "middlename",
+        "middle_initial",
+    )
+
+
+    last_name = get_resident_field(
+        resident,
+        "last_name",
+        "lastname",
+        "surname",
+    )
+
+
+    suffix = get_resident_field(
+        resident,
+        "suffix",
+        "suffix_name",
+        "name_suffix",
+    )
+
+
+    name_parts = [
+        first_name,
+        middle_name,
+        last_name,
+        suffix,
+    ]
+
+
+    full_name = " ".join(
+        part
+        for part in name_parts
+        if part
+    ).strip()
+
+
+    if full_name:
+
+        return full_name
+
+
+    # =====================================================
+    # FALLBACK
+    # =====================================================
+
+    resident_id = getattr(
+        resident,
+        "resident_id",
+        None
+    )
+
+
+    if resident_id:
+
+        return (
+            f"Resident #{resident_id}"
+        )
+
+
+    return "Unknown Resident"
+
+
+# =========================================================
+# ATTACH RESIDENT NAMES TO COMPLAINTS
+# =========================================================
+
+def attach_resident_names(
+    complaints
+):
+
+    """
+    Attach a temporary resident_name attribute to every
+    complaint object.
+
+    The complaints table stores resident_id rather than
+    a Django ForeignKey, so this avoids performing one
+    Resident query for every complaint row.
+    """
+
+    complaint_list = list(
+        complaints
+    )
+
+
+    if not complaint_list:
+
+        return complaint_list
+
+
+    # =====================================================
+    # COLLECT RESIDENT IDS
+    # =====================================================
+
+    resident_ids = {
+
+        complaint.resident_id
+
+        for complaint in complaint_list
+
+        if complaint.resident_id
+
+    }
+
+
+    if not resident_ids:
+
+        for complaint in complaint_list:
+
+            complaint.resident_name = (
+                "Unknown Resident"
+            )
+
+        return complaint_list
+
+
+    # =====================================================
+    # LOAD RESIDENTS IN ONE QUERY
+    # =====================================================
+
+    residents = (
+        Resident.objects
+        .filter(
+            resident_id__in=resident_ids
+        )
+    )
+
+
+    resident_map = {
+
+        resident.resident_id:
+            resident
+
+        for resident in residents
+
+    }
+
+
+    # =====================================================
+    # ATTACH RESIDENT INFORMATION
+    # =====================================================
+
+    for complaint in complaint_list:
+
+        resident = resident_map.get(
+            complaint.resident_id
+        )
+
+
+        if resident:
+
+            complaint.resident = resident
+
+            complaint.resident_name = (
+                get_resident_full_name(
+                    resident
+                )
+            )
+
+        else:
+
+            complaint.resident = None
+
+            complaint.resident_name = (
+                f"Resident #{complaint.resident_id}"
+                if complaint.resident_id
+                else "Unknown Resident"
+            )
+
+
+    return complaint_list
+
+
+# =========================================================
+# VALIDATE EVIDENCE FILES
+# =========================================================
+
+def validate_evidence_files(
+    evidence_files
+):
+
+    """
+    Validate evidence uploaded either while creating a
+    complaint or while reviewing an existing complaint.
+
+    Returns:
+
+        None
+            when all files are valid.
+
+        str
+            when validation fails.
+    """
+
+    # =====================================================
+    # MAXIMUM NUMBER OF FILES
+    # =====================================================
+
+    if (
+        len(evidence_files)
+        > MAX_EVIDENCE_FILES
+    ):
+
+        return (
+            "You may upload a maximum "
+            f"of {MAX_EVIDENCE_FILES} "
+            "evidence files."
+        )
+
+
+    # =====================================================
+    # VALIDATE EACH FILE
+    # =====================================================
+
+    for uploaded_file in evidence_files:
+
+        # -------------------------------------------------
+        # EMPTY FILE
+        # -------------------------------------------------
+
+        if (
+            uploaded_file.size <= 0
+        ):
+
+            return (
+                f"{uploaded_file.name} "
+                "is empty and cannot be uploaded."
+            )
+
+
+        # -------------------------------------------------
+        # FILE SIZE
+        # -------------------------------------------------
+
+        if (
+            uploaded_file.size
+            > MAX_EVIDENCE_FILE_SIZE
+        ):
+
+            return (
+                f"{uploaded_file.name} "
+                "exceeds the 10 MB "
+                "file size limit."
+            )
+
+
+        # -------------------------------------------------
+        # FILE EXTENSION
+        # -------------------------------------------------
+
+        file_extension = (
+            Path(
+                uploaded_file.name
+            )
+            .suffix
+            .lower()
+        )
+
+
+        if (
+            file_extension
+            not in ALLOWED_EVIDENCE_EXTENSIONS
+        ):
+
+            return (
+                f"{uploaded_file.name} "
+                "is not a supported "
+                "evidence file type."
+            )
+
+
+    return None
+
+
+# =========================================================
+# GET EVIDENCE UPLOADER
+# =========================================================
+
+def get_evidence_uploader(
+    request,
+    complaint=None,
+    resident=None
+):
+
+    """
+    Determine which user ID should be stored in the
+    evidence.uploaded_by field.
+
+    The logged-in session user is preferred.
+    """
+
+    session_user_id = (
+        request.session.get(
+            "user_id"
+        )
+    )
+
+
+    if session_user_id:
+
+        return session_user_id
+
+
+    # =====================================================
+    # RESIDENT USER ID
+    # =====================================================
+
+    if resident:
+
+        resident_user_id = getattr(
+            resident,
+            "user_id",
+            None
+        )
+
+
+        if resident_user_id:
+
+            return resident_user_id
+
+
+    # =====================================================
+    # COMPLAINT RESIDENT
+    # =====================================================
+
+    if complaint:
+
+        try:
+
+            complaint_resident = (
+                Resident.objects.get(
+                    resident_id=(
+                        complaint.resident_id
+                    )
+                )
+            )
+
+
+            resident_user_id = getattr(
+                complaint_resident,
+                "user_id",
+                None
+            )
+
+
+            if resident_user_id:
+
+                return resident_user_id
+
+
+        except Resident.DoesNotExist:
+
+            pass
+
+
+    return None
+
+
+# =========================================================
+# SAVE MULTIPLE EVIDENCE FILES
+# =========================================================
+
+def save_complaint_evidence(
+    evidence_files,
+    complaint,
+    uploaded_by
+):
+
+    """
+    Save all supplied evidence files using the existing
+    evidencemodule save_evidence_file() helper.
+
+    Returns:
+
+        evidence_saved
+        evidence_failed
+    """
+
+    evidence_saved = 0
+    evidence_failed = 0
+
+
+    if not evidence_files:
+
+        return (
+            evidence_saved,
+            evidence_failed,
+        )
+
+
+    if not uploaded_by:
+
+        return (
+            evidence_saved,
+            len(evidence_files),
+        )
+
+
+    for uploaded_file in evidence_files:
+
+        try:
+
+            save_evidence_file(
+
+                uploaded_file=(
+                    uploaded_file
+                ),
+
+                complaint_id=(
+                    complaint.complaint_id
+                ),
+
+                uploaded_by=(
+                    uploaded_by
+                ),
+            )
+
+
+            evidence_saved += 1
+
+
+        except Exception as error:
+
+            evidence_failed += 1
+
+
+            print(
+                "EVIDENCE SAVE ERROR:",
+                error
+            )
+
+
+    return (
+        evidence_saved,
+        evidence_failed,
+    )
 
 
 # =========================================================
@@ -112,10 +655,12 @@ def complaints(request):
         ""
     ).strip()
 
+
     status = request.GET.get(
         "status",
         ""
     ).strip()
+
 
     date_range = request.GET.get(
         "date_range",
@@ -127,7 +672,9 @@ def complaints(request):
     # FILTERED QUERYSET
     # =====================================================
 
-    complaints_list = all_complaints
+    complaints_list = (
+        all_complaints
+    )
 
 
     # -----------------------------------------------------
@@ -164,12 +711,17 @@ def complaints(request):
 
         thirty_days_ago = (
             timezone.now()
-            - timedelta(days=30)
+            - timedelta(
+                days=30
+            )
         )
+
 
         complaints_list = (
             complaints_list.filter(
-                submitted_at__gte=thirty_days_ago
+                submitted_at__gte=(
+                    thirty_days_ago
+                )
             )
         )
 
@@ -190,7 +742,9 @@ def complaints(request):
 
     ongoing_complaints_queryset = (
         complaints_list.filter(
-            status="Under Investigation"
+            status=(
+                "Under Investigation"
+            )
         )
     )
 
@@ -209,21 +763,9 @@ def complaints(request):
     # =====================================================
     # PAGINATION
     # =====================================================
-    #
-    # Each table has its own GET parameter:
-    #
-    # new_page
-    # ongoing_page
-    # completed_page
-    #
-    # This means changing one table's page will not
-    # change the page number of the other tables.
-    #
-    # =====================================================
-
 
     # -----------------------------------------------------
-    # NEW COMPLAINTS PAGINATOR
+    # NEW COMPLAINTS
     # -----------------------------------------------------
 
     new_paginator = Paginator(
@@ -238,13 +780,15 @@ def complaints(request):
     )
 
 
-    new_page = new_paginator.get_page(
-        new_page_number
+    new_page = (
+        new_paginator.get_page(
+            new_page_number
+        )
     )
 
 
     # -----------------------------------------------------
-    # ONGOING COMPLAINTS PAGINATOR
+    # ONGOING COMPLAINTS
     # -----------------------------------------------------
 
     ongoing_paginator = Paginator(
@@ -253,19 +797,23 @@ def complaints(request):
     )
 
 
-    ongoing_page_number = request.GET.get(
-        "ongoing_page",
-        1
+    ongoing_page_number = (
+        request.GET.get(
+            "ongoing_page",
+            1
+        )
     )
 
 
-    ongoing_page = ongoing_paginator.get_page(
-        ongoing_page_number
+    ongoing_page = (
+        ongoing_paginator.get_page(
+            ongoing_page_number
+        )
     )
 
 
     # -----------------------------------------------------
-    # COMPLETED COMPLAINTS PAGINATOR
+    # COMPLETED COMPLAINTS
     # -----------------------------------------------------
 
     completed_paginator = Paginator(
@@ -274,14 +822,37 @@ def complaints(request):
     )
 
 
-    completed_page_number = request.GET.get(
-        "completed_page",
-        1
+    completed_page_number = (
+        request.GET.get(
+            "completed_page",
+            1
+        )
     )
 
 
-    completed_page = completed_paginator.get_page(
-        completed_page_number
+    completed_page = (
+        completed_paginator.get_page(
+            completed_page_number
+        )
+    )
+
+
+    # =====================================================
+    # ATTACH RESIDENT NAMES
+    # =====================================================
+
+    attach_resident_names(
+        new_page.object_list
+    )
+
+
+    attach_resident_names(
+        ongoing_page.object_list
+    )
+
+
+    attach_resident_names(
+        completed_page.object_list
     )
 
 
@@ -307,7 +878,9 @@ def complaints(request):
 
     ongoing_count = (
         all_complaints.filter(
-            status="Under Investigation"
+            status=(
+                "Under Investigation"
+            )
         ).count()
     )
 
@@ -339,9 +912,11 @@ def complaints(request):
         resolved_percentage = round(
             (
                 resolved_complaints
-                / total_complaints
+                /
+                total_complaints
             )
-            * 100
+            *
+            100
         )
 
     else:
@@ -371,12 +946,14 @@ def complaints(request):
 
         if (
             complaint.submitted_at
-            and complaint.updated_at
+            and
+            complaint.updated_at
         ):
 
             difference = (
                 complaint.updated_at
-                - complaint.submitted_at
+                -
+                complaint.submitted_at
             )
 
 
@@ -393,7 +970,8 @@ def complaints(request):
 
         average_close_days = round(
             total_close_days
-            / close_count,
+            /
+            close_count,
             1
         )
 
@@ -540,6 +1118,13 @@ def update_complaint(
     ).strip()
 
 
+    evidence_files = (
+        request.FILES.getlist(
+            "evidence"
+        )
+    )
+
+
     # =====================================================
     # VALIDATE PRIORITY
     # =====================================================
@@ -579,12 +1164,39 @@ def update_complaint(
 
 
     # =====================================================
+    # VALIDATE NEW EVIDENCE
+    # =====================================================
+
+    evidence_error = (
+        validate_evidence_files(
+            evidence_files
+        )
+    )
+
+
+    if evidence_error:
+
+        messages.error(
+            request,
+            evidence_error
+        )
+
+        return redirect(
+            "complaints"
+        )
+
+
+    # =====================================================
     # UPDATE COMPLAINT
     # =====================================================
 
-    complaint.priority = priority
+    complaint.priority = (
+        priority
+    )
 
-    complaint.status = status
+    complaint.status = (
+        status
+    )
 
     complaint.resolution = (
         resolution
@@ -608,17 +1220,129 @@ def update_complaint(
 
 
     # =====================================================
-    # SUCCESS MESSAGE
+    # SAVE NEW EVIDENCE
     # =====================================================
 
-    messages.success(
-        request,
-        (
-            f"Complaint #CP-"
-            f"{complaint.complaint_id:04d} "
-            f"was updated successfully."
+    evidence_saved = 0
+    evidence_failed = 0
+
+
+    if evidence_files:
+
+        uploaded_by = (
+            get_evidence_uploader(
+                request,
+                complaint=complaint
+            )
         )
-    )
+
+
+        if not uploaded_by:
+
+            evidence_failed = (
+                len(
+                    evidence_files
+                )
+            )
+
+
+            print(
+                "EVIDENCE SAVE ERROR: "
+                "No valid uploaded_by user "
+                "could be determined."
+            )
+
+
+        else:
+
+            (
+                evidence_saved,
+                evidence_failed,
+            ) = save_complaint_evidence(
+
+                evidence_files=(
+                    evidence_files
+                ),
+
+                complaint=(
+                    complaint
+                ),
+
+                uploaded_by=(
+                    uploaded_by
+                ),
+            )
+
+
+    # =====================================================
+    # SUCCESS / WARNING MESSAGE
+    # =====================================================
+
+    if (
+        evidence_saved > 0
+        and
+        evidence_failed == 0
+    ):
+
+        messages.success(
+            request,
+            (
+                f"Complaint #CP-"
+                f"{complaint.complaint_id:04d} "
+                "was updated successfully "
+                f"with {evidence_saved} "
+                "new evidence file"
+                f"{'s' if evidence_saved != 1 else ''}."
+            )
+        )
+
+
+    elif (
+        evidence_saved > 0
+        and
+        evidence_failed > 0
+    ):
+
+        messages.warning(
+            request,
+            (
+                f"Complaint #CP-"
+                f"{complaint.complaint_id:04d} "
+                "was updated. "
+                f"{evidence_saved} evidence "
+                "file"
+                f"{'s were' if evidence_saved != 1 else ' was'} "
+                "saved, but "
+                f"{evidence_failed} "
+                "could not be uploaded."
+            )
+        )
+
+
+    elif evidence_failed > 0:
+
+        messages.warning(
+            request,
+            (
+                f"Complaint #CP-"
+                f"{complaint.complaint_id:04d} "
+                "was updated, but the "
+                "selected evidence files "
+                "could not be uploaded."
+            )
+        )
+
+
+    else:
+
+        messages.success(
+            request,
+            (
+                f"Complaint #CP-"
+                f"{complaint.complaint_id:04d} "
+                "was updated successfully."
+            )
+        )
 
 
     # =====================================================
@@ -859,34 +1583,32 @@ def new_complaint(request):
 
         if (
             report_type
-            == "Community Issue"
+            ==
+            "Community Issue"
         ):
 
             respondent_name = None
-
             respondent_address = None
-
             respondent_relationship = None
-
             respondent_contact = None
 
 
         # =================================================
-        # VALIDATE NUMBER OF EVIDENCE FILES
+        # VALIDATE EVIDENCE
         # =================================================
 
-        if (
-            len(evidence_files)
-            > MAX_EVIDENCE_FILES
-        ):
+        evidence_error = (
+            validate_evidence_files(
+                evidence_files
+            )
+        )
+
+
+        if evidence_error:
 
             messages.error(
                 request,
-                (
-                    "You may upload a maximum "
-                    f"of {MAX_EVIDENCE_FILES} "
-                    "evidence files."
-                )
+                evidence_error
             )
 
             return render(
@@ -897,85 +1619,6 @@ def new_complaint(request):
                         residents,
                 }
             )
-
-
-        # =================================================
-        # VALIDATE EACH EVIDENCE FILE
-        # =================================================
-
-        for uploaded_file in evidence_files:
-
-            # ---------------------------------------------
-            # FILE SIZE
-            # ---------------------------------------------
-
-            if (
-                uploaded_file.size
-                > MAX_EVIDENCE_FILE_SIZE
-            ):
-
-                messages.error(
-                    request,
-                    (
-                        f"{uploaded_file.name} "
-                        "exceeds the 10 MB "
-                        "file size limit."
-                    )
-                )
-
-                return render(
-                    request,
-                    "complaintmodule/newcomplaint.html",
-                    {
-                        "residents":
-                            residents,
-                    }
-                )
-
-
-            # ---------------------------------------------
-            # FILE EXTENSION
-            # ---------------------------------------------
-
-            file_name = (
-                uploaded_file.name
-                .lower()
-            )
-
-
-            file_extension = ""
-
-            if "." in file_name:
-
-                file_extension = (
-                    "."
-                    + file_name
-                    .rsplit(".", 1)[1]
-                )
-
-
-            if (
-                file_extension
-                not in ALLOWED_EVIDENCE_EXTENSIONS
-            ):
-
-                messages.error(
-                    request,
-                    (
-                        f"{uploaded_file.name} "
-                        "is not a supported "
-                        "evidence file type."
-                    )
-                )
-
-                return render(
-                    request,
-                    "complaintmodule/newcomplaint.html",
-                    {
-                        "residents":
-                            residents,
-                    }
-                )
 
 
         # =================================================
@@ -999,9 +1642,13 @@ def new_complaint(request):
                         complaint_type
                     ),
 
-                    subject=subject,
+                    subject=(
+                        subject
+                    ),
 
-                    description=description,
+                    description=(
+                        description
+                    ),
 
                     location=(
                         location
@@ -1096,11 +1743,11 @@ def new_complaint(request):
         # =================================================
 
         uploaded_by = (
-            request.session.get(
-                "user_id"
+            get_evidence_uploader(
+                request,
+                complaint=complaint,
+                resident=resident
             )
-            or
-            resident.resident_id
         )
 
 
@@ -1108,43 +1755,23 @@ def new_complaint(request):
         # SAVE EVIDENCE
         # =================================================
 
-        evidence_saved = 0
+        (
+            evidence_saved,
+            evidence_failed,
+        ) = save_complaint_evidence(
 
-        evidence_failed = 0
+            evidence_files=(
+                evidence_files
+            ),
 
+            complaint=(
+                complaint
+            ),
 
-        for uploaded_file in evidence_files:
-
-            try:
-
-                save_evidence_file(
-
-                    uploaded_file=(
-                        uploaded_file
-                    ),
-
-                    complaint_id=(
-                        complaint.complaint_id
-                    ),
-
-                    uploaded_by=(
-                        uploaded_by
-                    ),
-                )
-
-
-                evidence_saved += 1
-
-
-            except Exception as error:
-
-                evidence_failed += 1
-
-
-                print(
-                    "EVIDENCE SAVE ERROR:",
-                    error
-                )
+            uploaded_by=(
+                uploaded_by
+            ),
+        )
 
 
         # =================================================
@@ -1153,7 +1780,8 @@ def new_complaint(request):
 
         if (
             evidence_saved > 0
-            and evidence_failed == 0
+            and
+            evidence_failed == 0
         ):
 
             messages.success(
@@ -1171,7 +1799,8 @@ def new_complaint(request):
 
         elif (
             evidence_saved > 0
-            and evidence_failed > 0
+            and
+            evidence_failed > 0
         ):
 
             messages.warning(

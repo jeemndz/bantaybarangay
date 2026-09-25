@@ -11,11 +11,49 @@ from .models import User
 
 def login_view(request):
 
+    # =================================================
+    # ALREADY LOGGED IN
+    # =================================================
+
+    if request.session.get("is_logged_in"):
+
+        role = (
+            request.session.get("role", "")
+            or ""
+        ).strip().lower()
+
+        if role in [
+            "admin",
+            "official"
+        ]:
+
+            return redirect("dashboard")
+
+        elif role == "resident":
+
+            return redirect("home")
+
+
+    # =================================================
+    # POST REQUEST
+    # =================================================
+
     if request.method == "POST":
 
-        username = request.POST.get("username", "").strip()
-        password = request.POST.get("password", "")
-        remember = request.POST.get("remember")
+        username = request.POST.get(
+            "username",
+            ""
+        ).strip()
+
+        password = request.POST.get(
+            "password",
+            ""
+        )
+
+        remember = request.POST.get(
+            "remember"
+        )
+
 
         # -------------------------------------------------
         # EMPTY FIELDS
@@ -32,6 +70,7 @@ def login_view(request):
                 request,
                 "login/login.html"
             )
+
 
         # -------------------------------------------------
         # FIND USER
@@ -55,6 +94,7 @@ def login_view(request):
                 "login/login.html"
             )
 
+
         # -------------------------------------------------
         # CHECK ACCOUNT STATUS
         # -------------------------------------------------
@@ -70,6 +110,7 @@ def login_view(request):
                 request,
                 "login/login.html"
             )
+
 
         # -------------------------------------------------
         # CHECK PASSWORD
@@ -88,15 +129,18 @@ def login_view(request):
 
             password_valid = False
 
+
         # -------------------------------------------------
-        # SUPPORT PLAIN TEXT PASSWORD
+        # SUPPORT EXISTING PLAIN-TEXT PASSWORDS
         # -------------------------------------------------
 
         if not password_valid:
 
             password_valid = (
-                password == user.password_hash
+                password ==
+                user.password_hash
             )
+
 
         # -------------------------------------------------
         # INVALID PASSWORD
@@ -114,12 +158,14 @@ def login_view(request):
                 "login/login.html"
             )
 
+
         # =================================================
         # LOGIN SUCCESSFUL
         # =================================================
 
-        # Clear any previous session
+        # Clear previous session
         request.session.flush()
+
 
         # -------------------------------------------------
         # GET USER INFORMATION
@@ -149,11 +195,19 @@ def login_view(request):
             ""
         ) or ""
 
-        # Full name
-        full_name = f"{first_name} {last_name}".strip()
+
+        # -------------------------------------------------
+        # FULL NAME
+        # -------------------------------------------------
+
+        full_name = (
+            f"{first_name} {last_name}"
+        ).strip()
 
         if not full_name:
+
             full_name = user.username
+
 
         # -------------------------------------------------
         # GENERATE INITIALS
@@ -168,33 +222,57 @@ def login_view(request):
 
         elif first_name:
 
-            initials = first_name[:2].upper()
+            initials = (
+                first_name[:2]
+            ).upper()
 
         else:
 
-            initials = user.username[:2].upper()
+            initials = (
+                user.username[:2]
+            ).upper()
+
 
         # -------------------------------------------------
         # STORE USER SESSION
         # -------------------------------------------------
 
-        request.session["is_logged_in"] = True
+        request.session[
+            "is_logged_in"
+        ] = True
 
-        request.session["user_id"] = user.user_id
+        request.session[
+            "user_id"
+        ] = user.user_id
 
-        request.session["username"] = user.username
+        request.session[
+            "username"
+        ] = user.username
 
-        request.session["first_name"] = first_name
+        request.session[
+            "first_name"
+        ] = first_name
 
-        request.session["last_name"] = last_name
+        request.session[
+            "last_name"
+        ] = last_name
 
-        request.session["full_name"] = full_name
+        request.session[
+            "full_name"
+        ] = full_name
 
-        request.session["email"] = email
+        request.session[
+            "email"
+        ] = email
 
-        request.session["role"] = role
+        request.session[
+            "role"
+        ] = role
 
-        request.session["initials"] = initials
+        request.session[
+            "initials"
+        ] = initials
+
 
         # -------------------------------------------------
         # REMEMBER ME
@@ -209,25 +287,32 @@ def login_view(request):
 
         else:
 
-            # Session expires when browser closes
+            # Expire when browser closes
             request.session.set_expiry(0)
+
 
         # -------------------------------------------------
         # ROLE REDIRECTION
         # -------------------------------------------------
 
-        normalized_role = role.strip().lower()
+        normalized_role = (
+            role.strip().lower()
+        )
 
         if normalized_role in [
             "admin",
             "official"
         ]:
 
-            return redirect("dashboard")
+            return redirect(
+                "dashboard"
+            )
 
         elif normalized_role == "resident":
 
-            return redirect("home")
+            return redirect(
+                "home"
+            )
 
         else:
 
@@ -243,6 +328,7 @@ def login_view(request):
                 "login/login.html"
             )
 
+
     # =====================================================
     # GET REQUEST
     # =====================================================
@@ -254,17 +340,201 @@ def login_view(request):
 
 
 # =====================================================
+# FORGOT PASSWORD
+# =====================================================
+
+def forgot_password_view(request):
+
+    # =================================================
+    # POST REQUEST
+    # =================================================
+
+    if request.method == "POST":
+
+        email = request.POST.get(
+            "email",
+            ""
+        ).strip()
+
+
+        # -------------------------------------------------
+        # EMPTY EMAIL
+        # -------------------------------------------------
+
+        if not email:
+
+            messages.error(
+                request,
+                "Please enter your registered email address."
+            )
+
+            return render(
+                request,
+                "login/forgot_password.html"
+            )
+
+
+        # -------------------------------------------------
+        # NORMALIZE EMAIL
+        # -------------------------------------------------
+
+        email = email.lower()
+
+
+        # -------------------------------------------------
+        # FIND USER BY EMAIL
+        # -------------------------------------------------
+
+        try:
+
+            user = User.objects.get(
+                email__iexact=email
+            )
+
+        except User.DoesNotExist:
+
+            # Do not reveal whether an account exists.
+            messages.success(
+                request,
+                "If an account is registered with that email address, "
+                "password reset instructions will be provided."
+            )
+
+            return render(
+                request,
+                "login/forgot_password.html"
+            )
+
+        except User.MultipleObjectsReturned:
+
+            messages.error(
+                request,
+                "Multiple accounts are using this email address. "
+                "Please contact the barangay administrator."
+            )
+
+            return render(
+                request,
+                "login/forgot_password.html"
+            )
+
+
+        # -------------------------------------------------
+        # CHECK ACCOUNT STATUS
+        # -------------------------------------------------
+
+        if not user.is_active:
+
+            # Keep response generic so account status
+            # is not disclosed publicly.
+            messages.success(
+                request,
+                "If an account is registered with that email address, "
+                "password reset instructions will be provided."
+            )
+
+            return render(
+                request,
+                "login/forgot_password.html"
+            )
+
+
+        # =================================================
+        # ACCOUNT FOUND
+        # =================================================
+        #
+        # This stores only the minimum information needed
+        # for the next reset-password step.
+        #
+        # Do NOT store the user's current password.
+        # =================================================
+
+        request.session[
+            "password_reset_user_id"
+        ] = user.user_id
+
+        request.session[
+            "password_reset_email"
+        ] = email
+
+
+        # -------------------------------------------------
+        # SHORT SESSION EXPIRY
+        # -------------------------------------------------
+        #
+        # Temporary recovery session:
+        # 15 minutes
+        # -------------------------------------------------
+
+        request.session.set_expiry(
+            60 * 15
+        )
+
+
+        # -------------------------------------------------
+        # SUCCESS MESSAGE
+        # -------------------------------------------------
+
+        messages.success(
+            request,
+            "Your account was found. "
+            "You may continue with the password recovery process."
+        )
+
+
+        # -------------------------------------------------
+        # CURRENTLY RETURN TO FORGOT PASSWORD PAGE
+        # -------------------------------------------------
+        #
+        # Once reset_password_view is created,
+        # change this to:
+        #
+        # return redirect("reset_password")
+        # -------------------------------------------------
+
+        return render(
+            request,
+            "login/forgot_password.html"
+        )
+
+
+    # =====================================================
+    # GET REQUEST
+    # =====================================================
+
+    return render(
+        request,
+        "login/forgot_password.html"
+    )
+
+
+# =====================================================
 # LOGOUT
 # =====================================================
 
 def logout_view(request):
 
-    # Completely remove the logged-in session
+    # -------------------------------------------------
+    # CLEAR ENTIRE SESSION
+    # -------------------------------------------------
+
     request.session.flush()
+
+
+    # -------------------------------------------------
+    # SUCCESS MESSAGE
+    # -------------------------------------------------
 
     messages.success(
         request,
         "You have been successfully signed out."
     )
 
-    return redirect("login")
+
+    # -------------------------------------------------
+    # RETURN TO LOGIN
+    # -------------------------------------------------
+
+    return redirect(
+        "login"
+    )

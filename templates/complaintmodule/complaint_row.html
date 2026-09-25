@@ -1,32 +1,24 @@
 <tr
     class="complaint-row"
     tabindex="0"
-    role="button"
-    aria-label="Open complaint #CP-{{ complaint.complaint_id|stringformat:'04d' }}"
 
     data-complaint-id="{{ complaint.complaint_id }}"
-    data-reference="#CP-{{ complaint.complaint_id|stringformat:'04d' }}"
-
-    data-complainant="Resident #{{ complaint.resident_id }}"
-    data-report-type="{{ complaint.report_type|default:'N/A'|escape }}"
-    data-category="{{ complaint.complaint_type|default:'N/A'|escape }}"
-
+    data-reference="{{ complaint.reference_number }}"
+    data-complainant="{{ complaint.resident_name|default:'Unknown Resident'|escape }}"
+    data-report-type="{{ complaint.report_type|default:''|escape }}"
+    data-category="{{ complaint.complaint_type|default:''|escape }}"
+    data-incident-date="{% if complaint.incident_date %}{{ complaint.incident_date|date:'M d, Y' }}{% endif %}"
+    data-incident-time="{% if complaint.incident_time %}{{ complaint.incident_time|time:'g:i A' }}{% endif %}"
+    data-location="{{ complaint.location|default:''|escape }}"
     data-subject="{{ complaint.subject|default:''|escape }}"
     data-description="{{ complaint.description|default:''|escape }}"
-
-    data-location="{{ complaint.location|default:'N/A'|escape }}"
-
-    data-incident-date="{% if complaint.incident_date %}{{ complaint.incident_date|date:'M d, Y' }}{% else %}N/A{% endif %}"
-    data-incident-time="{% if complaint.incident_time %}{{ complaint.incident_time|time:'g:i A' }}{% else %}N/A{% endif %}"
-
-    data-priority="{{ complaint.priority|default:'N/A'|escape }}"
-    data-status="{{ complaint.status|default:'Submitted'|escape }}"
-    data-resolution="{{ complaint.resolution|default:''|escape }}"
-
     data-respondent-name="{{ complaint.respondent_name|default:''|escape }}"
     data-respondent-address="{{ complaint.respondent_address|default:''|escape }}"
     data-respondent-relationship="{{ complaint.respondent_relationship|default:''|escape }}"
     data-respondent-contact="{{ complaint.respondent_contact|default:''|escape }}"
+    data-priority="{{ complaint.priority|default:'N/A'|escape }}"
+    data-status="{{ complaint.status|default:'Submitted'|escape }}"
+    data-resolution="{{ complaint.resolution|default:''|escape }}"
 >
 
     <!-- =====================================================

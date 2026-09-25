@@ -12,7 +12,19 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Login | BantayBarangay</title>
+    <meta
+        name="color-scheme"
+        content="light"
+    >
+
+    <meta
+        name="theme-color"
+        content="#063d34"
+    >
+
+    <title>
+        Login | BantayBarangay
+    </title>
 
     <link
         rel="stylesheet"
@@ -24,49 +36,90 @@
 
 <body>
 
-
 <div class="login-container">
 
 
     <!-- =====================================================
-         LEFT SIDE
+         LEFT SIDE / BACKGROUND IMAGE
     ====================================================== -->
 
     <section class="left-section">
 
 
-        <!-- BACKGROUND IMAGE -->
+        <!--
+            BACKGROUND IMAGE
+
+            Put your background picture here:
+
+            static/
+                images/
+                    Background.png
+
+            The CSS automatically makes this image
+            cover the entire left side.
+        -->
 
         <img
             src="{% static 'images/Background.png' %}"
-            alt="BantayBarangay Background"
-            class="login-image"
+            alt=""
+            class="login-background"
         >
 
 
-        <!-- OVERLAY -->
+        <!-- DARK GREEN IMAGE OVERLAY -->
 
         <div class="left-overlay"></div>
 
 
+        <!-- DECORATIVE GRADIENT -->
 
-        <!-- SECURE GOVERNANCE CARD -->
+        <div class="background-glow"></div>
 
-        <div class="secure-card">
+
+        <!-- BRAND -->
+
+        <div class="left-brand">
+
+            <img
+                src="{% static 'images/SYSTEM_LOGO.png' %}"
+                alt="BantayBarangay"
+                class="left-logo"
+            >
+
+            <div>
+
+                <strong>
+                    BantayBarangay
+                </strong>
+
+                <span>
+                    Secure Digital Governance
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SECURE GOVERNANCE CONTENT -->
+
+        <div class="secure-content">
 
 
             <div class="secure-label">
 
                 <span class="secure-dot"></span>
 
-                SECURE BLOCKCHAIN SYSTEM
+                <span>
+                    SECURE BLOCKCHAIN SYSTEM
+                </span>
 
             </div>
 
 
             <h1>
-                Secure<br>
-                Governance
+                Secure
+                <span>Governance.</span>
             </h1>
 
 
@@ -74,26 +127,80 @@
 
                 Utilizing blockchain technology to ensure
                 that every incident report and document
-                remains immutable, transparent, and
-                verified for the community's safety.
+                remains immutable, transparent, and verified
+                for the community's safety.
 
             </p>
 
 
-            <!-- BADGES -->
-
             <div class="badges">
 
-                <span class="badge">
-                    ✓ Blockchain Verified
-                </span>
 
-                <span class="badge">
-                    ✓ Encrypted Data
-                </span>
+                <div class="badge">
+
+                    <span class="badge-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path d="m5 12 4 4L19 6"/>
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Blockchain Verified
+                    </span>
+
+                </div>
+
+
+                <div class="badge">
+
+                    <span class="badge-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <rect
+                                x="5"
+                                y="10"
+                                width="14"
+                                height="10"
+                                rx="2"
+                            />
+
+                            <path
+                                d="M8 10V7a4 4 0 0 1 8 0v3"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Encrypted Data
+                    </span>
+
+                </div>
+
 
             </div>
 
+        </div>
+
+
+        <!-- LEFT BOTTOM TEXT -->
+
+        <div class="left-footer">
+
+            <span class="left-footer-dot"></span>
+
+            <span>
+                Protected community records
+            </span>
 
         </div>
 
@@ -108,73 +215,132 @@
 
     <section class="right-section">
 
-    <a href="{% url 'home' %}" class="back-button">
-        ← Back to Home
-    </a>
 
-    <div class="login-wrapper">
+        <!-- BACK TO HOME -->
 
-        
-            <!-- =================================================
-                 LOGO
-            ================================================== -->
+        <a
+            href="{% url 'home' %}"
+            class="back-button"
+        >
 
-            <div class="logo-area">
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path d="m15 18-6-6 6-6"/>
+            </svg>
 
-                <img
-                    src="{% static 'images/LOGOV2.png' %}"
-                    alt="BantayBarangay Logo"
-                    class="login-logo"
-                >
+            <span>
+                Back to Home
+            </span>
 
-            </div>
+        </a>
 
 
+        <!-- LOGIN CONTENT -->
 
-            <!-- =================================================
-                 LOGIN CARD
-            ================================================== -->
+        <div class="login-wrapper">
+
+
+            <!-- LOGIN CARD -->
 
             <div class="login-card">
 
 
-                <!-- TITLE -->
+                <!-- HEADER -->
 
-                <div class="login-title">
+                <div class="login-card-header">
 
-                    Barangay Complaint and Incident
-                    Reporting System
+                    <span class="welcome-label">
+                        WELCOME BACK
+                    </span>
+
+                    <h2>
+                        Sign in to your account
+                    </h2>
+
+                    <p>
+                        Access the Barangay Complaint and
+                        Incident Reporting System
+                    </p>
 
                 </div>
 
 
-                <div class="login-subtitle">
+                <!-- SYSTEM LABEL -->
 
-                    SECURE BLOCKCHAIN-BASED DOCUMENT
-                    VERIFICATION
+                <div class="system-label">
+
+                    <span class="system-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M12 3 5 6v5c0 4.5 2.8 8.4 7 10 4.2-1.6 7-5.5 7-10V6l-7-3Z"
+                            />
+
+                            <path
+                                d="m9 12 2 2 4-4"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Secure Blockchain-Based Document Verification
+                    </span>
 
                 </div>
-
 
 
                 <!-- =================================================
-                     ERROR MESSAGES
+                     DJANGO MESSAGES
                 ================================================== -->
 
                 {% if messages %}
 
-                    {% for message in messages %}
+                    <div class="messages-container">
 
-                        <div class="error-message">
+                        {% for message in messages %}
 
-                            {{ message }}
+                            <div class="error-message">
 
-                        </div>
+                                <span class="error-icon">
 
-                    {% endfor %}
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="9"
+                                        />
+
+                                        <path d="M12 8v5"/>
+
+                                        <path d="M12 16h.01"/>
+
+                                    </svg>
+
+                                </span>
+
+                                <span>
+                                    {{ message }}
+                                </span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
 
                 {% endif %}
-
 
 
                 <!-- =================================================
@@ -184,10 +350,10 @@
                 <form
                     method="POST"
                     action="{% url 'login' %}"
+                    class="login-form"
                 >
 
                     {% csrf_token %}
-
 
 
                     <!-- USERNAME -->
@@ -198,9 +364,7 @@
                             for="username"
                             class="form-label"
                         >
-
                             Username
-
                         </label>
 
 
@@ -208,7 +372,24 @@
 
 
                             <span class="input-icon">
-                                ♙
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+
+                                    <circle
+                                        cx="12"
+                                        cy="8"
+                                        r="4"
+                                    />
+
+                                    <path
+                                        d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"
+                                    />
+
+                                </svg>
+
                             </span>
 
 
@@ -218,8 +399,8 @@
                                 name="username"
                                 class="form-input"
                                 placeholder="Enter your username"
-                                required
                                 autocomplete="username"
+                                required
                             >
 
 
@@ -228,26 +409,46 @@
                     </div>
 
 
-
                     <!-- PASSWORD -->
 
                     <div class="form-group">
 
-                        <label
-                            for="password"
-                            class="form-label"
-                        >
+                        <div class="password-label-row">
 
-                            Password
+                            <label
+                                for="password"
+                                class="form-label"
+                            >
+                                Password
+                            </label>
 
-                        </label>
+                        </div>
 
 
                         <div class="input-wrapper">
 
 
                             <span class="input-icon">
-                                🔒
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+
+                                    <rect
+                                        x="5"
+                                        y="10"
+                                        width="14"
+                                        height="10"
+                                        rx="2"
+                                    />
+
+                                    <path
+                                        d="M8 10V7a4 4 0 0 1 8 0v3"
+                                    />
+
+                                </svg>
+
                             </span>
 
 
@@ -257,19 +458,62 @@
                                 name="password"
                                 class="form-input password-input"
                                 placeholder="Enter your password"
-                                required
                                 autocomplete="current-password"
+                                required
                             >
 
 
                             <button
                                 type="button"
                                 class="password-toggle"
+                                id="passwordToggle"
                                 onclick="togglePassword()"
                                 aria-label="Show password"
+                                aria-pressed="false"
                             >
 
-                                👁
+                                <!-- EYE OPEN -->
+
+                                <svg
+                                    class="eye-open"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+
+                                    <path
+                                        d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"
+                                    />
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="2.5"
+                                    />
+
+                                </svg>
+
+
+                                <!-- EYE CLOSED -->
+
+                                <svg
+                                    class="eye-closed"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+
+                                    <path
+                                        d="m3 3 18 18"
+                                    />
+
+                                    <path
+                                        d="M10.6 6.2A10 10 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3 3.7"
+                                    />
+
+                                    <path
+                                        d="M6.2 6.2C3.5 8 2 12 2 12s3.5 6 10 6a10 10 0 0 0 4-.8"
+                                    />
+
+                                </svg>
 
                             </button>
 
@@ -279,10 +523,7 @@
                     </div>
 
 
-
-                    <!-- =================================================
-                         OPTIONS
-                    ================================================== -->
+                    <!-- OPTIONS -->
 
                     <div class="form-options">
 
@@ -295,14 +536,14 @@
                             >
 
                             <span>
-                                Remember Me
+                                Remember me
                             </span>
 
                         </label>
 
 
                         <a
-                            href="#"
+                            href="{% url 'forgot_password' %}"
                             class="forgot"
                         >
                             Forgot Password?
@@ -312,10 +553,7 @@
                     </div>
 
 
-
-                    <!-- =================================================
-                         LOGIN BUTTON
-                    ================================================== -->
+                    <!-- LOGIN BUTTON -->
 
                     <button
                         type="submit"
@@ -323,12 +561,20 @@
                     >
 
                         <span>
-                            Login
+                            Sign In
                         </span>
 
-                        <span>
-                            →
-                        </span>
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path d="M5 12h14"/>
+
+                            <path d="m14 7 5 5-5 5"/>
+
+                        </svg>
 
                     </button>
 
@@ -336,17 +582,31 @@
                 </form>
 
 
+                <!-- DIVIDER -->
 
-                <!-- =================================================
-                     REGISTER
-                ================================================== -->
+                <div class="login-divider">
+
+                    <span></span>
+
+                    <small>
+                        NEW TO BANTAYBARANGAY?
+                    </small>
+
+                    <span></span>
+
+                </div>
+
+
+                <!-- REGISTER -->
 
                 <div class="register-text">
 
-                    Don't have an account?
+                    <span>
+                        Don't have an account?
+                    </span>
 
                     <a href="{% url 'registration' %}">
-                        Register here.
+                        Create an account
                     </a>
 
                 </div>
@@ -355,34 +615,26 @@
             </div>
 
 
-
-            <!-- =================================================
-                 FOOTER
-            ================================================== -->
+            <!-- FOOTER -->
 
             <footer class="footer">
 
-
                 <span>
-
-                    © 2026 BantayBarangay.
-                    Secure Blockchain Governance.
-
+                    © 2026 BantayBarangay. Secure Blockchain Governance.
                 </span>
 
 
                 <div class="footer-links">
 
                     <a href="#">
-                        Privacy Policy
+                        Privacy
                     </a>
 
                     <a href="#">
-                        Terms of Service
+                        Terms
                     </a>
 
                 </div>
-
 
             </footer>
 
@@ -394,7 +646,6 @@
 
 
 </div>
-
 
 
 <!-- =====================================================
@@ -409,22 +660,42 @@ function togglePassword() {
         document.getElementById("password");
 
     const button =
-        document.querySelector(".password-toggle");
+        document.getElementById("passwordToggle");
 
 
-    if (password.type === "password") {
-
-        password.type = "text";
-
-        button.textContent = "👁️‍🗨️";
-
-    } else {
-
-        password.type = "password";
-
-        button.textContent = "👁";
-
+    if (!password || !button) {
+        return;
     }
+
+
+    const isPassword =
+        password.type === "password";
+
+
+    password.type =
+        isPassword
+            ? "text"
+            : "password";
+
+
+    button.classList.toggle(
+        "showing-password",
+        isPassword
+    );
+
+
+    button.setAttribute(
+        "aria-pressed",
+        isPassword ? "true" : "false"
+    );
+
+
+    button.setAttribute(
+        "aria-label",
+        isPassword
+            ? "Hide password"
+            : "Show password"
+    );
 
 }
 

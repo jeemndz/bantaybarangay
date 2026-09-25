@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'evidencemodule',
     'usermanagement',
     'auditlogs',
+    'hearingmodule',
+    'docrequest',
 ]
 
 MIDDLEWARE = [

@@ -407,45 +407,35 @@ Complaint Management
 
                     <option
                         value="Noise Complaint"
-                        {% if selected_category == "Noise Complaint" %}
-                            selected
-                        {% endif %}
+                        {% if selected_category == "Noise Complaint" %}selected{% endif %}
                     >
                         Noise Complaint
                     </option>
 
                     <option
                         value="Public Safety"
-                        {% if selected_category == "Public Safety" %}
-                            selected
-                        {% endif %}
+                        {% if selected_category == "Public Safety" %}selected{% endif %}
                     >
                         Public Safety
                     </option>
 
                     <option
                         value="Property Dispute"
-                        {% if selected_category == "Property Dispute" %}
-                            selected
-                        {% endif %}
+                        {% if selected_category == "Property Dispute" %}selected{% endif %}
                     >
                         Property Dispute
                     </option>
 
                     <option
                         value="Waste Management"
-                        {% if selected_category == "Waste Management" %}
-                            selected
-                        {% endif %}
+                        {% if selected_category == "Waste Management" %}selected{% endif %}
                     >
                         Waste Management
                     </option>
 
                     <option
                         value="Other"
-                        {% if selected_category == "Other" %}
-                            selected
-                        {% endif %}
+                        {% if selected_category == "Other" %}selected{% endif %}
                     >
                         Other
                     </option>
@@ -495,54 +485,42 @@ Complaint Management
 
                     <option
                         value="Submitted"
-                        {% if selected_status == "Submitted" %}
-                            selected
-                        {% endif %}
+                        {% if selected_status == "Submitted" %}selected{% endif %}
                     >
                         Submitted
                     </option>
 
                     <option
                         value="Under Review"
-                        {% if selected_status == "Under Review" %}
-                            selected
-                        {% endif %}
+                        {% if selected_status == "Under Review" %}selected{% endif %}
                     >
                         Under Review
                     </option>
 
                     <option
                         value="Under Investigation"
-                        {% if selected_status == "Under Investigation" %}
-                            selected
-                        {% endif %}
+                        {% if selected_status == "Under Investigation" %}selected{% endif %}
                     >
                         Under Investigation
                     </option>
 
                     <option
                         value="Resolved"
-                        {% if selected_status == "Resolved" %}
-                            selected
-                        {% endif %}
+                        {% if selected_status == "Resolved" %}selected{% endif %}
                     >
                         Resolved
                     </option>
 
                     <option
                         value="Rejected"
-                        {% if selected_status == "Rejected" %}
-                            selected
-                        {% endif %}
+                        {% if selected_status == "Rejected" %}selected{% endif %}
                     >
                         Rejected
                     </option>
 
                     <option
                         value="Closed"
-                        {% if selected_status == "Closed" %}
-                            selected
-                        {% endif %}
+                        {% if selected_status == "Closed" %}selected{% endif %}
                     >
                         Closed
                     </option>
@@ -687,12 +665,31 @@ Complaint Management
                     <thead>
 
                         <tr>
-                            <th>Complaint ID</th>
-                            <th>Complainant</th>
-                            <th>Category</th>
-                            <th>Filed Date</th>
-                            <th>Priority</th>
-                            <th>Status</th>
+
+                            <th>
+                                Complaint ID
+                            </th>
+
+                            <th>
+                                Resident / Complainant
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Filed Date
+                            </th>
+
+                            <th>
+                                Priority
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
                         </tr>
 
                     </thead>
@@ -964,12 +961,31 @@ Complaint Management
                     <thead>
 
                         <tr>
-                            <th>Complaint ID</th>
-                            <th>Complainant</th>
-                            <th>Category</th>
-                            <th>Filed Date</th>
-                            <th>Priority</th>
-                            <th>Status</th>
+
+                            <th>
+                                Complaint ID
+                            </th>
+
+                            <th>
+                                Resident / Complainant
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Filed Date
+                            </th>
+
+                            <th>
+                                Priority
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
                         </tr>
 
                     </thead>
@@ -1241,12 +1257,31 @@ Complaint Management
                     <thead>
 
                         <tr>
-                            <th>Complaint ID</th>
-                            <th>Complainant</th>
-                            <th>Category</th>
-                            <th>Filed Date</th>
-                            <th>Priority</th>
-                            <th>Status</th>
+
+                            <th>
+                                Complaint ID
+                            </th>
+
+                            <th>
+                                Resident / Complainant
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Filed Date
+                            </th>
+
+                            <th>
+                                Priority
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
                         </tr>
 
                     </thead>
@@ -1476,7 +1511,6 @@ Complaint Management
 
     <!-- =====================================================
          COMPLAINT REVIEW MODAL
-         SEPARATED INTO ITS OWN TEMPLATE
     ====================================================== -->
 
     {% include "complaintmodule/complaint_review_modal.html" %}

@@ -1,118 +1,316 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}
+Dashboard | BantayBarangay
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard.css' %}"
+>
+{% endblock %}
+
+
 {% block content %}
 
 <div class="dashboard-page">
 
-    <!-- =========================
+    <!-- =====================================================
          DASHBOARD HEADER
-    ========================== -->
+    ====================================================== -->
+
     <div class="dashboard-header">
-        <div>
-            <h1>Barangay Governance Overview</h1>
-            <p>Real-time transparency and incident monitoring</p>
+
+        <div class="dashboard-heading">
+
+            <h1>
+                Barangay Governance Overview
+            </h1>
+
+            <p>
+                Real-time transparency and incident monitoring
+            </p>
+
         </div>
+
 
         <div class="dashboard-actions">
-            <button class="dashboard-btn">
-                <span>▣</span>
-                Last 30 Days
+
+            <button
+                type="button"
+                class="dashboard-btn"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M8 2v3M16 2v3M3 9h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
+                    />
+                </svg>
+
+                <span>
+                    Last 30 Days
+                </span>
             </button>
 
-            <button class="dashboard-btn">
-                <span>⇩</span>
-                Export PDF
+
+            <button
+                type="button"
+                class="dashboard-btn dashboard-btn-primary"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M12 3v12M7 10l5 5 5-5M5 21h14"
+                    />
+                </svg>
+
+                <span>
+                    Export PDF
+                </span>
             </button>
+
         </div>
+
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          SUMMARY CARDS
-    ========================== -->
+    ====================================================== -->
+
     <div class="stats-grid">
 
+
+        <!-- TOTAL COMPLAINTS -->
+
         <div class="stat-card">
+
             <div class="stat-top">
-                <div class="stat-icon">▣</div>
-                <span class="stat-change positive">+12%</span>
+
+                <div class="stat-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 3h12v18H6z"/>
+                        <path d="M9 7h6M9 11h6M9 15h4"/>
+                    </svg>
+
+                </div>
+
+                <span class="stat-change positive">
+                    +12%
+                </span>
+
             </div>
 
-            <div class="stat-label">TOTAL COMPLAINTS</div>
-            <div class="stat-value">1,284</div>
+            <div class="stat-label">
+                Total Complaints
+            </div>
+
+            <div class="stat-value">
+                1,284
+            </div>
+
         </div>
 
 
+        <!-- ACTIVE CASES -->
+
         <div class="stat-card">
+
             <div class="stat-top">
-                <div class="stat-icon">▣</div>
-                <span class="stat-change negative">-4%</span>
+
+                <div class="stat-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 6h16v14H4z"/>
+                        <path d="M8 6V4h8v2"/>
+                        <path d="M4 11h16"/>
+                    </svg>
+
+                </div>
+
+                <span class="stat-change negative">
+                    -4%
+                </span>
+
             </div>
 
-            <div class="stat-label">ACTIVE CASES</div>
-            <div class="stat-value">42</div>
+            <div class="stat-label">
+                Active Cases
+            </div>
+
+            <div class="stat-value">
+                42
+            </div>
+
         </div>
 
 
+        <!-- INCIDENT REPORTS -->
+
         <div class="stat-card">
+
             <div class="stat-top">
-                <div class="stat-icon">△</div>
-                <span class="stat-change neutral">Steady</span>
+
+                <div class="stat-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3 2.5 20h19L12 3Z"/>
+                        <path d="M12 9v5M12 17h.01"/>
+                    </svg>
+
+                </div>
+
+                <span class="stat-change neutral">
+                    Steady
+                </span>
+
             </div>
 
-            <div class="stat-label">INCIDENT REPORTS</div>
-            <div class="stat-value">156</div>
+            <div class="stat-label">
+                Incident Reports
+            </div>
+
+            <div class="stat-value">
+                156
+            </div>
+
         </div>
 
 
-        <div class="stat-card highlighted">
+        <!-- VERIFIED DOCUMENTS -->
+
+        <div class="stat-card">
+
             <div class="stat-top">
-                <div class="stat-icon verified-icon">✓</div>
-                <span class="stat-change positive">+100%</span>
+
+                <div class="stat-icon verified-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="m5 12 4 4L19 6"/>
+                    </svg>
+
+                </div>
+
+                <span class="stat-change positive">
+                    +100%
+                </span>
+
             </div>
 
-            <div class="stat-label">VERIFIED DOCS</div>
-            <div class="stat-value">3,012</div>
+            <div class="stat-label">
+                Verified Docs
+            </div>
+
+            <div class="stat-value">
+                3,012
+            </div>
+
         </div>
 
 
+        <!-- RESIDENTS -->
+
         <div class="stat-card">
+
             <div class="stat-top">
-                <div class="stat-icon">♙</div>
-                <span class="stat-change neutral">+31</span>
+
+                <div class="stat-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="3"/>
+                        <path d="M3 20c0-4 2.5-6 6-6s6 2 6 6"/>
+                        <path d="M16 5a3 3 0 0 1 0 6"/>
+                        <path d="M17 14c2.5.5 4 2.4 4 5"/>
+                    </svg>
+
+                </div>
+
+                <span class="stat-change neutral">
+                    +31
+                </span>
+
             </div>
 
-            <div class="stat-label">RESIDENTS</div>
-            <div class="stat-value">8,920</div>
+            <div class="stat-label">
+                Residents
+            </div>
+
+            <div class="stat-value">
+                8,920
+            </div>
+
         </div>
 
 
+        <!-- PENDING HEARINGS -->
+
         <div class="stat-card">
+
             <div class="stat-top">
-                <div class="stat-icon">⚖</div>
-                <span class="stat-change neutral">8 New</span>
+
+                <div class="stat-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3v18M5 6h14"/>
+                        <path d="m5 6-3 6h6L5 6ZM19 6l-3 6h6l-3-6Z"/>
+                    </svg>
+
+                </div>
+
+                <span class="stat-change neutral">
+                    8 New
+                </span>
+
             </div>
 
-            <div class="stat-label">PENDING HEARINGS</div>
-            <div class="stat-value">14</div>
+            <div class="stat-label">
+                Pending Hearings
+            </div>
+
+            <div class="stat-value">
+                14
+            </div>
+
         </div>
 
     </div>
 
 
-    <!-- =========================
-         MAIN DASHBOARD GRID
-    ========================== -->
-    <div class="dashboard-grid">
+    <!-- =====================================================
+         ANALYTICS GRID
+    ====================================================== -->
+
+    <div class="dashboard-grid analytics-grid">
+
 
         <!-- MONTHLY COMPLAINT TRENDS -->
-        <div class="dashboard-card trends-card">
+
+        <section class="dashboard-card trends-card">
 
             <div class="card-header">
-                <h2>Monthly Complaint Trends</h2>
+
+                <div>
+
+                    <h2>
+                        Monthly Complaint Trends
+                    </h2>
+
+                    <p>
+                        Complaint volume throughout the year
+                    </p>
+
+                </div>
+
 
                 <div class="chart-legend">
+
                     <span>
                         <i class="legend-dot current"></i>
                         2024
@@ -122,136 +320,326 @@
                         <i class="legend-dot previous"></i>
                         2023
                     </span>
-                </div>
-            </div>
 
-
-            <div class="bar-chart">
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 52%;"></div>
-                    <span>JAN</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 68%;"></div>
-                    <span>FEB</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 46%;"></div>
-                    <span>MAR</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 75%;"></div>
-                    <span>APR</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 92%;"></div>
-                    <span>MAY</span>
-                </div>
-
-                <div class="bar-column active">
-                    <div class="bar" style="height: 60%;"></div>
-                    <span>JUN</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 64%;"></div>
-                    <span>JUL</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 80%;"></div>
-                    <span>AUG</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 72%;"></div>
-                    <span>SEP</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 42%;"></div>
-                    <span>OCT</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 52%;"></div>
-                    <span>NOV</span>
-                </div>
-
-                <div class="bar-column">
-                    <div class="bar" style="height: 68%;"></div>
-                    <span>DEC</span>
                 </div>
 
             </div>
 
-        </div>
+
+            <div class="chart-area">
+
+                <div class="chart-grid-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
 
 
-        <!-- =========================
-             INCIDENT CATEGORIES
-        ========================== -->
-        <div class="dashboard-card category-card">
+                <div class="bar-chart">
 
-            <div class="card-header">
-                <h2>Incident Categories</h2>
-            </div>
+                    <div class="bar-column">
 
-            <div class="donut-wrapper">
+                        <div
+                            class="bar"
+                            style="height: 52%;"
+                        ></div>
 
-                <div class="donut-chart">
-                    <div class="donut-center">
-                        <strong>156</strong>
-                        <span>TOTAL</span>
+                        <span>JAN</span>
+
                     </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 68%;"
+                        ></div>
+
+                        <span>FEB</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 46%;"
+                        ></div>
+
+                        <span>MAR</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 75%;"
+                        ></div>
+
+                        <span>APR</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 92%;"
+                        ></div>
+
+                        <span>MAY</span>
+
+                    </div>
+
+
+                    <div class="bar-column active">
+
+                        <div
+                            class="bar"
+                            style="height: 60%;"
+                        ></div>
+
+                        <span>JUN</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 64%;"
+                        ></div>
+
+                        <span>JUL</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 80%;"
+                        ></div>
+
+                        <span>AUG</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 72%;"
+                        ></div>
+
+                        <span>SEP</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 42%;"
+                        ></div>
+
+                        <span>OCT</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 52%;"
+                        ></div>
+
+                        <span>NOV</span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height: 68%;"
+                        ></div>
+
+                        <span>DEC</span>
+
+                    </div>
+
                 </div>
 
             </div>
 
-
-            <div class="category-legend">
-
-                <div>
-                    <span class="category-dot one"></span>
-                    Public Nuisance (45%)
-                </div>
-
-                <div>
-                    <span class="category-dot two"></span>
-                    Theft (20%)
-                </div>
-
-                <div>
-                    <span class="category-dot three"></span>
-                    Dispute (25%)
-                </div>
-
-                <div>
-                    <span class="category-dot four"></span>
-                    Other (10%)
-                </div>
-
-            </div>
-
-        </div>
+        </section>
 
 
-        <!-- =========================
-             RECENT COMPLAINTS
-        ========================== -->
-        <div class="dashboard-card complaints-card">
+        <!-- INCIDENT CATEGORIES -->
+
+        <section class="dashboard-card category-card">
 
             <div class="card-header">
-                <h2>Recent Complaints</h2>
 
-                <a href="{% url 'complaints' %}" class="view-all">
-                    View All →
+                <div>
+
+                    <h2>
+                        Incident Categories
+                    </h2>
+
+                    <p>
+                        Distribution of incident reports
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="category-content">
+
+                <div class="donut-wrapper">
+
+                    <div class="donut-chart has-data">
+
+                        <div class="donut-center">
+
+                            <strong>
+                                156
+                            </strong>
+
+                            <span>
+                                TOTAL
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="category-legend">
+
+                    <div>
+
+                        <span class="category-dot one"></span>
+
+                        <span class="category-name">
+                            Public Nuisance
+                        </span>
+
+                        <strong>
+                            45%
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="category-dot two"></span>
+
+                        <span class="category-name">
+                            Theft
+                        </span>
+
+                        <strong>
+                            20%
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="category-dot three"></span>
+
+                        <span class="category-name">
+                            Dispute
+                        </span>
+
+                        <strong>
+                            25%
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="category-dot four"></span>
+
+                        <span class="category-name">
+                            Other
+                        </span>
+
+                        <strong>
+                            10%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIVITY GRID
+    ====================================================== -->
+
+    <div class="dashboard-grid activity-grid">
+
+
+        <!-- RECENT COMPLAINTS -->
+
+        <section class="dashboard-card complaints-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Recent Complaints
+                    </h2>
+
+                    <p>
+                        Latest complaints submitted by residents
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'complaints' %}"
+                    class="view-all"
+                >
+                    View All
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="m9 18 6-6-6-6"/>
+                    </svg>
+
                 </a>
+
             </div>
 
 
@@ -260,6 +648,7 @@
                 <table class="dashboard-table">
 
                     <thead>
+
                         <tr>
                             <th>ID</th>
                             <th>Complainant</th>
@@ -268,63 +657,185 @@
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
+
                     </thead>
+
 
                     <tbody>
 
                         <tr>
-                            <td>#BB-2024-001</td>
-                            <td class="person-name">Maria Santos</td>
-                            <td>Noise Complaint</td>
+
+                            <td class="complaint-id">
+                                #BB-2024-001
+                            </td>
+
+                            <td class="person-name">
+                                Maria Santos
+                            </td>
+
                             <td>
+                                Noise Complaint
+                            </td>
+
+                            <td>
+
                                 <span class="status pending">
                                     PENDING
                                 </span>
+
                             </td>
-                            <td>Oct 12, 2024</td>
-                            <td class="action-eye">◉</td>
+
+                            <td>
+                                Oct 12, 2024
+                            </td>
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="table-action"
+                                    aria-label="View complaint"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
+                                        <circle cx="12" cy="12" r="2.5"/>
+                                    </svg>
+                                </button>
+
+                            </td>
+
                         </tr>
 
 
                         <tr>
-                            <td>#BB-2024-002</td>
-                            <td class="person-name">Roberto Cruz</td>
-                            <td>Land Dispute</td>
+
+                            <td class="complaint-id">
+                                #BB-2024-002
+                            </td>
+
+                            <td class="person-name">
+                                Roberto Cruz
+                            </td>
+
                             <td>
+                                Land Dispute
+                            </td>
+
+                            <td>
+
                                 <span class="status approved">
                                     APPROVED
                                 </span>
+
                             </td>
-                            <td>Oct 11, 2024</td>
-                            <td class="action-eye">◉</td>
+
+                            <td>
+                                Oct 11, 2024
+                            </td>
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="table-action"
+                                    aria-label="View complaint"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
+                                        <circle cx="12" cy="12" r="2.5"/>
+                                    </svg>
+                                </button>
+
+                            </td>
+
                         </tr>
 
 
                         <tr>
-                            <td>#BB-2024-003</td>
-                            <td class="person-name">Liza Gomez</td>
-                            <td>Illegal Parking</td>
+
+                            <td class="complaint-id">
+                                #BB-2024-003
+                            </td>
+
+                            <td class="person-name">
+                                Liza Gomez
+                            </td>
+
                             <td>
+                                Illegal Parking
+                            </td>
+
+                            <td>
+
                                 <span class="status rejected">
                                     REJECTED
                                 </span>
+
                             </td>
-                            <td>Oct 10, 2024</td>
-                            <td class="action-eye">◉</td>
+
+                            <td>
+                                Oct 10, 2024
+                            </td>
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="table-action"
+                                    aria-label="View complaint"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
+                                        <circle cx="12" cy="12" r="2.5"/>
+                                    </svg>
+                                </button>
+
+                            </td>
+
                         </tr>
 
 
                         <tr>
-                            <td>#BB-2024-004</td>
-                            <td class="person-name">Antonio P.</td>
-                            <td>Waste Mgmt</td>
+
+                            <td class="complaint-id">
+                                #BB-2024-004
+                            </td>
+
+                            <td class="person-name">
+                                Antonio P.
+                            </td>
+
                             <td>
+                                Waste Mgmt
+                            </td>
+
+                            <td>
+
                                 <span class="status resolved">
                                     RESOLVED
                                 </span>
+
                             </td>
-                            <td>Oct 09, 2024</td>
-                            <td class="action-eye">◉</td>
+
+                            <td>
+                                Oct 09, 2024
+                            </td>
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="table-action"
+                                    aria-label="View complaint"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
+                                        <circle cx="12" cy="12" r="2.5"/>
+                                    </svg>
+                                </button>
+
+                            </td>
+
                         </tr>
 
                     </tbody>
@@ -333,122 +844,271 @@
 
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- =========================
-             CHAIN LOGS
-        ========================== -->
-        <div class="dashboard-card chain-card">
+        <!-- CHAIN LOGS -->
+
+        <section class="dashboard-card chain-card">
 
             <div class="card-header">
-                <h2>
-                    <span class="chain-title-icon">✧</span>
-                    Chain Logs
-                </h2>
+
+                <div>
+
+                    <h2>
+                        Blockchain Activity
+                    </h2>
+
+                    <p>
+                        Recent ledger verification events
+                    </p>
+
+                </div>
+
 
                 <span class="block-number">
                     Block #82910
                 </span>
+
             </div>
 
 
             <div class="chain-list">
 
+
                 <div class="chain-item">
 
-                    <div class="chain-icon">✓</div>
+                    <div class="chain-icon">
 
-                    <div class="chain-info">
-                        <strong>New Doc Hashed</strong>
-                        <p>0x71C...a4f2 verified at 10:22</p>
+                        <svg viewBox="0 0 24 24">
+                            <path d="m5 12 4 4L19 6"/>
+                        </svg>
+
                     </div>
 
-                    <span class="chain-status">VERIFIED</span>
+
+                    <div class="chain-info">
+
+                        <strong>
+                            New Doc Hashed
+                        </strong>
+
+                        <p>
+                            0x71C...a4f2 verified at 10:22
+                        </p>
+
+                    </div>
+
+
+                    <span class="chain-status">
+                        VERIFIED
+                    </span>
 
                 </div>
 
 
                 <div class="chain-item">
 
-                    <div class="chain-icon">✓</div>
+                    <div class="chain-icon">
 
-                    <div class="chain-info">
-                        <strong>Complaint Signed</strong>
-                        <p>#BB-2024-001 Admin_V4</p>
+                        <svg viewBox="0 0 24 24">
+                            <path d="m5 12 4 4L19 6"/>
+                        </svg>
+
                     </div>
 
-                    <span class="chain-status">VERIFIED</span>
+
+                    <div class="chain-info">
+
+                        <strong>
+                            Complaint Signed
+                        </strong>
+
+                        <p>
+                            #BB-2024-001 Admin_V4
+                        </p>
+
+                    </div>
+
+
+                    <span class="chain-status">
+                        VERIFIED
+                    </span>
 
                 </div>
 
 
                 <div class="chain-item">
 
-                    <div class="chain-icon">✓</div>
+                    <div class="chain-icon">
 
-                    <div class="chain-info">
-                        <strong>Admin Re-Auth</strong>
-                        <p>Session valid for 2 hours.</p>
+                        <svg viewBox="0 0 24 24">
+                            <path d="m5 12 4 4L19 6"/>
+                        </svg>
+
                     </div>
 
-                    <span class="chain-status">VERIFIED</span>
+
+                    <div class="chain-info">
+
+                        <strong>
+                            Admin Re-Auth
+                        </strong>
+
+                        <p>
+                            Session valid for 2 hours.
+                        </p>
+
+                    </div>
+
+
+                    <span class="chain-status">
+                        VERIFIED
+                    </span>
 
                 </div>
 
             </div>
 
-        </div>
-
-
-        <!-- =========================
-             QUICK ALERTS
-        ========================== -->
-        <div class="dashboard-card alerts-card">
-
-            <div class="card-header">
-                <h2>Quick Alerts</h2>
-            </div>
-
-
-            <div class="alert-list">
-
-                <div class="alert-item">
-                    <strong>New Resident Registration</strong>
-                    <span>3 pending approvals in District 04.</span>
-                </div>
-
-
-                <div class="alert-item">
-                    <strong>Hearing Rescheduled</strong>
-                    <span>Case #82 moved to Oct 20th.</span>
-                </div>
-
-
-                <div class="alert-item">
-                    <strong>System Update</strong>
-                    <span>Version 2.4.0 blockchain patch applied.</span>
-                </div>
-
-            </div>
-
-        </div>
+        </section>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
+         QUICK ALERTS
+    ====================================================== -->
+
+    <section class="dashboard-card alerts-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h2>
+                    Quick Alerts
+                </h2>
+
+                <p>
+                    Recent administrative notifications
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="alert-list">
+
+
+            <div class="alert-item">
+
+                <div class="alert-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="3"/>
+                        <path d="M3 20c0-4 2.5-6 6-6s6 2 6 6"/>
+                        <path d="M18 8v6M15 11h6"/>
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        New Resident Registration
+                    </strong>
+
+                    <span>
+                        3 pending approvals in District 04.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="alert-item">
+
+                <div class="alert-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 2v3M16 2v3M3 9h18"/>
+                        <rect x="3" y="4" width="18" height="17" rx="2"/>
+                        <path d="M8 14h8"/>
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Hearing Rescheduled
+                    </strong>
+
+                    <span>
+                        Case #82 moved to Oct 20th.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="alert-item">
+
+                <div class="alert-icon">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
+                        <circle cx="12" cy="12" r="5"/>
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        System Update
+                    </strong>
+
+                    <span>
+                        Version 2.4.0 blockchain patch applied.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
          FOOTER
-    ========================== -->
+    ====================================================== -->
+
     <footer class="dashboard-footer">
 
         <span>
             © 2026 BantayBarangay. Secure Blockchain Governance.
         </span>
 
+
         <div>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms of Service
+            </a>
+
         </div>
 
     </footer>

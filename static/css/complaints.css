@@ -2164,6 +2164,403 @@ body.complaint-review-open {
     height: 11px;
 }
 
+/* =========================================================
+   REVIEW FILE UPLOAD
+========================================================= */
+
+.review-upload-header {
+    margin-bottom: 7px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.review-upload-header label {
+    display: block;
+
+    color: #60716a;
+
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.review-upload-header p {
+    margin: 3px 0 0;
+
+    color: #8b9893;
+
+    font-size: 8px;
+    line-height: 1.5;
+}
+
+.review-upload-count {
+    flex: 0 0 auto;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: #edf4f0;
+    color: #60746b;
+
+    font-size: 7px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   UPLOAD AREA
+========================================================= */
+
+.review-upload-area {
+    position: relative;
+
+    min-height: 105px;
+    padding: 16px;
+
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    box-sizing: border-box;
+
+    border: 1px dashed #bfcfc7;
+    border-radius: 9px;
+
+    background: #fafcfb;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.review-upload-area:hover,
+.review-upload-area.is-dragging {
+    border-color: #4f987c;
+
+    background: #f4faf7;
+}
+
+.review-upload-area:focus {
+    outline: none;
+
+    border-color: #79a996;
+
+    box-shadow:
+        0 0 0 3px rgba(48, 128, 99, 0.08);
+}
+
+.review-upload-input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   UPLOAD ICON
+========================================================= */
+
+.review-upload-icon {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #e7f4ed;
+    color: #32775a;
+}
+
+.review-upload-icon svg {
+    width: 19px;
+    height: 19px;
+}
+
+
+/* =========================================================
+   UPLOAD TEXT
+========================================================= */
+
+.review-upload-content {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.review-upload-content strong {
+    color: #344a42;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.review-upload-content span {
+    color: #71817b;
+
+    font-size: 8px;
+}
+
+.review-upload-content small {
+    color: #9aa6a1;
+
+    font-size: 7px;
+}
+
+
+/* =========================================================
+   BROWSE BUTTON
+========================================================= */
+
+.review-upload-browse {
+    min-height: 31px;
+    padding: 0 10px;
+
+    flex: 0 0 auto;
+
+    border: 1px solid #cbd9d2;
+    border-radius: 6px;
+
+    background: #ffffff;
+    color: #426b5b;
+
+    font-family: inherit;
+    font-size: 8px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.review-upload-browse:hover {
+    border-color: #94b9a9;
+
+    background: #edf7f2;
+}
+
+
+/* =========================================================
+   UPLOAD ERROR
+========================================================= */
+
+.review-upload-error {
+    margin-top: 7px;
+    padding: 7px 9px;
+
+    border: 1px solid #f0d2d2;
+    border-radius: 6px;
+
+    background: #fff7f7;
+    color: #a14b4b;
+
+    font-size: 8px;
+}
+
+.review-upload-error[hidden] {
+    display: none;
+}
+
+
+/* =========================================================
+   SELECTED FILES
+========================================================= */
+
+.review-selected-files {
+    margin-top: 9px;
+
+    overflow: hidden;
+
+    border: 1px solid #e2e9e5;
+    border-radius: 8px;
+
+    background: #ffffff;
+}
+
+.review-selected-files[hidden] {
+    display: none;
+}
+
+.review-selected-files-header {
+    padding: 8px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf1ef;
+
+    background: #fafcfb;
+}
+
+.review-selected-files-header span {
+    color: #52655e;
+
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.review-clear-files {
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+    color: #a14b4b;
+
+    font-family: inherit;
+    font-size: 7px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.review-selected-files-list {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   SELECTED FILE ITEM
+========================================================= */
+
+.review-selected-file {
+    padding: 8px 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    border-bottom: 1px solid #edf1ef;
+}
+
+.review-selected-file:last-child {
+    border-bottom: 0;
+}
+
+.review-selected-file-icon {
+    width: 31px;
+    height: 31px;
+
+    flex: 0 0 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #edf4f0;
+    color: #477060;
+
+    font-size: 7px;
+    font-weight: 800;
+}
+
+.review-selected-file-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.review-selected-file-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: #3d5149;
+
+    font-size: 8px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.review-selected-file-info span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #919d98;
+
+    font-size: 7px;
+}
+
+.review-selected-file-remove {
+    width: 25px;
+    height: 25px;
+    padding: 0;
+
+    flex: 0 0 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 5px;
+
+    background: #fff1f1;
+    color: #a65151;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.review-selected-file-remove:hover {
+    background: #fbe3e3;
+}
+
+
+/* =========================================================
+   MOBILE UPLOAD
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .review-upload-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .review-upload-area {
+        align-items: center;
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    .review-upload-browse {
+        width: 100%;
+    }
+
+}
+
 
 /* =========================================================
    RESPONSIVE - LARGE TABLET

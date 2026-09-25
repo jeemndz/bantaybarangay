@@ -1,0 +1,2622 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Hearing Schedule | BantayBarangay{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/hearing_schedule.css' %}"
+>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="hearing-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <section class="hearing-page-header">
+
+        <div class="hearing-page-heading">
+
+            <div class="hearing-title-line">
+
+                <div class="hearing-title-icon">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="16"
+                            rx="2"
+                        ></rect>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M8 3v4M16 3v4M3 10h18"
+                        ></path>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M8 14h3M8 17h6"
+                        ></path>
+                    </svg>
+                </div>
+
+                <div>
+
+                    <div class="hearing-title-with-badge">
+
+                        <h1>
+                            Scheduled Hearings &amp; Mediation
+                        </h1>
+
+                        <span class="protocol-badge">
+                            RA 7160 Protocol
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Manage Katarungang Pambarangay conciliation
+                        dockets, hearing schedules, mediation sessions,
+                        and Lupon summons.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="hearing-header-actions">
+
+            <button
+                type="button"
+                class="hearing-button hearing-button-outline"
+                id="exportCalendarButton"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14"
+                    ></path>
+                </svg>
+
+                <span>
+                    Export Calendar
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="hearing-button hearing-button-outline"
+                id="issueSummonsButton"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="14"
+                        rx="2"
+                    ></rect>
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m3 7 9 6 9-6"
+                    ></path>
+                </svg>
+
+                <span>
+                    Issue Summons
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="hearing-button hearing-button-primary"
+                id="openScheduleModalButton"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2"
+                    ></rect>
+
+                    <path
+                        stroke-linecap="round"
+                        d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4"
+                    ></path>
+                </svg>
+
+                <span>
+                    Schedule Hearing
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <section class="hearing-summary-grid">
+
+        <!-- TODAY -->
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-card-top">
+
+                <div class="summary-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="16"
+                            rx="2"
+                        ></rect>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M8 3v4M16 3v4M3 10h18"
+                        ></path>
+                    </svg>
+
+                </div>
+
+                <span class="summary-status">
+
+                    <span class="summary-dot"></span>
+
+                    Live Today
+
+                </span>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Today's Hearings
+                </span>
+
+                <div class="summary-value">
+                    6
+                    <span>Sessions</span>
+                </div>
+
+            </div>
+
+
+            <div class="summary-footer">
+
+                <span>
+                    <strong>2</strong>
+                    In Progress
+                </span>
+
+                <span>
+                    4 Upcoming
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- ACTIVE MEDIATIONS -->
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-card-top">
+
+                <div class="summary-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m14 5 5 5M12 7l5 5M5 19l6-6M4 20h6"
+                        ></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m13 4 7 7-3 3-7-7 3-3Z"
+                        ></path>
+                    </svg>
+
+                </div>
+
+                <span class="summary-status">
+                    Active Stage
+                </span>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Active Mediations
+                </span>
+
+                <div class="summary-value">
+                    18
+                    <span>Ongoing</span>
+                </div>
+
+            </div>
+
+
+            <div class="summary-footer summary-footer-three">
+
+                <span>
+                    1st Concil (8)
+                </span>
+
+                <span>
+                    2nd (6)
+                </span>
+
+                <span>
+                    Pangkat (4)
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- SUMMONS -->
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-card-top">
+
+                <div class="summary-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m8 12 2.5 2.5L16 9"
+                        ></path>
+                    </svg>
+
+                </div>
+
+                <span class="summary-status">
+                    Verified Compliance
+                </span>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Summons Served
+                </span>
+
+                <div class="summary-value">
+                    94.2%
+                </div>
+
+            </div>
+
+
+            <div class="summary-footer">
+
+                <span>
+                    <strong>38</strong>
+                    Served
+                </span>
+
+                <span class="summary-danger">
+                    3 Pending
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <!-- SETTLEMENT RATE -->
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-card-top">
+
+                <div class="summary-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m8 12 3 3 5-6"
+                        ></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3a9 9 0 1 0 9 9"
+                        ></path>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16 3h5v5"
+                        ></path>
+                    </svg>
+
+                </div>
+
+                <span class="summary-status">
+                    DILG Benchmark
+                </span>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Settlement Rate
+                </span>
+
+                <div class="summary-value">
+                    82.5%
+                </div>
+
+            </div>
+
+
+            <div class="summary-footer">
+
+                <span>
+                    41 Amicable
+                </span>
+
+                <span>
+                    RA 7160 Compliant
+                </span>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CALENDAR CONTROL
+    ====================================================== -->
+
+    <section class="hearing-calendar-toolbar">
+
+        <div class="hearing-view-tabs">
+
+            <button
+                type="button"
+                class="hearing-view-tab active"
+                data-hearing-view="today"
+            >
+                Today
+            </button>
+
+            <button
+                type="button"
+                class="hearing-view-tab"
+                data-hearing-view="weekly"
+            >
+                Weekly
+            </button>
+
+            <button
+                type="button"
+                class="hearing-view-tab"
+                data-hearing-view="monthly"
+            >
+                Monthly
+            </button>
+
+        </div>
+
+
+        <div class="hearing-date-navigation">
+
+            <button
+                type="button"
+                class="date-navigation-button"
+                id="previousHearingDate"
+                aria-label="Previous date"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m15 18-6-6 6-6"
+                    ></path>
+                </svg>
+
+            </button>
+
+
+            <div class="current-hearing-date">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2"
+                    ></rect>
+
+                    <path
+                        stroke-linecap="round"
+                        d="M8 3v4M16 3v4M3 10h18"
+                    ></path>
+                </svg>
+
+                <strong id="currentHearingDate">
+                    Thursday, October 24, 2024
+                </strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="date-navigation-button"
+                id="nextHearingDate"
+                aria-label="Next date"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m9 18 6-6-6-6"
+                    ></path>
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <div class="hearing-calendar-legend">
+
+            <span>
+
+                <span class="legend-dot legend-active"></span>
+
+                1 In Session
+
+            </span>
+
+            <span>
+
+                <span class="legend-dot legend-scheduled"></span>
+
+                2 Scheduled Today
+
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CHAMBER CARDS
+    ====================================================== -->
+
+    <section class="hearing-chamber-grid">
+
+        <!-- =================================================
+             CHAMBER 1
+        ================================================== -->
+
+        <article class="hearing-chamber-card">
+
+            <div class="chamber-card-header">
+
+                <div>
+
+                    <span class="chamber-number">
+                        Chamber 1
+                    </span>
+
+                    <h3>
+                        Main Session Hall
+                    </h3>
+
+                </div>
+
+
+                <span class="chamber-status chamber-status-active">
+
+                    <span class="chamber-status-dot"></span>
+
+                    In Session
+
+                </span>
+
+            </div>
+
+
+            <div class="chamber-case">
+
+                <div class="chamber-case-top">
+
+                    <strong>
+                        #KP-2024-0382
+                    </strong>
+
+                    <span>
+                        09:30 AM - 11:30 AM
+                    </span>
+
+                </div>
+
+
+                <h4>
+                    Property Boundary Dispute
+                </h4>
+
+
+                <div class="chamber-parties">
+
+                    <p>
+                        <span>Complainant</span>
+                        <strong>Ernesto Dela Cruz</strong>
+                    </p>
+
+                    <p>
+                        <span>Respondent</span>
+                        Roberto Mendoza
+                    </p>
+
+                </div>
+
+
+                <div class="chamber-mediator">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 21h18M5 21V10h14v11M4 10l8-6 8 6M9 14h6M9 17h6"
+                        ></path>
+                    </svg>
+
+                    <span>
+                        Mediator: Hon. Rogelio Morales (PB)
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="chamber-card-footer">
+
+                <span class="chamber-info">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <rect
+                            x="9"
+                            y="3"
+                            width="6"
+                            height="11"
+                            rx="3"
+                        ></rect>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M5 11a7 7 0 0 0 14 0M12 18v3"
+                        ></path>
+                    </svg>
+
+                    Audio Recording On
+
+                </span>
+
+
+                <button
+                    type="button"
+                    class="hearing-small-button hearing-small-button-primary"
+                >
+                    Log Minutes
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             CHAMBER 2
+        ================================================== -->
+
+        <article class="hearing-chamber-card">
+
+            <div class="chamber-card-header">
+
+                <div>
+
+                    <span class="chamber-number">
+                        Chamber 2
+                    </span>
+
+                    <h3>
+                        Peace &amp; Order Room
+                    </h3>
+
+                </div>
+
+
+                <span class="chamber-status chamber-status-scheduled">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M12 7v5l3 2"
+                        ></path>
+                    </svg>
+
+                    Scheduled 2:00 PM
+
+                </span>
+
+            </div>
+
+
+            <div class="chamber-case">
+
+                <div class="chamber-case-top">
+
+                    <strong>
+                        #KP-2024-0455
+                    </strong>
+
+                    <span>
+                        02:00 PM - 03:00 PM
+                    </span>
+
+                </div>
+
+
+                <h4>
+                    Public Disturbance &amp; Noise
+                </h4>
+
+
+                <div class="chamber-parties">
+
+                    <p>
+                        <span>Complainant</span>
+                        <strong>Purok 4 HOA</strong>
+                    </p>
+
+                    <p>
+                        <span>Respondent</span>
+                        Armando Castro
+                    </p>
+
+                </div>
+
+
+                <div class="chamber-mediator">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m14 5 5 5M12 7l5 5M5 19l6-6M4 20h6"
+                        ></path>
+                    </svg>
+
+                    <span>
+                        Mediator: Kgd. Fernando Gomez
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="chamber-card-footer">
+
+                <span class="chamber-info">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m8 12 2.5 2.5L16 9"
+                        ></path>
+                    </svg>
+
+                    Summons Signed
+
+                </span>
+
+
+                <button
+                    type="button"
+                    class="hearing-small-button"
+                >
+                    Prepare Settlement
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             CHAMBER 3
+        ================================================== -->
+
+        <article class="hearing-chamber-card">
+
+            <div class="chamber-card-header">
+
+                <div>
+
+                    <span class="chamber-number">
+                        Chamber 3
+                    </span>
+
+                    <h3>
+                        Kagawad Arbitration Room
+                    </h3>
+
+                </div>
+
+
+                <span class="chamber-status chamber-status-panel">
+                    Pangkat 3:30 PM
+                </span>
+
+            </div>
+
+
+            <div class="chamber-case">
+
+                <div class="chamber-case-top">
+
+                    <strong>
+                        #KP-2024-0391
+                    </strong>
+
+                    <span>
+                        03:30 PM - 05:00 PM
+                    </span>
+
+                </div>
+
+
+                <h4>
+                    Tenancy Dispute &amp; Default
+                </h4>
+
+
+                <div class="chamber-parties">
+
+                    <p>
+                        <span>Complainant</span>
+                        <strong>Eduardo Reyes</strong>
+                    </p>
+
+                    <p>
+                        <span>Respondent</span>
+                        Helen Grace
+                    </p>
+
+                </div>
+
+
+                <div class="chamber-mediator">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="3"
+                        ></circle>
+
+                        <circle
+                            cx="17"
+                            cy="9"
+                            r="2"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M3 20a6 6 0 0 1 12 0M15 15a5 5 0 0 1 6 5"
+                        ></path>
+                    </svg>
+
+                    <span>
+                        Lupon 3-Member Panel Selected
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="chamber-card-footer">
+
+                <span class="chamber-info">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="3"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M3 20a6 6 0 0 1 12 0"
+                        ></path>
+                    </svg>
+
+                    Quorum Verified
+
+                </span>
+
+
+                <button
+                    type="button"
+                    class="hearing-small-button"
+                >
+                    View Panelists
+                </button>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         TABLE SECTION
+    ====================================================== -->
+
+    <section class="hearing-records-section">
+
+        <!-- =================================================
+             FILTER BAR
+        ================================================== -->
+
+        <div class="hearing-filter-bar">
+
+            <div class="hearing-search">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
+
+                    <path
+                        stroke-linecap="round"
+                        d="m20 20-4-4"
+                    ></path>
+                </svg>
+
+                <input
+                    type="search"
+                    id="hearingSearchInput"
+                    placeholder="Filter by Case #, complainant or respondent..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="hearing-filter-controls">
+
+                <select id="hearingStatusFilter">
+
+                    <option value="all">
+                        Status: All Stages
+                    </option>
+
+                    <option value="in-progress">
+                        In Progress
+                    </option>
+
+                    <option value="scheduled">
+                        Scheduled
+                    </option>
+
+                    <option value="pangkat">
+                        Pangkat Formation
+                    </option>
+
+                    <option value="upcoming">
+                        Upcoming
+                    </option>
+
+                    <option value="resolved">
+                        Amicable Resolution
+                    </option>
+
+                </select>
+
+
+                <select id="hearingChamberFilter">
+
+                    <option value="all">
+                        Chamber: All Chambers
+                    </option>
+
+                    <option value="chamber-1">
+                        Chamber 1
+                    </option>
+
+                    <option value="chamber-2">
+                        Chamber 2
+                    </option>
+
+                    <option value="chamber-3">
+                        Chamber 3
+                    </option>
+
+                </select>
+
+
+                <select id="hearingDateFilter">
+
+                    <option value="all">
+                        All Dates
+                    </option>
+
+                    <option value="today">
+                        Today
+                    </option>
+
+                    <option value="upcoming">
+                        Upcoming
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="button"
+                    class="advanced-filter-button"
+                    id="resetHearingFilters"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            d="M4 7h16M7 12h10M10 17h4"
+                        ></path>
+                    </svg>
+
+                    Reset
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="hearing-table-wrapper">
+
+            <table class="hearing-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Case Number
+                        </th>
+
+                        <th>
+                            Complainant &amp;<br>
+                            Respondent
+                        </th>
+
+                        <th>
+                            Dispute Nature
+                        </th>
+
+                        <th>
+                            Scheduled Date &amp;<br>
+                            Time
+                        </th>
+
+                        <th>
+                            Chamber &amp;<br>
+                            Mediator
+                        </th>
+
+                        <th>
+                            Summons Status
+                        </th>
+
+                        <th>
+                            KP Action / Stage
+                        </th>
+
+                        <th class="table-actions-heading">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="hearingTableBody">
+
+                    <!-- =========================================
+                         ROW 1
+                    ========================================== -->
+
+                    <tr
+                        data-status="in-progress"
+                        data-chamber="chamber-1"
+                        data-date="today"
+                    >
+
+                        <td>
+
+                            <strong class="table-case-id">
+                                #KP-2024-0382
+                            </strong>
+
+                            <span class="table-secondary">
+                                Hash: 0x8a92...b4
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Ernesto Dela Cruz
+                            </strong>
+
+                            <span class="table-secondary">
+                                vs Roberto Mendoza
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Property Boundary
+                            </span>
+
+                            <span class="table-secondary">
+                                Land Encroachment
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Oct 24, 2024
+                            </strong>
+
+                            <span class="table-secondary">
+                                09:30 AM
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Chamber 1
+                            </span>
+
+                            <span class="table-secondary">
+                                Hon. Rogelio Morales
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-served">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="m5 12 4 4L19 6"
+                                    ></path>
+                                </svg>
+
+                                Served
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-progress">
+
+                                <span class="table-status-dot"></span>
+
+                                In Progress
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="hearing-table-actions">
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="View hearing"
+                                >
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                        ></path>
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                        ></circle>
+                                    </svg>
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Edit hearing"
+                                >
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
+                                        ></path>
+                                    </svg>
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Print"
+                                >
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+                                        ></path>
+
+                                        <rect
+                                            x="6"
+                                            y="14"
+                                            width="12"
+                                            height="7"
+                                        ></rect>
+                                    </svg>
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- =========================================
+                         ROW 2
+                    ========================================== -->
+
+                    <tr
+                        data-status="scheduled"
+                        data-chamber="chamber-2"
+                        data-date="today"
+                    >
+
+                        <td>
+
+                            <strong class="table-case-id">
+                                #KP-2024-0455
+                            </strong>
+
+                            <span class="table-secondary">
+                                Hash: 0x4f12...e1
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Purok 4 HOA
+                            </strong>
+
+                            <span class="table-secondary">
+                                vs Armando Castro
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Noise Nuisance
+                            </span>
+
+                            <span class="table-secondary">
+                                Repeated Videoke
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Oct 24, 2024
+                            </strong>
+
+                            <span class="table-secondary">
+                                02:00 PM
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Chamber 2
+                            </span>
+
+                            <span class="table-secondary">
+                                Kgd. Fernando Gomez
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-served">
+                                Served
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-scheduled">
+                                Scheduled
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="hearing-table-actions">
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="View hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                        ></path>
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                        ></circle>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Edit hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
+                                        ></path>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Print"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+                                        ></path>
+
+                                        <rect
+                                            x="6"
+                                            y="14"
+                                            width="12"
+                                            height="7"
+                                        ></rect>
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- =========================================
+                         ROW 3
+                    ========================================== -->
+
+                    <tr
+                        data-status="pangkat"
+                        data-chamber="chamber-3"
+                        data-date="today"
+                    >
+
+                        <td>
+
+                            <strong class="table-case-id">
+                                #KP-2024-0391
+                            </strong>
+
+                            <span class="table-secondary">
+                                Hash: 0x9c31...8a
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Eduardo Reyes
+                            </strong>
+
+                            <span class="table-secondary">
+                                vs Helen Grace
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Rental Tenancy
+                            </span>
+
+                            <span class="table-secondary">
+                                Unpaid 4 Months
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Oct 24, 2024
+                            </strong>
+
+                            <span class="table-secondary">
+                                03:30 PM
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Chamber 3
+                            </span>
+
+                            <span class="table-secondary">
+                                Lupon Panel
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-notice">
+                                2nd Notice Sent
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-pangkat">
+                                Pangkat Formation
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="hearing-table-actions">
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="View hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                        ></path>
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                        ></circle>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Edit hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
+                                        ></path>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Print"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+                                        ></path>
+
+                                        <rect
+                                            x="6"
+                                            y="14"
+                                            width="12"
+                                            height="7"
+                                        ></rect>
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- =========================================
+                         ROW 4
+                    ========================================== -->
+
+                    <tr
+                        data-status="upcoming"
+                        data-chamber="chamber-1"
+                        data-date="upcoming"
+                    >
+
+                        <td>
+
+                            <strong class="table-case-id">
+                                #KP-2024-0412
+                            </strong>
+
+                            <span class="table-secondary">
+                                Hash: 0x3d41...77
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Maria Santos
+                            </strong>
+
+                            <span class="table-secondary">
+                                vs Danilo Carpio
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Unsettled Debt
+                            </span>
+
+                            <span class="table-secondary">
+                                Promissory Note Default
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Oct 25, 2024
+                            </strong>
+
+                            <span class="table-secondary">
+                                10:00 AM
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Chamber 1
+                            </span>
+
+                            <span class="table-secondary">
+                                Hon. Rogelio Morales
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-pending">
+                                Pending Service
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-upcoming">
+                                Upcoming
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="hearing-table-actions">
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="View hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                        ></path>
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                        ></circle>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Edit hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
+                                        ></path>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="Issue summons"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <rect
+                                            x="3"
+                                            y="5"
+                                            width="18"
+                                            height="14"
+                                            rx="2"
+                                        ></rect>
+
+                                        <path
+                                            stroke-linecap="round"
+                                            d="m3 7 9 6 9-6"
+                                        ></path>
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- =========================================
+                         ROW 5
+                    ========================================== -->
+
+                    <tr
+                        data-status="resolved"
+                        data-chamber="chamber-2"
+                        data-date="upcoming"
+                    >
+
+                        <td>
+
+                            <strong class="table-case-id">
+                                #KP-2024-0365
+                            </strong>
+
+                            <span class="table-secondary">
+                                Hash: 0x11bb...09
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Lito Valenzuela
+                            </strong>
+
+                            <span class="table-secondary">
+                                vs Barangay Utility
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Right of Way
+                            </span>
+
+                            <span class="table-secondary">
+                                Drainage Easement
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                Oct 26, 2024
+                            </strong>
+
+                            <span class="table-secondary">
+                                01:30 PM
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span>
+                                Chamber 2
+                            </span>
+
+                            <span class="table-secondary">
+                                Atty. Manuel Diaz
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-served">
+                                Served
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="table-badge table-badge-resolution">
+                                Amicable Resolution
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="hearing-table-actions">
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="View hearing"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                        ></path>
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                        ></circle>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    title="View document"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M6 3h8l4 4v14H6V3Z"
+                                        ></path>
+
+                                        <path
+                                            stroke-linecap="round"
+                                            d="M14 3v5h5M9 13h6M9 17h6"
+                                        ></path>
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <div
+            class="hearing-empty-state"
+            id="hearingEmptyState"
+        >
+
+            <div class="empty-state-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                >
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
+
+                    <path
+                        stroke-linecap="round"
+                        d="m20 20-4-4"
+                    ></path>
+                </svg>
+
+            </div>
+
+            <strong>
+                No hearings found
+            </strong>
+
+            <p>
+                Try changing your search or filters.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLE FOOTER
+        ================================================== -->
+
+        <div class="hearing-table-footer">
+
+            <div class="hearing-table-summary">
+
+                Showing
+
+                <strong id="visibleHearingCount">
+                    5
+                </strong>
+
+                of
+
+                <strong id="totalHearingCount">
+                    5
+                </strong>
+
+                hearing records
+
+                <span class="table-summary-divider">
+                    •
+                </span>
+
+                <span class="ledger-sync">
+
+                    <span class="ledger-dot"></span>
+
+                    BantayBarangay case records synchronized
+
+                </span>
+
+            </div>
+
+
+            <div class="hearing-pagination">
+
+                <button
+                    type="button"
+                    class="pagination-navigation"
+                    disabled
+                >
+                    Previous
+                </button>
+
+                <button
+                    type="button"
+                    class="pagination-number active"
+                >
+                    1
+                </button>
+
+                <button
+                    type="button"
+                    class="pagination-number"
+                >
+                    2
+                </button>
+
+                <button
+                    type="button"
+                    class="pagination-number"
+                >
+                    3
+                </button>
+
+                <button
+                    type="button"
+                    class="pagination-navigation"
+                >
+                    Next
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PAGE FOOTER
+    ====================================================== -->
+
+    <footer class="hearing-module-footer">
+
+        <span>
+            BantayBarangay • Katarungang Pambarangay
+            Hearing Management
+        </span>
+
+        <span>
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 3 4 6v5c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-3Z"
+                ></path>
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m9 12 2 2 4-4"
+                ></path>
+            </svg>
+
+            Secure Case Management
+
+        </span>
+
+    </footer>
+
+</div>
+
+
+
+<!-- =========================================================
+     SCHEDULE HEARING MODAL
+========================================================== -->
+
+<div
+    class="hearing-modal"
+    id="scheduleHearingModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="hearing-modal-backdrop"
+        data-close-hearing-modal
+    ></div>
+
+
+    <div
+        class="hearing-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="scheduleHearingModalTitle"
+    >
+
+        <!-- MODAL HEADER -->
+
+        <div class="hearing-modal-header">
+
+            <div>
+
+                <span class="modal-eyebrow">
+                    HEARING CALENDAR
+                </span>
+
+                <h2 id="scheduleHearingModalTitle">
+                    Schedule Hearing
+                </h2>
+
+                <p>
+                    Assign a hearing date, chamber, and
+                    Katarungang Pambarangay stage.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="hearing-modal-close"
+                data-close-hearing-modal
+                aria-label="Close schedule hearing modal"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        d="M6 6l12 12M18 6 6 18"
+                    ></path>
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <!-- MODAL FORM -->
+
+        <form
+            id="scheduleHearingForm"
+            method="post"
+        >
+
+            {% csrf_token %}
+
+            <div class="hearing-modal-body">
+
+                <!-- CASE -->
+
+                <div class="hearing-form-group hearing-form-full">
+
+                    <label for="hearingCaseNumber">
+                        Case Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="hearingCaseNumber"
+                        name="case_number"
+                        placeholder="Example: KP-2024-0456"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- GRID -->
+
+                <div class="hearing-form-grid">
+
+                    <div class="hearing-form-group">
+
+                        <label for="hearingDate">
+                            Hearing Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="hearingDate"
+                            name="hearing_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="hearing-form-group">
+
+                        <label for="hearingTime">
+                            Hearing Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="hearingTime"
+                            name="hearing_time"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="hearing-form-group">
+
+                        <label for="hearingChamber">
+                            Hearing Chamber
+                        </label>
+
+                        <select
+                            id="hearingChamber"
+                            name="chamber"
+                            required
+                        >
+
+                            <option value="">
+                                Select chamber
+                            </option>
+
+                            <option value="chamber-1">
+                                Chamber 1 - Main Session Hall
+                            </option>
+
+                            <option value="chamber-2">
+                                Chamber 2 - Peace &amp; Order Room
+                            </option>
+
+                            <option value="chamber-3">
+                                Chamber 3 - Kagawad Arbitration Room
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="hearing-form-group">
+
+                        <label for="hearingStage">
+                            KP Stage
+                        </label>
+
+                        <select
+                            id="hearingStage"
+                            name="stage"
+                            required
+                        >
+
+                            <option value="">
+                                Select stage
+                            </option>
+
+                            <option value="mediation">
+                                Mediation
+                            </option>
+
+                            <option value="conciliation">
+                                Conciliation
+                            </option>
+
+                            <option value="pangkat">
+                                Pangkat
+                            </option>
+
+                            <option value="arbitration">
+                                Arbitration
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MEDIATOR -->
+
+                <div class="hearing-form-group hearing-form-full">
+
+                    <label for="hearingMediator">
+                        Assigned Mediator / Lupon Member
+                    </label>
+
+                    <input
+                        type="text"
+                        id="hearingMediator"
+                        name="mediator"
+                        placeholder="Enter mediator or Lupon member"
+                    >
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="hearing-form-group hearing-form-full">
+
+                    <label for="hearingNotes">
+                        Hearing Notes
+                    </label>
+
+                    <textarea
+                        id="hearingNotes"
+                        name="notes"
+                        rows="4"
+                        placeholder="Enter hearing instructions or notes..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- MODAL FOOTER -->
+
+            <div class="hearing-modal-footer">
+
+                <button
+                    type="button"
+                    class="hearing-button hearing-button-outline"
+                    data-close-hearing-modal
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="hearing-button hearing-button-primary"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="16"
+                            rx="2"
+                        ></rect>
+
+                        <path
+                            stroke-linecap="round"
+                            d="M8 3v4M16 3v4M3 10h18m-7 5 2 2 4-4"
+                        ></path>
+                    </svg>
+
+                    Save Hearing
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     PAGE TOAST
+========================================================== -->
+
+<div
+    class="hearing-toast"
+    id="hearingToast"
+    role="status"
+    aria-live="polite"
+>
+
+    <div class="hearing-toast-icon">
+
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m5 12 4 4L19 6"
+            ></path>
+        </svg>
+
+    </div>
+
+    <div>
+
+        <strong id="hearingToastTitle">
+            Success
+        </strong>
+
+        <p id="hearingToastMessage">
+            Operation completed.
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/hearing_schedule.js' %}"
+    defer
+></script>
+
+{% endblock %}
