@@ -648,325 +648,273 @@ Complaint Management
     ====================================================== -->
 
     <section
-    class="complaint-section"
-    id="new-complaints"
->
+        class="complaint-section"
+        id="new-complaints"
+    >
 
-    <div class="section-heading">
-        <div>
-            <h2>New Complaints</h2>
-            <span>Submitted complaints waiting for review</span>
-        </div>
+        <div class="section-heading">
 
-        <span class="section-count">
-            {{ new_page.paginator.count }}
-            complaint{% if new_page.paginator.count != 1 %}s{% endif %}
-        </span>
-    </div>
+            <div>
 
+                <h2>
+                    New Complaints
+                </h2>
 
-    <div class="complaint-table-container">
-
-        <table class="complaint-table">
-
-            <thead>
-                <tr>
-                    <th>Complaint ID</th>
-                    <th>Complainant</th>
-                    <th>Category</th>
-                    <th>Filed Date</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                {% for complaint in new_complaints %}
-
-                    {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
-
-                {% empty %}
-
-                    <tr>
-                        <td colspan="6" class="empty-complaints">
-                            <div class="empty-state">
-                                <span>No new complaints found.</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-
-        <!-- NEW COMPLAINT PAGINATION -->
-
-        <div class="table-pagination">
-
-            <div class="pagination-info">
-
-                {% if new_page.paginator.count > 0 %}
-
-                    Showing
-                    <strong>{{ new_page.start_index }}</strong>
-                    to
-                    <strong>{{ new_page.end_index }}</strong>
-                    of
-                    <strong>{{ new_page.paginator.count }}</strong>
-
-                {% else %}
-
-                    Showing 0 complaints
-
-                {% endif %}
+                <span>
+                    Submitted complaints waiting for review
+                </span>
 
             </div>
 
 
-            <div class="pagination-buttons">
+            <span class="section-count">
 
-                {% if new_page.has_previous %}
+                {{ new_page.paginator.count }}
 
-                    <a
-                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.previous_page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                        class="pagination-btn pagination-arrow"
-                    >
-                        &lsaquo;
-                    </a>
+                complaint{% if new_page.paginator.count != 1 %}s{% endif %}
 
-                {% else %}
-
-                    <span class="pagination-btn pagination-arrow disabled">
-                        &lsaquo;
-                    </span>
-
-                {% endif %}
-
-
-                {% for page_number in new_page.paginator.page_range %}
-
-                    {% if page_number == new_page.number %}
-
-                        <span class="pagination-btn active">
-                            {{ page_number }}
-                        </span>
-
-                    {% else %}
-
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                            class="pagination-btn"
-                        >
-                            {{ page_number }}
-                        </a>
-
-                    {% endif %}
-
-                {% endfor %}
-
-
-                {% if new_page.has_next %}
-
-                    <a
-                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.next_page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                        class="pagination-btn pagination-arrow"
-                    >
-                        &rsaquo;
-                    </a>
-
-                {% else %}
-
-                    <span class="pagination-btn pagination-arrow disabled">
-                        &rsaquo;
-                    </span>
-
-                {% endif %}
-
-            </div>
+            </span>
 
         </div>
 
-    </div>
 
-</section>
+        <div class="complaint-table-container">
+
+            <div class="complaint-table-scroll">
+
+                <table class="complaint-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Complainant</th>
+                            <th>Category</th>
+                            <th>Filed Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
 
 
+                    <tbody>
 
-        <!-- =================================================
-             NEW COMPLAINTS PAGINATION
-        ================================================== -->
+                        {% for complaint in new_complaints %}
 
-        {% if new_page.paginator.num_pages > 1 %}
+                            {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="empty-complaints"
+                                >
+
+                                    <div class="empty-state">
+
+                                        <span>
+                                            No new complaints found.
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =============================================
+                 NEW COMPLAINTS PAGINATION
+            ============================================== -->
 
             <div class="table-pagination">
 
                 <div class="pagination-info">
 
-                    Showing
+                    {% if new_page.paginator.count > 0 %}
 
-                    <strong>
-                        {{ new_page.start_index }}
-                    </strong>
+                        Showing
 
-                    to
+                        <strong>
+                            {{ new_page.start_index }}
+                        </strong>
 
-                    <strong>
-                        {{ new_page.end_index }}
-                    </strong>
+                        to
 
-                    of
+                        <strong>
+                            {{ new_page.end_index }}
+                        </strong>
 
-                    <strong>
-                        {{ new_page.paginator.count }}
-                    </strong>
+                        of
 
-                    complaints
+                        <strong>
+                            {{ new_page.paginator.count }}
+                        </strong>
+
+                        complaints
+
+                    {% else %}
+
+                        Showing 0 complaints
+
+                    {% endif %}
 
                 </div>
 
 
-                <div class="pagination-buttons">
+                {% if new_page.paginator.num_pages > 1 %}
+
+                    <div class="pagination-buttons">
 
 
-                    <!-- FIRST PAGE -->
+                        <!-- FIRST -->
 
-                    {% if new_page.has_previous %}
+                        {% if new_page.has_previous %}
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page=1&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                            class="pagination-btn pagination-arrow"
-                            aria-label="First page"
-                            title="First page"
-                        >
-                            &laquo;
-                        </a>
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page=1&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="First page"
+                                title="First page"
+                            >
+                                &laquo;
+                            </a>
 
-                    {% else %}
+                        {% else %}
 
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &laquo;
-                        </span>
-
-                    {% endif %}
-
-
-
-                    <!-- PREVIOUS -->
-
-                    {% if new_page.has_previous %}
-
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.previous_page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                            class="pagination-btn pagination-arrow"
-                            aria-label="Previous page"
-                            title="Previous page"
-                        >
-                            &lsaquo;
-                        </a>
-
-                    {% else %}
-
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &lsaquo;
-                        </span>
-
-                    {% endif %}
-
-
-
-                    <!-- PAGE NUMBERS -->
-
-                    {% for page_number in new_page.paginator.page_range %}
-
-                        {% if page_number >= new_page.number|add:"-2" and page_number <= new_page.number|add:"2" %}
-
-                            {% if page_number == new_page.number %}
-
-                                <span
-                                    class="pagination-btn active"
-                                    aria-current="page"
-                                >
-                                    {{ page_number }}
-                                </span>
-
-                            {% else %}
-
-                                <a
-                                    href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                                    class="pagination-btn"
-                                >
-                                    {{ page_number }}
-                                </a>
-
-                            {% endif %}
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &laquo;
+                            </span>
 
                         {% endif %}
 
-                    {% endfor %}
+
+                        <!-- PREVIOUS -->
+
+                        {% if new_page.has_previous %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.previous_page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Previous page"
+                                title="Previous page"
+                            >
+                                &lsaquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &lsaquo;
+                            </span>
+
+                        {% endif %}
 
 
+                        <!-- PAGE NUMBERS -->
 
-                    <!-- NEXT -->
+                        {% for page_number in new_page.paginator.page_range %}
 
-                    {% if new_page.has_next %}
+                            {% if page_number >= new_page.number|add:"-2" and page_number <= new_page.number|add:"2" %}
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.next_page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                            class="pagination-btn pagination-arrow"
-                            aria-label="Next page"
-                            title="Next page"
-                        >
-                            &rsaquo;
-                        </a>
+                                {% if page_number == new_page.number %}
 
-                    {% else %}
+                                    <span
+                                        class="pagination-btn active"
+                                        aria-current="page"
+                                    >
+                                        {{ page_number }}
+                                    </span>
 
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &rsaquo;
-                        </span>
+                                {% else %}
 
-                    {% endif %}
+                                    <a
+                                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
+                                        class="pagination-btn"
+                                    >
+                                        {{ page_number }}
+                                    </a>
+
+                                {% endif %}
+
+                            {% endif %}
+
+                        {% endfor %}
 
 
+                        <!-- NEXT -->
 
-                    <!-- LAST PAGE -->
+                        {% if new_page.has_next %}
 
-                    {% if new_page.has_next %}
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.next_page_number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Next page"
+                                title="Next page"
+                            >
+                                &rsaquo;
+                            </a>
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.paginator.num_pages }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
-                            class="pagination-btn pagination-arrow"
-                            aria-label="Last page"
-                            title="Last page"
-                        >
-                            &raquo;
-                        </a>
+                        {% else %}
 
-                    {% else %}
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &rsaquo;
+                            </span>
 
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &raquo;
-                        </span>
+                        {% endif %}
 
-                    {% endif %}
 
-                </div>
+                        <!-- LAST -->
+
+                        {% if new_page.has_next %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.paginator.num_pages }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.number }}#new-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Last page"
+                                title="Last page"
+                            >
+                                &raquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &raquo;
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
 
             </div>
 
-        {% endif %}
+        </div>
 
     </section>
 
@@ -976,321 +924,274 @@ Complaint Management
          ONGOING COMPLAINTS
     ====================================================== -->
 
-   <section
-    class="complaint-section"
-    id="ongoing-complaints"
->
+    <section
+        class="complaint-section"
+        id="ongoing-complaints"
+    >
 
-    <div class="section-heading">
-        <div>
-            <h2>Ongoing Complaints</h2>
-            <span>Complaints currently under investigation</span>
-        </div>
+        <div class="section-heading">
 
-        <span class="section-count">
-            {{ ongoing_page.paginator.count }}
-            complaint{% if ongoing_page.paginator.count != 1 %}s{% endif %}
-        </span>
-    </div>
+            <div>
 
+                <h2>
+                    Ongoing Complaints
+                </h2>
 
-    <div class="complaint-table-container">
-
-        <table class="complaint-table">
-
-            <thead>
-                <tr>
-                    <th>Complaint ID</th>
-                    <th>Complainant</th>
-                    <th>Category</th>
-                    <th>Filed Date</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                {% for complaint in ongoing_complaints %}
-
-                    {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
-
-                {% empty %}
-
-                    <tr>
-                        <td colspan="6" class="empty-complaints">
-                            <div class="empty-state">
-                                <span>No ongoing complaints found.</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-
-        <!-- ONGOING COMPLAINT PAGINATION -->
-
-        <div class="table-pagination">
-
-            <div class="pagination-info">
-
-                {% if ongoing_page.paginator.count > 0 %}
-
-                    Showing
-                    <strong>{{ ongoing_page.start_index }}</strong>
-                    to
-                    <strong>{{ ongoing_page.end_index }}</strong>
-                    of
-                    <strong>{{ ongoing_page.paginator.count }}</strong>
-
-                {% else %}
-
-                    Showing 0 complaints
-
-                {% endif %}
+                <span>
+                    Complaints currently under investigation
+                </span>
 
             </div>
 
 
-            <div class="pagination-buttons">
+            <span class="section-count">
 
-                {% if ongoing_page.has_previous %}
+                {{ ongoing_page.paginator.count }}
 
-                    <a
-                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.previous_page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                        class="pagination-btn pagination-arrow"
-                    >
-                        &lsaquo;
-                    </a>
+                complaint{% if ongoing_page.paginator.count != 1 %}s{% endif %}
 
-                {% else %}
-
-                    <span class="pagination-btn pagination-arrow disabled">
-                        &lsaquo;
-                    </span>
-
-                {% endif %}
-
-
-                {% for page_number in ongoing_page.paginator.page_range %}
-
-                    {% if page_number == ongoing_page.number %}
-
-                        <span class="pagination-btn active">
-                            {{ page_number }}
-                        </span>
-
-                    {% else %}
-
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                            class="pagination-btn"
-                        >
-                            {{ page_number }}
-                        </a>
-
-                    {% endif %}
-
-                {% endfor %}
-
-
-                {% if ongoing_page.has_next %}
-
-                    <a
-                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.next_page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                        class="pagination-btn pagination-arrow"
-                    >
-                        &rsaquo;
-                    </a>
-
-                {% else %}
-
-                    <span class="pagination-btn pagination-arrow disabled">
-                        &rsaquo;
-                    </span>
-
-                {% endif %}
-
-            </div>
+            </span>
 
         </div>
 
-    </div>
 
-</section>
+        <div class="complaint-table-container">
+
+            <div class="complaint-table-scroll">
+
+                <table class="complaint-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Complainant</th>
+                            <th>Category</th>
+                            <th>Filed Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
 
 
-        <!-- =================================================
-             ONGOING COMPLAINTS PAGINATION
-        ================================================== -->
+                    <tbody>
 
-        {% if ongoing_page.paginator.num_pages > 1 %}
+                        {% for complaint in ongoing_complaints %}
+
+                            {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="empty-complaints"
+                                >
+
+                                    <div class="empty-state">
+
+                                        <span>
+                                            No ongoing complaints found.
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =============================================
+                 ONGOING COMPLAINTS PAGINATION
+            ============================================== -->
 
             <div class="table-pagination">
 
                 <div class="pagination-info">
 
-                    Showing
+                    {% if ongoing_page.paginator.count > 0 %}
 
-                    <strong>
-                        {{ ongoing_page.start_index }}
-                    </strong>
+                        Showing
 
-                    to
+                        <strong>
+                            {{ ongoing_page.start_index }}
+                        </strong>
 
-                    <strong>
-                        {{ ongoing_page.end_index }}
-                    </strong>
+                        to
 
-                    of
+                        <strong>
+                            {{ ongoing_page.end_index }}
+                        </strong>
 
-                    <strong>
-                        {{ ongoing_page.paginator.count }}
-                    </strong>
+                        of
 
-                    complaints
+                        <strong>
+                            {{ ongoing_page.paginator.count }}
+                        </strong>
+
+                        complaints
+
+                    {% else %}
+
+                        Showing 0 complaints
+
+                    {% endif %}
 
                 </div>
 
 
-                <div class="pagination-buttons">
+                {% if ongoing_page.paginator.num_pages > 1 %}
+
+                    <div class="pagination-buttons">
 
 
-                    <!-- FIRST -->
+                        <!-- FIRST -->
 
-                    {% if ongoing_page.has_previous %}
+                        {% if ongoing_page.has_previous %}
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page=1&completed_page={{ completed_page.number }}#ongoing-complaints"
-                            class="pagination-btn pagination-arrow"
-                            title="First page"
-                        >
-                            &laquo;
-                        </a>
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page=1&completed_page={{ completed_page.number }}#ongoing-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="First page"
+                                title="First page"
+                            >
+                                &laquo;
+                            </a>
 
-                    {% else %}
+                        {% else %}
 
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &laquo;
-                        </span>
-
-                    {% endif %}
-
-
-
-                    <!-- PREVIOUS -->
-
-                    {% if ongoing_page.has_previous %}
-
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.previous_page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                            class="pagination-btn pagination-arrow"
-                            title="Previous page"
-                        >
-                            &lsaquo;
-                        </a>
-
-                    {% else %}
-
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &lsaquo;
-                        </span>
-
-                    {% endif %}
-
-
-
-                    <!-- PAGE NUMBERS -->
-
-                    {% for page_number in ongoing_page.paginator.page_range %}
-
-                        {% if page_number >= ongoing_page.number|add:"-2" and page_number <= ongoing_page.number|add:"2" %}
-
-                            {% if page_number == ongoing_page.number %}
-
-                                <span
-                                    class="pagination-btn active"
-                                    aria-current="page"
-                                >
-                                    {{ page_number }}
-                                </span>
-
-                            {% else %}
-
-                                <a
-                                    href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                                    class="pagination-btn"
-                                >
-                                    {{ page_number }}
-                                </a>
-
-                            {% endif %}
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &laquo;
+                            </span>
 
                         {% endif %}
 
-                    {% endfor %}
+
+                        <!-- PREVIOUS -->
+
+                        {% if ongoing_page.has_previous %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.previous_page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Previous page"
+                                title="Previous page"
+                            >
+                                &lsaquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &lsaquo;
+                            </span>
+
+                        {% endif %}
 
 
+                        <!-- PAGE NUMBERS -->
 
-                    <!-- NEXT -->
+                        {% for page_number in ongoing_page.paginator.page_range %}
 
-                    {% if ongoing_page.has_next %}
+                            {% if page_number >= ongoing_page.number|add:"-2" and page_number <= ongoing_page.number|add:"2" %}
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.next_page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                            class="pagination-btn pagination-arrow"
-                            title="Next page"
-                        >
-                            &rsaquo;
-                        </a>
+                                {% if page_number == ongoing_page.number %}
 
-                    {% else %}
+                                    <span
+                                        class="pagination-btn active"
+                                        aria-current="page"
+                                    >
+                                        {{ page_number }}
+                                    </span>
 
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &rsaquo;
-                        </span>
+                                {% else %}
 
-                    {% endif %}
+                                    <a
+                                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
+                                        class="pagination-btn"
+                                    >
+                                        {{ page_number }}
+                                    </a>
+
+                                {% endif %}
+
+                            {% endif %}
+
+                        {% endfor %}
 
 
+                        <!-- NEXT -->
 
-                    <!-- LAST -->
+                        {% if ongoing_page.has_next %}
 
-                    {% if ongoing_page.has_next %}
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.next_page_number }}&completed_page={{ completed_page.number }}#ongoing-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Next page"
+                                title="Next page"
+                            >
+                                &rsaquo;
+                            </a>
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.paginator.num_pages }}&completed_page={{ completed_page.number }}#ongoing-complaints"
-                            class="pagination-btn pagination-arrow"
-                            title="Last page"
-                        >
-                            &raquo;
-                        </a>
+                        {% else %}
 
-                    {% else %}
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &rsaquo;
+                            </span>
 
-                        <span
-                            class="pagination-btn pagination-arrow disabled"
-                        >
-                            &raquo;
-                        </span>
+                        {% endif %}
 
-                    {% endif %}
 
-                </div>
+                        <!-- LAST -->
+
+                        {% if ongoing_page.has_next %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.paginator.num_pages }}&completed_page={{ completed_page.number }}#ongoing-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Last page"
+                                title="Last page"
+                            >
+                                &raquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &raquo;
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
 
             </div>
 
-        {% endif %}
+        </div>
 
     </section>
 
@@ -1300,142 +1201,268 @@ Complaint Management
          COMPLETED COMPLAINTS
     ====================================================== -->
 
-  <section
-    class="complaint-section"
-    id="completed-complaints"
->
+    <section
+        class="complaint-section"
+        id="completed-complaints"
+    >
 
-    <div class="section-heading">
-        <div>
-            <h2>Completed Complaints</h2>
-            <span>Resolved, rejected, and closed complaints</span>
-        </div>
+        <div class="section-heading">
 
-        <span class="section-count">
-            {{ completed_page.paginator.count }}
-            complaint{% if completed_page.paginator.count != 1 %}s{% endif %}
-        </span>
-    </div>
+            <div>
 
+                <h2>
+                    Completed Complaints
+                </h2>
 
-    <div class="complaint-table-container">
-
-        <table class="complaint-table">
-
-            <thead>
-                <tr>
-                    <th>Complaint ID</th>
-                    <th>Complainant</th>
-                    <th>Category</th>
-                    <th>Filed Date</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                {% for complaint in completed_complaints %}
-
-                    {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
-
-                {% empty %}
-
-                    <tr>
-                        <td colspan="6" class="empty-complaints">
-                            <div class="empty-state">
-                                <span>No completed complaints found.</span>
-                            </div>
-                        </td>
-                    </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-
-        <!-- COMPLETED COMPLAINT PAGINATION -->
-
-        <div class="table-pagination">
-
-            <div class="pagination-info">
-
-                {% if completed_page.paginator.count > 0 %}
-
-                    Showing
-                    <strong>{{ completed_page.start_index }}</strong>
-                    to
-                    <strong>{{ completed_page.end_index }}</strong>
-                    of
-                    <strong>{{ completed_page.paginator.count }}</strong>
-
-                {% else %}
-
-                    Showing 0 complaints
-
-                {% endif %}
+                <span>
+                    Resolved, rejected, and closed complaints
+                </span>
 
             </div>
 
 
-            <div class="pagination-buttons">
+            <span class="section-count">
 
-                {% if completed_page.has_previous %}
+                {{ completed_page.paginator.count }}
 
-                    <a
-                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.previous_page_number }}#completed-complaints"
-                        class="pagination-btn pagination-arrow"
-                    >
-                        &lsaquo;
-                    </a>
+                complaint{% if completed_page.paginator.count != 1 %}s{% endif %}
 
-                {% else %}
+            </span>
 
-                    <span class="pagination-btn pagination-arrow disabled">
-                        &lsaquo;
-                    </span>
-
-                {% endif %}
+        </div>
 
 
-                {% for page_number in completed_page.paginator.page_range %}
+        <div class="complaint-table-container">
 
-                    {% if page_number == completed_page.number %}
+            <div class="complaint-table-scroll">
 
-                        <span class="pagination-btn active">
-                            {{ page_number }}
-                        </span>
+                <table class="complaint-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Complainant</th>
+                            <th>Category</th>
+                            <th>Filed Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for complaint in completed_complaints %}
+
+                            {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="empty-complaints"
+                                >
+
+                                    <div class="empty-state">
+
+                                        <span>
+                                            No completed complaints found.
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =============================================
+                 COMPLETED COMPLAINTS PAGINATION
+            ============================================== -->
+
+            <div class="table-pagination">
+
+                <div class="pagination-info">
+
+                    {% if completed_page.paginator.count > 0 %}
+
+                        Showing
+
+                        <strong>
+                            {{ completed_page.start_index }}
+                        </strong>
+
+                        to
+
+                        <strong>
+                            {{ completed_page.end_index }}
+                        </strong>
+
+                        of
+
+                        <strong>
+                            {{ completed_page.paginator.count }}
+                        </strong>
+
+                        complaints
 
                     {% else %}
 
-                        <a
-                            href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ page_number }}#completed-complaints"
-                            class="pagination-btn"
-                        >
-                            {{ page_number }}
-                        </a>
+                        Showing 0 complaints
 
                     {% endif %}
 
-                {% endfor %}
+                </div>
 
 
-                {% if completed_page.has_next %}
+                {% if completed_page.paginator.num_pages > 1 %}
 
-                    <a
-                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.next_page_number }}#completed-complaints"
-                        class="pagination-btn pagination-arrow"
-                    >
-                        &rsaquo;
-                    </a>
+                    <div class="pagination-buttons">
 
-                {% else %}
 
-                    <span class="pagination-btn pagination-arrow disabled">
-                        &rsaquo;
-                    </span>
+                        <!-- FIRST -->
+
+                        {% if completed_page.has_previous %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page=1#completed-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="First page"
+                                title="First page"
+                            >
+                                &laquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &laquo;
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- PREVIOUS -->
+
+                        {% if completed_page.has_previous %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.previous_page_number }}#completed-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Previous page"
+                                title="Previous page"
+                            >
+                                &lsaquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &lsaquo;
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- PAGE NUMBERS -->
+
+                        {% for page_number in completed_page.paginator.page_range %}
+
+                            {% if page_number >= completed_page.number|add:"-2" and page_number <= completed_page.number|add:"2" %}
+
+                                {% if page_number == completed_page.number %}
+
+                                    <span
+                                        class="pagination-btn active"
+                                        aria-current="page"
+                                    >
+                                        {{ page_number }}
+                                    </span>
+
+                                {% else %}
+
+                                    <a
+                                        href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ page_number }}#completed-complaints"
+                                        class="pagination-btn"
+                                    >
+                                        {{ page_number }}
+                                    </a>
+
+                                {% endif %}
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                        <!-- NEXT -->
+
+                        {% if completed_page.has_next %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.next_page_number }}#completed-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Next page"
+                                title="Next page"
+                            >
+                                &rsaquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &rsaquo;
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- LAST -->
+
+                        {% if completed_page.has_next %}
+
+                            <a
+                                href="?category={{ selected_category|urlencode }}&status={{ selected_status|urlencode }}&date_range={{ selected_date_range|urlencode }}&new_page={{ new_page.number }}&ongoing_page={{ ongoing_page.number }}&completed_page={{ completed_page.paginator.num_pages }}#completed-complaints"
+                                class="pagination-btn pagination-arrow"
+                                aria-label="Last page"
+                                title="Last page"
+                            >
+                                &raquo;
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-btn pagination-arrow disabled"
+                                aria-hidden="true"
+                            >
+                                &raquo;
+                            </span>
+
+                        {% endif %}
+
+                    </div>
 
                 {% endif %}
 
@@ -1443,804 +1470,17 @@ Complaint Management
 
         </div>
 
-    </div>
+    </section>
 
-</section>
 
 
-<!-- =========================================================
-     COMPLAINT REVIEW MODAL
-========================================================= -->
+    <!-- =====================================================
+         COMPLAINT REVIEW MODAL
+         SEPARATED INTO ITS OWN TEMPLATE
+    ====================================================== -->
 
-<div
-    id="complaintReviewModal"
-    class="review-modal"
-    aria-hidden="true"
->
+    {% include "complaintmodule/complaint_review_modal.html" %}
 
-    <div
-        class="review-modal-backdrop"
-        data-close-review
-    ></div>
-
-
-    <div
-        class="review-modal-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="reviewModalTitle"
-    >
-
-
-        <!-- =================================================
-             MODAL HEADER
-        ================================================== -->
-
-        <div class="review-modal-header">
-
-            <div>
-
-                <span class="review-eyebrow">
-                    COMPLAINT REVIEW
-                </span>
-
-                <h2 id="reviewModalTitle">
-
-                    Complaint
-
-                    <span id="reviewReference">
-                        —
-                    </span>
-
-                </h2>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="review-modal-close"
-                data-close-review
-                aria-label="Close complaint review"
-            >
-                &times;
-            </button>
-
-        </div>
-
-
-
-        <!-- =================================================
-             MODAL BODY
-        ================================================== -->
-
-        <div class="review-modal-body">
-
-
-            <!-- =============================================
-                 COMPLAINT INFORMATION
-            ============================================== -->
-
-            <section class="review-card">
-
-                <div class="review-card-heading">
-
-                    <div class="review-heading-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M7 3.5h10a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"
-                            />
-
-                            <path
-                                stroke-linecap="round"
-                                d="M8.5 8h7M8.5 12h7M8.5 16h4"
-                            />
-                        </svg>
-
-                    </div>
-
-
-                    <div>
-
-                        <h3>
-                            Complaint Information
-                        </h3>
-
-                        <p>
-                            Details submitted by the complainant.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="review-info-grid">
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Complainant
-                        </span>
-
-                        <strong id="reviewComplainant">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Report Type
-                        </span>
-
-                        <strong id="reviewReportType">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Category
-                        </span>
-
-                        <strong id="reviewCategory">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Incident Date
-                        </span>
-
-                        <strong id="reviewIncidentDate">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Incident Time
-                        </span>
-
-                        <strong id="reviewIncidentTime">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Location
-                        </span>
-
-                        <strong id="reviewLocation">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item review-info-wide">
-
-                        <span>
-                            Subject
-                        </span>
-
-                        <strong id="reviewSubject">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item review-info-wide">
-
-                        <span>
-                            Description
-                        </span>
-
-                        <p id="reviewDescription">
-                            —
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- =============================================
-                 RESPONDENT INFORMATION
-            ============================================== -->
-
-            <section
-                id="reviewRespondentSection"
-                class="review-card"
-            >
-
-                <div class="review-card-heading">
-
-                    <div class="review-heading-icon respondent">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            aria-hidden="true"
-                        >
-                            <circle
-                                cx="12"
-                                cy="8"
-                                r="3"
-                            />
-
-                            <path
-                                stroke-linecap="round"
-                                d="M6.5 19c.6-3 2.4-4.5 5.5-4.5s4.9 1.5 5.5 4.5"
-                            />
-                        </svg>
-
-                    </div>
-
-
-                    <div>
-
-                        <h3>
-                            Respondent Information
-                        </h3>
-
-                        <p>
-                            Information about the person involved in the complaint.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="review-info-grid">
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Name
-                        </span>
-
-                        <strong id="reviewRespondentName">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Relationship
-                        </span>
-
-                        <strong id="reviewRespondentRelationship">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item">
-
-                        <span>
-                            Contact
-                        </span>
-
-                        <strong id="reviewRespondentContact">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="review-info-item review-info-wide">
-
-                        <span>
-                            Address
-                        </span>
-
-                        <p id="reviewRespondentAddress">
-                            —
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- =============================================
-                 EVIDENCE & ATTACHMENTS
-            ============================================== -->
-
-            <section class="review-card review-evidence-card">
-
-                <div class="review-card-heading review-evidence-heading">
-
-                    <div class="review-heading-icon review-heading-icon-evidence">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            aria-hidden="true"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M8.5 12.5 13 8a3 3 0 0 1 4.25 4.25l-6 6a5 5 0 0 1-7.07-7.07l6.5-6.5"
-                            />
-                        </svg>
-
-                    </div>
-
-
-                    <div class="review-evidence-heading-text">
-
-                        <h3>
-                            Evidence &amp; Attachments
-                        </h3>
-
-                        <p>
-                            Review photos, videos, audio recordings and documents attached to this complaint.
-                        </p>
-
-                    </div>
-
-
-                    <span
-                        id="reviewEvidenceCount"
-                        class="review-evidence-count"
-                    >
-                        0 files
-                    </span>
-
-                </div>
-
-
-
-                <!-- EVIDENCE LOADING -->
-
-                <div
-                    id="reviewEvidenceLoading"
-                    class="review-evidence-loading"
-                    hidden
-                >
-
-                    <span class="evidence-loading-spinner"></span>
-
-                    <span>
-                        Loading evidence...
-                    </span>
-
-                </div>
-
-
-
-                <!-- NO EVIDENCE -->
-
-                <div
-                    id="reviewEvidenceEmpty"
-                    class="review-evidence-empty"
-                    hidden
-                >
-
-                    <div class="review-evidence-empty-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M5 4h14v16H5z"
-                            />
-
-                            <path
-                                stroke-linecap="round"
-                                d="M8 9h8M8 13h5"
-                            />
-                        </svg>
-
-                    </div>
-
-
-                    <strong>
-                        No evidence attached
-                    </strong>
-
-                    <span>
-                        This complaint does not currently have any uploaded evidence.
-                    </span>
-
-                </div>
-
-
-
-                <!-- EVIDENCE GRID -->
-
-                <div
-                    id="reviewEvidenceGrid"
-                    class="review-evidence-grid"
-                    hidden
-                ></div>
-
-            </section>
-
-
-
-            <!-- =============================================
-                 REVIEW AND PROCESSING
-            ============================================== -->
-
-            <section class="review-card">
-
-                <div class="review-card-heading">
-
-                    <div class="review-heading-icon processing">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M5 4.5h14v15H5z"
-                            />
-
-                            <path
-                                stroke-linecap="round"
-                                d="M8 8.5h8M8 12h8M8 15.5h5"
-                            />
-                        </svg>
-
-                    </div>
-
-
-                    <div>
-
-                        <h3>
-                            Review &amp; Processing
-                        </h3>
-
-                        <p>
-                            Update the complaint priority, status and official notes.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <form
-                    id="complaintReviewForm"
-                    method="POST"
-                    data-update-url-template="{% url 'update_complaint' 0 %}"
-                >
-
-                    {% csrf_token %}
-
-
-                    <div class="review-form-grid">
-
-
-                        <!-- PRIORITY -->
-
-                        <div class="review-form-group">
-
-                            <label for="reviewPriority">
-                                Priority
-                            </label>
-
-                            <select
-                                id="reviewPriority"
-                                name="priority"
-                                required
-                            >
-
-                                <option value="N/A">
-                                    N/A
-                                </option>
-
-                                <option value="Low">
-                                    Low
-                                </option>
-
-                                <option value="Medium">
-                                    Medium
-                                </option>
-
-                                <option value="High">
-                                    High
-                                </option>
-
-                                <option value="Urgent">
-                                    Urgent
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-
-                        <!-- STATUS -->
-
-                        <div class="review-form-group">
-
-                            <label for="reviewStatus">
-                                Status
-                            </label>
-
-                            <select
-                                id="reviewStatus"
-                                name="status"
-                                required
-                            >
-
-                                <option value="Submitted">
-                                    Submitted
-                                </option>
-
-                                <option value="Under Review">
-                                    Under Review
-                                </option>
-
-                                <option value="Under Investigation">
-                                    Under Investigation
-                                </option>
-
-                                <option value="Resolved">
-                                    Resolved
-                                </option>
-
-                                <option value="Rejected">
-                                    Rejected
-                                </option>
-
-                                <option value="Closed">
-                                    Closed
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-
-                        <!-- RESOLUTION -->
-
-                        <div class="review-form-group review-form-full">
-
-                            <label for="reviewResolution">
-                                Resolution / Review Notes
-                            </label>
-
-                            <textarea
-                                id="reviewResolution"
-                                name="resolution"
-                                rows="5"
-                                placeholder="Enter investigation notes, actions taken, settlement details, resolution, or other official remarks..."
-                            ></textarea>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- FORM ACTIONS -->
-
-                    <div class="review-form-actions">
-
-                        <button
-                            type="button"
-                            class="review-cancel-btn"
-                            data-close-review
-                        >
-                            Cancel
-                        </button>
-
-
-                        <button
-                            type="submit"
-                            id="reviewSaveButton"
-                            class="review-save-btn"
-                        >
-
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M5 12.5 9.5 17 19 7.5"
-                                />
-                            </svg>
-
-                            <span>
-                                Save Changes
-                            </span>
-
-                        </button>
-
-                    </div>
-
-                </form>
-
-            </section>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================================================
-     EVIDENCE PREVIEW MODAL
-========================================================= -->
-
-<div
-    id="evidencePreviewModal"
-    class="evidence-preview-modal"
-    aria-hidden="true"
->
-
-    <div
-        class="evidence-preview-backdrop"
-        data-close-evidence-preview
-    ></div>
-
-
-    <div
-        class="evidence-preview-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="evidencePreviewTitle"
-    >
-
-
-        <!-- HEADER -->
-
-        <div class="evidence-preview-header">
-
-            <div>
-
-                <span class="evidence-preview-eyebrow">
-                    EVIDENCE PREVIEW
-                </span>
-
-                <h3 id="evidencePreviewTitle">
-                    Evidence
-                </h3>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="evidence-preview-close"
-                data-close-evidence-preview
-                aria-label="Close evidence preview"
-            >
-                &times;
-            </button>
-
-        </div>
-
-
-
-        <!-- PREVIEW CONTENT -->
-
-        <div
-            id="evidencePreviewContent"
-            class="evidence-preview-content"
-        ></div>
-
-
-
-        <!-- FOOTER -->
-
-        <div class="evidence-preview-footer">
-
-            <div class="evidence-preview-meta">
-
-                <span id="evidencePreviewType">
-                    —
-                </span>
-
-                <span id="evidencePreviewSize">
-                    —
-                </span>
-
-                <span id="evidencePreviewDate">
-                    —
-                </span>
-
-            </div>
-
-
-            <a
-                id="evidenceOpenOriginal"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="evidence-open-original"
-            >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    aria-hidden="true"
-                >
-                    <path
-                        d="M14 5h5v5"
-                    />
-
-                    <path
-                        d="m19 5-8 8"
-                    />
-
-                    <path
-                        d="M17 13v6H5V7h6"
-                    />
-                </svg>
-
-                <span>
-                    Open Original
-                </span>
-
-            </a>
-
-        </div>
-
-    </div>
 
 </div>
 
@@ -2250,8 +1490,21 @@ Complaint Management
 
 {% block extra_js %}
 
+<!-- =========================================================
+     MAIN COMPLAINT PAGE JAVASCRIPT
+========================================================= -->
+
 <script
     src="{% static 'js/complaint.js' %}"
+></script>
+
+
+<!-- =========================================================
+     COMPLAINT REVIEW MODAL JAVASCRIPT
+========================================================= -->
+
+<script
+    src="{% static 'js/complaint_review.js' %}"
 ></script>
 
 {% endblock %}
