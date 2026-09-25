@@ -44,9 +44,7 @@ Document Management | BantayBarangay
 
         <h3>DOCUMENT TEMPLATES</h3>
 
-        <a href="#" class="view-all-link">
-            View All Templates
-        </a>
+        
 
     </div>
 
@@ -57,84 +55,85 @@ Document Management | BantayBarangay
 
     <div class="document-templates">
 
+    {% for template in document_types %}
 
-        <!-- Complaint Reports -->
+    <div class="document-template-card">
 
-        <div class="document-template-card">
+        <div class="template-icon">
 
-            <div class="template-icon">
+            {% if template.type_name == "Complaint" %}
                 <i data-lucide="message-square-warning"></i>
-            </div>
 
-            <h3>Complaint Reports</h3>
-
-            <p>Conflict resolution logs</p>
-
-        </div>
-
-
-        <!-- Incident Reports -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
+            {% elif template.type_name == "Incident Report" %}
                 <i data-lucide="triangle-alert"></i>
-            </div>
 
-            <h3>Incident Reports</h3>
-
-            <p>Emergency tracking</p>
-
-        </div>
-
-
-        <!-- Summons -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
+            {% elif template.type_name == "Summons" %}
                 <i data-lucide="mail"></i>
-            </div>
 
-            <h3>Summons</h3>
-
-            <p>Legal appearance notice</p>
-
-        </div>
-
-
-        <!-- Certificates -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
-                <i data-lucide="file-badge"></i>
-            </div>
-
-            <h3>Certificates</h3>
-
-            <p>Residency &amp; Clearance</p>
-
-        </div>
-
-
-        <!-- Settlements -->
-
-        <div class="document-template-card">
-
-            <div class="template-icon">
+            {% elif template.type_name == "Agreement" %}
                 <i data-lucide="handshake"></i>
-            </div>
 
-            <h3>Settlements</h3>
-
-            <p>Mutual agreements</p>
+            {% else %}
+                <i data-lucide="file-text"></i>
+            {% endif %}
 
         </div>
 
+        <div class="template-content">
+
+            <h3>
+                {{ template.type_name }}
+            </h3>
+
+            <p>
+                {{ template.description|default:"Barangay document template" }}
+            </p>
+
+        </div>
+
+        {% if template.file_path %}
+
+        <div class="template-actions">
+
+            <a
+                href="{{ template.file_path }}"
+                target="_blank"
+                class="template-view-btn"
+            >
+                <i data-lucide="eye"></i>
+                View
+            </a>
+
+            <a
+                href="{{ template.file_path }}"
+                download
+                class="template-download-btn"
+            >
+                <i data-lucide="download"></i>
+                Download
+            </a>
+
+        </div>
+
+        {% else %}
+
+        <span class="template-unavailable">
+            File unavailable
+        </span>
+
+        {% endif %}
 
     </div>
 
+    {% empty %}
+
+    <div class="document-template-empty">
+        No document templates available.
+    </div>
+
+    {% endfor %}
+
+</div>
 
     <!-- =====================================================
          DOCUMENT REGISTRY
@@ -212,8 +211,9 @@ Document Management | BantayBarangay
                     <tr
                         class="document-row"
                         onclick="openDocumentPanel(this)"
+                        data-file-path="{{ document.file_path }}"
                         data-document-id="#DOC-{{ document.document_id }}"
-                        data-document-type="{{ document.document_type|default:'Document'|upper }}"
+                        data-document-type="{{ document.document_type.type_name|default:'Document'|upper }}"
 
                         {% if document.resident %}
                         data-resident-name="{{ document.resident.first_name }} {% if document.resident.middle_name %}{{ document.resident.middle_name }} {% endif %}{{ document.resident.last_name }}"
@@ -249,7 +249,7 @@ Document Management | BantayBarangay
                         <td>
 
                             <span class="document-type">
-                                {{ document.document_type|upper }}
+                                {{ document.document_type.type_name|upper }}
                             </span>
 
                         </td>
@@ -397,16 +397,15 @@ Document Management | BantayBarangay
 
                                 <!-- Download -->
 
-                                <button
-                                    type="button"
-                                    onclick="event.stopPropagation()"
-                                    title="Download document"
-                                    aria-label="Download document"
-                                >
 
-                                    <i data-lucide="download"></i>
-
-                                </button>
+                            <button
+                                type="button"
+                                onclick="event.stopPropagation(); downloadDocument(this.closest('.document-row'))"
+                                title="Download document"
+                                aria-label="Download document"
+                            >
+                                <i data-lucide="download"></i>
+                            </button>
 
 
                                 <!-- More -->
@@ -522,49 +521,51 @@ Document Management | BantayBarangay
              DOCUMENT PREVIEW
         ================================================== -->
 
-        <div class="document-preview">
+       <div class="document-preview">
 
-            <div class="document-preview-placeholder">
+    <iframe
+        id="documentFilePreview"
+        title="Document Preview"
+        style="
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: none;
+            border-radius: 8px;
+        "
+    ></iframe>
 
+    <div
+        class="document-preview-placeholder"
+        id="documentPreviewPlaceholder"
+    >
 
-                <div class="certificate-icon">
-
-                    <i data-lucide="file-text"></i>
-
-                </div>
-
-
-                <h3 id="detailDocumentType">
-                    BARANGAY DOCUMENT
-                </h3>
-
-
-                <p id="detailResidentName">
-                    Resident
-                </p>
-
-
-                <div class="certificate-line"></div>
-
-
-                <p class="certificate-small">
-
-                    This document certifies the information
-                    recorded and issued by the barangay.
-
-                </p>
-
-
-                <div class="certificate-seal">
-
-                    <i data-lucide="check"></i>
-
-                </div>
-
-
-            </div>
-
+        <div class="certificate-icon">
+            <i data-lucide="file-text"></i>
         </div>
+
+        <h3 id="detailDocumentType">
+            BARANGAY DOCUMENT
+        </h3>
+
+        <p id="detailResidentName">
+            Resident
+        </p>
+
+        <div class="certificate-line"></div>
+
+        <p class="certificate-small">
+            This document certifies the information
+            recorded and issued by the barangay.
+        </p>
+
+        <div class="certificate-seal">
+            <i data-lucide="check"></i>
+        </div>
+
+    </div>
+
+</div>
 
 
         <!-- =================================================
@@ -627,16 +628,14 @@ Document Management | BantayBarangay
              DOWNLOAD
         ================================================== -->
 
-        <button
-            type="button"
-            class="download-pdf-btn"
-        >
-
-            <i data-lucide="download"></i>
-
-            <span>Download PDF</span>
-
-        </button>
+       <button
+    type="button"
+    class="download-pdf-btn"
+    id="detailDownloadButton"
+>
+    <i data-lucide="download"></i>
+    <span>Download PDF</span>
+</button>
 
 
         <!-- =================================================
@@ -734,6 +733,8 @@ Document Management | BantayBarangay
 
             const documentId =
                 row.dataset.documentId || "Document";
+            const filePath =
+                row.dataset.filePath || "";
 
             const documentType =
                 row.dataset.documentType || "BARANGAY DOCUMENT";
@@ -762,7 +763,13 @@ Document Management | BantayBarangay
 
             const detailVerificationDate =
                 document.getElementById("detailVerificationDate");
+            const detailDownloadButton =
+                document.getElementById("detailDownloadButton");
+            const documentFilePreview =
+                document.getElementById("documentFilePreview");
 
+            const documentPreviewPlaceholder =
+                document.getElementById("documentPreviewPlaceholder");
 
             if (detailDocumentMeta) {
 
@@ -802,7 +809,40 @@ Document Management | BantayBarangay
                     date;
 
             }
+            if (detailDownloadButton) {
 
+                detailDownloadButton.onclick = function () {
+
+                    if (!filePath) {
+                        alert("No document file is available.");
+                        return; 
+            }
+
+            window.open(filePath, "_blank");
+    };
+
+}
+if (documentFilePreview && filePath) {
+
+    documentFilePreview.src = filePath;
+    documentFilePreview.style.display = "block";
+
+    if (documentPreviewPlaceholder) {
+        documentPreviewPlaceholder.style.display = "none";
+    }
+
+} else {
+
+    if (documentFilePreview) {
+        documentFilePreview.src = "";
+        documentFilePreview.style.display = "none";
+    }
+
+    if (documentPreviewPlaceholder) {
+        documentPreviewPlaceholder.style.display = "block";
+    }
+
+}
         }
 
 
@@ -866,7 +906,17 @@ Document Management | BantayBarangay
 
         }
     );
+function downloadDocument(row) {
 
+    const filePath = row.dataset.filePath;
+
+    if (!filePath) {
+        alert("No document file is available.");
+        return;
+    }
+
+    window.open(filePath, "_blank");
+}
 </script>
 
 {% endblock %}

@@ -2,6 +2,45 @@ from django.db import models
 from registration.models import Resident
 
 
+class DocumentType(models.Model):
+
+    document_type_id = models.AutoField(
+        primary_key=True
+    )
+
+    type_name = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    description = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    file_path = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        default="Active"
+    )
+
+    created_at = models.DateTimeField()
+
+    updated_at = models.DateTimeField()
+
+    class Meta:
+        db_table = "document_types"
+        managed = False
+
+    def __str__(self):
+        return self.type_name
+
+
 class Document(models.Model):
 
     document_id = models.AutoField(
@@ -10,17 +49,29 @@ class Document(models.Model):
 
     resident = models.ForeignKey(
         Resident,
-        db_column='resident_id',
+        db_column="resident_id",
         on_delete=models.DO_NOTHING,
-        related_name='documents'
+        related_name="documents"
     )
 
-    document_type = models.CharField(
-        max_length=50
+    document_type = models.ForeignKey(
+        DocumentType,
+        db_column="document_type_id",
+        on_delete=models.DO_NOTHING,
+        related_name="documents"
     )
 
     document_number = models.CharField(
         max_length=100
+    )
+    notes = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    valid_until = models.DateField(
+        null=True,
+        blank=True
     )
 
     file_path = models.CharField(
@@ -56,7 +107,7 @@ class Document(models.Model):
     )
 
     class Meta:
-        db_table = 'documents'
+        db_table = "documents"
         managed = False
 
     def __str__(self):

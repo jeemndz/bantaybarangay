@@ -1,12 +1,19 @@
 from django.shortcuts import render
 
-from .models import Document
+from .models import Document, DocumentType
 from registration.models import Resident
 
 
 def document_list(request):
 
-    documents = Document.objects.all().order_by('-document_id')
+    # ==========================
+    # GET ISSUED DOCUMENTS
+    # ==========================
+
+    documents = Document.objects.select_related(
+        'document_type'
+    ).all().order_by('-document_id')
+
 
     # ==========================
     # SEARCH
@@ -19,33 +26,36 @@ def document_list(request):
             document_number__icontains=search
         )
 
+
     # ==========================
     # FILTER BY TYPE
     # ==========================
 
-    document_type = request.GET.get(
+    selected_type = request.GET.get(
         'document_type',
         ''
-    )
+    ).strip()
 
-    if document_type:
+    if selected_type:
         documents = documents.filter(
-            document_type=document_type
+            document_type__type_name=selected_type
         )
+
 
     # ==========================
     # FILTER BY STATUS
     # ==========================
 
-    status = request.GET.get(
+    selected_status = request.GET.get(
         'status',
         ''
-    )
+    ).strip()
 
-    if status:
+    if selected_status:
         documents = documents.filter(
-            status=status
+            status=selected_status
         )
+
 
     # ==========================
     # STATISTICS
@@ -61,6 +71,16 @@ def document_list(request):
         status='Pending'
     ).count()
 
+
+    # ==========================
+    # DOCUMENT TEMPLATES
+    # ==========================
+
+    document_types = DocumentType.objects.filter(
+        status='Active'
+    ).order_by('type_name')
+
+
     # ==========================
     # GET RESIDENTS
     # ==========================
@@ -72,39 +92,39 @@ def document_list(request):
         for resident in residents
     }
 
-    # Attach resident information
+
+    # ==========================
+    # ATTACH RESIDENT
+    # ==========================
+
     for document in documents:
 
         document.resident = resident_dict.get(
             document.resident_id
         )
 
+
     # ==========================
     # CONTEXT
     # ==========================
 
     context = {
-
         'documents': documents,
 
-        'total_documents':
-            total_documents,
+        # Used by DOCUMENT TEMPLATES
+        'document_types': document_types,
 
-        'verified_documents':
-            verified_documents,
+        # Statistics
+        'total_documents': total_documents,
+        'verified_documents': verified_documents,
+        'pending_documents': pending_documents,
 
-        'pending_documents':
-            pending_documents,
-
-        'search':
-            search,
-
-        'selected_type':
-            document_type,
-
-        'selected_status':
-            status,
+        # Filters
+        'search': search,
+        'selected_type': selected_type,
+        'selected_status': selected_status,
     }
+
 
     return render(
         request,
