@@ -1,0 +1,180 @@
+<tr
+    class="complaint-row"
+    tabindex="0"
+    role="button"
+    aria-label="Open complaint #CP-{{ complaint.complaint_id|stringformat:'04d' }}"
+
+    data-complaint-id="{{ complaint.complaint_id }}"
+    data-reference="#CP-{{ complaint.complaint_id|stringformat:'04d' }}"
+
+    data-complainant="Resident #{{ complaint.resident_id }}"
+    data-report-type="{{ complaint.report_type|default:'N/A'|escape }}"
+    data-category="{{ complaint.complaint_type|default:'N/A'|escape }}"
+
+    data-subject="{{ complaint.subject|default:''|escape }}"
+    data-description="{{ complaint.description|default:''|escape }}"
+
+    data-location="{{ complaint.location|default:'N/A'|escape }}"
+
+    data-incident-date="{% if complaint.incident_date %}{{ complaint.incident_date|date:'M d, Y' }}{% else %}N/A{% endif %}"
+    data-incident-time="{% if complaint.incident_time %}{{ complaint.incident_time|time:'g:i A' }}{% else %}N/A{% endif %}"
+
+    data-priority="{{ complaint.priority|default:'N/A'|escape }}"
+    data-status="{{ complaint.status|default:'Submitted'|escape }}"
+    data-resolution="{{ complaint.resolution|default:''|escape }}"
+
+    data-respondent-name="{{ complaint.respondent_name|default:''|escape }}"
+    data-respondent-address="{{ complaint.respondent_address|default:''|escape }}"
+    data-respondent-relationship="{{ complaint.respondent_relationship|default:''|escape }}"
+    data-respondent-contact="{{ complaint.respondent_contact|default:''|escape }}"
+>
+
+    <!-- =====================================================
+         COMPLAINT ID
+    ====================================================== -->
+
+    <td>
+
+        <div class="complaint-id-wrap">
+
+            <span class="complaint-id">
+                #CP-{{ complaint.complaint_id|stringformat:"04d" }}
+            </span>
+
+            <span class="complaint-type-small">
+                {{ complaint.report_type|default:"Complaint" }}
+            </span>
+
+        </div>
+
+    </td>
+
+
+    <!-- =====================================================
+         COMPLAINANT
+    ====================================================== -->
+
+    <td>
+
+        <div class="complainant-info">
+
+            <div class="complainant-avatar">
+                R
+            </div>
+
+            <div class="complainant-details">
+
+                <strong>
+                    Resident #{{ complaint.resident_id }}
+                </strong>
+
+                {% if complaint.location %}
+
+                    <small>
+                        {{ complaint.location|truncatechars:35 }}
+                    </small>
+
+                {% else %}
+
+                    <small>
+                        No location provided
+                    </small>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </td>
+
+
+    <!-- =====================================================
+         CATEGORY
+    ====================================================== -->
+
+    <td>
+
+        <span class="category-text">
+            {{ complaint.complaint_type|default:"N/A" }}
+        </span>
+
+    </td>
+
+
+    <!-- =====================================================
+         FILED DATE
+    ====================================================== -->
+
+    <td>
+
+        <div class="filed-date">
+
+            {% if complaint.submitted_at %}
+
+                <strong>
+                    {{ complaint.submitted_at|date:"M d, Y" }}
+                </strong>
+
+                <small>
+                    {{ complaint.submitted_at|time:"g:i A" }}
+                </small>
+
+            {% else %}
+
+                <span class="muted-value">
+                    —
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </td>
+
+
+    <!-- =====================================================
+         PRIORITY
+    ====================================================== -->
+
+    <td>
+
+        <span
+            class="priority
+            {% if complaint.priority == 'Urgent' %}
+                urgent
+            {% elif complaint.priority == 'High' %}
+                high
+            {% elif complaint.priority == 'Medium' %}
+                medium
+            {% elif complaint.priority == 'Low' %}
+                low
+            {% else %}
+                na
+            {% endif %}"
+        >
+            {{ complaint.priority|default:"N/A" }}
+        </span>
+
+    </td>
+
+
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+    <td>
+
+        <span
+            class="complaint-status {{ complaint.status|lower|slugify }}"
+        >
+
+            <span class="status-indicator"></span>
+
+            {{ complaint.status|default:"Submitted" }}
+
+        </span>
+
+    </td>
+
+</tr>

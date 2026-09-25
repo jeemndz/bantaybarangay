@@ -2,13 +2,25 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Submit Complaint | BantayBarangay</title>
 
-    <!-- Tailwind CSS -->
+
+    <!-- =====================================================
+         TAILWIND CSS
+    ====================================================== -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -24,325 +36,2590 @@
                             900: '#052e16'
                         }
                     },
+
                     boxShadow: {
                         soft: '0 10px 35px rgba(15, 23, 42, 0.08)'
                     }
                 }
             }
-        }
+        };
     </script>
 
-    <link rel="stylesheet" href="{% static 'css/topnav.css' %}">
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-    <link rel="stylesheet" href="{% static 'css/complaint_success_popup.css' %}">
+
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/topnav.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/footer.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/complaint_success_popup.css' %}"
+    >
+
 </head>
 
-<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+
+<body
+    class="min-h-screen bg-slate-50 text-slate-800 antialiased"
+    data-complaint-submitted="{{ complaint_submitted|yesno:'true,false' }}"
+    data-complaint-id="{{ submitted_complaint_id|default:'' }}"
+    data-complaint-reference="{{ complaint_reference|default:'' }}"
+>
+
+
+<!-- =========================================================
+     DJANGO MESSAGES
+========================================================= -->
 
 {% if messages %}
-<div class="fixed inset-x-0 top-5 z-[100] mx-auto flex max-w-xl flex-col gap-3 px-4" id="messagePopupContainer">
+
+<div
+    id="messagePopupContainer"
+    class="fixed inset-x-0 top-5 z-[100]
+           mx-auto flex max-w-xl flex-col
+           gap-3 px-4"
+>
+
     {% for message in messages %}
-    <div class="message-popup {{ message.tags }} flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl"
-         id="messagePopup">
-        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl
-            {% if message.tags == 'success' %}bg-emerald-100 text-emerald-700
-            {% elif message.tags == 'error' %}bg-red-100 text-red-700
-            {% else %}bg-blue-100 text-blue-700{% endif %}">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+
+    <div
+        class="message-popup {{ message.tags }}
+               flex items-start gap-4
+               rounded-2xl border border-slate-200
+               bg-white p-4 shadow-2xl"
+    >
+
+        <div
+            class="flex h-11 w-11 shrink-0
+                   items-center justify-center
+                   rounded-xl
+
+                   {% if message.tags == 'success' %}
+                       bg-emerald-100 text-emerald-700
+                   {% elif message.tags == 'error' %}
+                       bg-red-100 text-red-700
+                   {% else %}
+                       bg-blue-100 text-blue-700
+                   {% endif %}"
+        >
+
+            <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+            >
+
                 {% if message.tags == "success" %}
-                <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4 4L19 6"/>
-                {% elif message.tags == "error" %}
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/>
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m5 12 4 4L19 6"
+                />
+
                 {% else %}
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/>
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 8v4m0 4h.01"
+                />
+
                 {% endif %}
+
             </svg>
+
         </div>
+
 
         <div class="min-w-0 flex-1">
-            <strong class="block text-sm font-bold text-slate-900">
-                {% if message.tags == "success" %}Success
-                {% elif message.tags == "error" %}Error
-                {% else %}Notice{% endif %}
+
+            <strong
+                class="block text-sm font-bold text-slate-900"
+            >
+
+                {% if message.tags == "success" %}
+
+                    Success
+
+                {% elif message.tags == "error" %}
+
+                    Error
+
+                {% else %}
+
+                    Notice
+
+                {% endif %}
+
             </strong>
-            <p class="mt-1 text-sm leading-6 text-slate-600">{{ message }}</p>
+
+
+            <p
+                class="mt-1 text-sm leading-6 text-slate-600"
+            >
+                {{ message }}
+            </p>
+
         </div>
 
-        <button type="button"
-                class="message-close rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                onclick="closeMessage()" aria-label="Close message">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18"/>
+
+        <button
+            type="button"
+            class="message-close rounded-lg
+                   p-1 text-slate-400
+                   transition
+                   hover:bg-slate-100
+                   hover:text-slate-700"
+            aria-label="Close message"
+        >
+
+            <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 6l12 12M18 6 6 18"
+                />
             </svg>
+
         </button>
+
     </div>
+
     {% endfor %}
+
 </div>
+
 {% endif %}
+
+
+<!-- =========================================================
+     TOP NAVIGATION
+========================================================= -->
 
 {% include 'partials/topnav.html' %}
 
-<main class="relative overflow-hidden">
-    <!-- Decorative background -->
-    <div class="pointer-events-none absolute inset-x-0 top-0 -z-0 h-80 bg-gradient-to-br from-emerald-950 via-emerald-800 to-slate-900"></div>
-    <div class="pointer-events-none absolute left-1/2 top-24 -z-0 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-400/10 blur-3xl"></div>
 
-    <div class="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-        <!-- Intro -->
-        <section class="mx-auto max-w-3xl text-center text-white">
-            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold tracking-widest text-emerald-100 backdrop-blur">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3 5 6v5c0 4.5 2.9 8.5 7 10 4.1-1.5 7-5.5 7-10V6l-7-3Z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4"/>
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="relative overflow-hidden">
+
+    <!-- Background -->
+
+    <div
+        class="pointer-events-none
+               absolute inset-x-0 top-0
+               -z-0 h-80
+               bg-gradient-to-br
+               from-emerald-950
+               via-emerald-800
+               to-slate-900"
+    ></div>
+
+
+    <div
+        class="pointer-events-none
+               absolute left-1/2 top-24
+               -z-0 h-72 w-72
+               -translate-x-1/2
+               rounded-full
+               bg-emerald-400/10
+               blur-3xl"
+    ></div>
+
+
+    <div
+        class="relative z-10
+               mx-auto max-w-6xl
+               px-4 pb-16 pt-10
+               sm:px-6 lg:px-8"
+    >
+
+
+        <!-- =================================================
+             PAGE INTRO
+        ================================================== -->
+
+        <section
+            class="mx-auto max-w-3xl
+                   text-center text-white"
+        >
+
+            <div
+                class="mb-5 inline-flex
+                       items-center gap-2
+                       rounded-full
+                       border border-white/15
+                       bg-white/10
+                       px-4 py-2
+                       text-xs font-bold
+                       tracking-widest
+                       text-emerald-100
+                       backdrop-blur"
+            >
+
+                <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                >
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3 5 6v5c0 4.5 2.9 8.5 7 10 4.1-1.5 7-5.5 7-10V6l-7-3Z"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m9 12 2 2 4-4"
+                    />
+
                 </svg>
-                BLOCKCHAIN SECURED SUBMISSION
+
+                SECURED SUBMISSION
+
             </div>
-            <h1 class="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-                Submit a Formal Complaint
+
+
+            <h1
+                class="text-3xl font-black
+                       tracking-tight
+                       sm:text-4xl
+                       lg:text-5xl"
+            >
+                Submit a Report or Complaint
             </h1>
-            <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-emerald-50/80 sm:text-base">
-                Please provide accurate details to help us address your concern promptly.
-                All submissions are secured via blockchain.
+
+
+            <p
+                class="mx-auto mt-4 max-w-2xl
+                       text-sm leading-7
+                       text-emerald-50/80
+                       sm:text-base"
+            >
+                Report a neighborhood incident or notify
+                the Barangay about community concerns.
+                Complete the information below so your
+                report can be properly reviewed.
             </p>
+
         </section>
 
-        <form method="POST"
-              action="{% url 'submit_complaint' %}"
-              enctype="multipart/form-data"
-              class="mx-auto mt-10 max-w-5xl space-y-5">
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form
+            method="POST"
+            action="{% url 'submit_complaint' %}"
+            enctype="multipart/form-data"
+            id="complaintForm"
+            class="mx-auto mt-10
+                   max-w-5xl space-y-5"
+        >
+
             {% csrf_token %}
 
-            <!-- Reusable visual card: complainant -->
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft">
-                <div class="border-b border-slate-100 bg-slate-50/80 px-5 py-5 sm:px-7">
+
+            <!-- =================================================
+                 REPORT TYPE
+            ================================================== -->
+
+            <section
+                class="overflow-hidden
+                       rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+                <div
+                    class="border-b border-slate-100
+                           bg-slate-50/80
+                           px-5 py-5 sm:px-7"
+                >
+
                     <div class="flex items-center gap-4">
-                        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/>
+
+                        <div
+                            class="flex h-11 w-11
+                                   items-center justify-center
+                                   rounded-2xl
+                                   bg-emerald-950
+                                   text-white"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
                             </svg>
+
                         </div>
+
+
                         <div>
-                            <h2 class="text-lg font-bold text-slate-900">Complainant Information</h2>
-                            <p class="text-sm text-slate-500">Your registered resident information</p>
+
+                            <h2
+                                class="text-lg font-bold
+                                       text-slate-900"
+                            >
+                                Select Report Type
+                            </h2>
+
+                            <p
+                                class="text-sm text-slate-500"
+                            >
+                                Choose the type that best
+                                matches your submission.
+                            </p>
+
                         </div>
+
                     </div>
+
                 </div>
 
-                <div class="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
-                    <div>
-                        <label class="mb-2 block text-sm font-semibold text-slate-700">Full Name</label>
-                        <input type="text"
-                               value="{{ resident.first_name }}{% if resident.middle_name %} {{ resident.middle_name }}{% endif %} {{ resident.last_name }}{% if resident.suffix %} {{ resident.suffix }}{% endif %}"
-                               readonly
-                               class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600 outline-none">
-                    </div>
 
-                    <div>
-                        <label class="mb-2 block text-sm font-semibold text-slate-700">Contact Number</label>
-                        <input type="text"
-                               value="{{ resident.contact_number|default:'' }}"
-                               readonly
-                               class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600 outline-none">
-                    </div>
+                <div
+                    class="grid gap-4 p-5
+                           sm:grid-cols-2 sm:p-7"
+                >
 
-                    <div class="sm:col-span-2">
-                        <label class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
-                        <input type="email"
-                               value="{{ resident.email|default:email }}"
-                               readonly
-                               class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600 outline-none">
-                    </div>
 
-                    <div class="sm:col-span-2">
-                        <label class="mb-2 block text-sm font-semibold text-slate-700">Address</label>
-                        <textarea readonly
-                                  class="min-h-24 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium leading-6 text-slate-600 outline-none">{{ resident.address|default:'' }}</textarea>
-                    </div>
+                    <!-- =========================================
+                         FORMAL COMPLAINT
+                    ========================================== -->
+
+                    <label
+                        id="formalComplaintCard"
+                        class="report-type-card
+                               relative cursor-pointer
+                               rounded-2xl
+                               border-2 border-slate-200
+                               bg-white p-5
+                               transition duration-200
+                               hover:border-emerald-400
+                               hover:bg-emerald-50/40"
+                    >
+
+                        <input
+                            type="radio"
+                            name="report_type"
+                            value="Formal Complaint"
+                            class="sr-only"
+
+                            {% if form_data.report_type != "Community Issue" %}
+                                checked
+                            {% endif %}
+
+                            required
+                        >
+
+
+                        <div class="flex items-start gap-4">
+
+                            <div
+                                class="flex h-10 w-10
+                                       shrink-0 items-center
+                                       justify-center
+                                       rounded-xl
+                                       bg-emerald-900
+                                       text-white"
+                            >
+
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M6 18 18 6M8 6h10v10"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M5 10v9h9"
+                                    />
+                                </svg>
+
+                            </div>
+
+
+                            <div class="min-w-0 flex-1">
+
+                                <h3
+                                    class="font-bold
+                                           text-slate-900"
+                                >
+                                    Formal Complaint / Incident
+                                </h3>
+
+
+                                <p
+                                    class="mt-1 text-[11px]
+                                           font-bold uppercase
+                                           tracking-wider
+                                           text-emerald-700"
+                                >
+                                    Disputes &amp; Violations
+                                </p>
+
+
+                                <p
+                                    class="mt-3 text-sm
+                                           leading-6
+                                           text-slate-600"
+                                >
+                                    Disputes, noise disturbances,
+                                    resident violations, blotter
+                                    filings, or Lupon conciliation
+                                    matters.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="report-radio mt-1
+                                       flex h-5 w-5 shrink-0
+                                       items-center justify-center
+                                       rounded-full
+                                       border-2
+                                       border-slate-300"
+                            >
+
+                                <div
+                                    class="report-radio-dot
+                                           hidden h-2.5 w-2.5
+                                           rounded-full
+                                           bg-emerald-900"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <!-- =========================================
+                         COMMUNITY ISSUE
+                    ========================================== -->
+
+                    <label
+                        id="communityIssueCard"
+                        class="report-type-card
+                               relative cursor-pointer
+                               rounded-2xl
+                               border-2 border-slate-200
+                               bg-white p-5
+                               transition duration-200
+                               hover:border-emerald-400
+                               hover:bg-emerald-50/40"
+                    >
+
+                        <input
+                            type="radio"
+                            name="report_type"
+                            value="Community Issue"
+                            class="sr-only"
+
+                            {% if form_data.report_type == "Community Issue" %}
+                                checked
+                            {% endif %}
+
+                            required
+                        >
+
+
+                        <div class="flex items-start gap-4">
+
+                            <div
+                                class="flex h-10 w-10
+                                       shrink-0 items-center
+                                       justify-center
+                                       rounded-xl
+                                       bg-emerald-100
+                                       text-emerald-800"
+                            >
+
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="m14.7 6.3 3 3M5 19l4.5-4.5"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M14 4a4 4 0 0 0 5.7 5.7L11 18.4 5.6 13 14.3 4.3A4 4 0 0 0 14 4Z"
+                                    />
+
+                                </svg>
+
+                            </div>
+
+
+                            <div class="min-w-0 flex-1">
+
+                                <h3
+                                    class="font-bold
+                                           text-slate-900"
+                                >
+                                    Community Issue &amp; Hazards
+                                </h3>
+
+
+                                <p
+                                    class="mt-1 text-[11px]
+                                           font-bold uppercase
+                                           tracking-wider
+                                           text-emerald-700"
+                                >
+                                    Public Works &amp; Infrastructure
+                                </p>
+
+
+                                <p
+                                    class="mt-3 text-sm
+                                           leading-6
+                                           text-slate-600"
+                                >
+                                    Damaged roads, broken
+                                    streetlights, clogged drainage,
+                                    uncollected waste, or other
+                                    public hazards.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="report-radio mt-1
+                                       flex h-5 w-5 shrink-0
+                                       items-center justify-center
+                                       rounded-full border-2
+                                       border-slate-300"
+                            >
+
+                                <div
+                                    class="report-radio-dot
+                                           hidden h-2.5 w-2.5
+                                           rounded-full
+                                           bg-emerald-900"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
                 </div>
+
             </section>
 
-            <!-- Complaint details -->
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft">
-                <div class="border-b border-slate-100 bg-slate-50/80 px-5 py-5 sm:px-7">
+
+            <!-- =================================================
+                 COMPLAINANT INFORMATION
+            ================================================== -->
+
+            <section
+                class="overflow-hidden
+                       rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+                <div
+                    class="border-b border-slate-100
+                           bg-slate-50/80
+                           px-5 py-5 sm:px-7"
+                >
+
                     <div class="flex items-center gap-4">
-                        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>
+
+                        <div
+                            class="flex h-11 w-11
+                                   items-center justify-center
+                                   rounded-2xl
+                                   bg-emerald-100
+                                   text-emerald-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"
+                                />
                             </svg>
+
                         </div>
+
+
                         <div>
-                            <h2 class="text-lg font-bold text-slate-900">Complaint Details</h2>
-                            <p class="text-sm text-slate-500">Describe what happened and why you are reporting it</p>
+
+                            <h2
+                                class="text-lg font-bold
+                                       text-slate-900"
+                            >
+                                Complainant Information
+                            </h2>
+
+                            <p
+                                class="text-sm text-slate-500"
+                            >
+                                Your registered resident information
+                            </p>
+
                         </div>
+
                     </div>
+
                 </div>
 
-                <div class="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
+
+                <div
+                    class="grid gap-5 p-5
+                           sm:grid-cols-2 sm:p-7"
+                >
+
+
+                    <!-- FULL NAME -->
+
                     <div>
-                        <label for="complaint_type" class="mb-2 block text-sm font-semibold text-slate-700">Category</label>
-                        <select id="complaint_type" name="complaint_type" required
-                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
-                            <option value="">Select category</option>
-                            <option value="Noise Complaint">Noise Complaint</option>
-                            <option value="Property Dispute">Property Dispute</option>
-                            <option value="Public Safety">Public Safety</option>
-                            <option value="Community Issue">Community Issue</option>
-                            <option value="Other">Other</option>
+
+                        <label
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Full Name
+                        </label>
+
+
+                        <input
+                            type="text"
+
+                            value="{{ resident.first_name }}{% if resident.middle_name %} {{ resident.middle_name }}{% endif %} {{ resident.last_name }}{% if resident.suffix %} {{ resident.suffix }}{% endif %}"
+
+                            readonly
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-slate-50
+                                   px-4 py-3
+                                   text-sm font-medium
+                                   text-slate-600
+                                   outline-none"
+                        >
+
+                    </div>
+
+
+                    <!-- CONTACT -->
+
+                    <div>
+
+                        <label
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Contact Number
+                        </label>
+
+
+                        <input
+                            type="text"
+                            value="{{ resident.contact_number|default:'' }}"
+                            readonly
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-slate-50
+                                   px-4 py-3
+                                   text-sm font-medium
+                                   text-slate-600
+                                   outline-none"
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Email
+                        </label>
+
+
+                        <input
+                            type="email"
+                            value="{{ resident.email|default:email }}"
+                            readonly
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-slate-50
+                                   px-4 py-3
+                                   text-sm font-medium
+                                   text-slate-600
+                                   outline-none"
+                        >
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Address
+                        </label>
+
+
+                        <textarea
+                            readonly
+
+                            class="min-h-24 w-full
+                                   resize-none rounded-xl
+                                   border border-slate-200
+                                   bg-slate-50
+                                   px-4 py-3
+                                   text-sm font-medium
+                                   leading-6
+                                   text-slate-600
+                                   outline-none"
+                        >{{ resident.address|default:'' }}</textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RESPONDENT INFORMATION
+            ================================================== -->
+
+            <section
+                id="respondentSection"
+
+                class="overflow-hidden
+                       rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+                <div
+                    class="border-b border-slate-100
+                           bg-slate-50/80
+                           px-5 py-5 sm:px-7"
+                >
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="flex h-11 w-11
+                                   items-center justify-center
+                                   rounded-2xl
+                                   bg-emerald-950
+                                   text-white"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="4"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M5 21a7 7 0 0 1 14 0"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M17 5l3 3"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2
+                                class="text-lg font-bold
+                                       text-slate-900"
+                            >
+                                Respondent / Person Complained Against
+                            </h2>
+
+                            <p
+                                class="text-sm text-slate-500"
+                            >
+                                Provide known details about
+                                the person, household, or
+                                entity involved.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="grid gap-5 p-5
+                           sm:grid-cols-2 sm:p-7"
+                >
+
+
+                    <!-- RESPONDENT NAME -->
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            for="respondent_name"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Respondent Full Name or Known Alias
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="respondent_name"
+                            name="respondent_name"
+
+                            value="{{ form_data.respondent_name|default:'' }}"
+
+                            placeholder="e.g. Juan Santos or known alias"
+
+                            required
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm text-slate-700
+                                   placeholder:text-slate-400
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >
+
+                    </div>
+
+
+                    <!-- RESPONDENT ADDRESS -->
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            for="respondent_address"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Respondent Address / Known Location
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="respondent_address"
+                            name="respondent_address"
+
+                            value="{{ form_data.respondent_address|default:'' }}"
+
+                            placeholder="House #, Street, Purok / Sitio"
+
+                            required
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm text-slate-700
+                                   placeholder:text-slate-400
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >
+
+                    </div>
+
+
+                    <!-- RELATIONSHIP -->
+
+                    <div>
+
+                        <label
+                            for="respondent_relationship"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Relationship to Complainant
+                        </label>
+
+
+                        <select
+                            id="respondent_relationship"
+                            name="respondent_relationship"
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm text-slate-700
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >
+
+                            <option value="">
+                                Select relationship
+                            </option>
+
+
+                            <option
+                                value="Neighbor"
+                                {% if form_data.respondent_relationship == "Neighbor" %}selected{% endif %}
+                            >
+                                Neighbor
+                            </option>
+
+
+                            <option
+                                value="Family / Relative"
+                                {% if form_data.respondent_relationship == "Family / Relative" %}selected{% endif %}
+                            >
+                                Family / Relative
+                            </option>
+
+
+                            <option
+                                value="Landlord"
+                                {% if form_data.respondent_relationship == "Landlord" %}selected{% endif %}
+                            >
+                                Landlord
+                            </option>
+
+
+                            <option
+                                value="Tenant"
+                                {% if form_data.respondent_relationship == "Tenant" %}selected{% endif %}
+                            >
+                                Tenant
+                            </option>
+
+
+                            <option
+                                value="Business Owner"
+                                {% if form_data.respondent_relationship == "Business Owner" %}selected{% endif %}
+                            >
+                                Business Owner
+                            </option>
+
+
+                            <option
+                                value="Employee / Worker"
+                                {% if form_data.respondent_relationship == "Employee / Worker" %}selected{% endif %}
+                            >
+                                Employee / Worker
+                            </option>
+
+
+                            <option
+                                value="Barangay Resident"
+                                {% if form_data.respondent_relationship == "Barangay Resident" %}selected{% endif %}
+                            >
+                                Barangay Resident
+                            </option>
+
+
+                            <option
+                                value="Unknown"
+                                {% if form_data.respondent_relationship == "Unknown" %}selected{% endif %}
+                            >
+                                Unknown
+                            </option>
+
+
+                            <option
+                                value="Other"
+                                {% if form_data.respondent_relationship == "Other" %}selected{% endif %}
+                            >
+                                Other
+                            </option>
+
                         </select>
+
                     </div>
 
+
+                    <!-- CONTACT -->
+
                     <div>
-                        <label for="subject" class="mb-2 block text-sm font-semibold text-slate-700">Subject</label>
-                        <input type="text" id="subject" name="subject"
-                               placeholder="Short summary of the issue" required
-                               class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
+
+                        <label
+                            for="respondent_contact"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Contact Number / Details
+
+                            <span
+                                class="font-normal
+                                       text-slate-400"
+                            >
+                                (If known)
+                            </span>
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="respondent_contact"
+                            name="respondent_contact"
+
+                            value="{{ form_data.respondent_contact|default:'' }}"
+
+                            placeholder="e.g. 0912 345 6789 or Unknown"
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm text-slate-700
+                                   placeholder:text-slate-400
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >
+
                     </div>
+
+
+                    <!-- INFORMATION -->
 
                     <div class="sm:col-span-2">
-                        <label for="description" class="mb-2 block text-sm font-semibold text-slate-700">Detailed Description</label>
-                        <textarea id="description" name="description" required
-                                  placeholder="Please describe the incident in detail..."
-                                  class="min-h-40 w-full resize-y rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-700 placeholder:text-slate-400 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"></textarea>
+
+                        <div
+                            class="flex items-start gap-3
+                                   rounded-xl
+                                   border border-emerald-100
+                                   bg-emerald-50
+                                   px-4 py-3"
+                        >
+
+                            <div
+                                class="mt-0.5
+                                       flex h-5 w-5
+                                       shrink-0
+                                       items-center
+                                       justify-center
+                                       rounded-full
+                                       bg-emerald-950
+                                       text-[10px]
+                                       font-bold text-white"
+                            >
+                                i
+                            </div>
+
+
+                            <p
+                                class="text-xs leading-5
+                                       text-emerald-900"
+                            >
+                                If the respondent's exact
+                                name or address is unknown,
+                                provide any known alias,
+                                landmark, or location that
+                                can help identify them.
+                            </p>
+
+                        </div>
+
                     </div>
+
                 </div>
+
             </section>
 
-            <!-- Incident -->
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft">
-                <div class="border-b border-slate-100 bg-slate-50/80 px-5 py-5 sm:px-7">
+
+            <!-- =================================================
+                 COMPLAINT DETAILS
+            ================================================== -->
+
+            <section
+                class="overflow-hidden
+                       rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+                <div
+                    class="border-b border-slate-100
+                           bg-slate-50/80
+                           px-5 py-5 sm:px-7"
+                >
+
                     <div class="flex items-center gap-4">
-                        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"/>
-                                <circle cx="12" cy="10" r="2.2"/>
+
+                        <div
+                            class="flex h-11 w-11
+                                   items-center justify-center
+                                   rounded-2xl
+                                   bg-blue-100
+                                   text-blue-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"
+                                />
                             </svg>
+
                         </div>
+
+
                         <div>
-                            <h2 class="text-lg font-bold text-slate-900">Incident Information</h2>
-                            <p class="text-sm text-slate-500">Tell us where and when the incident occurred</p>
+
+                            <h2
+                                class="text-lg font-bold
+                                       text-slate-900"
+                            >
+                                Complaint Details
+                            </h2>
+
+                            <p
+                                class="text-sm text-slate-500"
+                            >
+                                Describe what happened and
+                                why you are reporting it.
+                            </p>
+
                         </div>
+
                     </div>
+
                 </div>
 
-                <div class="space-y-5 p-5 sm:p-7">
+
+                <div
+                    class="grid gap-5 p-5
+                           sm:grid-cols-2 sm:p-7"
+                >
+
+
+                    <!-- CATEGORY -->
+
                     <div>
-                        <label for="location" class="mb-2 block text-sm font-semibold text-slate-700">Location/Address</label>
-                        <div class="relative">
-                            <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"/>
-                                <circle cx="12" cy="10" r="2.2"/>
-                            </svg>
-                            <input type="text" id="location" name="location"
-                                   placeholder="Street, Barangay, City" required
-                                   class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-12 pr-4 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
-                        </div>
+
+                        <label
+                            for="complaint_type"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Category
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+                        </label>
+
+
+                        <select
+                            id="complaint_type"
+                            name="complaint_type"
+
+                            required
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm text-slate-700
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+
+                            <option
+                                value="Noise Complaint"
+                                {% if form_data.complaint_type == "Noise Complaint" %}selected{% endif %}
+                            >
+                                Noise Complaint
+                            </option>
+
+
+                            <option
+                                value="Property Dispute"
+                                {% if form_data.complaint_type == "Property Dispute" %}selected{% endif %}
+                            >
+                                Property Dispute
+                            </option>
+
+
+                            <option
+                                value="Public Safety"
+                                {% if form_data.complaint_type == "Public Safety" %}selected{% endif %}
+                            >
+                                Public Safety
+                            </option>
+
+
+                            <option
+                                value="Community Issue"
+                                {% if form_data.complaint_type == "Community Issue" %}selected{% endif %}
+                            >
+                                Community Issue
+                            </option>
+
+
+                            <option
+                                value="Other"
+                                {% if form_data.complaint_type == "Other" %}selected{% endif %}
+                            >
+                                Other
+                            </option>
+
+                        </select>
+
                     </div>
 
-                    <div class="grid gap-5 sm:grid-cols-2">
-                        <div>
-                            <label for="incident_date" class="mb-2 block text-sm font-semibold text-slate-700">Date of Incident</label>
-                            <input type="date" id="incident_date" name="incident_date" required
-                                   class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
-                        </div>
-                        <div>
-                            <label for="incident_time" class="mb-2 block text-sm font-semibold text-slate-700">Time of Incident</label>
-                            <input type="time" id="incident_time" name="incident_time" required
-                                   class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
-                        </div>
+
+                    <!-- SUBJECT -->
+
+                    <div>
+
+                        <label
+                            for="subject"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Subject
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+
+                            value="{{ form_data.subject|default:'' }}"
+
+                            placeholder="Short summary of the issue"
+
+                            required
+
+                            class="w-full rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm text-slate-700
+                                   placeholder:text-slate-400
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >
+
                     </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="sm:col-span-2">
+
+                        <label
+                            for="description"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Detailed Description
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+                        </label>
+
+
+                        <textarea
+                            id="description"
+                            name="description"
+
+                            required
+
+                            placeholder="Please describe the incident in detail..."
+
+                            class="min-h-40 w-full
+                                   resize-y rounded-xl
+                                   border border-slate-200
+                                   bg-white px-4 py-3
+                                   text-sm leading-6
+                                   text-slate-700
+                                   placeholder:text-slate-400
+                                   outline-none transition
+                                   focus:border-emerald-500
+                                   focus:ring-4
+                                   focus:ring-emerald-500/10"
+                        >{{ form_data.description|default:'' }}</textarea>
+
+                    </div>
+
                 </div>
+
             </section>
 
-            <!-- Evidence -->
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-soft">
-                <div class="border-b border-slate-100 bg-slate-50/80 px-5 py-5 sm:px-7">
+
+            <!-- =================================================
+                 INCIDENT INFORMATION
+            ================================================== -->
+
+            <section
+                class="overflow-hidden
+                       rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+                <div
+                    class="border-b border-slate-100
+                           bg-slate-50/80
+                           px-5 py-5 sm:px-7"
+                >
+
                     <div class="flex items-center gap-4">
-                        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h3l1.5-2h7L17 7h3v12H4V7Z"/>
-                                <circle cx="12" cy="13" r="3"/>
+
+                        <div
+                            class="flex h-11 w-11
+                                   items-center justify-center
+                                   rounded-2xl
+                                   bg-amber-100
+                                   text-amber-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="10"
+                                    r="2.2"
+                                />
+
                             </svg>
+
                         </div>
+
+
                         <div>
-                            <h2 class="text-lg font-bold text-slate-900">Evidence</h2>
-                            <p class="text-sm text-slate-500">Attach files that can help support your complaint</p>
+
+                            <h2
+                                class="text-lg font-bold
+                                       text-slate-900"
+                            >
+                                Incident Information
+                            </h2>
+
+                            <p
+                                class="text-sm text-slate-500"
+                            >
+                                Tell us where and when the
+                                incident occurred.
+                            </p>
+
                         </div>
+
                     </div>
+
                 </div>
+
+
+                <div
+                    class="space-y-5 p-5 sm:p-7"
+                >
+
+
+                    <!-- LOCATION -->
+
+                    <div>
+
+                        <label
+                            for="location"
+
+                            class="mb-2 block
+                                   text-sm font-semibold
+                                   text-slate-700"
+                        >
+                            Location / Address
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+                        </label>
+
+
+                        <div class="relative">
+
+                            <svg
+                                class="pointer-events-none
+                                       absolute left-4 top-1/2
+                                       h-5 w-5
+                                       -translate-y-1/2
+                                       text-slate-400"
+
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="10"
+                                    r="2.2"
+                                />
+
+                            </svg>
+
+
+                            <input
+                                type="text"
+                                id="location"
+                                name="location"
+
+                                value="{{ form_data.location|default:'' }}"
+
+                                placeholder="Street, Barangay, City"
+
+                                required
+
+                                class="w-full rounded-xl
+                                       border border-slate-200
+                                       bg-white
+                                       py-3 pl-12 pr-4
+                                       text-sm text-slate-700
+                                       placeholder:text-slate-400
+                                       outline-none transition
+                                       focus:border-emerald-500
+                                       focus:ring-4
+                                       focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATE / TIME -->
+
+                    <div
+                        class="grid gap-5
+                               sm:grid-cols-2"
+                    >
+
+
+                        <!-- DATE -->
+
+                        <div>
+
+                            <label
+                                for="incident_date"
+
+                                class="mb-2 block
+                                       text-sm font-semibold
+                                       text-slate-700"
+                            >
+                                Date of Incident
+
+                                <span class="text-red-500">
+                                    *
+                                </span>
+                            </label>
+
+
+                            <input
+                                type="date"
+                                id="incident_date"
+                                name="incident_date"
+
+                                value="{{ form_data.incident_date|default:'' }}"
+
+                                required
+
+                                class="w-full rounded-xl
+                                       border border-slate-200
+                                       bg-white px-4 py-3
+                                       text-sm text-slate-700
+                                       outline-none transition
+                                       focus:border-emerald-500
+                                       focus:ring-4
+                                       focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+
+                        <!-- TIME -->
+
+                        <div>
+
+                            <label
+                                for="incident_time"
+
+                                class="mb-2 block
+                                       text-sm font-semibold
+                                       text-slate-700"
+                            >
+                                Time of Incident
+
+                                <span class="text-red-500">
+                                    *
+                                </span>
+                            </label>
+
+
+                            <input
+                                type="time"
+                                id="incident_time"
+                                name="incident_time"
+
+                                value="{{ form_data.incident_time|default:'' }}"
+
+                                required
+
+                                class="w-full rounded-xl
+                                       border border-slate-200
+                                       bg-white px-4 py-3
+                                       text-sm text-slate-700
+                                       outline-none transition
+                                       focus:border-emerald-500
+                                       focus:ring-4
+                                       focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 EVIDENCE
+            ================================================== -->
+
+            <section
+                class="overflow-hidden
+                       rounded-3xl
+                       border border-slate-200
+                       bg-white shadow-soft"
+            >
+
+                <div
+                    class="border-b border-slate-100
+                           bg-slate-50/80
+                           px-5 py-5 sm:px-7"
+                >
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="flex h-11 w-11
+                                   items-center justify-center
+                                   rounded-2xl
+                                   bg-violet-100
+                                   text-violet-700"
+                        >
+
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4 7h3l1.5-2h7L17 7h3v12H4V7Z"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="13"
+                                    r="3"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2
+                                class="text-lg font-bold
+                                       text-slate-900"
+                            >
+                                Evidence
+                            </h2>
+
+                            <p
+                                class="text-sm text-slate-500"
+                            >
+                                Attach files that can help
+                                support your complaint.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
 
                 <div class="p-5 sm:p-7">
-                    <label for="evidence"
-                           class="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 px-6 py-12 text-center transition hover:border-emerald-400 hover:bg-emerald-50/40">
-                        <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-emerald-600 shadow-sm ring-1 ring-slate-200 transition group-hover:scale-105">
-                            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/>
+
+                    <label
+                        for="evidence"
+
+                        class="group flex cursor-pointer
+                               flex-col items-center
+                               justify-center
+                               rounded-2xl
+                               border-2 border-dashed
+                               border-slate-200
+                               bg-slate-50/60
+                               px-6 py-12
+                               text-center transition
+                               hover:border-emerald-400
+                               hover:bg-emerald-50/40"
+                    >
+
+                        <div
+                            class="mb-4 flex h-14 w-14
+                                   items-center justify-center
+                                   rounded-2xl bg-white
+                                   text-emerald-600
+                                   shadow-sm
+                                   ring-1 ring-slate-200
+                                   transition
+                                   group-hover:scale-105"
+                        >
+
+                            <svg
+                                class="h-7 w-7"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                viewBox="0 0 24 24"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 16V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"
+                                />
+
                             </svg>
+
                         </div>
-                        <strong class="text-sm font-bold text-slate-800">Click to upload photos, videos, or documents</strong>
-                        <span class="mt-2 text-xs text-slate-500">Maximum 5 files, up to 10MB each</span>
-                        <span id="fileCount" class="mt-3 hidden rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700"></span>
-                        <input type="file" id="evidence" name="evidence" multiple
-                               accept="image/*,video/*,.pdf,.doc,.docx" class="sr-only">
+
+
+                        <strong
+                            class="text-sm font-bold
+                                   text-slate-800"
+                        >
+                            Click to upload photos,
+                            videos, or documents
+                        </strong>
+
+
+                        <span
+                            class="mt-2 text-xs
+                                   text-slate-500"
+                        >
+                            Maximum 5 files,
+                            up to 10MB each
+                        </span>
+
+
+                        <span
+                            id="fileCount"
+
+                            class="mt-3 hidden
+                                   rounded-full
+                                   bg-emerald-100
+                                   px-3 py-1
+                                   text-xs font-semibold
+                                   text-emerald-700"
+                        ></span>
+
+
+                        <input
+                            type="file"
+                            id="evidence"
+                            name="evidence"
+                            multiple
+
+                            accept="image/*,video/*,.pdf,.doc,.docx"
+
+                            class="sr-only"
+                        >
+
                     </label>
+
                 </div>
+
             </section>
 
-            <!-- Submit -->
-            <div class="rounded-3xl bg-slate-900 p-5 shadow-xl sm:p-7">
-                <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+
+            <!-- =================================================
+                 SUBMIT
+            ================================================== -->
+
+            <div
+                class="rounded-3xl
+                       bg-slate-900
+                       p-5 shadow-xl
+                       sm:p-7"
+            >
+
+                <div
+                    class="flex flex-col gap-5
+                           sm:flex-row
+                           sm:items-center
+                           sm:justify-between"
+                >
+
                     <div>
-                        <p class="font-bold text-white">Ready to submit?</p>
-                        <p class="mt-1 text-sm leading-6 text-slate-400">Review your information before sending this formal complaint.</p>
+
+                        <p
+                            class="font-bold text-white"
+                        >
+                            Ready to submit?
+                        </p>
+
+                        <p
+                            class="mt-1 text-sm
+                                   leading-6
+                                   text-slate-400"
+                        >
+                            Review your information before
+                            sending this report or complaint.
+                        </p>
+
                     </div>
-                    <button type="submit"
-                            class="inline-flex items-center justify-center gap-3 rounded-xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition hover:-translate-y-0.5 hover:bg-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-500/30">
-                        <span>Submit Formal Complaint</span>
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h13m-5-5 5 5-5 5"/>
+
+
+                    <button
+                        type="submit"
+
+                        id="submitComplaintButton"
+
+                        class="inline-flex
+                               items-center
+                               justify-center
+                               gap-3 rounded-xl
+                               bg-emerald-500
+                               px-6 py-3.5
+                               text-sm font-bold
+                               text-white
+                               shadow-lg
+                               shadow-emerald-500/20
+                               transition
+                               hover:-translate-y-0.5
+                               hover:bg-emerald-400
+                               focus:outline-none
+                               focus:ring-4
+                               focus:ring-emerald-500/30
+                               disabled:cursor-not-allowed
+                               disabled:opacity-60"
+                    >
+
+                        <span
+                            id="submitComplaintButtonText"
+                        >
+                            Submit Report / Complaint
+                        </span>
+
+
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 12h13m-5-5 5 5-5 5"
+                            />
                         </svg>
+
                     </button>
+
                 </div>
+
             </div>
 
-            <p class="text-center text-xs leading-6 text-slate-500">
+
+            <!-- =================================================
+                 TERMS
+            ================================================== -->
+
+            <p
+                class="text-center
+                       text-xs leading-6
+                       text-slate-500"
+            >
+
                 By submitting, you agree to our
-                <a href="#" class="font-semibold text-emerald-700 hover:underline">Terms of Service</a>
+
+                <a
+                    href="#"
+                    class="font-semibold
+                           text-emerald-700
+                           hover:underline"
+                >
+                    Terms of Service
+                </a>
+
                 and
-                <a href="#" class="font-semibold text-emerald-700 hover:underline">Privacy Policy</a>.
+
+                <a
+                    href="#"
+                    class="font-semibold
+                           text-emerald-700
+                           hover:underline"
+                >
+                    Privacy Policy
+                </a>.
+
             </p>
+
         </form>
+
     </div>
+
 </main>
 
+
+<!-- =========================================================
+     COMPLAINT SUCCESS POPUP
+========================================================= -->
+
 {% include 'partials/complaint_success_popup.html' %}
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
 {% include 'partials/footer.html' %}
 
-<script src="{% static 'js/topnav.js' %}"></script>
-<script src="{% static 'js/complaint_success_popup.js' %}"></script>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script
+    src="{% static 'js/topnav.js' %}"
+></script>
+
+<script
+    src="{% static 'js/complaint_success_popup.js' %}"
+></script>
+
 
 <script>
-    const evidenceInput = document.getElementById('evidence');
-    const fileCount = document.getElementById('fileCount');
 
-    if (evidenceInput && fileCount) {
-        evidenceInput.addEventListener('change', function () {
-            const count = this.files.length;
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
 
-            if (count > 0) {
-                fileCount.textContent = `${count} file${count === 1 ? '' : 's'} selected`;
-                fileCount.classList.remove('hidden');
+        /* =================================================
+           DJANGO MESSAGE CLOSE BUTTONS
+        ================================================= */
+
+        const messageCloseButtons =
+            document.querySelectorAll(
+                '.message-close'
+            );
+
+
+        messageCloseButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    'click',
+                    function () {
+
+                        const message =
+                            button.closest(
+                                '.message-popup'
+                            );
+
+
+                        if (!message) {
+                            return;
+                        }
+
+
+                        message.style.opacity =
+                            '0';
+
+
+                        message.style.transform =
+                            'translateY(-10px)';
+
+
+                        setTimeout(
+                            function () {
+
+                                message.remove();
+
+                            },
+                            200
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           AUTO HIDE DJANGO MESSAGES
+        ================================================= */
+
+        const messagePopups =
+            document.querySelectorAll(
+                '.message-popup'
+            );
+
+
+        if (messagePopups.length > 0) {
+
+            setTimeout(
+                function () {
+
+                    messagePopups.forEach(
+                        function (message) {
+
+                            message.style.transition =
+                                'opacity 0.2s ease, transform 0.2s ease';
+
+
+                            message.style.opacity =
+                                '0';
+
+
+                            message.style.transform =
+                                'translateY(-10px)';
+
+
+                            setTimeout(
+                                function () {
+
+                                    if (
+                                        message.parentNode
+                                    ) {
+
+                                        message.remove();
+
+                                    }
+
+                                },
+                                200
+                            );
+
+                        }
+                    );
+
+                },
+                5000
+            );
+
+        }
+
+
+        /* =================================================
+           REPORT TYPE
+        ================================================= */
+
+        const reportTypeInputs =
+            document.querySelectorAll(
+                'input[name="report_type"]'
+            );
+
+
+        const reportCards =
+            document.querySelectorAll(
+                '.report-type-card'
+            );
+
+
+        const respondentSection =
+            document.getElementById(
+                'respondentSection'
+            );
+
+
+        const respondentName =
+            document.getElementById(
+                'respondent_name'
+            );
+
+
+        const respondentAddress =
+            document.getElementById(
+                'respondent_address'
+            );
+
+
+        function updateReportTypeCards() {
+
+            reportCards.forEach(
+                function (card) {
+
+                    const input =
+                        card.querySelector(
+                            'input[name="report_type"]'
+                        );
+
+
+                    const radio =
+                        card.querySelector(
+                            '.report-radio'
+                        );
+
+
+                    const dot =
+                        card.querySelector(
+                            '.report-radio-dot'
+                        );
+
+
+                    if (!input) {
+                        return;
+                    }
+
+
+                    if (input.checked) {
+
+                        card.classList.remove(
+                            'border-slate-200',
+                            'bg-white'
+                        );
+
+
+                        card.classList.add(
+                            'border-emerald-900',
+                            'bg-emerald-50'
+                        );
+
+
+                        if (radio) {
+
+                            radio.classList.remove(
+                                'border-slate-300'
+                            );
+
+
+                            radio.classList.add(
+                                'border-emerald-800'
+                            );
+
+                        }
+
+
+                        if (dot) {
+
+                            dot.classList.remove(
+                                'hidden'
+                            );
+
+                        }
+
+                    } else {
+
+                        card.classList.remove(
+                            'border-emerald-900',
+                            'bg-emerald-50'
+                        );
+
+
+                        card.classList.add(
+                            'border-slate-200',
+                            'bg-white'
+                        );
+
+
+                        if (radio) {
+
+                            radio.classList.remove(
+                                'border-emerald-800'
+                            );
+
+
+                            radio.classList.add(
+                                'border-slate-300'
+                            );
+
+                        }
+
+
+                        if (dot) {
+
+                            dot.classList.add(
+                                'hidden'
+                            );
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            const selected =
+                document.querySelector(
+                    'input[name="report_type"]:checked'
+                );
+
+
+            /*
+             * Community Issues do not require
+             * respondent information.
+             */
+
+            if (
+                selected &&
+                selected.value ===
+                    'Community Issue'
+            ) {
+
+                if (respondentSection) {
+
+                    respondentSection.classList.add(
+                        'hidden'
+                    );
+
+                }
+
+
+                if (respondentName) {
+
+                    respondentName.required =
+                        false;
+
+                }
+
+
+                if (respondentAddress) {
+
+                    respondentAddress.required =
+                        false;
+
+                }
+
             } else {
-                fileCount.classList.add('hidden');
+
+                if (respondentSection) {
+
+                    respondentSection.classList.remove(
+                        'hidden'
+                    );
+
+                }
+
+
+                if (respondentName) {
+
+                    respondentName.required =
+                        true;
+
+                }
+
+
+                if (respondentAddress) {
+
+                    respondentAddress.required =
+                        true;
+
+                }
+
             }
 
-            if (count > 5) {
-                fileCount.textContent = 'Please select a maximum of 5 files';
-                fileCount.classList.remove('bg-emerald-100', 'text-emerald-700');
-                fileCount.classList.add('bg-red-100', 'text-red-700');
+        }
+
+
+        reportTypeInputs.forEach(
+            function (input) {
+
+                input.addEventListener(
+                    'change',
+                    updateReportTypeCards
+                );
+
             }
-        });
+        );
+
+
+        updateReportTypeCards();
+
+
+        /* =================================================
+           EVIDENCE FILES
+        ================================================= */
+
+        const evidenceInput =
+            document.getElementById(
+                'evidence'
+            );
+
+
+        const fileCount =
+            document.getElementById(
+                'fileCount'
+            );
+
+
+        if (
+            evidenceInput &&
+            fileCount
+        ) {
+
+            evidenceInput.addEventListener(
+                'change',
+                function () {
+
+                    const count =
+                        this.files.length;
+
+
+                    fileCount.classList.remove(
+                        'bg-red-100',
+                        'text-red-700'
+                    );
+
+
+                    fileCount.classList.add(
+                        'bg-emerald-100',
+                        'text-emerald-700'
+                    );
+
+
+                    if (count > 0) {
+
+                        fileCount.textContent =
+                            `${count} file${count === 1 ? '' : 's'} selected`;
+
+
+                        fileCount.classList.remove(
+                            'hidden'
+                        );
+
+                    } else {
+
+                        fileCount.classList.add(
+                            'hidden'
+                        );
+
+                    }
+
+
+                    if (count > 5) {
+
+                        fileCount.textContent =
+                            'Please select a maximum of 5 files';
+
+
+                        fileCount.classList.remove(
+                            'bg-emerald-100',
+                            'text-emerald-700'
+                        );
+
+
+                        fileCount.classList.add(
+                            'bg-red-100',
+                            'text-red-700'
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           FORM SUBMISSION
+        ================================================= */
+
+        const complaintForm =
+            document.getElementById(
+                'complaintForm'
+            );
+
+
+        const submitButton =
+            document.getElementById(
+                'submitComplaintButton'
+            );
+
+
+        const submitButtonText =
+            document.getElementById(
+                'submitComplaintButtonText'
+            );
+
+
+        if (complaintForm) {
+
+            complaintForm.addEventListener(
+                'submit',
+                function (event) {
+
+                    /* =====================================
+                       MAXIMUM 5 FILES
+                    ===================================== */
+
+                    if (
+                        evidenceInput &&
+                        evidenceInput.files.length > 5
+                    ) {
+
+                        event.preventDefault();
+
+
+                        alert(
+                            'Please select a maximum of 5 evidence files.'
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    /* =====================================
+                       MAXIMUM 10MB PER FILE
+                    ===================================== */
+
+                    if (evidenceInput) {
+
+                        const maxFileSize =
+                            10 * 1024 * 1024;
+
+
+                        for (
+                            let i = 0;
+                            i < evidenceInput.files.length;
+                            i++
+                        ) {
+
+                            const file =
+                                evidenceInput.files[i];
+
+
+                            if (
+                                file.size >
+                                maxFileSize
+                            ) {
+
+                                event.preventDefault();
+
+
+                                alert(
+                                    `${file.name} exceeds the 10MB file size limit.`
+                                );
+
+
+                                return;
+
+                            }
+
+                        }
+
+                    }
+
+
+                    /* =====================================
+                       PREVENT DOUBLE SUBMISSION
+                    ===================================== */
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            true;
+
+                    }
+
+
+                    if (submitButtonText) {
+
+                        submitButtonText.textContent =
+                            'Submitting...';
+
+                    }
+
+                }
+            );
+
+        }
+
     }
+);
+
 </script>
+
 
 </body>
 </html>
