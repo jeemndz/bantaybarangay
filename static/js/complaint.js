@@ -9,6 +9,7 @@ document.addEventListener(
 
         initializeComplaintReview();
         initializeComplaintMessages();
+        initializeEvidencePreview();
 
     }
 );
@@ -43,96 +44,56 @@ function initializeComplaintReview() {
 
 
     /* =====================================================
-       TABLE ROWS
+       CLICKABLE COMPLAINT ROWS
     ===================================================== */
 
-    const rows =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             ".complaint-row"
-        );
+        )
+        .forEach(function (row) {
 
+            row.addEventListener(
+                "click",
+                function (event) {
 
-    rows.forEach(function (row) {
+                    /*
+                     * Do not trigger the row when the user
+                     * clicked another interactive control.
+                     */
 
-        row.addEventListener(
-            "click",
-            function (event) {
+                    if (
+                        event.target.closest(
+                            "a, button, input, select, textarea"
+                        )
+                    ) {
+                        return;
+                    }
 
-                /*
-                 * Prevent duplicate behavior if the user
-                 * clicks an interactive element.
-                 */
-
-                if (
-                    event.target.closest(
-                        "a, input, select, textarea"
-                    )
-                ) {
-                    return;
-                }
-
-
-                openComplaintReview(
-                    row
-                );
-
-            }
-        );
-
-
-        /* =================================================
-           KEYBOARD ACCESSIBILITY
-        ================================================= */
-
-        row.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key === "Enter" ||
-                    event.key === " "
-                ) {
-
-                    event.preventDefault();
 
                     openComplaintReview(
                         row
                     );
 
                 }
-
-            }
-        );
-
-    });
+            );
 
 
-    /* =====================================================
-       ACTION BUTTONS
-    ===================================================== */
+            /* =============================================
+               KEYBOARD ACCESSIBILITY
+            ============================================== */
 
-    document
-        .querySelectorAll(
-            ".action-btn"
-        )
-        .forEach(function (button) {
-
-            button.addEventListener(
-                "click",
+            row.addEventListener(
+                "keydown",
                 function (event) {
 
-                    event.preventDefault();
+                    if (
+                        event.key === "Enter"
+                        ||
+                        event.key === " "
+                    ) {
 
-                    event.stopPropagation();
-
-
-                    const row =
-                        button.closest(
-                            ".complaint-row"
-                        );
-
-
-                    if (row) {
+                        event.preventDefault();
 
                         openComplaintReview(
                             row
@@ -147,7 +108,7 @@ function initializeComplaintReview() {
 
 
     /* =====================================================
-       CLOSE BUTTONS
+       CLOSE REVIEW BUTTONS
     ===================================================== */
 
     document
@@ -177,7 +138,42 @@ function initializeComplaintReview() {
         function (event) {
 
             if (
-                event.key === "Escape" &&
+                event.key !== "Escape"
+            ) {
+                return;
+            }
+
+
+            const evidencePreview =
+                document.getElementById(
+                    "evidencePreviewModal"
+                );
+
+
+            /*
+             * Close the evidence preview first.
+             */
+
+            if (
+                evidencePreview
+                &&
+                evidencePreview.classList.contains(
+                    "active"
+                )
+            ) {
+
+                closeEvidencePreview();
+
+                return;
+
+            }
+
+
+            /*
+             * Otherwise close complaint review.
+             */
+
+            if (
                 modal.classList.contains(
                     "active"
                 )
@@ -249,24 +245,33 @@ function openComplaintReview(row) {
         );
 
 
-    if (!modal || !form || !row) {
+    if (
+        !modal
+        ||
+        !form
+        ||
+        !row
+    ) {
         return;
     }
 
-
-    /* =====================================================
-       COMPLAINT ID
-    ===================================================== */
 
     const complaintId =
         row.dataset.complaintId || "";
 
 
+    /* =====================================================
+       COMPLAINT REFERENCE
+    ===================================================== */
+
     setText(
         "reviewReference",
-        row.dataset.reference ||
+
+        row.dataset.reference
+        ||
         (
-            "#CP-" +
+            "#CP-"
+            +
             String(
                 complaintId
             ).padStart(
@@ -357,10 +362,6 @@ function openComplaintReview(row) {
     );
 
 
-    /* =====================================================
-       RESPONDENT SECTION VISIBILITY
-    ===================================================== */
-
     const respondentSection =
         document.getElementById(
             "reviewRespondentSection"
@@ -372,17 +373,20 @@ function openComplaintReview(row) {
             cleanValue(
                 row.dataset.respondentName
             )
-        ) ||
+        )
+        ||
         Boolean(
             cleanValue(
                 row.dataset.respondentAddress
             )
-        ) ||
+        )
+        ||
         Boolean(
             cleanValue(
                 row.dataset.respondentRelationship
             )
-        ) ||
+        )
+        ||
         Boolean(
             cleanValue(
                 row.dataset.respondentContact
@@ -394,19 +398,24 @@ function openComplaintReview(row) {
 
         if (
             row.dataset.reportType ===
-                "Community Issue" &&
+                "Community Issue"
+            &&
             !hasRespondent
         ) {
 
-            respondentSection.classList.add(
-                "hidden"
-            );
+            respondentSection
+                .classList
+                .add(
+                    "hidden"
+                );
 
         } else {
 
-            respondentSection.classList.remove(
-                "hidden"
-            );
+            respondentSection
+                .classList
+                .remove(
+                    "hidden"
+                );
 
         }
 
@@ -414,7 +423,7 @@ function openComplaintReview(row) {
 
 
     /* =====================================================
-       FORM VALUES
+       REVIEW FORM
     ===================================================== */
 
     const priority =
@@ -438,7 +447,8 @@ function openComplaintReview(row) {
     if (priority) {
 
         priority.value =
-            row.dataset.priority ||
+            row.dataset.priority
+            ||
             "N/A";
 
     }
@@ -447,7 +457,8 @@ function openComplaintReview(row) {
     if (status) {
 
         status.value =
-            row.dataset.status ||
+            row.dataset.status
+            ||
             "Submitted";
 
     }
@@ -456,62 +467,39 @@ function openComplaintReview(row) {
     if (resolution) {
 
         resolution.value =
-            row.dataset.resolution ||
+            row.dataset.resolution
+            ||
             "";
 
     }
 
 
     /* =====================================================
-       BUILD DJANGO UPDATE URL
+       RESET SAVE BUTTON
     ===================================================== */
 
-    const urlTemplate =
-        form.dataset.updateUrlTemplate;
+    const saveButton =
+        document.getElementById(
+            "reviewSaveButton"
+        );
 
 
-    if (urlTemplate && complaintId) {
+    if (saveButton) {
 
-        /*
-         * Template example:
-         *
-         * /complaints/0/update/
-         *
-         * Replace the placeholder ID with the
-         * selected complaint ID.
-         */
+        saveButton.disabled =
+            false;
 
-        form.action =
-            urlTemplate.replace(
-                /\/0\/(?=[^/]*\/?$)/,
-                "/" +
-                encodeURIComponent(
-                    complaintId
-                ) +
-                "/"
+
+        const label =
+            saveButton.querySelector(
+                "span"
             );
 
 
-        /*
-         * Fallback in case the project's URL has
-         * additional path components.
-         */
+        if (label) {
 
-        if (
-            form.action.includes(
-                "/0/"
-            )
-        ) {
-
-            form.action =
-                urlTemplate.replace(
-                    "/0/",
-                    "/" +
-                    encodeURIComponent(
-                        complaintId
-                    ) +
-                    "/"
-                );
+            label.textContent =
+                "Save Changes";
 
         }
 
@@ -519,7 +507,30 @@ function openComplaintReview(row) {
 
 
     /* =====================================================
-       SHOW MODAL
+       UPDATE FORM URL
+    ===================================================== */
+
+    const urlTemplate =
+        form.dataset.updateUrlTemplate;
+
+
+    if (
+        urlTemplate
+        &&
+        complaintId
+    ) {
+
+        form.action =
+            replaceUrlId(
+                urlTemplate,
+                complaintId
+            );
+
+    }
+
+
+    /* =====================================================
+       SHOW COMPLAINT MODAL
     ===================================================== */
 
     modal.classList.add(
@@ -539,19 +550,1205 @@ function openComplaintReview(row) {
 
 
     /* =====================================================
-       FOCUS FIRST FIELD
+       LOAD COMPLAINT EVIDENCE
     ===================================================== */
 
-    window.setTimeout(
-        function () {
-
-            if (priority) {
-                priority.focus();
-            }
-
-        },
-        180
+    loadComplaintEvidence(
+        complaintId
     );
+
+}
+
+
+/* =========================================================
+   LOAD COMPLAINT EVIDENCE
+========================================================= */
+
+async function loadComplaintEvidence(
+    complaintId
+) {
+
+    const page =
+        document.querySelector(
+            ".complaint-page"
+        );
+
+
+    const grid =
+        document.getElementById(
+            "reviewEvidenceGrid"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "reviewEvidenceLoading"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "reviewEvidenceEmpty"
+        );
+
+
+    const count =
+        document.getElementById(
+            "reviewEvidenceCount"
+        );
+
+
+    if (
+        !page
+        ||
+        !grid
+        ||
+        !loading
+        ||
+        !empty
+        ||
+        !count
+    ) {
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       RESET EVIDENCE UI
+    ===================================================== */
+
+    grid.innerHTML =
+        "";
+
+
+    grid.hidden =
+        true;
+
+
+    empty.hidden =
+        true;
+
+
+    loading.hidden =
+        false;
+
+
+    count.textContent =
+        "Loading...";
+
+
+    /*
+     * Reset the empty-state message in case the
+     * previous request failed.
+     */
+
+    const emptyMessage =
+        empty.querySelector(
+            "span"
+        );
+
+
+    if (emptyMessage) {
+
+        emptyMessage.textContent =
+            "This complaint does not currently have any uploaded evidence.";
+
+    }
+
+
+    /* =====================================================
+       URL
+    ===================================================== */
+
+    const template =
+        page.dataset.evidenceUrlTemplate;
+
+
+    if (
+        !template
+        ||
+        !complaintId
+    ) {
+
+        showEvidenceError(
+            "Unable to load evidence."
+        );
+
+        return;
+
+    }
+
+
+    const url =
+        replaceUrlId(
+            template,
+            complaintId
+        );
+
+
+    /* =====================================================
+       FETCH
+    ===================================================== */
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method:
+                        "GET",
+
+                    headers: {
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+                    },
+
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Evidence request returned "
+                +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        loading.hidden =
+            true;
+
+
+        const evidence =
+            Array.isArray(
+                data.evidence
+            )
+                ? data.evidence
+                : [];
+
+
+        /* =================================================
+           COUNT
+        ================================================= */
+
+        count.textContent =
+            evidence.length
+            +
+            (
+                evidence.length === 1
+                    ? " file"
+                    : " files"
+            );
+
+
+        /* =================================================
+           EMPTY
+        ================================================= */
+
+        if (
+            evidence.length === 0
+        ) {
+
+            empty.hidden =
+                false;
+
+            return;
+
+        }
+
+
+        /* =================================================
+           CREATE CARDS
+        ================================================= */
+
+        evidence.forEach(
+            function (item) {
+
+                const card =
+                    createEvidenceCard(
+                        item
+                    );
+
+
+                grid.appendChild(
+                    card
+                );
+
+            }
+        );
+
+
+        grid.hidden =
+            false;
+
+    } catch (error) {
+
+        console.error(
+            "Evidence loading error:",
+            error
+        );
+
+
+        loading.hidden =
+            true;
+
+
+        count.textContent =
+            "Unavailable";
+
+
+        showEvidenceError(
+            "Evidence could not be loaded. Please try again."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE EVIDENCE CARD
+========================================================= */
+
+function createEvidenceCard(item) {
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+
+    button.type =
+        "button";
+
+
+    button.className =
+        "review-evidence-item";
+
+
+    /* =====================================================
+       FILE KIND
+    ===================================================== */
+
+    const kind =
+        determineEvidenceKind(
+            item.file_type,
+            item.file_name
+        );
+
+
+    button.dataset.kind =
+        kind;
+
+
+    /* =====================================================
+       PREVIEW
+    ===================================================== */
+
+    const preview =
+        document.createElement(
+            "div"
+        );
+
+
+    preview.className =
+        "review-evidence-thumbnail";
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    if (
+        kind === "image"
+        &&
+        item.file_path
+    ) {
+
+        const image =
+            document.createElement(
+                "img"
+            );
+
+
+        image.src =
+            item.file_path;
+
+
+        image.alt =
+            item.file_name
+            ||
+            "Complaint evidence";
+
+
+        image.loading =
+            "lazy";
+
+
+        image.addEventListener(
+            "error",
+            function () {
+
+                preview.innerHTML =
+                    "";
+
+
+                preview.appendChild(
+                    createEvidenceIcon(
+                        "image"
+                    )
+                );
+
+            }
+        );
+
+
+        preview.appendChild(
+            image
+        );
+
+    }
+
+    /* =====================================================
+       OTHER FILE TYPES
+    ===================================================== */
+
+    else {
+
+        preview.appendChild(
+            createEvidenceIcon(
+                kind
+            )
+        );
+
+    }
+
+
+    /* =====================================================
+       VIDEO PLAY INDICATOR
+    ===================================================== */
+
+    if (
+        kind === "video"
+    ) {
+
+        const play =
+            document.createElement(
+                "span"
+            );
+
+
+        play.className =
+            "review-evidence-play";
+
+
+        play.textContent =
+            "▶";
+
+
+        preview.appendChild(
+            play
+        );
+
+    }
+
+
+    /* =====================================================
+       HASH / VERIFIED
+    ===================================================== */
+
+    if (
+        cleanValue(
+            item.file_hash
+        )
+    ) {
+
+        const verified =
+            document.createElement(
+                "span"
+            );
+
+
+        verified.className =
+            "review-evidence-verified";
+
+
+        verified.textContent =
+            "Verified";
+
+
+        preview.appendChild(
+            verified
+        );
+
+    }
+
+
+    /* =====================================================
+       INFORMATION
+    ===================================================== */
+
+    const info =
+        document.createElement(
+            "div"
+        );
+
+
+    info.className =
+        "review-evidence-info";
+
+
+    const name =
+        document.createElement(
+            "strong"
+        );
+
+
+    name.textContent =
+        item.file_name
+        ||
+        "Evidence file";
+
+
+    name.title =
+        item.file_name
+        ||
+        "Evidence file";
+
+
+    const meta =
+        document.createElement(
+            "div"
+        );
+
+
+    meta.className =
+        "review-evidence-meta";
+
+
+    const size =
+        document.createElement(
+            "span"
+        );
+
+
+    size.textContent =
+        formatFileSize(
+            item.file_size
+        );
+
+
+    const type =
+        document.createElement(
+            "span"
+        );
+
+
+    type.textContent =
+        getFriendlyFileType(
+            item.file_type,
+            item.file_name
+        );
+
+
+    meta.appendChild(
+        size
+    );
+
+
+    meta.appendChild(
+        type
+    );
+
+
+    info.appendChild(
+        name
+    );
+
+
+    info.appendChild(
+        meta
+    );
+
+
+    button.appendChild(
+        preview
+    );
+
+
+    button.appendChild(
+        info
+    );
+
+
+    /* =====================================================
+       OPEN PREVIEW
+    ===================================================== */
+
+    button.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            openEvidencePreview(
+                item,
+                kind
+            );
+
+        }
+    );
+
+
+    return button;
+
+}
+
+
+/* =========================================================
+   DETERMINE EVIDENCE KIND
+========================================================= */
+
+function determineEvidenceKind(
+    fileType,
+    fileName
+) {
+
+    const type =
+        String(
+            fileType || ""
+        ).toLowerCase();
+
+
+    const name =
+        String(
+            fileName || ""
+        ).toLowerCase();
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    if (
+        type.startsWith(
+            "image/"
+        )
+        ||
+        /\.(jpg|jpeg|png|gif|webp|bmp)$/i
+            .test(name)
+    ) {
+
+        return "image";
+
+    }
+
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
+
+    if (
+        type.startsWith(
+            "video/"
+        )
+        ||
+        /\.(mp4|webm|mov|m4v|ogv)$/i
+            .test(name)
+    ) {
+
+        return "video";
+
+    }
+
+
+    /* =====================================================
+       AUDIO
+    ===================================================== */
+
+    if (
+        type.startsWith(
+            "audio/"
+        )
+        ||
+        /\.(mp3|wav|ogg|m4a|aac|flac)$/i
+            .test(name)
+    ) {
+
+        return "audio";
+
+    }
+
+
+    /* =====================================================
+       PDF
+    ===================================================== */
+
+    if (
+        type.includes(
+            "pdf"
+        )
+        ||
+        /\.pdf$/i.test(
+            name
+        )
+    ) {
+
+        return "pdf";
+
+    }
+
+
+    return "document";
+
+}
+
+
+/* =========================================================
+   CREATE EVIDENCE ICON
+========================================================= */
+
+function createEvidenceIcon(type) {
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    wrapper.className =
+        "review-evidence-file-icon "
+        +
+        "review-evidence-file-"
+        +
+        type;
+
+
+    const labels = {
+
+        image:
+            "IMG",
+
+        video:
+            "VIDEO",
+
+        audio:
+            "AUDIO",
+
+        pdf:
+            "PDF",
+
+        document:
+            "FILE"
+
+    };
+
+
+    wrapper.textContent =
+        labels[type]
+        ||
+        "FILE";
+
+
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   INITIALIZE EVIDENCE PREVIEW
+========================================================= */
+
+function initializeEvidencePreview() {
+
+    document
+        .querySelectorAll(
+            "[data-close-evidence-preview]"
+        )
+        .forEach(function (element) {
+
+            element.addEventListener(
+                "click",
+                function () {
+
+                    closeEvidencePreview();
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   OPEN EVIDENCE PREVIEW
+========================================================= */
+
+function openEvidencePreview(
+    item,
+    kind
+) {
+
+    const modal =
+        document.getElementById(
+            "evidencePreviewModal"
+        );
+
+
+    const content =
+        document.getElementById(
+            "evidencePreviewContent"
+        );
+
+
+    const title =
+        document.getElementById(
+            "evidencePreviewTitle"
+        );
+
+
+    const type =
+        document.getElementById(
+            "evidencePreviewType"
+        );
+
+
+    const size =
+        document.getElementById(
+            "evidencePreviewSize"
+        );
+
+
+    const date =
+        document.getElementById(
+            "evidencePreviewDate"
+        );
+
+
+    const original =
+        document.getElementById(
+            "evidenceOpenOriginal"
+        );
+
+
+    if (
+        !modal
+        ||
+        !content
+    ) {
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    content.innerHTML =
+        "";
+
+
+    /* =====================================================
+       INFORMATION
+    ===================================================== */
+
+    if (title) {
+
+        title.textContent =
+            item.file_name
+            ||
+            "Evidence";
+
+    }
+
+
+    if (type) {
+
+        type.textContent =
+            getFriendlyFileType(
+                item.file_type,
+                item.file_name
+            );
+
+    }
+
+
+    if (size) {
+
+        size.textContent =
+            formatFileSize(
+                item.file_size
+            );
+
+    }
+
+
+    if (date) {
+
+        date.textContent =
+            item.uploaded_at
+            ||
+            "";
+
+    }
+
+
+    /* =====================================================
+       OPEN ORIGINAL LINK
+    ===================================================== */
+
+    if (original) {
+
+        if (
+            cleanValue(
+                item.file_path
+            )
+        ) {
+
+            original.href =
+                item.file_path;
+
+
+            original.style.display =
+                "inline-flex";
+
+        } else {
+
+            original.removeAttribute(
+                "href"
+            );
+
+
+            original.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    if (
+        kind === "image"
+        &&
+        item.file_path
+    ) {
+
+        const image =
+            document.createElement(
+                "img"
+            );
+
+
+        image.src =
+            item.file_path;
+
+
+        image.alt =
+            item.file_name
+            ||
+            "Complaint evidence";
+
+
+        image.className =
+            "evidence-preview-image";
+
+
+        content.appendChild(
+            image
+        );
+
+    }
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
+
+    else if (
+        kind === "video"
+        &&
+        item.file_path
+    ) {
+
+        const video =
+            document.createElement(
+                "video"
+            );
+
+
+        video.src =
+            item.file_path;
+
+
+        video.controls =
+            true;
+
+
+        video.preload =
+            "metadata";
+
+
+        video.playsInline =
+            true;
+
+
+        video.className =
+            "evidence-preview-video";
+
+
+        content.appendChild(
+            video
+        );
+
+    }
+
+    /* =====================================================
+       AUDIO
+    ===================================================== */
+
+    else if (
+        kind === "audio"
+        &&
+        item.file_path
+    ) {
+
+        const wrapper =
+            document.createElement(
+                "div"
+            );
+
+
+        wrapper.className =
+            "evidence-preview-audio-wrapper";
+
+
+        const audio =
+            document.createElement(
+                "audio"
+            );
+
+
+        audio.src =
+            item.file_path;
+
+
+        audio.controls =
+            true;
+
+
+        audio.preload =
+            "metadata";
+
+
+        wrapper.appendChild(
+            audio
+        );
+
+
+        content.appendChild(
+            wrapper
+        );
+
+    }
+
+    /* =====================================================
+       PDF
+    ===================================================== */
+
+    else if (
+        kind === "pdf"
+        &&
+        item.file_path
+    ) {
+
+        const frame =
+            document.createElement(
+                "iframe"
+            );
+
+
+        frame.src =
+            item.file_path;
+
+
+        frame.className =
+            "evidence-preview-pdf";
+
+
+        frame.title =
+            item.file_name
+            ||
+            "PDF evidence";
+
+
+        content.appendChild(
+            frame
+        );
+
+    }
+
+    /* =====================================================
+       DOCUMENT / NO PREVIEW
+    ===================================================== */
+
+    else {
+
+        createDocumentFallback(
+            content,
+            kind
+        );
+
+    }
+
+
+    /* =====================================================
+       SHOW
+    ===================================================== */
+
+    modal.classList.add(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+/* =========================================================
+   DOCUMENT FALLBACK
+========================================================= */
+
+function createDocumentFallback(
+    content,
+    kind
+) {
+
+    const documentPreview =
+        document.createElement(
+            "div"
+        );
+
+
+    documentPreview.className =
+        "evidence-preview-document";
+
+
+    const icon =
+        document.createElement(
+            "div"
+        );
+
+
+    icon.className =
+        "evidence-preview-document-icon";
+
+
+    icon.textContent =
+        kind === "pdf"
+            ? "PDF"
+            : "FILE";
+
+
+    const message =
+        document.createElement(
+            "p"
+        );
+
+
+    message.textContent =
+        (
+            "Preview is not available for this file type. "
+            +
+            "Use Open Original to view or download the file."
+        );
+
+
+    documentPreview.appendChild(
+        icon
+    );
+
+
+    documentPreview.appendChild(
+        message
+    );
+
+
+    content.appendChild(
+        documentPreview
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE EVIDENCE PREVIEW
+========================================================= */
+
+function closeEvidencePreview() {
+
+    const modal =
+        document.getElementById(
+            "evidencePreviewModal"
+        );
+
+
+    const content =
+        document.getElementById(
+            "evidencePreviewContent"
+        );
+
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.remove(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    /*
+     * Clearing the content stops currently playing
+     * video or audio when the preview closes.
+     */
+
+    if (content) {
+
+        content.innerHTML =
+            "";
+
+    }
 
 }
 
@@ -573,6 +1770,17 @@ function closeComplaintReview() {
     }
 
 
+    /* =====================================================
+       CLOSE EVIDENCE PREVIEW FIRST
+    ===================================================== */
+
+    closeEvidencePreview();
+
+
+    /* =====================================================
+       CLOSE REVIEW
+    ===================================================== */
+
     modal.classList.remove(
         "active"
     );
@@ -586,6 +1794,324 @@ function closeComplaintReview() {
 
     document.body.classList.remove(
         "complaint-review-open"
+    );
+
+
+    /* =====================================================
+       RESET EVIDENCE AREA
+    ===================================================== */
+
+    const grid =
+        document.getElementById(
+            "reviewEvidenceGrid"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "reviewEvidenceLoading"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "reviewEvidenceEmpty"
+        );
+
+
+    const count =
+        document.getElementById(
+            "reviewEvidenceCount"
+        );
+
+
+    if (grid) {
+
+        grid.innerHTML =
+            "";
+
+        grid.hidden =
+            true;
+
+    }
+
+
+    if (loading) {
+
+        loading.hidden =
+            true;
+
+    }
+
+
+    if (empty) {
+
+        empty.hidden =
+            true;
+
+    }
+
+
+    if (count) {
+
+        count.textContent =
+            "0 files";
+
+    }
+
+}
+
+
+/* =========================================================
+   FRIENDLY FILE TYPE
+========================================================= */
+
+function getFriendlyFileType(
+    fileType,
+    fileName
+) {
+
+    const kind =
+        determineEvidenceKind(
+            fileType,
+            fileName
+        );
+
+
+    const labels = {
+
+        image:
+            "Image",
+
+        video:
+            "Video",
+
+        audio:
+            "Audio",
+
+        pdf:
+            "PDF",
+
+        document:
+            "Document"
+
+    };
+
+
+    return (
+        labels[kind]
+        ||
+        "Document"
+    );
+
+}
+
+
+/* =========================================================
+   FORMAT FILE SIZE
+========================================================= */
+
+function formatFileSize(bytes) {
+
+    const size =
+        Number(
+            bytes || 0
+        );
+
+
+    if (
+        !Number.isFinite(size)
+        ||
+        size <= 0
+    ) {
+
+        return "0 B";
+
+    }
+
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB",
+        "TB"
+    ];
+
+
+    const index =
+        Math.min(
+            Math.floor(
+                Math.log(size)
+                /
+                Math.log(1024)
+            ),
+
+            units.length - 1
+        );
+
+
+    const value =
+        size
+        /
+        Math.pow(
+            1024,
+            index
+        );
+
+
+    const formatted =
+        index === 0
+            ? value.toFixed(0)
+            : value.toFixed(1);
+
+
+    return (
+        formatted
+        +
+        " "
+        +
+        units[index]
+    );
+
+}
+
+
+/* =========================================================
+   SHOW EVIDENCE ERROR
+========================================================= */
+
+function showEvidenceError(message) {
+
+    const loading =
+        document.getElementById(
+            "reviewEvidenceLoading"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "reviewEvidenceEmpty"
+        );
+
+
+    const grid =
+        document.getElementById(
+            "reviewEvidenceGrid"
+        );
+
+
+    const count =
+        document.getElementById(
+            "reviewEvidenceCount"
+        );
+
+
+    if (loading) {
+
+        loading.hidden =
+            true;
+
+    }
+
+
+    if (grid) {
+
+        grid.hidden =
+            true;
+
+    }
+
+
+    if (count) {
+
+        count.textContent =
+            "Unavailable";
+
+    }
+
+
+    if (empty) {
+
+        empty.hidden =
+            false;
+
+
+        const text =
+            empty.querySelector(
+                "span"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                message;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   REPLACE URL ID
+
+   Example:
+
+   /evidence/complaint/0/
+          ↓
+   /evidence/complaint/15/
+========================================================= */
+
+function replaceUrlId(
+    template,
+    id
+) {
+
+    if (
+        !template
+        ||
+        !id
+    ) {
+
+        return template;
+
+    }
+
+
+    /*
+     * Django's URL generated with ID 0 normally
+     * contains /0/. Replace that placeholder.
+     */
+
+    if (
+        template.includes(
+            "/0/"
+        )
+    ) {
+
+        return template.replace(
+            "/0/",
+            "/"
+            +
+            encodeURIComponent(id)
+            +
+            "/"
+        );
+
+    }
+
+
+    /*
+     * Fallback in case the URL does not contain
+     * the expected /0/ pattern.
+     */
+
+    return template.replace(
+        /0(?=\/?$)/,
+        encodeURIComponent(id)
     );
 
 }
@@ -612,7 +2138,8 @@ function setText(
 
 
     element.textContent =
-        cleanValue(value) ||
+        cleanValue(value)
+        ||
         "—";
 
 }
@@ -625,7 +2152,8 @@ function setText(
 function cleanValue(value) {
 
     if (
-        value === undefined ||
+        value === undefined
+        ||
         value === null
     ) {
 
@@ -683,6 +2211,7 @@ function initializeComplaintMessages() {
                     );
 
                 },
+
                 5000
             );
 
@@ -713,6 +2242,7 @@ function hideComplaintMessage(message) {
             message.remove();
 
         },
+
         200
     );
 
@@ -729,3 +2259,11 @@ window.openComplaintReview =
 
 window.closeComplaintReview =
     closeComplaintReview;
+
+
+window.openEvidencePreview =
+    openEvidencePreview;
+
+
+window.closeEvidencePreview =
+    closeEvidencePreview;

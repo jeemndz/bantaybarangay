@@ -1,7 +1,42 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.db import connection, transaction
+import hashlib
+import os
+import uuid
+
 from datetime import datetime
+
+from django.conf import settings
+from django.contrib import messages
+from django.core.files.storage import default_storage
+from django.db import connection, transaction
+from django.shortcuts import render, redirect
+
+
+# =====================================================
+# EVIDENCE CONFIGURATION
+# =====================================================
+
+MAX_EVIDENCE_FILES = 5
+
+MAX_EVIDENCE_FILE_SIZE = (
+    10 * 1024 * 1024
+)  # 10 MB
+
+
+ALLOWED_EVIDENCE_EXTENSIONS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+
+    ".mp4",
+    ".webm",
+    ".mov",
+
+    ".pdf",
+    ".doc",
+    ".docx",
+}
 
 
 # =====================================================
@@ -16,9 +51,18 @@ def get_session_context(request):
 
     return {
         "user_id": request.session.get("user_id"),
-        "username": request.session.get("username", ""),
-        "email": request.session.get("email", ""),
-        "role": request.session.get("role", ""),
+        "username": request.session.get(
+            "username",
+            ""
+        ),
+        "email": request.session.get(
+            "email",
+            ""
+        ),
+        "role": request.session.get(
+            "role",
+            ""
+        ),
     }
 
 
@@ -94,7 +138,10 @@ def build_complaint_reference(
     else:
         year = datetime.now().year
 
-    return f"CMP-{year}-{complaint_id:04d}"
+    return (
+        f"CMP-{year}-"
+        f"{complaint_id:04d}"
+    )
 
 
 # =====================================================
@@ -135,23 +182,30 @@ def get_complaint_status_message(
         return resolution
 
     status_messages = {
+
         "Submitted":
-            "Your complaint has been submitted and is awaiting review.",
+            "Your complaint has been submitted "
+            "and is awaiting review.",
 
         "Under Review":
-            "Your complaint is currently being reviewed by the barangay.",
+            "Your complaint is currently being "
+            "reviewed by the barangay.",
 
         "Under Investigation":
-            "Barangay officials are currently investigating this complaint.",
+            "Barangay officials are currently "
+            "investigating this complaint.",
 
         "Resolved":
             "This complaint has been resolved.",
 
         "Rejected":
-            "This complaint has been rejected. Contact the barangay for more information.",
+            "This complaint has been rejected. "
+            "Contact the barangay for more "
+            "information.",
 
         "Closed":
-            "This complaint has been officially closed.",
+            "This complaint has been officially "
+            "closed.",
     }
 
     return status_messages.get(
@@ -161,12 +215,348 @@ def get_complaint_status_message(
 
 
 # =====================================================
+# HELPER: VALIDATE EVIDENCE FILES
+# =====================================================
+
+def validate_evidence_files(
+    evidence_files
+):
+    """
+    Validate all evidence uploaded together with
+    the complaint.
+
+    Maximum:
+        5 files
+
+    Maximum size:
+        10 MB per file
+    """
+
+    if len(evidence_files) > MAX_EVIDENCE_FILES:
+
+        return (
+            "Please select a maximum of "
+            "5 evidence files."
+        )
+
+
+    for uploaded_file in evidence_files:
+
+        # =============================================
+        # VALIDATE FILE SIZE
+        # =============================================
+
+        if (
+            uploaded_file.size >
+            MAX_EVIDENCE_FILE_SIZE
+        ):
+
+            return (
+                f"{uploaded_file.name} exceeds "
+                "the 10MB file size limit."
+            )
+
+
+        # =============================================
+        # VALIDATE EXTENSION
+        # =============================================
+
+        extension = (
+            os.path.splitext(
+                uploaded_file.name
+            )[1]
+            .lower()
+        )
+
+        if (
+            extension not in
+            ALLOWED_EVIDENCE_EXTENSIONS
+        ):
+
+            return (
+                f"{uploaded_file.name} has an "
+                "unsupported file type."
+            )
+
+
+    return None
+
+
+# =====================================================
+# HELPER: CALCULATE FILE HASH
+# =====================================================
+
+def calculate_file_hash(
+    uploaded_file
+):
+    """
+    Generate SHA-256 hash for uploaded evidence.
+    """
+
+    sha256 = hashlib.sha256()
+
+
+    for chunk in uploaded_file.chunks():
+
+        sha256.update(
+            chunk
+        )
+
+
+    # Reset the uploaded file pointer so Django
+    # can save the file afterward.
+
+    try:
+
+        uploaded_file.seek(0)
+
+    except Exception:
+
+        pass
+
+
+    return sha256.hexdigest()
+
+
+# =====================================================
+# HELPER: BUILD SAFE EVIDENCE FILE NAME
+# =====================================================
+
+def build_evidence_file_name(
+    uploaded_file
+):
+    """
+    Generate a unique storage filename.
+
+    The original filename is still stored in the
+    database as file_name.
+    """
+
+    extension = (
+        os.path.splitext(
+            uploaded_file.name
+        )[1]
+        .lower()
+    )
+
+
+    unique_name = (
+        uuid.uuid4().hex
+    )
+
+
+    return (
+        f"{unique_name}"
+        f"{extension}"
+    )
+
+
+# =====================================================
+# HELPER: SAVE EVIDENCE
+# =====================================================
+
+def save_complaint_evidence(
+    complaint_id,
+    uploaded_by,
+    evidence_files
+):
+    """
+    Save evidence files to Django media storage and
+    insert their metadata into the evidence table.
+
+    Database relationship:
+
+        complaints.complaint_id
+                ↓
+        evidence.complaint_id
+    """
+
+    saved_storage_paths = []
+
+
+    try:
+
+        for uploaded_file in evidence_files:
+
+            # =========================================
+            # ORIGINAL FILE INFORMATION
+            # =========================================
+
+            original_file_name = (
+                uploaded_file.name
+            )
+
+            file_size = (
+                uploaded_file.size
+            )
+
+            file_type = (
+                uploaded_file.content_type
+                or
+                "application/octet-stream"
+            )
+
+
+            # =========================================
+            # CALCULATE SHA-256 HASH
+            # =========================================
+
+            file_hash = (
+                calculate_file_hash(
+                    uploaded_file
+                )
+            )
+
+
+            # =========================================
+            # UNIQUE PHYSICAL FILE NAME
+            # =========================================
+
+            stored_file_name = (
+                build_evidence_file_name(
+                    uploaded_file
+                )
+            )
+
+
+            # =========================================
+            # STORAGE DIRECTORY
+            # =========================================
+            #
+            # Example:
+            #
+            # media/
+            #   evidence/
+            #       complaint_25/
+            #           abc123.jpg
+            #
+            # =========================================
+
+            storage_path = (
+                f"evidence/"
+                f"complaint_{complaint_id}/"
+                f"{stored_file_name}"
+            )
+
+
+            # =========================================
+            # SAVE PHYSICAL FILE
+            # =========================================
+
+            saved_path = (
+                default_storage.save(
+                    storage_path,
+                    uploaded_file
+                )
+            )
+
+
+            saved_storage_paths.append(
+                saved_path
+            )
+
+
+            # =========================================
+            # FILE URL
+            # =========================================
+
+            try:
+
+                file_path = (
+                    default_storage.url(
+                        saved_path
+                    )
+                )
+
+            except Exception:
+
+                file_path = (
+                    f"{settings.MEDIA_URL}"
+                    f"{saved_path}"
+                )
+
+
+            # =========================================
+            # INSERT EVIDENCE INTO DATABASE
+            # =========================================
+
+            with connection.cursor() as cursor:
+
+                cursor.execute(
+                    """
+                    INSERT INTO evidence
+                    (
+                        complaint_id,
+                        uploaded_by,
+                        file_name,
+                        file_path,
+                        file_type,
+                        file_size,
+                        file_hash,
+                        uploaded_at
+                    )
+                    VALUES
+                    (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        NOW()
+                    )
+                    """,
+                    [
+                        complaint_id,
+                        uploaded_by,
+                        original_file_name,
+                        file_path,
+                        file_type,
+                        file_size,
+                        file_hash,
+                    ]
+                )
+
+
+        return saved_storage_paths
+
+
+    except Exception:
+
+        # =============================================
+        # REMOVE FILES IF DATABASE INSERT FAILS
+        # =============================================
+
+        for saved_path in saved_storage_paths:
+
+            try:
+
+                if default_storage.exists(
+                    saved_path
+                ):
+
+                    default_storage.delete(
+                        saved_path
+                    )
+
+            except Exception:
+
+                pass
+
+
+        raise
+
+
+# =====================================================
 # HOME
 # =====================================================
 
 def home(request):
 
-    context = get_session_context(request)
+    context = get_session_context(
+        request
+    )
 
     return render(
         request,
@@ -181,7 +571,9 @@ def home(request):
 
 def dashboard(request):
 
-    context = get_session_context(request)
+    context = get_session_context(
+        request
+    )
 
     return render(
         request,
@@ -200,23 +592,31 @@ def submit_complaint(request):
     # CHECK LOGIN
     # =================================================
 
-    user_id = request.session.get("user_id")
+    user_id = request.session.get(
+        "user_id"
+    )
+
 
     if not user_id:
 
         messages.error(
             request,
-            "Please log in first before submitting a complaint."
+            "Please log in first before "
+            "submitting a complaint."
         )
 
-        return redirect("login")
+        return redirect(
+            "login"
+        )
 
 
     # =================================================
     # GET SESSION INFORMATION
     # =================================================
 
-    context = get_session_context(request)
+    context = get_session_context(
+        request
+    )
 
 
     # =================================================
@@ -224,37 +624,50 @@ def submit_complaint(request):
     # =================================================
 
     role = (
-        context.get("role", "")
+        context.get(
+            "role",
+            ""
+        )
         .strip()
         .lower()
     )
+
 
     if role != "resident":
 
         messages.error(
             request,
-            "Only resident accounts can submit complaints."
+            "Only resident accounts can "
+            "submit complaints."
         )
 
-        return redirect("home")
+        return redirect(
+            "home"
+        )
 
 
     # =================================================
     # GET RESIDENT PROFILE
     # =================================================
 
-    resident = get_resident_by_user_id(
-        user_id
+    resident = (
+        get_resident_by_user_id(
+            user_id
+        )
     )
+
 
     if not resident:
 
         messages.error(
             request,
-            "Your resident profile could not be found."
+            "Your resident profile could "
+            "not be found."
         )
 
-        return redirect("home")
+        return redirect(
+            "home"
+        )
 
 
     # =================================================
@@ -262,45 +675,44 @@ def submit_complaint(request):
     # =================================================
 
     context.update({
-        "resident": resident,
 
-        "form_data": {},
+        "resident":
+            resident,
+
+        "form_data":
+            {},
 
         # Success popup
-        "complaint_submitted": False,
-        "submitted_complaint": None,
-        "submitted_complaint_id": "",
-        "complaint_reference": "",
-        "submitted_report_type": "",
-        "submitted_complaint_type": "",
-        "submitted_subject": "",
-        "submitted_status": "",
+
+        "complaint_submitted":
+            False,
+
+        "submitted_complaint":
+            None,
+
+        "submitted_complaint_id":
+            "",
+
+        "complaint_reference":
+            "",
+
+        "submitted_report_type":
+            "",
+
+        "submitted_complaint_type":
+            "",
+
+        "submitted_subject":
+            "",
+
+        "submitted_status":
+            "",
+
     })
 
 
     # =================================================
     # GET REQUEST
-    # =================================================
-    #
-    # This is where the popup information is retrieved
-    # after a successful POST redirects back here.
-    #
-    # POST
-    #   ↓
-    # INSERT complaint
-    #   ↓
-    # Save submitted complaint to session
-    #   ↓
-    # redirect("submit_complaint")
-    #   ↓
-    # GET
-    #   ↓
-    # Read session
-    #   ↓
-    # complaint_submitted = True
-    #   ↓
-    # Popup is rendered
-    #
     # =================================================
 
     if request.method == "GET":
@@ -312,10 +724,13 @@ def submit_complaint(request):
             )
         )
 
+
         if submitted_complaint:
 
             context.update({
-                "complaint_submitted": True,
+
+                "complaint_submitted":
+                    True,
 
                 "submitted_complaint":
                     submitted_complaint,
@@ -355,7 +770,9 @@ def submit_complaint(request):
                         "status",
                         "Submitted"
                     ),
+
             })
+
 
         return render(
             request,
@@ -395,6 +812,7 @@ def submit_complaint(request):
             .strip()
         )
 
+
         respondent_address = (
             request.POST.get(
                 "respondent_address",
@@ -403,6 +821,7 @@ def submit_complaint(request):
             .strip()
         )
 
+
         respondent_relationship = (
             request.POST.get(
                 "respondent_relationship",
@@ -410,6 +829,7 @@ def submit_complaint(request):
             )
             .strip()
         )
+
 
         respondent_contact = (
             request.POST.get(
@@ -432,6 +852,7 @@ def submit_complaint(request):
             .strip()
         )
 
+
         subject = (
             request.POST.get(
                 "subject",
@@ -439,6 +860,7 @@ def submit_complaint(request):
             )
             .strip()
         )
+
 
         description = (
             request.POST.get(
@@ -461,6 +883,7 @@ def submit_complaint(request):
             .strip()
         )
 
+
         incident_date = (
             request.POST.get(
                 "incident_date",
@@ -468,6 +891,7 @@ def submit_complaint(request):
             )
             .strip()
         )
+
 
         incident_time = (
             request.POST.get(
@@ -479,12 +903,18 @@ def submit_complaint(request):
 
 
         # =================================================
-        # PRIORITY
+        # EVIDENCE FILES
         # =================================================
-        #
-        # Resident submissions start with N/A.
-        # Barangay/admin staff can assign priority later.
-        #
+
+        evidence_files = (
+            request.FILES.getlist(
+                "evidence"
+            )
+        )
+
+
+        # =================================================
+        # PRIORITY
         # =================================================
 
         priority = "N/A"
@@ -495,6 +925,7 @@ def submit_complaint(request):
         # =================================================
 
         context["form_data"] = {
+
             "report_type":
                 report_type,
 
@@ -530,6 +961,7 @@ def submit_complaint(request):
 
             "priority":
                 priority,
+
         }
 
 
@@ -542,7 +974,11 @@ def submit_complaint(request):
             "Community Issue",
         ]
 
-        if report_type not in allowed_report_types:
+
+        if (
+            report_type not in
+            allowed_report_types
+        ):
 
             messages.error(
                 request,
@@ -559,21 +995,18 @@ def submit_complaint(request):
         # =================================================
         # VALIDATE RESPONDENT
         # =================================================
-        #
-        # Respondent information is only required for
-        # Formal Complaints.
-        #
-        # Community Issues do not require a respondent.
-        #
-        # =================================================
 
-        if report_type == "Formal Complaint":
+        if (
+            report_type ==
+            "Formal Complaint"
+        ):
 
             if not respondent_name:
 
                 messages.error(
                     request,
-                    "Please enter the respondent's name or known alias."
+                    "Please enter the respondent's "
+                    "name or known alias."
                 )
 
                 return render(
@@ -587,7 +1020,8 @@ def submit_complaint(request):
 
                 messages.error(
                     request,
-                    "Please enter the respondent's address or known location."
+                    "Please enter the respondent's "
+                    "address or known location."
                 )
 
                 return render(
@@ -595,6 +1029,7 @@ def submit_complaint(request):
                     "website/submit_complaint.html",
                     context
                 )
+
 
         else:
 
@@ -708,6 +1143,7 @@ def submit_complaint(request):
                 .date()
             )
 
+
         except ValueError:
 
             messages.error(
@@ -754,6 +1190,7 @@ def submit_complaint(request):
                 .time()
             )
 
+
         except ValueError:
 
             messages.error(
@@ -769,12 +1206,44 @@ def submit_complaint(request):
 
 
         # =================================================
-        # INSERT COMPLAINT INTO DATABASE
+        # VALIDATE EVIDENCE
         # =================================================
+
+        evidence_error = (
+            validate_evidence_files(
+                evidence_files
+            )
+        )
+
+
+        if evidence_error:
+
+            messages.error(
+                request,
+                evidence_error
+            )
+
+            return render(
+                request,
+                "website/submit_complaint.html",
+                context
+            )
+
+
+        # =================================================
+        # INSERT COMPLAINT + EVIDENCE
+        # =================================================
+
+        saved_evidence_paths = []
+
 
         try:
 
             with transaction.atomic():
+
+                # =========================================
+                # INSERT COMPLAINT
+                # =========================================
 
                 with connection.cursor() as cursor:
 
@@ -830,7 +1299,9 @@ def submit_complaint(request):
                         )
                         """,
                         [
-                            resident["resident_id"],
+                            resident[
+                                "resident_id"
+                            ],
 
                             report_type,
 
@@ -861,9 +1332,47 @@ def submit_complaint(request):
                     )
 
 
-                    # =====================================
-                    # GET DATABASE SUBMISSION DATE
-                    # =====================================
+                    if not complaint_id:
+
+                        raise Exception(
+                            "Unable to retrieve "
+                            "new complaint ID."
+                        )
+
+
+                # =========================================
+                # SAVE EVIDENCE
+                # =========================================
+                #
+                # user_id comes directly from the
+                # authenticated session.
+                #
+                # evidence.uploaded_by references
+                # users.user_id.
+                #
+                # =========================================
+
+                if evidence_files:
+
+                    saved_evidence_paths = (
+                        save_complaint_evidence(
+                            complaint_id=
+                                complaint_id,
+
+                            uploaded_by=
+                                user_id,
+
+                            evidence_files=
+                                evidence_files
+                        )
+                    )
+
+
+                # =========================================
+                # GET DATABASE SUBMISSION DATE
+                # =========================================
+
+                with connection.cursor() as cursor:
 
                     cursor.execute(
                         """
@@ -873,8 +1382,11 @@ def submit_complaint(request):
                         WHERE complaint_id = %s
                         LIMIT 1
                         """,
-                        [complaint_id]
+                        [
+                            complaint_id
+                        ]
                     )
+
 
                     submitted_row = (
                         cursor.fetchone()
@@ -882,25 +1394,58 @@ def submit_complaint(request):
 
 
                     if submitted_row:
+
                         submitted_at = (
                             submitted_row[0]
                         )
+
                     else:
+
                         submitted_at = None
 
 
         except Exception as e:
 
-            # Development/debug information
+            # =============================================
+            # DELETE PHYSICAL FILES ON FAILURE
+            # =============================================
+            #
+            # transaction.atomic() rolls back the database,
+            # but files saved to MEDIA_ROOT are not part of
+            # the SQL transaction.
+            #
+            # =============================================
+
+            for saved_path in saved_evidence_paths:
+
+                try:
+
+                    if default_storage.exists(
+                        saved_path
+                    ):
+
+                        default_storage.delete(
+                            saved_path
+                        )
+
+                except Exception:
+
+                    pass
+
+
             print(
-                "COMPLAINT INSERT ERROR:",
+                "COMPLAINT / EVIDENCE "
+                "INSERT ERROR:",
                 e
             )
 
+
             messages.error(
                 request,
-                "Unable to submit your complaint. Please try again."
+                "Unable to submit your complaint. "
+                "Please try again."
             )
+
 
             return render(
                 request,
@@ -924,23 +1469,11 @@ def submit_complaint(request):
         # =================================================
         # SAVE SUCCESS INFORMATION TO SESSION
         # =================================================
-        #
-        # IMPORTANT:
-        #
-        # We intentionally DO NOT use:
-        #
-        # messages.success(...)
-        #
-        # The custom complaint popup is controlled by
-        # complaint_submitted instead.
-        #
-        # The information below survives the redirect.
-        #
-        # =================================================
 
         request.session[
             "submitted_complaint"
         ] = {
+
             "complaint_id":
                 complaint_id,
 
@@ -958,23 +1491,20 @@ def submit_complaint(request):
 
             "status":
                 "Submitted",
+
+            "evidence_count":
+                len(
+                    evidence_files
+                ),
+
         }
 
-
-        # Make sure Django knows the session changed.
 
         request.session.modified = True
 
 
         # =================================================
         # REDIRECT BACK TO SUBMIT PAGE
-        # =================================================
-        #
-        # DO NOT redirect to my_complaints.
-        #
-        # The redirected GET will read the session and
-        # display complaint_success_popup.html.
-        #
         # =================================================
 
         return redirect(
@@ -1007,6 +1537,7 @@ def my_complaints(request):
         "user_id"
     )
 
+
     if not user_id:
 
         messages.error(
@@ -1033,16 +1564,21 @@ def my_complaints(request):
     # =================================================
 
     role = (
-        context.get("role", "")
+        context.get(
+            "role",
+            ""
+        )
         .strip()
         .lower()
     )
+
 
     if role != "resident":
 
         messages.error(
             request,
-            "Only resident accounts can access My Complaints."
+            "Only resident accounts can "
+            "access My Complaints."
         )
 
         return redirect(
@@ -1054,15 +1590,19 @@ def my_complaints(request):
     # GET RESIDENT
     # =================================================
 
-    resident = get_resident_by_user_id(
-        user_id
+    resident = (
+        get_resident_by_user_id(
+            user_id
+        )
     )
+
 
     if not resident:
 
         messages.error(
             request,
-            "Your resident profile could not be found."
+            "Your resident profile could "
+            "not be found."
         )
 
         return redirect(
@@ -1084,28 +1624,41 @@ def my_complaints(request):
             cursor.execute(
                 """
                 SELECT
-                    complaint_id,
-                    resident_id,
-                    complaint_type,
-                    subject,
-                    description,
-                    location,
-                    incident_date,
-                    priority,
-                    status,
-                    assigned_official,
-                    resolution,
-                    submitted_at,
-                    updated_at,
-                    report_type,
-                    respondent_name,
-                    respondent_address,
-                    respondent_relationship,
-                    respondent_contact,
-                    incident_time
-                FROM complaints
-                WHERE resident_id = %s
-                ORDER BY submitted_at DESC
+                    c.complaint_id,
+                    c.resident_id,
+                    c.complaint_type,
+                    c.subject,
+                    c.description,
+                    c.location,
+                    c.incident_date,
+                    c.priority,
+                    c.status,
+                    c.assigned_official,
+                    c.resolution,
+                    c.submitted_at,
+                    c.updated_at,
+                    c.report_type,
+                    c.respondent_name,
+                    c.respondent_address,
+                    c.respondent_relationship,
+                    c.respondent_contact,
+                    c.incident_time,
+
+                    (
+                        SELECT COUNT(*)
+                        FROM evidence e
+                        WHERE
+                            e.complaint_id =
+                            c.complaint_id
+                    ) AS evidence_count
+
+                FROM complaints c
+
+                WHERE
+                    c.resident_id = %s
+
+                ORDER BY
+                    c.submitted_at DESC
                 """,
                 [
                     resident[
@@ -1113,6 +1666,7 @@ def my_complaints(request):
                     ]
                 ]
             )
+
 
             rows = cursor.fetchall()
 
@@ -1159,8 +1713,13 @@ def my_complaints(request):
 
             incident_time = row[18]
 
+            evidence_count = (
+                row[19] or 0
+            )
+
 
             complaint = {
+
                 "complaint_id":
                     complaint_id,
 
@@ -1218,6 +1777,9 @@ def my_complaints(request):
                 "updated_at":
                     updated_at,
 
+                "evidence_count":
+                    evidence_count,
+
                 "reference_number":
                     build_complaint_reference(
                         complaint_id,
@@ -1234,6 +1796,7 @@ def my_complaints(request):
                         status,
                         resolution
                     ),
+
             }
 
 
@@ -1248,6 +1811,7 @@ def my_complaints(request):
             "MY COMPLAINTS DATABASE ERROR:",
             e
         )
+
 
         messages.error(
             request,
@@ -1299,11 +1863,15 @@ def my_complaints(request):
 
     categories = sorted(
         {
-            complaint["complaint_type"]
+            complaint[
+                "complaint_type"
+            ]
 
             for complaint in complaints
 
-            if complaint["complaint_type"]
+            if complaint[
+                "complaint_type"
+            ]
         }
     )
 
@@ -1313,10 +1881,18 @@ def my_complaints(request):
     # =================================================
 
     name_parts = [
-        resident.get("first_name"),
-        resident.get("middle_name"),
-        resident.get("last_name"),
-        resident.get("suffix"),
+        resident.get(
+            "first_name"
+        ),
+        resident.get(
+            "middle_name"
+        ),
+        resident.get(
+            "last_name"
+        ),
+        resident.get(
+            "suffix"
+        ),
     ]
 
 
@@ -1334,6 +1910,7 @@ def my_complaints(request):
     # =================================================
 
     context.update({
+
         "resident":
             resident,
 
@@ -1360,6 +1937,7 @@ def my_complaints(request):
 
         "rejected_count":
             rejected_count,
+
     })
 
 
@@ -1422,11 +2000,13 @@ def request_document(request):
         "user_id"
     )
 
+
     if not user_id:
 
         messages.error(
             request,
-            "Please log in first before requesting a document."
+            "Please log in first before "
+            "requesting a document."
         )
 
         return redirect(
@@ -1447,15 +2027,19 @@ def request_document(request):
     # GET RESIDENT
     # =================================================
 
-    resident = get_resident_by_user_id(
-        user_id
+    resident = (
+        get_resident_by_user_id(
+            user_id
+        )
     )
+
 
     if not resident:
 
         messages.error(
             request,
-            "Your resident profile could not be found."
+            "Your resident profile could "
+            "not be found."
         )
 
         return redirect(
@@ -1463,7 +2047,9 @@ def request_document(request):
         )
 
 
-    context["resident"] = resident
+    context[
+        "resident"
+    ] = resident
 
 
     # =================================================

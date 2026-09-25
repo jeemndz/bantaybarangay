@@ -7,35 +7,54 @@ app_name = "evidencemodule"
 
 urlpatterns = [
 
-    # Evidence Management
+    # =====================================================
+    # EVIDENCE MANAGEMENT
+    # =====================================================
+
     path(
         "",
         views.evidence_list,
         name="evidence_list"
     ),
 
-    # Create Evidence
+
+    # =====================================================
+    # CREATE
+    # =====================================================
+
     path(
         "create/",
         views.evidence_create,
         name="evidence_create"
     ),
 
-    # Get Complaints for Selected Resident
+
+    # =====================================================
+    # EVIDENCE BELONGING TO COMPLAINT
+    # =====================================================
+
     path(
-        "resident/<int:resident_id>/complaints/",
-        views.resident_complaints,
-        name="resident_complaints"
+        "complaint/<int:complaint_id>/",
+        views.complaint_evidence,
+        name="complaint_evidence"
     ),
 
-    # Evidence Detail
+
+    # =====================================================
+    # DETAIL
+    # =====================================================
+
     path(
         "<int:evidence_id>/",
         views.evidence_detail,
         name="evidence_detail"
     ),
 
-    # Delete Evidence
+
+    # =====================================================
+    # DELETE
+    # =====================================================
+
     path(
         "<int:evidence_id>/delete/",
         views.evidence_delete,
