@@ -8,5 +8,6 @@ urlpatterns = [
     path('verify-document/', views.verify_document, name='verify_document'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    path('request-document/', views.request_document, name='request_document')
+    path('request-document/', views.request_document, name='request_document'),
+    path("my-complaints/", views.my_complaints, name="my_complaints"),
 ]

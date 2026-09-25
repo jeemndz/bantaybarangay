@@ -5,51 +5,122 @@
 Complaint Management | BantayBarangay
 {% endblock %}
 
+
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/complaints.css' %}">
+<link
+    rel="stylesheet"
+    href="{% static 'css/complaints.css' %}"
+>
 {% endblock %}
+
 
 {% block content %}
 
-<div class="complaint-page">
+<div class="complaint-page font-sans text-slate-700">
 
-    <!-- PAGE HEADER -->
+
+    <!-- =====================================================
+         DJANGO MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="complaint-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="complaint-message
+                    {% if message.tags %}
+                        complaint-message-{{ message.tags }}
+                    {% endif %}"
+                >
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="complaint-message-close"
+                        aria-label="Close notification"
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
     <div class="complaint-header">
 
         <div>
-            <h1>Complaint Management</h1>
 
-            <p>
-                Oversee and resolve community grievances with blockchain integrity.
+            <h1 class="text-2xl font-bold tracking-tight text-emerald-950">
+                Complaint Management
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Review, process, monitor, and resolve community complaints.
             </p>
+
         </div>
 
 
-        <!-- NEW COMPLAINT BUTTON -->
-
         <a
             href="{% url 'new_complaint' %}"
-            class="new-complaint-btn">
+            class="new-complaint-btn"
+        >
 
-            + New Complaint
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 5v14M5 12h14"
+                />
+            </svg>
+
+            <span>
+                New Complaint
+            </span>
 
         </a>
 
     </div>
 
 
-    <!-- STATISTICS CARDS -->
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
 
     <div class="complaint-stats">
 
 
-        <!-- TOTAL FILED -->
+        <!-- TOTAL -->
 
         <div class="complaint-stat-card">
 
             <div class="stat-content">
 
-                <span>Total Filed</span>
+                <span>
+                    Total Filed
+                </span>
 
                 <h2>
                     {{ total_complaints|default:"0" }}
@@ -57,8 +128,19 @@ Complaint Management | BantayBarangay
 
             </div>
 
+
             <div class="stat-icon">
-                ▣
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path d="M6 2.75h8.5L19 7.25V21H6V2.75Z"/>
+                    <path d="M14 2.75V8h5M9 12h6M9 16h6"/>
+                </svg>
+
             </div>
 
         </div>
@@ -70,7 +152,9 @@ Complaint Management | BantayBarangay
 
             <div class="stat-content">
 
-                <span>Pending Action</span>
+                <span>
+                    Pending Action
+                </span>
 
                 <h2>
                     {{ pending_complaints|default:"0" }}
@@ -78,8 +162,24 @@ Complaint Management | BantayBarangay
 
             </div>
 
-            <div class="stat-icon">
-                ◷
+
+            <div class="stat-icon stat-icon-warning">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="8.5"
+                    />
+
+                    <path d="M12 7.5V12l3 2"/>
+                </svg>
+
             </div>
 
         </div>
@@ -91,7 +191,9 @@ Complaint Management | BantayBarangay
 
             <div class="stat-content">
 
-                <span>Resolved This Month</span>
+                <span>
+                    Resolved
+                </span>
 
                 <h2>
                     {{ resolved_percentage|default:"0" }}%
@@ -99,20 +201,38 @@ Complaint Management | BantayBarangay
 
             </div>
 
+
             <div class="stat-icon">
-                ✓
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="8.5"
+                    />
+
+                    <path d="m8.5 12 2.2 2.2 4.8-5"/>
+                </svg>
+
             </div>
 
         </div>
 
 
-        <!-- AVERAGE CLOSE -->
+        <!-- AVERAGE CLOSE TIME -->
 
         <div class="complaint-stat-card">
 
             <div class="stat-content">
 
-                <span>Avg. Time to Close</span>
+                <span>
+                    Avg. Time to Close
+                </span>
 
                 <h2>
                     {{ average_close_days|default:"0" }} Days
@@ -120,8 +240,28 @@ Complaint Management | BantayBarangay
 
             </div>
 
-            <div class="stat-icon">
-                ◷
+
+            <div class="stat-icon stat-icon-blue">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+
+                    <rect
+                        x="3.5"
+                        y="5.5"
+                        width="17"
+                        height="15"
+                        rx="2"
+                    />
+
+                    <path d="M8 3.5v4M16 3.5v4M3.5 9.5h17"/>
+
+                </svg>
+
             </div>
 
         </div>
@@ -129,338 +269,1249 @@ Complaint Management | BantayBarangay
     </div>
 
 
- <!-- FILTERS -->
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
 
-<form method="GET"
-      action="{% url 'complaints' %}"
-      class="complaint-filters">
-
-    <!-- CATEGORY -->
-
-    <div class="filter-group">
-
-        <label>
-            Category:
-        </label>
-
-        <select
-            name="category"
-            onchange="this.form.submit()">
-
-            <option
-                value=""
-                {% if not selected_category %}selected{% endif %}>
-                All Types
-            </option>
-
-            <option
-                value="Property Dispute"
-                {% if selected_category == "Property Dispute" %}selected{% endif %}>
-                Property Dispute
-            </option>
-
-            <option
-                value="Noise Complaint"
-                {% if selected_category == "Noise Complaint" %}selected{% endif %}>
-                Noise Complaint
-            </option>
-
-            <option
-                value="Illegal Parking"
-                {% if selected_category == "Illegal Parking" %}selected{% endif %}>
-                Illegal Parking
-            </option>
-
-        </select>
-
-    </div>
+    <form
+        method="GET"
+        action="{% url 'complaints' %}"
+        class="complaint-filters"
+    >
 
 
-    <!-- STATUS -->
+        <!-- CATEGORY -->
 
-    <div class="filter-group">
+        <div class="filter-group">
 
-        <label>
-            Status:
-        </label>
+            <label for="categoryFilter">
+                Category:
+            </label>
 
-        <select
-            name="status"
-            onchange="this.form.submit()">
+            <select
+                id="categoryFilter"
+                name="category"
+                onchange="this.form.submit()"
+            >
 
-            <option
-                value=""
-                {% if not selected_status %}selected{% endif %}>
-                All Status
-            </option>
-
-            <option
-                value="Submitted"
-                {% if selected_status == "Submitted" %}selected{% endif %}>
-                Submitted
-            </option>
-
-            <option
-                value="Under Review"
-                {% if selected_status == "Under Review" %}selected{% endif %}>
-                Under Review
-            </option>
-
-            <option
-                value="Under Investigation"
-                {% if selected_status == "Under Investigation" %}selected{% endif %}>
-                Under Investigation
-            </option>
-
-            <option
-                value="Resolved"
-                {% if selected_status == "Resolved" %}selected{% endif %}>
-                Resolved
-            </option>
-
-            <option
-                value="Rejected"
-                {% if selected_status == "Rejected" %}selected{% endif %}>
-                Rejected
-            </option>
-
-            <option
-                value="Closed"
-                {% if selected_status == "Closed" %}selected{% endif %}>
-                Closed
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <!-- LAST 30 DAYS -->
-
-    <button
-        type="submit"
-        name="date_range"
-        value="30"
-        class="date-filter">
-
-        📅 Last 30 Days
-
-    </button>
-
-
-    <!-- CLEAR FILTERS -->
-
-    <a
-        href="{% url 'complaints' %}"
-        class="advanced-filter">
-
-        ☰ Clear Filters
-
-    </a>
-
-</form>
-
-
-    <!-- COMPLAINT TABLE -->
-
-    <div class="complaint-table-container">
-
-        <table class="complaint-table">
-
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Complaint ID
-                    </th>
-
-                    <th>
-                        Complainant
-                    </th>
-
-                    <th>
-                        Category
-                    </th>
-
-                    <th>
-                        Filed Date
-                    </th>
-
-                    <th>
-                        Priority
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Actions
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-
-                {% for complaint in complaints %}
-
-                <tr
-                    class="complaint-row"
-
-                    data-complaint-id="{{ complaint.complaint_id }}"
-                    data-complainant="Resident #{{ complaint.resident_id }}"
-                    data-subject="{{ complaint.subject|escapejs }}"
-                    data-description="{{ complaint.description|escapejs }}"
-                    data-category="{{ complaint.complaint_type|escapejs }}"
-                    data-priority="{{ complaint.priority|escapejs }}"
-                    data-status="{{ complaint.status|escapejs }}"
-                    data-location="{{ complaint.location|default:''|escapejs }}"
-                    data-incident-date="{{ complaint.incident_date|date:'M d, Y' }}"
+                <option
+                    value=""
+                    {% if not selected_category %}
+                        selected
+                    {% endif %}
                 >
+                    All Types
+                </option>
 
 
-                    <!-- COMPLAINT ID -->
+                <option
+                    value="Property Dispute"
+                    {% if selected_category == "Property Dispute" %}
+                        selected
+                    {% endif %}
+                >
+                    Property Dispute
+                </option>
 
-                    <td>
 
-                        <span class="complaint-id">
+                <option
+                    value="Noise Complaint"
+                    {% if selected_category == "Noise Complaint" %}
+                        selected
+                    {% endif %}
+                >
+                    Noise Complaint
+                </option>
 
-                            #CP-{{ complaint.complaint_id|stringformat:"04d" }}
 
+                <option
+                    value="Public Safety"
+                    {% if selected_category == "Public Safety" %}
+                        selected
+                    {% endif %}
+                >
+                    Public Safety
+                </option>
+
+
+                <option
+                    value="Community Issue"
+                    {% if selected_category == "Community Issue" %}
+                        selected
+                    {% endif %}
+                >
+                    Community Issue
+                </option>
+
+
+                <option
+                    value="Other"
+                    {% if selected_category == "Other" %}
+                        selected
+                    {% endif %}
+                >
+                    Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="filter-group">
+
+            <label for="statusFilter">
+                Status:
+            </label>
+
+            <select
+                id="statusFilter"
+                name="status"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value=""
+                    {% if not selected_status %}
+                        selected
+                    {% endif %}
+                >
+                    All Status
+                </option>
+
+
+                <option
+                    value="Submitted"
+                    {% if selected_status == "Submitted" %}
+                        selected
+                    {% endif %}
+                >
+                    Submitted
+                </option>
+
+
+                <option
+                    value="Under Review"
+                    {% if selected_status == "Under Review" %}
+                        selected
+                    {% endif %}
+                >
+                    Under Review
+                </option>
+
+
+                <option
+                    value="Under Investigation"
+                    {% if selected_status == "Under Investigation" %}
+                        selected
+                    {% endif %}
+                >
+                    Under Investigation
+                </option>
+
+
+                <option
+                    value="Resolved"
+                    {% if selected_status == "Resolved" %}
+                        selected
+                    {% endif %}
+                >
+                    Resolved
+                </option>
+
+
+                <option
+                    value="Rejected"
+                    {% if selected_status == "Rejected" %}
+                        selected
+                    {% endif %}
+                >
+                    Rejected
+                </option>
+
+
+                <option
+                    value="Closed"
+                    {% if selected_status == "Closed" %}
+                        selected
+                    {% endif %}
+                >
+                    Closed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- LAST 30 DAYS -->
+
+        <button
+            type="submit"
+            name="date_range"
+            value="30"
+            class="date-filter
+            {% if selected_date_range == '30' %}
+                active
+            {% endif %}"
+        >
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+
+                <rect
+                    x="3.5"
+                    y="5.5"
+                    width="17"
+                    height="15"
+                    rx="2"
+                />
+
+                <path d="M8 3.5v4M16 3.5v4M3.5 9.5h17"/>
+
+            </svg>
+
+            Last 30 Days
+
+        </button>
+
+
+        <!-- CLEAR -->
+
+        <a
+            href="{% url 'complaints' %}"
+            class="advanced-filter"
+        >
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+                <path d="M4 6h16M7 12h10M10 18h4"/>
+                <path d="m18 15 3 3m0-3-3 3"/>
+            </svg>
+
+            Clear Filters
+
+        </a>
+
+    </form>
+
+
+    <!-- =====================================================
+         NEW COMPLAINTS
+    ====================================================== -->
+
+    <section class="complaint-section">
+
+
+        <div class="complaint-section-header">
+
+            <div class="complaint-section-heading">
+
+                <div class="section-title-row">
+
+
+                    <div class="section-icon section-icon-new">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <path d="M4 5.5h16v13H4v-13Z"/>
+                            <path d="M4 14h4l1.5 2h5L16 14h4"/>
+                        </svg>
+
+                    </div>
+
+
+                    <h2>
+                        New Complaints
+                    </h2>
+
+
+                    <span class="section-count section-count-new">
+                        {{ new_complaints|length }}
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Newly submitted complaints awaiting review or action.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="complaint-table-container">
+
+            <table class="complaint-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Complaint ID
+                        </th>
+
+                        <th>
+                            Complainant
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Filed Date
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for complaint in new_complaints %}
+
+                        {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty-complaints"
+                            >
+
+                                <div class="empty-state">
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.5"
+                                    >
+                                        <path d="M4 5.5h16v13H4v-13Z"/>
+                                        <path d="M8 10h8M8 14h5"/>
+                                    </svg>
+
+
+                                    <span>
+                                        No submitted or under review complaints.
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ONGOING COMPLAINTS
+    ====================================================== -->
+
+    <section class="complaint-section">
+
+
+        <div class="complaint-section-header">
+
+            <div class="complaint-section-heading">
+
+                <div class="section-title-row">
+
+
+                    <div class="section-icon section-icon-ongoing">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+
+                            <circle
+                                cx="10.5"
+                                cy="10.5"
+                                r="5.5"
+                            />
+
+                            <path d="m15 15 4.5 4.5"/>
+
+                        </svg>
+
+                    </div>
+
+
+                    <h2>
+                        Ongoing Complaints
+                    </h2>
+
+
+                    <span class="section-count section-count-ongoing">
+                        {{ ongoing_complaints|length }}
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Complaints currently under investigation.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="complaint-table-container">
+
+            <table class="complaint-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Complaint ID
+                        </th>
+
+                        <th>
+                            Complainant
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Filed Date
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for complaint in ongoing_complaints %}
+
+                        {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty-complaints"
+                            >
+
+                                <div class="empty-state">
+
+                                    <span>
+                                        No complaints currently under investigation.
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMPLETED COMPLAINTS
+    ====================================================== -->
+
+    <section class="complaint-section">
+
+
+        <div class="complaint-section-header">
+
+            <div class="complaint-section-heading">
+
+                <div class="section-title-row">
+
+
+                    <div class="section-icon section-icon-completed">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8.5"
+                            />
+
+                            <path d="m8.5 12 2.2 2.2 4.8-5"/>
+
+                        </svg>
+
+                    </div>
+
+
+                    <h2>
+                        Completed Complaints
+                    </h2>
+
+
+                    <span class="section-count section-count-completed">
+                        {{ completed_complaints|length }}
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Resolved, rejected, and closed complaints.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="complaint-table-container">
+
+            <table class="complaint-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Complaint ID
+                        </th>
+
+                        <th>
+                            Complainant
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Filed Date
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for complaint in completed_complaints %}
+
+                        {% include "complaintmodule/complaint_row.html" with complaint=complaint %}
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty-complaints"
+                            >
+
+                                <div class="empty-state">
+
+                                    <span>
+                                        No resolved, rejected, or closed complaints.
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMPLAINT REVIEW MODAL
+    ====================================================== -->
+
+    <div
+        id="complaintReviewModal"
+        class="review-modal"
+        aria-hidden="true"
+    >
+
+
+        <!-- BACKDROP -->
+
+        <div
+            class="review-modal-backdrop"
+            data-close-review
+        ></div>
+
+
+        <!-- MODAL -->
+
+        <div
+            class="review-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reviewModalTitle"
+        >
+
+
+            <!-- =================================================
+                 MODAL HEADER
+            ================================================== -->
+
+            <div class="review-modal-header">
+
+                <div>
+
+                    <span class="review-modal-eyebrow">
+                        COMPLAINT REVIEW
+                    </span>
+
+
+                    <div class="review-modal-title-row">
+
+                        <h2 id="reviewModalTitle">
+                            Complaint Details
+                        </h2>
+
+
+                        <span
+                            id="reviewReference"
+                            class="review-reference"
+                        >
+                            #CP-0000
                         </span>
 
-                    </td>
+                    </div>
 
 
-                    <!-- COMPLAINANT -->
+                    <p>
+                        Review the complaint and update its processing information.
+                    </p>
 
-                    <td>
-
-                        <div class="complainant-info">
+                </div>
 
 
-                            <div class="complainant-avatar">
+                <button
+                    type="button"
+                    class="review-modal-close"
+                    data-close-review
+                    aria-label="Close complaint review"
+                >
+                    &times;
+                </button>
 
-                                R
+            </div>
+
+
+            <!-- =================================================
+                 MODAL BODY
+            ================================================== -->
+
+            <div class="review-modal-body">
+
+
+                <!-- =============================================
+                     COMPLAINT INFORMATION
+                ============================================== -->
+
+                <section class="review-card">
+
+                    <div class="review-card-heading">
+
+
+                        <div class="review-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+
+                                <path d="M6 3h9l3 3v15H6V3Z"/>
+
+                                <path d="M14 3v5h4M9 12h6M9 16h6"/>
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Complaint Information
+                            </h3>
+
+                            <p>
+                                Submitted complaint details
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="review-info-grid">
+
+
+                        <!-- COMPLAINANT -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Complainant
+                            </span>
+
+                            <strong id="reviewComplainant">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- REPORT TYPE -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Report Type
+                            </span>
+
+                            <strong id="reviewReportType">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Category
+                            </span>
+
+                            <strong id="reviewCategory">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- INCIDENT DATE -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Incident Date
+                            </span>
+
+                            <strong id="reviewIncidentDate">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- INCIDENT TIME -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Incident Time
+                            </span>
+
+                            <strong id="reviewIncidentTime">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- LOCATION -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Location
+                            </span>
+
+                            <strong id="reviewLocation">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="review-subject">
+
+                        <span>
+                            Subject
+                        </span>
+
+                        <strong id="reviewSubject">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="review-description">
+
+                        <span>
+                            Description
+                        </span>
+
+                        <p id="reviewDescription">
+                            —
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     RESPONDENT INFORMATION
+                ============================================== -->
+
+                <section
+                    class="review-card"
+                    id="reviewRespondentSection"
+                >
+
+                    <div class="review-card-heading">
+
+
+                        <div class="review-heading-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="3.5"
+                                />
+
+                                <path
+                                    d="M5.5 20c.5-4 2.7-6 6.5-6s6 2 6.5 6"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Respondent Information
+                            </h3>
+
+                            <p>
+                                Person or party complained against
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="review-info-grid">
+
+
+                        <!-- NAME -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Name / Alias
+                            </span>
+
+                            <strong id="reviewRespondentName">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- RELATIONSHIP -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Relationship
+                            </span>
+
+                            <strong id="reviewRespondentRelationship">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- CONTACT -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Contact
+                            </span>
+
+                            <strong id="reviewRespondentContact">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+
+                        <div class="review-info-item">
+
+                            <span>
+                                Address / Location
+                            </span>
+
+                            <strong id="reviewRespondentAddress">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     REVIEW / PROCESSING
+                ============================================== -->
+
+                <section class="review-card">
+
+
+                    <div class="review-card-heading">
+
+
+                        <div class="review-heading-icon review-heading-icon-green">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path d="M4 7h16M7 12h10M9 17h6"/>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Review &amp; Processing
+                            </h3>
+
+                            <p>
+                                Change complaint priority, status and review notes
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         UPDATE FORM
+                    ========================================== -->
+
+                    <form
+                        id="complaintReviewForm"
+                        method="POST"
+                        data-update-url-template="{% url 'update_complaint' 0 %}"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <div class="review-form-grid">
+
+
+                            <!-- PRIORITY -->
+
+                            <div class="review-field">
+
+                                <label for="reviewPriority">
+                                    Priority
+                                </label>
+
+
+                                <select
+                                    id="reviewPriority"
+                                    name="priority"
+                                    required
+                                >
+
+                                    <option value="N/A">
+                                        N/A
+                                    </option>
+
+                                    <option value="Low">
+                                        Low
+                                    </option>
+
+                                    <option value="Medium">
+                                        Medium
+                                    </option>
+
+                                    <option value="High">
+                                        High
+                                    </option>
+
+                                    <option value="Urgent">
+                                        Urgent
+                                    </option>
+
+                                </select>
 
                             </div>
 
 
-                            <div>
+                            <!-- STATUS -->
 
-                                <strong>
+                            <div class="review-field">
 
-                                    Resident #{{ complaint.resident_id }}
+                                <label for="reviewStatus">
+                                    Status
+                                </label>
 
-                                </strong>
 
+                                <select
+                                    id="reviewStatus"
+                                    name="status"
+                                    required
+                                >
 
-                                <small>
+                                    <option value="Submitted">
+                                        Submitted
+                                    </option>
 
-                                    {{ complaint.location }}
+                                    <option value="Under Review">
+                                        Under Review
+                                    </option>
 
-                                </small>
+                                    <option value="Under Investigation">
+                                        Under Investigation
+                                    </option>
+
+                                    <option value="Resolved">
+                                        Resolved
+                                    </option>
+
+                                    <option value="Rejected">
+                                        Rejected
+                                    </option>
+
+                                    <option value="Closed">
+                                        Closed
+                                    </option>
+
+                                </select>
 
                             </div>
 
                         </div>
 
-                    </td>
+
+                        <!-- =====================================
+                             RESOLUTION
+                        ====================================== -->
+
+                        <div class="review-field">
+
+                            <label for="reviewResolution">
+                                Resolution / Review Notes
+                            </label>
 
 
-                    <!-- CATEGORY -->
-
-                    <td>
-
-                        {{ complaint.complaint_type }}
-
-                    </td>
-
-
-                    <!-- DATE -->
-
-                    <td>
-
-                        {{ complaint.incident_date|date:"M d, Y" }}
-
-                    </td>
+                            <textarea
+                                id="reviewResolution"
+                                name="resolution"
+                                rows="5"
+                                placeholder="Enter findings, actions taken, mediation notes, settlement details, or final resolution..."
+                            ></textarea>
 
 
-                    <!-- PRIORITY -->
+                            <small>
+                                Use this field for review notes, actions taken,
+                                mediation results, findings, or the final resolution.
+                            </small>
 
-                    <td>
-
-                        <span
-                            class="priority {{ complaint.priority|lower }}">
-
-                            {{ complaint.priority }}
-
-                        </span>
-
-                    </td>
+                        </div>
 
 
-                    <!-- STATUS -->
+                        <!-- =====================================
+                             ACTION BUTTONS
+                        ====================================== -->
 
-                    <td>
-
-                        <span
-                            class="complaint-status {{ complaint.status|lower }}">
-
-                            {{ complaint.status }}
-
-                        </span>
-
-                    </td>
+                        <div class="review-form-actions">
 
 
-                    <!-- ACTIONS -->
-
-                    <td
-                        onclick="event.stopPropagation();">
-
-                        <button
-                            type="button"
-                            class="action-btn">
-
-                            ⋮
-
-                        </button>
-
-                    </td>
+                            <button
+                                type="button"
+                                class="review-cancel-btn"
+                                data-close-review
+                            >
+                                Cancel
+                            </button>
 
 
-                </tr>
+                            <button
+                                type="submit"
+                                class="review-save-btn"
+                                id="reviewSaveButton"
+                            >
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M5 12l4 4L19 6"
+                                    />
+                                </svg>
 
 
-                {% empty %}
+                                <span>
+                                    Save Changes
+                                </span>
 
+                            </button>
 
-                <tr>
+                        </div>
 
-                    <td
-                        colspan="7"
-                        class="empty-complaints">
+                    </form>
 
-                        No complaints found.
+                </section>
 
-                    </td>
+            </div>
 
-                </tr>
-
-
-                {% endfor %}
-
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
