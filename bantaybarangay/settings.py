@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'auditlogs',
     'hearingmodule',
     'docrequest',
+    'reportsmodule',
 ]
 
 MIDDLEWARE = [

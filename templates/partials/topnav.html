@@ -183,7 +183,7 @@
 
                 <div
                     id="complaintsDropdown"
-                    class="absolute left-0 top-full z-[11000] mt-2 hidden w-[290px] rounded-xl border border-slate-200 bg-white p-2 shadow-2xl"
+                    class="absolute left-0 top-full z-[11000] mt-2 hidden w-[300px] rounded-xl border border-slate-200 bg-white p-2 shadow-2xl"
                 >
 
                     <!-- SUBMIT COMPLAINT -->
@@ -232,11 +232,127 @@
 
                     </a>
 
-                </a>
+
+                    <!-- MY COMPLAINTS -->
+
+                    {% if request.session.user_id %}
+
+                        <a
+                            href="{% url 'my_complaints' %}"
+                            class="group flex items-start gap-3 rounded-lg px-3 py-3 transition hover:bg-[#eef8f4]"
+                        >
+
+                            <div
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5f5ef] text-[#073b35]"
+                            >
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-5 w-5"
+                                >
+                                    <rect
+                                        x="5"
+                                        y="4"
+                                        width="14"
+                                        height="17"
+                                        rx="2"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9 4V3h6v1"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M8.5 10h7M8.5 14h7M8.5 18h4"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <p
+                                    class="text-sm font-semibold text-slate-800 group-hover:text-[#073b35]"
+                                >
+                                    My Complaints
+                                </p>
+
+                                <p
+                                    class="mt-1 text-xs leading-5 text-slate-500"
+                                >
+                                    View your submitted complaints.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    {% endif %}
+
+
+                    <!-- TRACK COMPLAINT -->
+
+                    <a
+                        href="{% url 'track_complaint' %}"
+                        class="group flex items-start gap-3 rounded-lg px-3 py-3 transition hover:bg-[#eef8f4]"
+                    >
+
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#e5f5ef] text-[#073b35]"
+                        >
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 7v5l3 2"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <p
+                                class="text-sm font-semibold text-slate-800 group-hover:text-[#073b35]"
+                            >
+                                Track Complaint
+                            </p>
+
+                            <p
+                                class="mt-1 text-xs leading-5 text-slate-500"
+                            >
+                                Check the status of a complaint.
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
 
             </div>
-
-         </div>
 
 
             <!-- =================================================
@@ -430,9 +546,7 @@
             </div>
 
 
-            <!-- =================================================
-                ABOUT
-            ================================================== -->
+            <!-- ABOUT -->
 
             <a
                 href="{% url 'about' %}"
@@ -467,9 +581,7 @@
             </a>
 
 
-            <!-- =================================================
-                CONTACT
-            ================================================== -->
+            <!-- CONTACT -->
 
             <a
                 href="{% url 'contact' %}"
@@ -742,12 +854,12 @@
                         ================================================== -->
 
                         <a
-                            href="#"
-                            class="mt-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-600 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                            href="{% url 'my_profile' %}"
+                            class="group mt-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-600 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
                         >
 
                             <span
-                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100"
+                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#eef8f4] text-[#073b35]"
                             >
 
                                 <svg
@@ -773,15 +885,35 @@
 
                             </span>
 
-                            <span>
-                                <span class="block font-medium text-slate-700">
+                            <span class="min-w-0 flex-1">
+
+                                <span
+                                    class="block font-medium text-slate-700 group-hover:text-[#073b35]"
+                                >
                                     My Profile
                                 </span>
 
                                 <span class="block text-xs text-slate-400">
                                     View and manage your profile
                                 </span>
+
                             </span>
+
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                                class="h-4 w-4 shrink-0 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-[#073b35]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
 
                         </a>
 
@@ -863,9 +995,7 @@
                         </a>
 
 
-                        <!-- =================================================
-                            SETTINGS
-                        ================================================== -->
+                        <!-- SETTINGS -->
 
                         <a
                             href="#"
@@ -900,6 +1030,7 @@
                             </span>
 
                             <span>
+
                                 <span class="block font-medium text-slate-700">
                                     Settings
                                 </span>
@@ -907,6 +1038,7 @@
                                 <span class="block text-xs text-slate-400">
                                     Account preferences
                                 </span>
+
                             </span>
 
                         </a>
@@ -917,9 +1049,7 @@
                         ></div>
 
 
-                        <!-- =================================================
-                            LOGOUT
-                        ================================================== -->
+                        <!-- LOGOUT -->
 
                         <a
                             href="{% url 'logout' %}"
@@ -969,9 +1099,7 @@
 
             {% else %}
 
-                <!-- =================================================
-                    NOT LOGGED IN
-                ================================================== -->
+                <!-- NOT LOGGED IN -->
 
                 <a
                     href="{% url 'login' %}"
@@ -1012,9 +1140,7 @@
             {% endif %}
 
 
-            <!-- =================================================
-                MOBILE MENU BUTTON
-            ================================================== -->
+            <!-- MOBILE MENU BUTTON -->
 
             <button
                 id="mobileNavButton"
@@ -1117,9 +1243,7 @@
             </a>
 
 
-            <!-- =================================================
-                COMPLAINTS
-            ================================================== -->
+            <!-- COMPLAINTS -->
 
             <p
                 class="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400"
@@ -1153,6 +1277,43 @@
             </a>
 
 
+            {% if request.session.user_id %}
+
+                <a
+                    href="{% url 'my_complaints' %}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <rect
+                            x="5"
+                            y="4"
+                            width="14"
+                            height="17"
+                            rx="2"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.5 10h7M8.5 14h7M8.5 18h4"
+                        />
+                    </svg>
+
+                    My Complaints
+
+                </a>
+
+            {% endif %}
+
+
             <a
                 href="{% url 'track_complaint' %}"
                 class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
@@ -1184,9 +1345,7 @@
             </a>
 
 
-            <!-- =================================================
-                DOCUMENTS
-            ================================================== -->
+            <!-- DOCUMENTS -->
 
             <p
                 class="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400"
@@ -1249,12 +1408,6 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="M14 3v6h5"
-                    />
-
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 13h5M9 17h3"
                     />
 
                     <path
@@ -1416,7 +1569,7 @@
                     <!-- MY PROFILE -->
 
                     <a
-                        href="#"
+                        href="{% url 'my_profile' %}"
                         class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[#eef8f4] hover:text-[#073b35]"
                     >
 

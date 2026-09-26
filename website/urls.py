@@ -10,4 +10,5 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('request-document/', views.request_document, name='request_document'),
     path("my-complaints/", views.my_complaints, name="my_complaints"),
+    path("my_profile/", views.my_profile, name="my_profile"),
 ]

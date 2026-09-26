@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+
+import secrets
 
 from .models import User
 
@@ -163,7 +168,6 @@ def login_view(request):
         # LOGIN SUCCESSFUL
         # =================================================
 
-        # Clear previous session
         request.session.flush()
 
 
@@ -354,7 +358,7 @@ def forgot_password_view(request):
         email = request.POST.get(
             "email",
             ""
-        ).strip()
+        ).strip().lower()
 
 
         # -------------------------------------------------
@@ -375,13 +379,6 @@ def forgot_password_view(request):
 
 
         # -------------------------------------------------
-        # NORMALIZE EMAIL
-        # -------------------------------------------------
-
-        email = email.lower()
-
-
-        # -------------------------------------------------
         # FIND USER BY EMAIL
         # -------------------------------------------------
 
@@ -393,29 +390,30 @@ def forgot_password_view(request):
 
         except User.DoesNotExist:
 
-            # Do not reveal whether an account exists.
+            # Generic response prevents account enumeration.
+
             messages.success(
                 request,
-                "If an account is registered with that email address, "
-                "password reset instructions will be provided."
+                "If an account is registered with that email "
+                "address, password reset instructions have "
+                "been generated."
             )
 
-            return render(
-                request,
-                "login/forgot_password.html"
+            return redirect(
+                "forgot_password"
             )
 
         except User.MultipleObjectsReturned:
 
             messages.error(
                 request,
-                "Multiple accounts are using this email address. "
-                "Please contact the barangay administrator."
+                "Multiple accounts are using this email "
+                "address. Please contact the barangay "
+                "administrator."
             )
 
-            return render(
-                request,
-                "login/forgot_password.html"
+            return redirect(
+                "forgot_password"
             )
 
 
@@ -425,29 +423,32 @@ def forgot_password_view(request):
 
         if not user.is_active:
 
-            # Keep response generic so account status
-            # is not disclosed publicly.
+            # Keep response generic.
+
             messages.success(
                 request,
-                "If an account is registered with that email address, "
-                "password reset instructions will be provided."
+                "If an account is registered with that email "
+                "address, password reset instructions have "
+                "been generated."
             )
 
-            return render(
-                request,
-                "login/forgot_password.html"
+            return redirect(
+                "forgot_password"
             )
 
 
         # =================================================
-        # ACCOUNT FOUND
+        # GENERATE SECURE RESET TOKEN
         # =================================================
-        #
-        # This stores only the minimum information needed
-        # for the next reset-password step.
-        #
-        # Do NOT store the user's current password.
-        # =================================================
+
+        reset_token = secrets.token_urlsafe(
+            32
+        )
+
+
+        # -------------------------------------------------
+        # STORE RESET INFORMATION IN SESSION
+        # -------------------------------------------------
 
         request.session[
             "password_reset_user_id"
@@ -455,46 +456,143 @@ def forgot_password_view(request):
 
         request.session[
             "password_reset_email"
-        ] = email
+        ] = user.email
+
+        request.session[
+            "password_reset_token"
+        ] = reset_token
 
 
         # -------------------------------------------------
-        # SHORT SESSION EXPIRY
+        # RESET SESSION EXPIRATION
         # -------------------------------------------------
-        #
-        # Temporary recovery session:
-        # 15 minutes
-        # -------------------------------------------------
+
+        # The reset information will expire after 15 minutes.
 
         request.session.set_expiry(
             60 * 15
         )
 
 
-        # -------------------------------------------------
-        # SUCCESS MESSAGE
-        # -------------------------------------------------
+        # =================================================
+        # CREATE RESET URL
+        # =================================================
 
-        messages.success(
-            request,
-            "Your account was found. "
-            "You may continue with the password recovery process."
+        # This expects a URL named "reset_password"
+        # accepting a token parameter.
+
+        reset_path = reverse(
+            "reset_password",
+            kwargs={
+                "token": reset_token
+            }
+        )
+
+        reset_url = request.build_absolute_uri(
+            reset_path
         )
 
 
-        # -------------------------------------------------
-        # CURRENTLY RETURN TO FORGOT PASSWORD PAGE
-        # -------------------------------------------------
-        #
-        # Once reset_password_view is created,
-        # change this to:
-        #
-        # return redirect("reset_password")
-        # -------------------------------------------------
+        # =================================================
+        # PREPARE EMAIL
+        # =================================================
 
-        return render(
+        first_name = getattr(
+            user,
+            "first_name",
+            ""
+        ) or ""
+
+        if first_name:
+
+            greeting = (
+                f"Hello {first_name},"
+            )
+
+        else:
+
+            greeting = (
+                f"Hello {user.username},"
+            )
+
+
+        subject = (
+            "BantayBarangay Password Reset"
+        )
+
+        email_message = f"""
+{greeting}
+
+We received a request to reset the password for your
+BantayBarangay account.
+
+Use the link below to reset your password:
+
+{reset_url}
+
+This password reset link is intended to be used within
+15 minutes.
+
+If you did not request a password reset, you can ignore
+this message.
+
+For your security, never share this reset link with
+another person.
+
+BantayBarangay
+Secure Digital Governance
+"""
+
+
+        # =================================================
+        # SEND EMAIL
+        # =================================================
+
+        try:
+
+            send_mail(
+                subject=subject,
+                message=email_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[
+                    user.email
+                ],
+                fail_silently=False,
+            )
+
+        except Exception as error:
+
+            # Development logging.
+            # The email address/password are not printed.
+
+            print(
+                "Password reset email error:",
+                error
+            )
+
+            messages.error(
+                request,
+                "Unable to generate the password reset "
+                "email. Please try again."
+            )
+
+            return redirect(
+                "forgot_password"
+            )
+
+
+        # =================================================
+        # SUCCESS MESSAGE
+        # =================================================
+
+        messages.success(
             request,
-            "login/forgot_password.html"
+            "Password reset instructions have been "
+            "generated. Check the Django terminal."
+        )
+
+        return redirect(
+            "forgot_password"
         )
 
 

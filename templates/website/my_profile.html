@@ -1,0 +1,1683 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Profile | BantayBarangay</title>
+
+
+    <!-- =====================================================
+        TAILWIND CSS
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =====================================================
+        FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+        PROFILE CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/my_profile.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+        TOP NAVIGATION
+    ====================================================== -->
+
+    {% include "partials/topnav.html" %}
+
+
+
+    <!-- =====================================================
+        PROFILE PAGE
+    ====================================================== -->
+
+    <main class="profile-page">
+
+
+        <!-- =================================================
+            PAGE HEADER
+        ================================================== -->
+
+        <section class="profile-page-header">
+
+                <span>Resident Portal</span>
+
+
+            <div class="profile-heading-row">
+
+                <div>
+
+                    <h1>
+                        Resident Profile & Verification
+                    </h1>
+
+                    <p>
+                        Manage your personal information,
+                        residency credentials, and decentralized
+                        civic security settings.
+                    </p>
+
+                </div>
+
+
+                <div class="profile-sync">
+
+                    <span class="sync-badge">
+
+                        <span class="sync-dot"></span>
+
+                        Barangay On-Chain Sync: Active
+
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="sync-button"
+                        id="syncProfileButton"
+                        title="Synchronize profile"
+                    >
+
+                        <i class="fa-solid fa-arrows-rotate"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+            MAIN PROFILE GRID
+        ================================================== -->
+
+        <div class="profile-layout">
+
+
+            <!-- =============================================
+                LEFT COLUMN
+            ============================================== -->
+
+            <aside class="profile-sidebar">
+
+
+                <!-- =========================================
+                    RESIDENT CARD
+                ========================================== -->
+
+                <section class="resident-card">
+
+
+                    <div class="resident-card-banner">
+
+                        <div class="resident-government">
+
+                            <i class="fa-solid fa-landmark"></i>
+
+                            <span>
+                                REPÚBLICA NG PILIPINAS
+                            </span>
+
+                        </div>
+
+
+                        <span class="resident-code">
+                            QC-SAN-ANT
+                        </span>
+
+                    </div>
+
+
+
+                    <div class="resident-card-body">
+
+
+                        <!-- AVATAR -->
+
+                        <div class="resident-avatar-wrapper">
+
+                            <div class="resident-avatar">
+
+                                {% if resident.profile_picture %}
+
+                                    <img
+                                        src="{{ resident.profile_picture.url }}"
+                                        alt="Resident profile"
+                                    >
+
+                                {% else %}
+
+                                    <div class="resident-avatar-placeholder">
+
+                                        <i class="fa-solid fa-user"></i>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if resident.is_verified %}
+
+                                <span class="avatar-verified">
+
+                                    <i class="fa-solid fa-circle-check"></i>
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- VERIFICATION -->
+
+                        <div class="resident-verification-row">
+
+                            {% if resident.is_verified %}
+
+                                <span class="verification-badge">
+
+                                    <i class="fa-solid fa-shield-halved"></i>
+
+                                    Verified Resident
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="verification-badge">
+
+                                    <i class="fa-solid fa-clock"></i>
+
+                                    {{ resident.verification_status|default:"Pending Verification" }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <!-- RESIDENT NAME -->
+
+                        <h2>
+                            {{ resident.full_name|default:"Resident" }}
+                        </h2>
+
+
+                        <p class="resident-id">
+
+                            {{ resident.resident_number|default:"No Resident ID" }}
+
+                        </p>
+
+
+                        <p class="resident-barangay">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            {% if resident.barangay %}
+
+                                {{ resident.barangay }}
+
+                            {% elif resident.address %}
+
+                                {{ resident.address }}
+
+                            {% else %}
+
+                                Address not available
+
+                            {% endif %}
+
+                        </p>
+
+
+
+                        <!-- =================================
+                            DIGITAL RESIDENT PASS
+                        ================================== -->
+
+                        <div class="digital-pass">
+
+
+                            <div class="digital-pass-header">
+
+                                <strong>
+
+                                    <i class="fa-solid fa-qrcode"></i>
+
+                                    Digital Resident Pass
+
+                                </strong>
+
+
+                                <span>
+                                    Civic ID
+                                </span>
+
+                            </div>
+
+
+
+                            <div class="digital-pass-content">
+
+
+                                <div
+                                    class="qr-placeholder"
+                                    id="residentQrCode"
+                                >
+
+                                    <div class="qr-grid">
+
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="digital-pass-details">
+
+                                    <span>
+                                        Resident Identity
+                                    </span>
+
+
+                                    <strong>
+
+                                        {% if resident.identity_hash %}
+
+                                            {{ resident.identity_hash }}
+
+                                        {% else %}
+
+                                            {{ resident.resident_number|default:"Not available" }}
+
+                                        {% endif %}
+
+                                    </strong>
+
+
+                                    <small>
+
+                                        {% if resident.is_verified %}
+
+                                            Verified resident record
+
+                                        {% else %}
+
+                                            Verification pending
+
+                                        {% endif %}
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <button
+                                type="button"
+                                class="download-pass-button"
+                                id="downloadQrButton"
+                            >
+
+                                <i class="fa-solid fa-download"></i>
+
+                                Download QR ID
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- =================================
+                            ACCOUNT DETAILS
+                        ================================== -->
+
+                        <div class="resident-status-list">
+
+
+                            <div class="resident-status-item">
+
+                                <span>
+
+                                    <i class="fa-regular fa-circle-check"></i>
+
+                                    Account Status
+
+                                </span>
+
+                                <strong>
+                                    Account Active
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="resident-status-item">
+
+                                <span>
+
+                                    <i class="fa-solid fa-briefcase"></i>
+
+                                    Verification Status
+
+                                </span>
+
+
+                                {% if resident.is_verified %}
+
+                                    <strong class="status-green">
+                                        Verified
+                                    </strong>
+
+                                {% else %}
+
+                                    <strong>
+
+                                        {{ resident.verification_status|default:"Pending" }}
+
+                                    </strong>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <div class="resident-status-item">
+
+                                <span>
+
+                                    <i class="fa-regular fa-calendar"></i>
+
+                                    Registration Date
+
+                                </span>
+
+
+                                <strong>
+
+                                    {% if resident.registration_date %}
+
+                                        {{ resident.registration_date|date:"M. d, Y" }}
+
+                                    {% else %}
+
+                                        Not available
+
+                                    {% endif %}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================================
+                    QUICK ACTIONS
+                ========================================== -->
+
+                <section class="quick-actions-card">
+
+                    <h3>
+                        QUICK ACTIONS
+                    </h3>
+
+
+                    <a
+                        href="#personal-details"
+                        class="quick-action"
+                    >
+
+                        <span class="quick-action-icon">
+
+                            <i class="fa-solid fa-user-pen"></i>
+
+                        </span>
+
+
+                        <span class="quick-action-text">
+
+                            <strong>
+                                Edit Profile
+                            </strong>
+
+                            <small>
+                                Update contact & personal data
+                            </small>
+
+                        </span>
+
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+
+                    <a
+                        href="{% url 'request_document' %}"
+                        class="quick-action"
+                    >
+
+                        <span class="quick-action-icon">
+
+                            <i class="fa-regular fa-file-lines"></i>
+
+                        </span>
+
+
+                        <span class="quick-action-text">
+
+                            <strong>
+                                Request Barangay Clearance
+                            </strong>
+
+                            <small>
+                                Request an official document
+                            </small>
+
+                        </span>
+
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="quick-action quick-action-danger"
+                        id="logoutButton"
+                    >
+
+                        <span class="quick-action-icon danger">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                        </span>
+
+
+                        <span class="quick-action-text">
+
+                            <strong>
+                                Log Out
+                            </strong>
+
+                            <small>
+                                End this session securely
+                            </small>
+
+                        </span>
+
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </section>
+
+            </aside>
+
+
+
+            <!-- =============================================
+                RIGHT COLUMN
+            ============================================== -->
+
+            <div class="profile-content">
+
+
+                <!-- =========================================
+                    DJANGO MESSAGES
+                ========================================== -->
+
+                {% if messages %}
+
+                    <div class="profile-messages">
+
+                        {% for message in messages %}
+
+                            <div
+                                class="profile-message
+                                {% if message.tags %}
+                                    profile-message-{{ message.tags }}
+                                {% endif %}"
+                            >
+
+                                <span>
+
+                                    {% if message.tags == "success" %}
+
+                                        <i class="fa-solid fa-circle-check"></i>
+
+                                    {% elif message.tags == "error" %}
+
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-circle-info"></i>
+
+                                    {% endif %}
+
+                                    {{ message }}
+
+                                </span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =========================================
+                    PERSONAL DETAILS
+                ========================================== -->
+
+                <section
+                    class="profile-section"
+                    id="personal-details"
+                >
+
+
+                    <div class="profile-section-header">
+
+
+                        <div class="section-title">
+
+                            <span class="section-icon">
+
+                                <i class="fa-regular fa-user"></i>
+
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Personal Details
+                                </h2>
+
+                                <p>
+                                    Civil registry baseline information
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <button
+                            type="button"
+                            class="outline-button"
+                            id="editContactButton"
+                        >
+
+                            <i class="fa-solid fa-pencil"></i>
+
+                            Update Contact Info
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="details-grid">
+
+
+                        <!-- FULL NAME -->
+
+                        <div class="detail-field">
+
+                            <label>
+                                Full Legal Name
+                            </label>
+
+                            <strong>
+
+                                {{ resident.full_name|default:"Not available" }}
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- DATE OF BIRTH -->
+
+                        <div class="detail-field">
+
+                            <label>
+                                Date of Birth
+                            </label>
+
+
+                            <strong>
+
+                                {% if resident.birth_date %}
+
+                                    {{ resident.birth_date|date:"F d, Y" }}
+
+                                    {% if resident.age %}
+
+                                        (Age {{ resident.age }})
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    Not available
+
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- GENDER -->
+
+                        <div class="detail-field">
+
+                            <label>
+                                Gender
+                            </label>
+
+                            <strong>
+
+                                {{ resident.gender|default:"Not available" }}
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- CIVIL STATUS -->
+
+                        <div class="detail-field">
+
+                            <label>
+                                Civil Status
+                            </label>
+
+                            <strong>
+
+                                {{ resident.civil_status|default:"Not available" }}
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- MOBILE -->
+
+                        <div class="detail-field">
+
+                            <label>
+                                Contact Mobile Number
+                            </label>
+
+
+                            <div class="verified-value">
+
+                                <strong>
+
+                                    {{ resident.mobile_number|default:"Not available" }}
+
+                                </strong>
+
+
+                                {% if resident.mobile_number %}
+
+                                    <span class="small-verified">
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                        Registered
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        <div class="detail-field">
+
+                            <label>
+                                Primary Email Address
+                            </label>
+
+
+                            <div class="verified-value">
+
+                                <strong>
+
+                                    {{ resident.email|default:"Not available" }}
+
+                                </strong>
+
+
+                                {% if resident.email %}
+
+                                    <span class="small-verified">
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                        Registered
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================================
+                    RESIDENTIAL ADDRESS
+                ========================================== -->
+
+                <section class="profile-section">
+
+
+                    <div class="profile-section-header">
+
+
+                        <div class="section-title">
+
+                            <span class="section-icon">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Residential Address & Household Info
+                                </h2>
+
+                                <p>
+                                    Barangay census registry and residency records
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="primary-residence-badge">
+
+                            <i class="fa-solid fa-house"></i>
+
+                            Primary Residence
+
+                        </span>
+
+                    </div>
+
+
+
+                    <div class="address-box">
+
+
+                        <div class="address-main">
+
+                            <span class="field-caption">
+                                REGISTERED ADDRESS
+                            </span>
+
+
+                            <strong>
+
+                                {{ resident.address_line|default:"Address not available" }}
+
+                            </strong>
+
+
+                            {% if resident.full_address %}
+
+                                <p>
+                                    {{ resident.full_address }}
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <div class="address-meta">
+
+                            {% if resident.zone %}
+
+                                <span class="zone-badge">
+
+                                    {{ resident.zone }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                            {% if resident.geo_id %}
+
+                                <small>
+
+                                    Geo-tagged ID:
+                                    {{ resident.geo_id }}
+
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="household-grid">
+
+
+                        <div class="household-card">
+
+                            <span class="household-icon">
+
+                                <i class="fa-solid fa-people-roof"></i>
+
+                            </span>
+
+
+                            <div>
+
+                                <span>
+                                    Household Head
+                                </span>
+
+                                <strong>
+
+                                    {{ resident.household_head|default:"Not available" }}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="household-card">
+
+                            <span class="household-icon">
+
+                                <i class="fa-solid fa-user-group"></i>
+
+                            </span>
+
+
+                            <div>
+
+                                <span>
+                                    Family Members Count
+                                </span>
+
+
+                                <div class="family-count">
+
+                                    <strong>
+
+                                        {% if resident.family_count %}
+
+                                            {{ resident.family_count }} registered
+
+                                        {% else %}
+
+                                            Not available
+
+                                        {% endif %}
+
+                                    </strong>
+
+
+                                    {% if resident.family_count %}
+
+                                        <button
+                                            type="button"
+                                            class="text-button"
+                                            id="viewFamilyButton"
+                                        >
+
+                                            View List
+
+                                        </button>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================================
+                    VERIFIED CREDENTIALS
+                ========================================== -->
+
+                <section class="profile-section">
+
+
+                    <div class="profile-section-header">
+
+
+                        <div class="section-title">
+
+                            <span class="section-icon">
+
+                                <i class="fa-solid fa-cube"></i>
+
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Verified Credentials & Blockchain Seal
+                                </h2>
+
+                                <p>
+                                    Civic identity and verification information
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if resident.is_verified %}
+
+                            <span class="ledger-badge">
+
+                                <i class="fa-solid fa-shield-halved"></i>
+
+                                Resident Verified
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                        RESIDENT VERIFICATION
+                    ====================================== -->
+
+                    <div class="credential-list">
+
+
+                        <div class="credential-item">
+
+                            <span class="credential-icon">
+
+                                <i class="fa-solid fa-id-card"></i>
+
+                            </span>
+
+
+                            <div class="credential-info">
+
+                                <strong>
+                                    Resident Registration
+                                </strong>
+
+                                <small>
+
+                                    {{ resident.resident_number|default:"No resident ID" }}
+
+                                </small>
+
+                            </div>
+
+
+                            {% if resident.is_verified %}
+
+                                <span class="credential-status">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    Verified
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="credential-status">
+
+                                    {{ resident.verification_status|default:"Pending" }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                            <small class="credential-source">
+                                Barangay Registry
+                            </small>
+
+                        </div>
+
+
+
+                        <div class="credential-item">
+
+                            <span class="credential-icon">
+
+                                <i class="fa-solid fa-house"></i>
+
+                            </span>
+
+
+                            <div class="credential-info">
+
+                                <strong>
+                                    Proof of Residency
+                                </strong>
+
+                                <small>
+
+                                    {% if resident.address %}
+
+                                        Registered barangay address
+
+                                    {% else %}
+
+                                        Address record unavailable
+
+                                    {% endif %}
+
+                                </small>
+
+                            </div>
+
+
+                            {% if resident.is_verified %}
+
+                                <span class="credential-status">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    Verified
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="credential-status">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+
+                            <small class="credential-source">
+                                Barangay Registry
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                        BLOCKCHAIN / IDENTITY HASH
+                    ====================================== -->
+
+                    <div class="blockchain-box">
+
+
+                        <div class="blockchain-header">
+
+                            <strong>
+
+                                <i class="fa-solid fa-share-nodes"></i>
+
+                                Cryptographic Identity Hash
+
+                            </strong>
+
+
+                            <span>
+
+                                {% if resident.identity_hash %}
+
+                                    Registered Identity
+
+                                {% else %}
+
+                                    Not yet available
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="hash-value">
+
+                            <code id="identityHash">
+
+                                {% if resident.identity_hash %}
+
+                                    {{ resident.identity_hash }}
+
+                                {% else %}
+
+                                    No identity hash available
+
+                                {% endif %}
+
+                            </code>
+
+
+                            {% if resident.identity_hash %}
+
+                                <button
+                                    type="button"
+                                    id="copyHashButton"
+                                    title="Copy identity hash"
+                                >
+
+                                    <i class="fa-regular fa-copy"></i>
+
+                                </button>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        <div class="blockchain-footer">
+
+                            <span>
+
+                                <i class="fa-solid fa-database"></i>
+
+                                Resident ID:
+                                {{ resident.resident_number|default:"N/A" }}
+
+                            </span>
+
+
+                            <span>
+
+                                <i class="fa-solid fa-shield-halved"></i>
+
+                                {{ resident.verification_status|default:"Pending Verification" }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================================
+                    SECURITY
+                ========================================== -->
+
+                <section class="profile-section security-section">
+
+
+                    <div class="profile-section-header">
+
+
+                        <div class="section-title">
+
+                            <span class="section-icon">
+
+                                <i class="fa-solid fa-shield-halved"></i>
+
+                            </span>
+
+
+                            <div>
+
+                                <h2>
+                                    Security & Notification Preferences
+                                </h2>
+
+                                <p>
+                                    Authentication safeguards and civic advisory channels
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="security-list">
+
+
+                        <!-- 2FA -->
+
+                        <div class="security-item">
+
+
+                            <div class="security-info">
+
+                                <strong>
+                                    Two-Factor Authentication (2FA)
+                                </strong>
+
+                                <small>
+
+                                    Additional account authentication
+                                    security for your resident portal.
+
+                                </small>
+
+                            </div>
+
+
+                            <div class="security-actions">
+
+                                <span class="security-status">
+                                    Account Security
+                                </span>
+
+
+                                <button
+                                    type="button"
+                                    class="text-button"
+                                    id="configure2faButton"
+                                >
+
+                                    Configure
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ALERTS -->
+
+                        <div class="security-item">
+
+
+                            <div class="security-info">
+
+                                <strong>
+                                    SMS Alerts for Emergency & Case Updates
+                                </strong>
+
+                                <small>
+
+                                    Receive notifications for barangay
+                                    announcements and complaint updates.
+
+                                </small>
+
+                            </div>
+
+
+                            <div class="security-actions">
+
+                                <span class="security-status active">
+                                    Available
+                                </span>
+
+
+                                <button
+                                    type="button"
+                                    class="text-button"
+                                    id="manageAlertsButton"
+                                >
+
+                                    Manage
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- LOGIN ACTIVITY -->
+
+                        <div class="login-activity">
+
+
+                            <div class="login-activity-header">
+
+                                <strong>
+
+                                    <i class="fa-solid fa-mobile-screen"></i>
+
+                                    Current Session
+
+                                </strong>
+
+
+                                <a
+                                    href="{% url 'logout' %}"
+                                    class="text-button"
+                                >
+
+                                    Log Out
+
+                                </a>
+
+                            </div>
+
+
+
+                            <div class="login-activity-info">
+
+                                <span>
+
+                                    <span class="activity-dot"></span>
+
+                                    Logged in as
+                                    {{ request.session.username|default:"Resident" }}
+
+                                </span>
+
+
+                                <code>
+                                    Active current session
+                                </code>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+        CONTACT EDIT MODAL
+    ====================================================== -->
+
+    <div
+        class="profile-modal"
+        id="contactModal"
+        aria-hidden="true"
+    >
+
+
+        <div class="profile-modal-overlay"></div>
+
+
+        <div class="profile-modal-dialog">
+
+
+            <div class="profile-modal-header">
+
+
+                <div>
+
+                    <h2>
+                        Update Contact Information
+                    </h2>
+
+                    <p>
+                        Change your registered mobile number
+                        or email address.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal
+                    aria-label="Close"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <form
+                method="POST"
+                action="{% url 'my_profile' %}"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- MOBILE NUMBER -->
+
+                <div class="modal-form-group">
+
+                    <label for="mobile_number">
+                        Mobile Number
+                    </label>
+
+
+                    <input
+                        type="tel"
+                        id="mobile_number"
+                        name="mobile_number"
+                        value="{{ resident.mobile_number|default:'' }}"
+                        placeholder="+63 9XX XXX XXXX"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="modal-form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ resident.email|default:'' }}"
+                        placeholder="resident@email.com"
+                        required
+                    >
+
+                </div>
+
+
+
+                <div class="modal-actions">
+
+
+                    <button
+                        type="button"
+                        class="modal-cancel"
+                        data-close-modal
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="modal-save"
+                    >
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+        TOAST
+    ====================================================== -->
+
+    <div
+        class="profile-toast"
+        id="profileToast"
+    >
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <span id="profileToastText">
+            Successfully copied.
+        </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+        PROFILE JAVASCRIPT
+    ====================================================== -->
+
+    <script
+        src="{% static 'website/js/my_profile.js' %}"
+    ></script>
+
+
+</body>
+
+</html>

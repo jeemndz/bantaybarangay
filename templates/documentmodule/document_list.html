@@ -7,16 +7,16 @@ Document Management | BantayBarangay
 
 
 {% block extra_css %}
-
-<link rel="stylesheet" href="{% static 'css/document.css' %}">
-
+<link
+    rel="stylesheet"
+    href="{% static 'css/document.css' %}"
+>
 {% endblock %}
 
 
 {% block content %}
 
 <div class="document-page">
-
 
     <!-- =====================================================
          PAGE HEADER
@@ -25,7 +25,9 @@ Document Management | BantayBarangay
     <div class="document-page-header">
 
         <div>
-            <h1>Document Management</h1>
+            <h1>
+                Document Management
+            </h1>
 
             <p>
                 Manage and issue blockchain-verified civic documents
@@ -42,9 +44,9 @@ Document Management | BantayBarangay
 
     <div class="document-template-header">
 
-        <h3>DOCUMENT TEMPLATES</h3>
-
-        
+        <h3>
+            DOCUMENT TEMPLATES
+        </h3>
 
     </div>
 
@@ -55,85 +57,90 @@ Document Management | BantayBarangay
 
     <div class="document-templates">
 
-    {% for template in document_types %}
+        {% for template in document_types %}
 
-    <div class="document-template-card">
+        <div class="document-template-card">
 
-        <div class="template-icon">
+            <!-- ICON -->
 
-            {% if template.type_name == "Complaint" %}
-                <i data-lucide="message-square-warning"></i>
+            <div class="template-icon">
 
-            {% elif template.type_name == "Incident Report" %}
-                <i data-lucide="triangle-alert"></i>
+                {% if template.type_name == "Complaint" %}
 
-            {% elif template.type_name == "Summons" %}
-                <i data-lucide="mail"></i>
+                    <i data-lucide="message-square-warning"></i>
 
-            {% elif template.type_name == "Agreement" %}
-                <i data-lucide="handshake"></i>
+                {% elif template.type_name == "Incident Report" %}
 
-            {% else %}
-                <i data-lucide="file-text"></i>
-            {% endif %}
+                    <i data-lucide="triangle-alert"></i>
 
-        </div>
+                {% elif template.type_name == "Summons" %}
 
-        <div class="template-content">
+                    <i data-lucide="mail"></i>
 
-            <h3>
-                {{ template.type_name }}
-            </h3>
+                {% elif template.type_name == "Agreement" %}
 
-            <p>
-                {{ template.description|default:"Barangay document template" }}
-            </p>
+                    <i data-lucide="handshake"></i>
 
-        </div>
+                {% else %}
 
-        {% if template.file_path %}
+                    <i data-lucide="file-text"></i>
 
-        <div class="template-actions">
+                {% endif %}
 
-            <a
-                href="{{ template.file_path }}"
-                target="_blank"
-                class="template-view-btn"
-            >
-                <i data-lucide="eye"></i>
-                View
-            </a>
+            </div>
+
+
+            <!-- CONTENT -->
+
+            <div class="template-content">
+
+                <h3>
+                    {{ template.type_name }}
+                </h3>
+
+                <p>
+                    {{ template.description|default:"Barangay document template" }}
+                </p>
+
+            </div>
+
+
+            <!-- DOWNLOAD ONLY -->
+
+            {% if template.file_path %}
 
             <a
                 href="{{ template.file_path }}"
                 download
-                class="template-download-btn"
+                class="template-download-icon"
+                title="Download template"
+                aria-label="Download {{ template.type_name }}"
             >
+
                 <i data-lucide="download"></i>
-                Download
+
             </a>
+
+            {% endif %}
 
         </div>
 
-        {% else %}
+        {% empty %}
 
-        <span class="template-unavailable">
-            File unavailable
-        </span>
+        <div class="document-template-empty">
 
-        {% endif %}
+            <i data-lucide="files"></i>
+
+            <span>
+                No document templates available.
+            </span>
+
+        </div>
+
+        {% endfor %}
 
     </div>
 
-    {% empty %}
-
-    <div class="document-template-empty">
-        No document templates available.
-    </div>
-
-    {% endfor %}
-
-</div>
 
     <!-- =====================================================
          DOCUMENT REGISTRY
@@ -142,11 +149,15 @@ Document Management | BantayBarangay
     <div class="document-registry">
 
 
-        <!-- Registry Header -->
+        <!-- =================================================
+             REGISTRY HEADER
+        ================================================== -->
 
         <div class="registry-header">
 
-            <h2>Document Registry</h2>
+            <h2>
+                Document Registry
+            </h2>
 
 
             <div class="registry-actions">
@@ -154,18 +165,30 @@ Document Management | BantayBarangay
                 <button
                     type="button"
                     class="document-filter-btn"
+                    id="documentFilterButton"
                 >
+
                     <i data-lucide="list-filter"></i>
-                    <span>Filter Status</span>
+
+                    <span>
+                        Filter Status
+                    </span>
+
                 </button>
 
 
                 <button
                     type="button"
                     class="export-btn"
+                    id="exportRegistryButton"
                 >
+
                     <i data-lucide="download"></i>
-                    <span>Export Registry</span>
+
+                    <span>
+                        Export Registry
+                    </span>
+
                 </button>
 
             </div>
@@ -174,7 +197,7 @@ Document Management | BantayBarangay
 
 
         <!-- =================================================
-             DOCUMENT TABLE
+             TABLE
         ================================================== -->
 
         <div class="document-table-wrapper">
@@ -185,38 +208,54 @@ Document Management | BantayBarangay
 
                     <tr>
 
-                        <th>DOCUMENT ID</th>
+                        <th>
+                            DOCUMENT ID
+                        </th>
 
-                        <th>TYPE</th>
+                        <th>
+                            TYPE
+                        </th>
 
-                        <th>RESIDENT NAME</th>
+                        <th>
+                            RESIDENT NAME
+                        </th>
 
-                        <th>DATE ISSUED</th>
+                        <th>
+                            DATE ISSUED
+                        </th>
 
-                        <th>STATUS</th>
+                        <th>
+                            STATUS
+                        </th>
 
-                        <th>QR</th>
+                        <th>
+                            QR
+                        </th>
 
-                        <th>ACTIONS</th>
+                        <th>
+                            ACTIONS
+                        </th>
 
                     </tr>
 
                 </thead>
 
 
-                <tbody>
+                <tbody id="documentTableBody">
 
                     {% for document in documents %}
 
                     <tr
                         class="document-row"
-                        onclick="openDocumentPanel(this)"
-                        data-file-path="{{ document.file_path }}"
+
+                        data-file-path="{{ document.file_path|default:'' }}"
+
                         data-document-id="#DOC-{{ document.document_id }}"
+
                         data-document-type="{{ document.document_type.type_name|default:'Document'|upper }}"
 
                         {% if document.resident %}
-                        data-resident-name="{{ document.resident.first_name }} {% if document.resident.middle_name %}{{ document.resident.middle_name }} {% endif %}{{ document.resident.last_name }}"
+                        data-resident-name="{{ document.resident.first_name }}{% if document.resident.middle_name %} {{ document.resident.middle_name }}{% endif %} {{ document.resident.last_name }}"
                         {% else %}
                         data-resident-name="Unknown Resident"
                         {% endif %}
@@ -244,12 +283,22 @@ Document Management | BantayBarangay
                         </td>
 
 
-                        <!-- DOCUMENT TYPE -->
+                        <!-- TYPE -->
 
                         <td>
 
                             <span class="document-type">
-                                {{ document.document_type.type_name|upper }}
+
+                                {% if document.document_type %}
+
+                                    {{ document.document_type.type_name|upper }}
+
+                                {% else %}
+
+                                    DOCUMENT
+
+                                {% endif %}
+
                             </span>
 
                         </td>
@@ -260,7 +309,6 @@ Document Management | BantayBarangay
                         <td>
 
                             <div class="resident-document">
-
 
                                 <div class="resident-avatar">
 
@@ -277,7 +325,7 @@ Document Management | BantayBarangay
                                 </div>
 
 
-                                <span>
+                                <span class="resident-document-name">
 
                                     {% if document.resident %}
 
@@ -297,13 +345,12 @@ Document Management | BantayBarangay
 
                                 </span>
 
-
                             </div>
 
                         </td>
 
 
-                        <!-- DATE ISSUED -->
+                        <!-- DATE -->
 
                         <td>
 
@@ -330,24 +377,35 @@ Document Management | BantayBarangay
 
                             {% if document.status == "Verified" %}
 
-                                <span class="document-status verified">
-                                    <i data-lucide="circle-check"></i>
-                                    VERIFIED
-                                </span>
+                            <span class="document-status verified">
+
+                                <i data-lucide="circle-check"></i>
+
+                                VERIFIED
+
+                            </span>
+
 
                             {% elif document.status == "Pending" %}
 
-                                <span class="document-status pending">
-                                    <i data-lucide="clock-3"></i>
-                                    PENDING
-                                </span>
+                            <span class="document-status pending">
+
+                                <i data-lucide="clock-3"></i>
+
+                                PENDING
+
+                            </span>
+
 
                             {% else %}
 
-                                <span class="document-status">
-                                    <i data-lucide="circle"></i>
-                                    {{ document.status|upper }}
-                                </span>
+                            <span class="document-status default">
+
+                                <i data-lucide="circle"></i>
+
+                                {{ document.status|default:"UNKNOWN"|upper }}
+
+                            </span>
 
                             {% endif %}
 
@@ -361,7 +419,6 @@ Document Management | BantayBarangay
                             <button
                                 type="button"
                                 class="qr-btn"
-                                onclick="event.stopPropagation()"
                                 disabled
                                 title="QR Verification coming soon"
                                 aria-label="QR Verification"
@@ -380,12 +437,11 @@ Document Management | BantayBarangay
 
                             <div class="document-actions">
 
-
-                                <!-- View -->
+                                <!-- VIEW DOCUMENT -->
 
                                 <button
                                     type="button"
-                                    onclick="event.stopPropagation(); openDocumentPanel(this.closest('.document-row'))"
+                                    class="document-view-btn"
                                     title="View document"
                                     aria-label="View document"
                                 >
@@ -395,24 +451,25 @@ Document Management | BantayBarangay
                                 </button>
 
 
-                                <!-- Download -->
-
-
-                            <button
-                                type="button"
-                                onclick="event.stopPropagation(); downloadDocument(this.closest('.document-row'))"
-                                title="Download document"
-                                aria-label="Download document"
-                            >
-                                <i data-lucide="download"></i>
-                            </button>
-
-
-                                <!-- More -->
+                                <!-- DOWNLOAD -->
 
                                 <button
                                     type="button"
-                                    onclick="event.stopPropagation()"
+                                    class="document-download-btn"
+                                    title="Download document"
+                                    aria-label="Download document"
+                                >
+
+                                    <i data-lucide="download"></i>
+
+                                </button>
+
+
+                                <!-- MORE -->
+
+                                <button
+                                    type="button"
+                                    class="document-more-btn"
                                     title="More options"
                                     aria-label="More options"
                                 >
@@ -421,37 +478,36 @@ Document Management | BantayBarangay
 
                                 </button>
 
-
                             </div>
 
                         </td>
-
 
                     </tr>
 
 
                     {% empty %}
 
+                    <tr class="document-empty-row">
 
-                    <!-- Empty Registry -->
+                        <td colspan="7">
 
-                    <tr>
+                            <div class="document-empty-state">
 
-                        <td
-                            colspan="7"
-                            style="
-                                text-align: center;
-                                padding: 40px;
-                                color: #71817b;
-                            "
-                        >
+                                <i data-lucide="file-x"></i>
 
-                            No documents found.
+                                <strong>
+                                    No documents found
+                                </strong>
+
+                                <span>
+                                    Issued documents will appear here.
+                                </span>
+
+                            </div>
 
                         </td>
 
                     </tr>
-
 
                     {% endfor %}
 
@@ -465,13 +521,12 @@ Document Management | BantayBarangay
 
 
     <!-- =====================================================
-         DOCUMENT OVERLAY
+         OVERLAY
     ====================================================== -->
 
     <div
         class="document-overlay"
         id="documentOverlay"
-        onclick="closeDocumentPanel()"
     ></div>
 
 
@@ -486,15 +541,15 @@ Document Management | BantayBarangay
     >
 
 
-        <!-- =================================================
-             PANEL HEADER
-        ================================================== -->
+        <!-- HEADER -->
 
         <div class="detail-header">
 
             <div>
 
-                <h2>Document Detail</h2>
+                <h2>
+                    Document Detail
+                </h2>
 
                 <p id="detailDocumentMeta">
                     Select a document to view details.
@@ -506,7 +561,7 @@ Document Management | BantayBarangay
             <button
                 type="button"
                 class="detail-close"
-                onclick="closeDocumentPanel()"
+                id="detailCloseButton"
                 aria-label="Close document detail"
             >
 
@@ -518,62 +573,67 @@ Document Management | BantayBarangay
 
 
         <!-- =================================================
-             DOCUMENT PREVIEW
+             PREVIEW
         ================================================== -->
 
-       <div class="document-preview">
+        <div class="document-preview">
 
-    <iframe
-        id="documentFilePreview"
-        title="Document Preview"
-        style="
-            width: 100%;
-            height: 600px;
-            border: none;
-            display: none;
-            border-radius: 8px;
-        "
-    ></iframe>
+            <iframe
+                id="documentFilePreview"
+                class="document-file-preview"
+                title="Document Preview"
+            ></iframe>
 
-    <div
-        class="document-preview-placeholder"
-        id="documentPreviewPlaceholder"
-    >
 
-        <div class="certificate-icon">
-            <i data-lucide="file-text"></i>
+            <div
+                class="document-preview-placeholder"
+                id="documentPreviewPlaceholder"
+            >
+
+                <div class="certificate-icon">
+
+                    <i data-lucide="file-text"></i>
+
+                </div>
+
+
+                <h3 id="detailDocumentType">
+                    BARANGAY DOCUMENT
+                </h3>
+
+
+                <p id="detailResidentName">
+                    Resident
+                </p>
+
+
+                <div class="certificate-line"></div>
+
+
+                <p class="certificate-small">
+
+                    This document certifies the information
+                    recorded and issued by the barangay.
+
+                </p>
+
+
+                <div class="certificate-seal">
+
+                    <i data-lucide="check"></i>
+
+                </div>
+
+            </div>
+
         </div>
-
-        <h3 id="detailDocumentType">
-            BARANGAY DOCUMENT
-        </h3>
-
-        <p id="detailResidentName">
-            Resident
-        </p>
-
-        <div class="certificate-line"></div>
-
-        <p class="certificate-small">
-            This document certifies the information
-            recorded and issued by the barangay.
-        </p>
-
-        <div class="certificate-seal">
-            <i data-lucide="check"></i>
-        </div>
-
-    </div>
-
-</div>
 
 
         <!-- =================================================
-             BLOCKCHAIN VERIFICATION
+             BLOCKCHAIN
         ================================================== -->
 
         <div class="blockchain-box">
-
 
             <div class="blockchain-title">
 
@@ -598,7 +658,6 @@ Document Management | BantayBarangay
 
             <div class="verification-result">
 
-
                 <div class="qr-preview">
 
                     <i data-lucide="qr-code"></i>
@@ -618,7 +677,6 @@ Document Management | BantayBarangay
 
                 </div>
 
-
             </div>
 
         </div>
@@ -628,14 +686,19 @@ Document Management | BantayBarangay
              DOWNLOAD
         ================================================== -->
 
-       <button
-    type="button"
-    class="download-pdf-btn"
-    id="detailDownloadButton"
->
-    <i data-lucide="download"></i>
-    <span>Download PDF</span>
-</button>
+        <button
+            type="button"
+            class="download-pdf-btn"
+            id="detailDownloadButton"
+        >
+
+            <i data-lucide="download"></i>
+
+            <span>
+                Download PDF
+            </span>
+
+        </button>
 
 
         <!-- =================================================
@@ -644,16 +707,17 @@ Document Management | BantayBarangay
 
         <div class="detail-bottom-actions">
 
-
             <button
                 type="button"
                 class="detail-outline-btn"
-                onclick="window.print()"
+                id="printDocumentButton"
             >
 
                 <i data-lucide="printer"></i>
 
-                <span>Print</span>
+                <span>
+                    Print
+                </span>
 
             </button>
 
@@ -661,40 +725,39 @@ Document Management | BantayBarangay
             <button
                 type="button"
                 class="detail-outline-btn"
+                id="ledgerButton"
             >
 
                 <i data-lucide="blocks"></i>
 
-                <span>Ledger</span>
+                <span>
+                    Ledger
+                </span>
 
             </button>
 
-
         </div>
 
-
     </aside>
-
 
 </div>
 
 {% endblock %}
 
 
-
 {% block extra_js %}
 
-<!-- Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
-
 
 <script>
 
-    /* =====================================================
-       INITIALIZE ICONS
-    ===================================================== */
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    document.addEventListener("DOMContentLoaded", function () {
+        /* =====================================================
+           LUCIDE
+        ===================================================== */
 
         if (typeof lucide !== "undefined") {
 
@@ -702,184 +765,433 @@ Document Management | BantayBarangay
 
         }
 
-    });
 
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
 
-
-    /* =====================================================
-       OPEN DOCUMENT PANEL
-    ===================================================== */
-
-    function openDocumentPanel(row) {
-
-        const panel =
-            document.getElementById("documentDetailPanel");
+        const documentRows =
+            document.querySelectorAll(
+                ".document-row"
+            );
 
         const overlay =
-            document.getElementById("documentOverlay");
+            document.getElementById(
+                "documentOverlay"
+            );
+
+        const closeButton =
+            document.getElementById(
+                "detailCloseButton"
+            );
+
+        const detailDownloadButton =
+            document.getElementById(
+                "detailDownloadButton"
+            );
+
+        const printButton =
+            document.getElementById(
+                "printDocumentButton"
+            );
+
+        const exportButton =
+            document.getElementById(
+                "exportRegistryButton"
+            );
 
 
-        if (!panel || !overlay) {
-            return;
-        }
+        /* =====================================================
+           DOCUMENT ROWS
+        ===================================================== */
+
+        documentRows.forEach(
+            function (row) {
+
+                const viewButton =
+                    row.querySelector(
+                        ".document-view-btn"
+                    );
+
+                const downloadButton =
+                    row.querySelector(
+                        ".document-download-btn"
+                    );
 
 
-        /*
-         * Update the detail panel using the selected
-         * document row.
-         */
+                if (viewButton) {
 
-        if (row) {
+                    viewButton.addEventListener(
+                        "click",
+                        function (event) {
 
-            const documentId =
-                row.dataset.documentId || "Document";
-            const filePath =
-                row.dataset.filePath || "";
+                            event.stopPropagation();
 
-            const documentType =
-                row.dataset.documentType || "BARANGAY DOCUMENT";
+                            openDocumentPanel(
+                                row
+                            );
 
-            const residentName =
-                row.dataset.residentName || "Unknown Resident";
+                        }
+                    );
 
-            const date =
-                row.dataset.date || "Not available";
-
-            const status =
-                row.dataset.status || "Unknown";
+                }
 
 
-            const detailDocumentMeta =
-                document.getElementById("detailDocumentMeta");
+                if (downloadButton) {
 
-            const detailDocumentType =
-                document.getElementById("detailDocumentType");
+                    downloadButton.addEventListener(
+                        "click",
+                        function (event) {
 
-            const detailResidentName =
-                document.getElementById("detailResidentName");
+                            event.stopPropagation();
 
-            const detailVerificationStatus =
-                document.getElementById("detailVerificationStatus");
+                            downloadDocument(
+                                row
+                            );
 
-            const detailVerificationDate =
-                document.getElementById("detailVerificationDate");
-            const detailDownloadButton =
-                document.getElementById("detailDownloadButton");
-            const documentFilePreview =
-                document.getElementById("documentFilePreview");
+                        }
+                    );
 
-            const documentPreviewPlaceholder =
-                document.getElementById("documentPreviewPlaceholder");
-
-            if (detailDocumentMeta) {
-
-                detailDocumentMeta.textContent =
-                    documentId + " • " + date;
-
-            }
-
-
-            if (detailDocumentType) {
-
-                detailDocumentType.textContent =
-                    documentType;
-
-            }
-
-
-            if (detailResidentName) {
-
-                detailResidentName.textContent =
-                    residentName;
-
-            }
-
-
-            if (detailVerificationStatus) {
-
-                detailVerificationStatus.textContent =
-                    status;
+                }
 
             }
-
-
-            if (detailVerificationDate) {
-
-                detailVerificationDate.textContent =
-                    date;
-
-            }
-            if (detailDownloadButton) {
-
-                detailDownloadButton.onclick = function () {
-
-                    if (!filePath) {
-                        alert("No document file is available.");
-                        return; 
-            }
-
-            window.open(filePath, "_blank");
-    };
-
-}
-if (documentFilePreview && filePath) {
-
-    documentFilePreview.src = filePath;
-    documentFilePreview.style.display = "block";
-
-    if (documentPreviewPlaceholder) {
-        documentPreviewPlaceholder.style.display = "none";
-    }
-
-} else {
-
-    if (documentFilePreview) {
-        documentFilePreview.src = "";
-        documentFilePreview.style.display = "none";
-    }
-
-    if (documentPreviewPlaceholder) {
-        documentPreviewPlaceholder.style.display = "block";
-    }
-
-}
-        }
-
-
-        panel.classList.add("active");
-
-        overlay.classList.add("active");
-
-        panel.setAttribute(
-            "aria-hidden",
-            "false"
         );
 
-    }
 
+        /* =====================================================
+           CLOSE PANEL
+        ===================================================== */
 
+        if (overlay) {
 
-    /* =====================================================
-       CLOSE DOCUMENT PANEL
-    ===================================================== */
+            overlay.addEventListener(
+                "click",
+                closeDocumentPanel
+            );
 
-    function closeDocumentPanel() {
-
-        const panel =
-            document.getElementById("documentDetailPanel");
-
-        const overlay =
-            document.getElementById("documentOverlay");
-
-
-        if (!panel || !overlay) {
-            return;
         }
 
 
-        panel.classList.remove("active");
+        if (closeButton) {
 
-        overlay.classList.remove("active");
+            closeButton.addEventListener(
+                "click",
+                closeDocumentPanel
+            );
+
+        }
+
+
+        /* =====================================================
+           DETAIL DOWNLOAD
+        ===================================================== */
+
+        if (detailDownloadButton) {
+
+            detailDownloadButton.addEventListener(
+                "click",
+                function () {
+
+                    const filePath =
+                        detailDownloadButton
+                            .dataset
+                            .filePath;
+
+                    if (!filePath) {
+
+                        alert(
+                            "No document file is available."
+                        );
+
+                        return;
+
+                    }
+
+                    downloadFile(
+                        filePath
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           PRINT
+        ===================================================== */
+
+        if (printButton) {
+
+            printButton.addEventListener(
+                "click",
+                function () {
+
+                    const preview =
+                        document.getElementById(
+                            "documentFilePreview"
+                        );
+
+                    if (
+                        preview &&
+                        preview.src &&
+                        preview.style.display !== "none"
+                    ) {
+
+                        try {
+
+                            preview
+                                .contentWindow
+                                .print();
+
+                            return;
+
+                        } catch (error) {
+
+                            console.warn(
+                                "Preview print unavailable.",
+                                error
+                            );
+
+                        }
+
+                    }
+
+                    window.print();
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           EXPORT
+        ===================================================== */
+
+        if (exportButton) {
+
+            exportButton.addEventListener(
+                "click",
+                exportRegistry
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   OPEN DOCUMENT PANEL
+========================================================= */
+
+function openDocumentPanel(row) {
+
+    if (!row) {
+        return;
+    }
+
+
+    const panel =
+        document.getElementById(
+            "documentDetailPanel"
+        );
+
+    const overlay =
+        document.getElementById(
+            "documentOverlay"
+        );
+
+    const preview =
+        document.getElementById(
+            "documentFilePreview"
+        );
+
+    const placeholder =
+        document.getElementById(
+            "documentPreviewPlaceholder"
+        );
+
+    const downloadButton =
+        document.getElementById(
+            "detailDownloadButton"
+        );
+
+
+    if (!panel || !overlay) {
+        return;
+    }
+
+
+    const documentId =
+        row.dataset.documentId ||
+        "Document";
+
+    const documentType =
+        row.dataset.documentType ||
+        "BARANGAY DOCUMENT";
+
+    const residentName =
+        row.dataset.residentName ||
+        "Unknown Resident";
+
+    const date =
+        row.dataset.date ||
+        "Not available";
+
+    const status =
+        row.dataset.status ||
+        "Unknown";
+
+    const filePath =
+        row.dataset.filePath ||
+        "";
+
+
+    document.getElementById(
+        "detailDocumentMeta"
+    ).textContent =
+        documentId +
+        " • " +
+        date;
+
+
+    document.getElementById(
+        "detailDocumentType"
+    ).textContent =
+        documentType;
+
+
+    document.getElementById(
+        "detailResidentName"
+    ).textContent =
+        residentName;
+
+
+    document.getElementById(
+        "detailVerificationStatus"
+    ).textContent =
+        status;
+
+
+    document.getElementById(
+        "detailVerificationDate"
+    ).textContent =
+        date;
+
+
+    if (downloadButton) {
+
+        downloadButton.dataset.filePath =
+            filePath;
+
+        downloadButton.disabled =
+            !filePath;
+
+    }
+
+
+    if (
+        preview &&
+        filePath
+    ) {
+
+        preview.src =
+            filePath;
+
+        preview.style.display =
+            "block";
+
+
+        if (placeholder) {
+
+            placeholder.style.display =
+                "none";
+
+        }
+
+    } else {
+
+        if (preview) {
+
+            preview.src =
+                "";
+
+            preview.style.display =
+                "none";
+
+        }
+
+
+        if (placeholder) {
+
+            placeholder.style.display =
+                "block";
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".document-row"
+        )
+        .forEach(
+            function (documentRow) {
+
+                documentRow.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    row.classList.add(
+        "selected"
+    );
+
+
+    panel.classList.add(
+        "active"
+    );
+
+    overlay.classList.add(
+        "active"
+    );
+
+    panel.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE DOCUMENT PANEL
+========================================================= */
+
+function closeDocumentPanel() {
+
+    const panel =
+        document.getElementById(
+            "documentDetailPanel"
+        );
+
+    const overlay =
+        document.getElementById(
+            "documentOverlay"
+        );
+
+
+    if (panel) {
+
+        panel.classList.remove(
+            "active"
+        );
 
         panel.setAttribute(
             "aria-hidden",
@@ -889,34 +1201,229 @@ if (documentFilePreview && filePath) {
     }
 
 
+    if (overlay) {
 
-    /* =====================================================
-       CLOSE WITH ESC KEY
-    ===================================================== */
+        overlay.classList.remove(
+            "active"
+        );
 
-    document.addEventListener(
-        "keydown",
-        function (event) {
+    }
 
-            if (event.key === "Escape") {
+}
 
-                closeDocumentPanel();
 
-            }
+/* =========================================================
+   DOWNLOAD DOCUMENT
+========================================================= */
 
-        }
-    );
 function downloadDocument(row) {
 
-    const filePath = row.dataset.filePath;
-
-    if (!filePath) {
-        alert("No document file is available.");
+    if (!row) {
         return;
     }
 
-    window.open(filePath, "_blank");
+
+    const filePath =
+        row.dataset.filePath;
+
+
+    if (!filePath) {
+
+        alert(
+            "No document file is available."
+        );
+
+        return;
+
+    }
+
+
+    downloadFile(
+        filePath
+    );
+
 }
+
+
+/* =========================================================
+   DOWNLOAD FILE
+========================================================= */
+
+function downloadFile(filePath) {
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        filePath;
+
+    link.download =
+        "";
+
+    link.target =
+        "_blank";
+
+    link.rel =
+        "noopener noreferrer";
+
+
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    link.remove();
+
+}
+
+
+/* =========================================================
+   EXPORT REGISTRY
+========================================================= */
+
+function exportRegistry() {
+
+    const rows =
+        document.querySelectorAll(
+            ".document-row"
+        );
+
+
+    if (!rows.length) {
+
+        alert(
+            "There are no documents to export."
+        );
+
+        return;
+
+    }
+
+
+    const csvRows = [
+
+        [
+            "Document ID",
+            "Document Type",
+            "Resident Name",
+            "Date Issued",
+            "Status"
+        ]
+
+    ];
+
+
+    rows.forEach(
+        function (row) {
+
+            csvRows.push(
+                [
+                    row.dataset.documentId || "",
+                    row.dataset.documentType || "",
+                    row.dataset.residentName || "",
+                    row.dataset.date || "",
+                    row.dataset.status || ""
+                ]
+            );
+
+        }
+    );
+
+
+    const csv =
+        csvRows
+            .map(
+                function (row) {
+
+                    return row
+                        .map(
+                            function (value) {
+
+                                return (
+                                    '"' +
+                                    String(value)
+                                        .replace(
+                                            /"/g,
+                                            '""'
+                                        ) +
+                                    '"'
+                                );
+
+                            }
+                        )
+                        .join(",");
+
+                }
+            )
+            .join("\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+    link.download =
+        "bantaybarangay_document_registry.csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeDocumentPanel();
+
+        }
+
+    }
+);
+
 </script>
 
 {% endblock %}

@@ -1,373 +1,349 @@
-/* =====================================================
+/* =========================================================
+   BANTAYBARANGAY
    DOCUMENT MANAGEMENT
-===================================================== */
+========================================================= */
+
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 .document-page {
     width: 100%;
     min-height: calc(100vh - 70px);
 
+    padding: 22px 26px 32px;
+
     background: transparent;
 
-    /* Reduced spacing on all sides */
-    padding: 12px 14px 24px;
+    color: #25433d;
 
     box-sizing: border-box;
+
     position: relative;
 }
 
 
-/* =====================================================
-   DOCUMENT REGISTRY
-===================================================== */
-
-.document-registry {
-    width: 100%;
-    max-width: none;
-
-    margin-top: 20px;
-
-    /* Remove white card/container */
-    background: transparent;
-    border: none;
-    border-radius: 0;
-
-    overflow: hidden;
+.document-page *,
+.document-page *::before,
+.document-page *::after {
     box-sizing: border-box;
 }
 
 
-/* =====================================================
-   REGISTRY HEADER
-===================================================== */
-
-.registry-header {
-    width: 100%;
-    min-height: 54px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 10px 0 14px;
-
-    /* Remove container-style border */
-    border-bottom: none;
-
-    box-sizing: border-box;
-}
-
-
-/* =====================================================
-   TABLE
-===================================================== */
-
-.document-table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-
-    /* Keep only the table itself visually contained */
-    border: 1px solid #dce7e2;
-    border-radius: 10px;
-}
-
-.document-table {
-    width: 100%;
-    min-width: 900px;
-
-    border-collapse: collapse;
-    table-layout: fixed;
-
-    background: transparent;
-}
-
-
-/* Table rows */
-
-.document-table tbody {
-    background: transparent;
-}
-
-.document-table td {
-    padding: 14px 18px;
-
-    border-bottom: 1px solid #e5eee9;
-
-    color: #25433d;
-    font-size: 13px;
-
-    vertical-align: middle;
-}
-
-
-/* =====================================================
-   TEMPLATE CARDS
-===================================================== */
-
-.document-template-card {
-    flex: 1 1 0;
-
-    min-width: 160px;
-    height: 72px;
-
-    display: grid;
-    grid-template-columns: 38px minmax(0, 1fr);
-    grid-template-rows: 1fr 1fr;
-
-    column-gap: 10px;
-    align-items: center;
-
-    padding: 10px 12px;
-
-    /* Softer card instead of solid white */
-    background: rgba(255, 255, 255, 0.35);
-
-    border: 1px solid #d7e5dd;
-    border-radius: 10px;
-
-    box-sizing: border-box;
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
-}
-
-.document-template-card:hover {
-    transform: translateY(-2px);
-    background: #f4faf5;
-    border-color: #b9d4c7;
-
-    box-shadow: 0 4px 12px rgba(25, 71, 57, 0.08);
-}
-
-
-/* =====================================================
+/* =========================================================
    PAGE HEADER
-===================================================== */
+========================================================= */
 
 .document-page-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+
+    margin-bottom: 20px;
 }
+
 
 .document-page-header h1 {
     margin: 0;
+
     color: #092f28;
+
     font-size: 24px;
     font-weight: 700;
+
+    line-height: 1.2;
 }
+
 
 .document-page-header p {
-    margin: 5px 0 0;
+    margin: 7px 0 0;
+
     color: #60766e;
+
     font-size: 14px;
+    font-weight: 400;
+
+    line-height: 1.5;
 }
 
 
-/* PAGE HEADER */
-
-.document-page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 14px;
-}
-
-
-/* TEMPLATE HEADER */
+/* =========================================================
+   TEMPLATE HEADER
+========================================================= */
 
 .document-template-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 
-/* TEMPLATE CARDS */
+.document-template-header h3 {
+    margin: 0;
+
+    color: #173c34;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* =========================================================
+   TEMPLATE GRID
+========================================================= */
 
 .document-templates {
     width: 100%;
 
-    display: flex;
-    align-items: stretch;
+    display: grid;
 
-    gap: 8px;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
 
-    margin-bottom: 14px;
+    gap: 12px;
+
+    margin: 0 0 22px;
     padding: 0;
 
-    overflow-x: auto;
-    overflow-y: hidden;
-
     box-sizing: border-box;
 }
 
 
-/* DOCUMENT REGISTRY */
-
-.document-registry {
-    width: 100%;
-
-    margin-top: 10px;
-
-    background: transparent;
-    border: none;
-    border-radius: 0;
-
-    overflow: hidden;
-
-    box-sizing: border-box;
-}
-
-
-/* REGISTRY HEADER */
-
-.registry-header {
-    width: 100%;
-    min-height: 48px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 6px 0 10px;
-
-    border-bottom: none;
-
-    box-sizing: border-box;
-}
-
-/* Individual Card */
+/* =========================================================
+   TEMPLATE CARD
+========================================================= */
 
 .document-template-card {
-    flex: 1 1 0;
+    position: relative;
 
-    min-width: 160px;
-    height: 72px;
+    width: 100%;
+    min-width: 0;
+    min-height: 94px;
 
     display: grid;
-    grid-template-columns: 38px minmax(0, 1fr);
-    grid-template-rows: 1fr 1fr;
 
-    column-gap: 10px;
+    grid-template-columns:
+        44px
+        minmax(0, 1fr)
+        32px;
 
     align-items: center;
 
-    padding: 10px 12px;
+    gap: 12px;
+
+    padding: 15px;
 
     background: #ffffff;
 
     border: 1px solid #d7e5dd;
-    border-radius: 10px;
+    border-radius: 12px;
 
-    box-sizing: border-box;
-
-    cursor: pointer;
+    box-shadow:
+        0 1px 2px
+        rgba(16, 54, 44, 0.02);
 
     transition:
         transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
+
 
 .document-template-card:hover {
     transform: translateY(-2px);
 
-    background: #f4faf5;
     border-color: #b9d4c7;
 
-    box-shadow: 0 4px 12px rgba(25, 71, 57, 0.08);
+    box-shadow:
+        0 5px 14px
+        rgba(25, 71, 57, 0.08);
 }
 
 
-/* Template Icon */
+/* =========================================================
+   TEMPLATE ICON
+========================================================= */
 
 .template-icon {
-    grid-column: 1;
-    grid-row: 1 / 3;
-
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
     margin: 0;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: #e2f1ea;
+
     color: #245d51;
-
-    font-size: 16px;
-
-    flex-shrink: 0;
 }
 
 
-/* Template Title */
+.template-icon svg {
+    width: 20px;
+    height: 20px;
 
-.document-template-card h3 {
-    grid-column: 2;
-    grid-row: 1;
+    stroke-width: 1.8;
+}
 
-    align-self: end;
 
-    margin: 0 0 2px;
+/* =========================================================
+   TEMPLATE CONTENT
+========================================================= */
+
+.template-content {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 4px;
+}
+
+
+.template-content h3 {
+    margin: 0;
 
     color: #153b34;
 
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
 
-    line-height: 1.2;
+    line-height: 1.25;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
 
-/* Template Description */
-
-.document-template-card p {
-    grid-column: 2;
-    grid-row: 2;
-
-    align-self: start;
-
+.template-content p {
     margin: 0;
 
     color: #71817b;
 
     font-size: 10px;
+    font-weight: 400;
 
-    line-height: 1.2;
+    line-height: 1.4;
 
-    white-space: nowrap;
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 
-/* =====================================================
+/* =========================================================
+   TEMPLATE DOWNLOAD BUTTON
+========================================================= */
+
+.template-download-icon {
+    width: 32px;
+    height: 32px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid #d5e4dc;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #35675b;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.template-download-icon:hover {
+    background: #e5f2eb;
+
+    border-color: #b9d4c7;
+
+    color: #174d42;
+
+    transform: translateY(-1px);
+}
+
+
+.template-download-icon svg {
+    width: 15px;
+    height: 15px;
+
+    stroke-width: 1.8;
+}
+
+
+/* =========================================================
+   EMPTY TEMPLATE
+========================================================= */
+
+.document-template-empty {
+    grid-column: 1 / -1;
+
+    min-height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 20px;
+
+    border: 1px dashed #cdded5;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #71817b;
+
+    font-size: 12px;
+}
+
+
+.document-template-empty svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================================================
    DOCUMENT REGISTRY
-===================================================== */
+========================================================= */
 
 .document-registry {
     width: 100%;
-    max-width: none;
 
-    margin-top: 24px;
+    margin-top: 6px;
 
     background: #ffffff;
 
@@ -380,9 +356,9 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    REGISTRY HEADER
-===================================================== */
+========================================================= */
 
 .registry-header {
     width: 100%;
@@ -392,12 +368,15 @@
     align-items: center;
     justify-content: space-between;
 
+    gap: 15px;
+
     padding: 12px 20px;
 
     border-bottom: 1px solid #d5e5da;
 
-    box-sizing: border-box;
+    background: #ffffff;
 }
+
 
 .registry-header h2 {
     margin: 0;
@@ -408,34 +387,44 @@
     font-weight: 500;
 }
 
+
 .registry-actions {
     display: flex;
     align-items: center;
+
     gap: 10px;
 }
 
 
-/* =====================================================
+/* =========================================================
    REGISTRY BUTTONS
-===================================================== */
+========================================================= */
 
 .document-filter-btn,
 .export-btn {
-    height: 34px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
 
     padding: 0 14px;
 
     border-radius: 8px;
 
-    font-size: 12px;
     font-family: inherit;
+    font-size: 12px;
 
     cursor: pointer;
 
     transition:
         background 0.2s ease,
-        border-color 0.2s ease;
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
+
 
 .document-filter-btn {
     background: #ffffff;
@@ -445,9 +434,13 @@
     border: 1px solid #ccdcd3;
 }
 
+
 .document-filter-btn:hover {
     background: #f3f8f5;
+
+    border-color: #b8cec2;
 }
+
 
 .export-btn {
     background: #1b5b50;
@@ -459,15 +452,25 @@
     font-weight: 600;
 }
 
+
 .export-btn:hover {
     background: #134b41;
+
     border-color: #134b41;
 }
 
 
-/* =====================================================
+.registry-actions button svg {
+    width: 14px;
+    height: 14px;
+
+    stroke-width: 1.8;
+}
+
+
+/* =========================================================
    TABLE WRAPPER
-===================================================== */
+========================================================= */
 
 .document-table-wrapper {
     width: 100%;
@@ -476,9 +479,9 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE
-===================================================== */
+========================================================= */
 
 .document-table {
     width: 100%;
@@ -487,17 +490,22 @@
     border-collapse: collapse;
 
     table-layout: fixed;
+
+    background: #ffffff;
 }
 
 
-/* Table Header */
+/* =========================================================
+   TABLE HEADER
+========================================================= */
 
 .document-table thead {
     background: #06483e;
 }
 
+
 .document-table th {
-    padding: 14px 18px;
+    padding: 15px 18px;
 
     text-align: left;
 
@@ -514,7 +522,14 @@
 }
 
 
-/* Table Cells */
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
+.document-table tbody {
+    background: #ffffff;
+}
+
 
 .document-table td {
     padding: 16px 18px;
@@ -529,86 +544,103 @@
 }
 
 
-/* Last Row */
-
-.document-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-
-/* Row Hover */
-
 .document-table tbody tr {
-    transition: background 0.2s ease;
+    background: #ffffff;
+
+    transition:
+        background 0.2s ease;
 }
+
 
 .document-table tbody tr:hover {
     background: #f5faf7;
 }
 
 
-/* =====================================================
+.document-table tbody tr.selected {
+    background: #eef8f3;
+}
+
+
+.document-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
    COLUMN WIDTHS
-===================================================== */
+========================================================= */
 
 .document-table th:nth-child(1),
 .document-table td:nth-child(1) {
     width: 15%;
 }
 
+
 .document-table th:nth-child(2),
 .document-table td:nth-child(2) {
     width: 13%;
 }
+
 
 .document-table th:nth-child(3),
 .document-table td:nth-child(3) {
     width: 22%;
 }
 
+
 .document-table th:nth-child(4),
 .document-table td:nth-child(4) {
     width: 15%;
 }
+
 
 .document-table th:nth-child(5),
 .document-table td:nth-child(5) {
     width: 14%;
 }
 
+
 .document-table th:nth-child(6),
 .document-table td:nth-child(6) {
     width: 8%;
+
     text-align: center;
 }
+
 
 .document-table th:nth-child(7),
 .document-table td:nth-child(7) {
     width: 13%;
+
     text-align: center;
 }
 
 
-/* =====================================================
+/* =========================================================
    DOCUMENT ID
-===================================================== */
+========================================================= */
 
 .document-id {
     color: #205c51;
 
     font-size: 11px;
-
     font-weight: 700;
+
+    white-space: nowrap;
 }
 
 
-/* =====================================================
+/* =========================================================
    DOCUMENT TYPE
-===================================================== */
+========================================================= */
 
 .document-type {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+
+    min-height: 25px;
 
     padding: 5px 9px;
 
@@ -619,22 +651,25 @@
     color: #2e6658;
 
     font-size: 9px;
-
     font-weight: 700;
+
+    white-space: nowrap;
 }
 
 
-/* =====================================================
+/* =========================================================
    RESIDENT
-===================================================== */
+========================================================= */
 
 .resident-document {
-    display: flex;
+    min-width: 0;
 
+    display: flex;
     align-items: center;
 
     gap: 10px;
 }
+
 
 .resident-avatar {
     width: 32px;
@@ -656,38 +691,51 @@
     font-weight: 700;
 }
 
-.avatar-blue {
-    background: #dce8f1;
-    color: #356579;
+
+.resident-document-name {
+    min-width: 0;
+
+    color: #25433d;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
-.avatar-purple {
-    background: #e7e0ef;
-    color: #6b557c;
-}
 
-
-/* =====================================================
+/* =========================================================
    STATUS
-===================================================== */
+========================================================= */
 
 .document-status {
     display: inline-flex;
-
     align-items: center;
+    justify-content: center;
 
-    gap: 4px;
+    gap: 5px;
+
+    min-height: 26px;
 
     padding: 6px 10px;
 
     border-radius: 20px;
 
     font-size: 9px;
-
     font-weight: 700;
 
     white-space: nowrap;
 }
+
+
+.document-status svg {
+    width: 11px;
+    height: 11px;
+
+    stroke-width: 2;
+}
+
 
 .document-status.verified {
     background: #d9eee2;
@@ -695,24 +743,37 @@
     color: #286354;
 }
 
+
 .document-status.pending {
+    background: #fff2ce;
+
+    color: #8b6817;
+}
+
+
+.document-status.default {
     background: #e8eee9;
 
     color: #536760;
 }
 
 
-/* =====================================================
+/* =========================================================
    QR BUTTON
-===================================================== */
+========================================================= */
 
 .qr-btn {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
 
-    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
 
     border: 1px solid #ccdcd4;
+    border-radius: 7px;
 
     background: #ffffff;
 
@@ -720,52 +781,67 @@
 
     cursor: pointer;
 
-    transition: background 0.2s ease;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
-.qr-btn:hover {
+
+.qr-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+.qr-btn:hover:not(:disabled) {
     background: #edf6f1;
 }
 
+
 .qr-btn:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+
+    opacity: 0.55;
 }
 
 
-/* =====================================================
+/* =========================================================
    TABLE ACTIONS
-===================================================== */
+========================================================= */
 
 .document-actions {
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     gap: 5px;
 }
 
+
 .document-actions button {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
 
     border: none;
+    border-radius: 6px;
 
     background: transparent;
 
     color: #58726a;
 
-    border-radius: 5px;
-
     cursor: pointer;
-
-    font-size: 13px;
 
     transition:
         background 0.2s ease,
         color 0.2s ease;
 }
+
 
 .document-actions button:hover {
     background: #dceee5;
@@ -774,16 +850,71 @@
 }
 
 
-/* =====================================================
-   DOCUMENT OVERLAY
-===================================================== */
+.document-actions button svg {
+    width: 15px;
+    height: 15px;
+
+    stroke-width: 1.8;
+}
+
+
+/* =========================================================
+   EMPTY TABLE STATE
+========================================================= */
+
+.document-empty-state {
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    color: #71817b;
+
+    text-align: center;
+}
+
+
+.document-empty-state svg {
+    width: 28px;
+    height: 28px;
+
+    color: #76988e;
+}
+
+
+.document-empty-state strong {
+    color: #315149;
+
+    font-size: 13px;
+}
+
+
+.document-empty-state span {
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
 
 .document-overlay {
     position: fixed;
 
     inset: 0;
 
-    background: rgba(5, 35, 29, 0.25);
+    background:
+        rgba(
+            5,
+            35,
+            29,
+            0.25
+        );
 
     opacity: 0;
 
@@ -796,6 +927,7 @@
     z-index: 90;
 }
 
+
 .document-overlay.active {
     opacity: 1;
 
@@ -803,139 +935,182 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    DETAIL PANEL
-===================================================== */
+========================================================= */
 
 .document-detail-panel {
     position: fixed;
 
     top: 70px;
-
     right: 0;
 
-    width: 350px;
-
+    width: 380px;
     height: calc(100vh - 70px);
 
-    background: #f1f8f3;
+    padding: 20px;
+
+    background: #f6faf7;
 
     border-left: 1px solid #d1e3d8;
 
     box-shadow:
-        -8px 0 25px rgba(20, 55, 45, 0.08);
-
-    padding: 20px;
-
-    box-sizing: border-box;
+        -8px 0 25px
+        rgba(20, 55, 45, 0.08);
 
     overflow-y: auto;
 
     transform: translateX(100%);
 
-    transition: transform 0.3s ease;
+    transition:
+        transform 0.3s ease;
 
     z-index: 100;
 }
+
 
 .document-detail-panel.active {
     transform: translateX(0);
 }
 
 
-/* =====================================================
+/* =========================================================
    DETAIL HEADER
-===================================================== */
+========================================================= */
 
 .detail-header {
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
+
+    gap: 15px;
 
     margin-bottom: 18px;
 }
+
 
 .detail-header h2 {
     margin: 0;
 
     color: #173c34;
 
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 700;
 }
+
 
 .detail-header p {
     margin: 5px 0 0;
 
     color: #71817b;
 
-    font-size: 9px;
+    font-size: 10px;
 }
+
 
 .detail-close {
     width: 30px;
     height: 30px;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
     border: none;
+    border-radius: 7px;
 
     background: transparent;
 
     color: #173c34;
 
-    font-size: 24px;
-
     cursor: pointer;
 }
 
 
-/* =====================================================
+.detail-close:hover {
+    background: #e3efe9;
+}
+
+
+.detail-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =========================================================
    DOCUMENT PREVIEW
-===================================================== */
+========================================================= */
 
 .document-preview {
-    height: 360px;
+    width: 100%;
+    min-height: 360px;
 
-    background: #ffffff;
-
-    border: 1px solid #d9e4dd;
-
-    border-radius: 10px;
-
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     margin-bottom: 18px;
 
-    display: flex;
+    border: 1px solid #d9e4dd;
+    border-radius: 10px;
 
-    align-items: center;
-    justify-content: center;
+    background: #ffffff;
+
+    overflow: hidden;
 }
+
+
+.document-file-preview {
+    width: 100%;
+    height: 500px;
+
+    display: none;
+
+    border: none;
+
+    background: #ffffff;
+}
+
 
 .document-preview-placeholder {
     position: relative;
 
     width: 82%;
-    height: 90%;
+    min-height: 320px;
 
     padding: 25px 20px;
-
-    box-sizing: border-box;
 
     background: #fbfaf5;
 
     border: 1px solid #e5dfca;
 
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.08);
 
     text-align: center;
 }
 
+
 .certificate-icon {
-    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     margin-bottom: 18px;
+
+    color: #4c4a42;
 }
+
+
+.certificate-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
 
 .document-preview-placeholder h3 {
     margin: 0;
@@ -943,7 +1118,9 @@
     color: #4c4a42;
 
     font-size: 12px;
+    font-weight: 700;
 }
+
 
 .document-preview-placeholder > p {
     margin-top: 5px;
@@ -953,9 +1130,9 @@
     font-size: 10px;
 }
 
+
 .certificate-line {
     width: 80%;
-
     height: 1px;
 
     margin: 20px auto;
@@ -963,9 +1140,11 @@
     background: #b7b29e;
 }
 
+
 .certificate-small {
     line-height: 1.6;
 }
+
 
 .certificate-seal {
     position: absolute;
@@ -976,40 +1155,41 @@
     width: 42px;
     height: 42px;
 
-    border: 2px solid #bcae72;
-
-    border-radius: 50%;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
 
-    color: #a39152;
+    border: 2px solid #bcae72;
+    border-radius: 50%;
 
-    font-size: 18px;
+    color: #a39152;
 }
 
 
-/* =====================================================
+.certificate-seal svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================================================
    BLOCKCHAIN BOX
-===================================================== */
+========================================================= */
 
 .blockchain-box {
-    background: #e0f0e6;
-
-    border: 1px solid #c9dfd1;
-
-    border-radius: 10px;
+    margin-bottom: 14px;
 
     padding: 15px;
 
-    margin-bottom: 14px;
+    background: #e0f0e6;
+
+    border: 1px solid #c9dfd1;
+    border-radius: 10px;
 }
+
 
 .blockchain-title {
     display: flex;
-
     align-items: center;
 
     gap: 7px;
@@ -1019,6 +1199,13 @@
     font-size: 12px;
 }
 
+
+.blockchain-title svg {
+    width: 16px;
+    height: 16px;
+}
+
+
 .transaction-label {
     margin: 12px 0 3px;
 
@@ -1026,6 +1213,7 @@
 
     font-size: 9px;
 }
+
 
 .transaction-hash {
     margin: 0;
@@ -1037,43 +1225,54 @@
     word-break: break-all;
 }
 
+
 .verification-result {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
+
+    gap: 12px;
 
     margin-top: 12px;
 }
+
 
 .qr-preview {
     width: 48px;
     height: 48px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
+    border: 1px solid #c9d9d0;
     border-radius: 7px;
 
     background: #ffffff;
 
-    border: 1px solid #c9d9d0;
-
-    font-size: 25px;
+    color: #315149;
 }
+
+
+.qr-preview svg {
+    width: 28px;
+    height: 28px;
+}
+
 
 .verification-result > div:last-child {
     display: flex;
-
     flex-direction: column;
 
     align-items: flex-end;
 
     gap: 4px;
+
+    min-width: 0;
 }
+
 
 .verification-result strong {
     color: #234f46;
@@ -1081,24 +1280,33 @@
     font-size: 13px;
 }
 
+
 .verification-result span {
     color: #75837e;
 
     font-size: 8px;
+
+    text-align: right;
 }
 
 
-/* =====================================================
-   DOWNLOAD BUTTON
-===================================================== */
+/* =========================================================
+   DOWNLOAD PDF BUTTON
+========================================================= */
 
 .download-pdf-btn {
     width: 100%;
-
     height: 42px;
 
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    gap: 7px;
+
+    margin-bottom: 10px;
+
+    border: none;
     border-radius: 9px;
 
     background: #123f37;
@@ -1106,96 +1314,114 @@
     color: #ffffff;
 
     font-family: inherit;
-
     font-size: 12px;
-
     font-weight: 700;
 
     cursor: pointer;
 
-    margin-bottom: 10px;
-
-    transition: background 0.2s ease;
+    transition:
+        background 0.2s ease,
+        opacity 0.2s ease;
 }
 
-.download-pdf-btn:hover {
+
+.download-pdf-btn:hover:not(:disabled) {
     background: #0c332d;
 }
 
 
-/* =====================================================
-   DETAIL BOTTOM BUTTONS
-===================================================== */
+.download-pdf-btn:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+.download-pdf-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   DETAIL BOTTOM ACTIONS
+========================================================= */
 
 .detail-bottom-actions {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
     gap: 10px;
 }
 
+
 .detail-outline-btn {
     height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
 
     background: transparent;
 
     border: 1px solid #17483f;
-
     border-radius: 9px;
 
     color: #17483f;
 
     font-family: inherit;
-
     font-size: 11px;
-
     font-weight: 600;
 
     cursor: pointer;
 
-    transition: background 0.2s ease;
+    transition:
+        background 0.2s ease;
 }
+
 
 .detail-outline-btn:hover {
     background: #dceee5;
 }
 
 
-/* =====================================================
-   RESPONSIVE - LARGE TABLET
-===================================================== */
+.detail-outline-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   RESPONSIVE - DESKTOP / TABLET
+========================================================= */
 
 @media (max-width: 1200px) {
 
-    .document-template-card {
-        flex: 0 0 175px;
-    }
-
-    .document-registry {
-        max-width: 100%;
+    .document-templates {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 
 }
 
 
-/* =====================================================
+/* =========================================================
    RESPONSIVE - TABLET
-===================================================== */
+========================================================= */
 
 @media (max-width: 900px) {
 
     .document-page {
-        padding: 25px 20px 50px;
+        padding:
+            18px
+            18px
+            30px;
     }
 
-    .document-templates {
-        gap: 10px;
-    }
-
-    .document-template-card {
-        flex: 0 0 170px;
-    }
 
     .document-table {
         min-width: 900px;
@@ -1204,88 +1430,80 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    RESPONSIVE - MOBILE
-===================================================== */
+========================================================= */
 
 @media (max-width: 650px) {
 
     .document-page {
-        padding: 20px 14px 40px;
+        padding:
+            16px
+            12px
+            30px;
     }
 
 
-    /* Page Header */
+    /* PAGE HEADER */
 
     .document-page-header {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 10px;
-
-        margin-bottom: 20px;
+        margin-bottom: 18px;
     }
+
 
     .document-page-header h1 {
         font-size: 21px;
     }
+
 
     .document-page-header p {
         font-size: 12px;
     }
 
 
-    /* Template Header */
-
-    .document-template-header {
-        margin-bottom: 10px;
-    }
-
-
-    /* Horizontal scroll cards */
+    /* TEMPLATE CARDS */
 
     .document-templates {
-        gap: 8px;
+        grid-template-columns: 1fr;
+
+        gap: 10px;
 
         margin-bottom: 18px;
-
-        padding-bottom: 8px;
     }
+
 
     .document-template-card {
-        flex: 0 0 165px;
+        min-height: 82px;
 
-        min-width: 165px;
+        grid-template-columns:
+            40px
+            minmax(0, 1fr)
+            30px;
 
-        height: 68px;
+        gap: 10px;
 
-        padding: 9px 10px;
+        padding: 12px;
     }
+
 
     .template-icon {
-        width: 34px;
-        height: 34px;
-
-        font-size: 15px;
-    }
-
-    .document-template-card h3 {
-        font-size: 11px;
-    }
-
-    .document-template-card p {
-        font-size: 9px;
+        width: 40px;
+        height: 40px;
     }
 
 
-    /* Registry */
+    .template-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    /* REGISTRY */
 
     .document-registry {
-        margin-top: 18px;
-
         border-radius: 12px;
     }
+
 
     .registry-header {
         flex-direction: column;
@@ -1297,9 +1515,11 @@
         padding: 14px;
     }
 
+
     .registry-actions {
         width: 100%;
     }
+
 
     .document-filter-btn,
     .export-btn {
@@ -1307,9 +1527,11 @@
     }
 
 
-    /* Detail Panel */
+    /* DETAIL PANEL */
 
     .document-detail-panel {
+        top: 70px;
+
         width: 100%;
 
         padding: 16px;
@@ -1318,157 +1540,33 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    EXTRA SMALL MOBILE
-===================================================== */
+========================================================= */
 
 @media (max-width: 420px) {
 
     .document-page {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding:
+            12px
+            10px
+            25px;
     }
 
-    .document-template-card {
-        flex: 0 0 155px;
-
-        min-width: 155px;
-
-        height: 66px;
-    }
 
     .registry-actions {
         flex-direction: column;
     }
+
 
     .document-filter-btn,
     .export-btn {
         width: 100%;
     }
 
-}
 
-/* =====================================================
-   LUCIDE ICONS
-===================================================== */
-
-.template-icon svg {
-    width: 18px;
-    height: 18px;
-    stroke-width: 1.8;
-}
-
-.registry-actions button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-}
-
-.registry-actions button svg {
-    width: 14px;
-    height: 14px;
-}
-
-.document-status svg {
-    width: 11px;
-    height: 11px;
-}
-
-.qr-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.qr-btn svg {
-    width: 15px;
-    height: 15px;
-}
-
-.document-actions button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.document-actions button svg {
-    width: 15px;
-    height: 15px;
-}
-
-.detail-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.detail-close svg {
-    width: 20px;
-    height: 20px;
-}
-
-.certificate-icon {
-    display: flex;
-    justify-content: center;
-}
-
-.certificate-icon svg {
-    width: 30px;
-    height: 30px;
-}
-
-.certificate-seal svg {
-    width: 18px;
-    height: 18px;
-}
-
-.blockchain-title svg {
-    width: 16px;
-    height: 16px;
-}
-
-.qr-preview svg {
-    width: 28px;
-    height: 28px;
-}
-
-.download-pdf-btn,
-.detail-outline-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-}
-
-.download-pdf-btn svg,
-.detail-outline-btn svg {
-    width: 15px;
-    height: 15px;
-}
-
-@media (max-width: 900px) {
-
-    .document-page {
-        padding: 10px 12px 20px;
-    }
-
-}
-
-
-@media (max-width: 650px) {
-
-    .document-page {
-        padding: 10px;
-    }
-
-}
-
-
-@media (max-width: 420px) {
-
-    .document-page {
-        padding: 8px;
+    .detail-bottom-actions {
+        grid-template-columns: 1fr;
     }
 
 }
