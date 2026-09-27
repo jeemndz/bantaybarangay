@@ -1650,31 +1650,64 @@ function createEvidenceCard(item) {
        VERIFIED
     ===================================================== */
 
-    if (
-        cleanReviewValue(
-            item.file_hash
-        )
-    ) {
+    /* =====================================================
+   BLOCKCHAIN / INTEGRITY STATUS
+===================================================== */
 
-        const verified =
-            document.createElement(
-                "span"
-            );
+const blockchainStatus =
+    cleanReviewValue(
+        item.blockchain_status
+    );
+
+const integrityStatus =
+    cleanReviewValue(
+        item.integrity_status
+    );
+
+const statusBadge =
+    document.createElement(
+        "span"
+    );
+
+statusBadge.className =
+    "review-evidence-verified";
 
 
-        verified.className =
-            "review-evidence-verified";
+if (integrityStatus === "Verified") {
+
+    statusBadge.textContent =
+        "Verified";
+
+}
+else if (integrityStatus === "Failed") {
+
+    statusBadge.textContent =
+        "Integrity Failed";
+
+}
+else if (blockchainStatus === "Registered") {
+
+    statusBadge.textContent =
+        "Registered";
+
+}
+else if (blockchainStatus === "Failed") {
+
+    statusBadge.textContent =
+        "Registration Failed";
+
+}
+else {
+
+    statusBadge.textContent =
+        "Pending Registration";
+
+}
 
 
-        verified.textContent =
-            "Verified";
-
-
-        preview.appendChild(
-            verified
-        );
-
-    }
+preview.appendChild(
+    statusBadge
+);
 
 
     /* =====================================================
