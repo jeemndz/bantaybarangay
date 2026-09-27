@@ -1,0 +1,1091 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Document Requests | BantayBarangay
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/docrequest.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dr-page">
+
+    <!-- ==================================================
+         PAGE HEADER
+    =================================================== -->
+
+    <div class="dr-header">
+
+        <div>
+
+            <p class="dr-eyebrow">
+                Document Management
+            </p>
+
+            <h1>
+                Document Requests
+            </h1>
+
+            <p class="dr-subtitle">
+                Review and process document requests
+                submitted by residents.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         DJANGO MESSAGES
+    =================================================== -->
+
+    {% if messages %}
+
+        <div class="dr-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="
+                        dr-message
+                        {% if message.tags %}
+                            {{ message.tags }}
+                        {% endif %}
+                    "
+                >
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- ==================================================
+         STATISTICS
+    =================================================== -->
+
+    <div class="dr-stats">
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-file-lines"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Total Requests
+                </span>
+
+                <strong>
+                    {{ total_requests }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Processing
+                </span>
+
+                <strong>
+                    {{ pending_requests }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-box-archive"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Ready for Pickup
+                </span>
+
+                <strong>
+                    {{ ready_requests }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Released
+                </span>
+
+                <strong>
+                    {{ released_requests }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         FILTERS
+    =================================================== -->
+
+    <div class="dr-filter-card">
+
+        <form
+            method="GET"
+            class="dr-filter-form"
+        >
+
+            <!-- SEARCH -->
+
+            <div class="dr-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search resident, document or purpose..."
+                >
+
+            </div>
+
+
+            <!-- DOCUMENT TYPE -->
+
+            <select
+                name="document_type"
+                class="dr-filter-select"
+            >
+
+                <option value="">
+                    All Documents
+                </option>
+
+                {% for document in document_types %}
+
+                    <option
+                        value="{{ document.id }}"
+                        {% if selected_document_type == document.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ document.name }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <!-- STATUS -->
+
+            <select
+                name="status"
+                class="dr-filter-select"
+            >
+
+                <option value="">
+                    All Statuses
+                </option>
+
+                {% for status in statuses %}
+
+                    <option
+                        value="{{ status }}"
+                        {% if selected_status == status %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ status }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="dr-filter-button"
+            >
+                <i class="fa-solid fa-filter"></i>
+
+                Filter
+            </button>
+
+
+            <a
+                href="{% url 'docrequestmodule:request_documents' %}"
+                class="dr-clear-button"
+            >
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- ==================================================
+         REQUEST TABLE
+    =================================================== -->
+
+    <div class="dr-table-card">
+
+        <div class="dr-table-header">
+
+            <div>
+
+                <h2>
+                    Resident Requests
+                </h2>
+
+                <p>
+                    {{ document_requests|length }}
+                    request{{ document_requests|length|pluralize }}
+                    displayed
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="dr-table-wrapper">
+
+            <table class="dr-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Reference
+                        </th>
+
+                        <th>
+                            Resident
+                        </th>
+
+                        <th>
+                            Document
+                        </th>
+
+                        <th>
+                            Purpose
+                        </th>
+
+                        <th>
+                            Submitted
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="requestTableBody">
+
+                    {% for item in document_requests %}
+
+                        <tr
+                            class="dr-request-row"
+
+                            data-request-id="{{ item.request_id }}"
+
+                            data-reference="{{ item.reference_number|escape }}"
+
+                            data-resident="{{ item.resident_name|escape }}"
+
+                            data-resident-id="{{ item.resident_id }}"
+
+                            data-address="{{ item.address|default:''|escape }}"
+
+                            data-email="{{ item.email|default:''|escape }}"
+
+                            data-contact="{{ item.contact_number|default:''|escape }}"
+
+                            data-document="{{ item.document_name|escape }}"
+
+                            data-purpose="{{ item.purpose|escape }}"
+
+                            data-institution="{{ item.institution|default:''|escape }}"
+
+                            data-notes="{{ item.request_notes|default:''|escape }}"
+
+                            data-delivery="{{ item.delivery_method|default:''|escape }}"
+
+                            data-payment="{{ item.payment_method|default:''|escape }}"
+
+                            data-status="{{ item.status|escape }}"
+
+                            data-submitted="{{ item.submitted_at|date:'M d, Y h:i A' }}"
+                        >
+
+                            <!-- REFERENCE -->
+
+                            <td>
+
+                                <div class="dr-reference">
+
+                                    <strong>
+                                        {{ item.reference_number }}
+                                    </strong>
+
+                                    <small>
+                                        Request #{{ item.request_id }}
+                                    </small>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- RESIDENT -->
+
+                            <td>
+
+                                <div class="dr-resident">
+
+                                    <div class="dr-avatar">
+
+                                        {{ item.first_name|first|upper }}
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            {{ item.resident_name }}
+                                        </strong>
+
+                                        <small>
+                                            Resident #{{ item.resident_id }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- DOCUMENT -->
+
+                            <td>
+
+                                <strong>
+                                    {{ item.document_name }}
+                                </strong>
+
+                                {% if item.institution %}
+
+                                    <small class="dr-cell-subtext">
+                                        {{ item.institution }}
+                                    </small>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- PURPOSE -->
+
+                            <td>
+
+                                <span>
+                                    {{ item.purpose }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                <span>
+                                    {{ item.submitted_at|date:"M d, Y" }}
+                                </span>
+
+                                <small class="dr-cell-subtext">
+                                    {{ item.submitted_at|date:"h:i A" }}
+                                </small>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <span
+                                    class="
+                                        dr-status-badge
+
+                                        {% if item.status == 'Submitted' %}
+                                            submitted
+
+                                        {% elif item.status == 'Under Verification' %}
+                                            verification
+
+                                        {% elif item.status == 'Ready for Signature' %}
+                                            signature
+
+                                        {% elif item.status == 'Ready for Pickup' %}
+                                            pickup
+
+                                        {% elif item.status == 'Released' %}
+                                            released
+
+                                        {% elif item.status == 'Rejected' %}
+                                            rejected
+
+                                        {% elif item.status == 'Cancelled' %}
+                                            cancelled
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{ item.status }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="dr-action-btn dr-view-btn"
+                                    onclick="openRequestModal(this)"
+                                >
+
+                                    <i class="fa-regular fa-eye"></i>
+
+                                    View
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="dr-empty"
+                            >
+
+                                <i class="fa-regular fa-folder-open"></i>
+
+                                <strong>
+                                    No document requests found
+                                </strong>
+
+                                <span>
+                                    Resident document requests
+                                    will appear here.
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     REQUEST DETAILS MODAL
+======================================================= -->
+
+<div
+    id="requestModal"
+    class="dr-modal"
+>
+
+    <div class="dr-modal-overlay"
+         onclick="closeRequestModal()">
+    </div>
+
+
+    <div class="dr-modal-panel">
+
+        <!-- HEADER -->
+
+        <div class="dr-modal-header">
+
+            <div>
+
+                <p class="dr-eyebrow">
+                    Document Request
+                </p>
+
+                <h2 id="modalReference">
+                    Request Details
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="dr-modal-close"
+                onclick="closeRequestModal()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="dr-modal-body">
+
+
+            <!-- RESIDENT -->
+
+            <section class="dr-detail-section">
+
+                <h3>
+                    Resident Information
+                </h3>
+
+                <div class="dr-detail-grid">
+
+                    <div>
+
+                        <span>
+                            Resident
+                        </span>
+
+                        <strong id="modalResident">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Resident ID
+                        </span>
+
+                        <strong id="modalResidentId">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong id="modalEmail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Contact Number
+                        </span>
+
+                        <strong id="modalContact">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Address
+                        </span>
+
+                        <strong id="modalAddress">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- REQUEST -->
+
+            <section class="dr-detail-section">
+
+                <h3>
+                    Request Information
+                </h3>
+
+                <div class="dr-detail-grid">
+
+                    <div>
+
+                        <span>
+                            Document
+                        </span>
+
+                        <strong id="modalDocument">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Submitted
+                        </span>
+
+                        <strong id="modalSubmitted">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Purpose
+                        </span>
+
+                        <strong id="modalPurpose">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Institution
+                        </span>
+
+                        <strong id="modalInstitution">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Notes
+                        </span>
+
+                        <strong id="modalNotes">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Release Method
+                        </span>
+
+                        <strong id="modalDelivery">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Payment Method
+                        </span>
+
+                        <strong id="modalPayment">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- STATUS -->
+
+            <section class="dr-detail-section">
+
+                <h3>
+                    Update Status
+                </h3>
+
+                <form
+                    id="statusUpdateForm"
+                    method="POST"
+                >
+
+                    {% csrf_token %}
+
+                    <div class="dr-status-form">
+
+                        <select
+                            name="status"
+                            id="modalStatus"
+                            required
+                        >
+
+                            {% for status in statuses %}
+
+                                <option
+                                    value="{{ status }}"
+                                >
+                                    {{ status }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <button
+                            type="submit"
+                            class="dr-primary-button"
+                        >
+
+                            <i class="fa-solid fa-floppy-disk"></i>
+
+                            Update Status
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+    // =====================================================
+    // OPEN REQUEST MODAL
+    // =====================================================
+
+    function openRequestModal(button) {
+
+        const row = button.closest(
+            ".dr-request-row"
+        );
+
+        if (!row) {
+            return;
+        }
+
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
+
+
+        // =================================================
+        // POPULATE DATA
+        // =================================================
+
+        setModalText(
+            "modalReference",
+            row.dataset.reference
+        );
+
+        setModalText(
+            "modalResident",
+            row.dataset.resident
+        );
+
+        setModalText(
+            "modalResidentId",
+            row.dataset.residentId
+        );
+
+        setModalText(
+            "modalEmail",
+            row.dataset.email
+        );
+
+        setModalText(
+            "modalContact",
+            row.dataset.contact
+        );
+
+        setModalText(
+            "modalAddress",
+            row.dataset.address
+        );
+
+        setModalText(
+            "modalDocument",
+            row.dataset.document
+        );
+
+        setModalText(
+            "modalPurpose",
+            row.dataset.purpose
+        );
+
+        setModalText(
+            "modalInstitution",
+            row.dataset.institution
+        );
+
+        setModalText(
+            "modalNotes",
+            row.dataset.notes
+        );
+
+        setModalText(
+            "modalDelivery",
+            row.dataset.delivery
+        );
+
+        setModalText(
+            "modalPayment",
+            row.dataset.payment
+        );
+
+        setModalText(
+            "modalSubmitted",
+            row.dataset.submitted
+        );
+
+
+        // =================================================
+        // STATUS
+        // =================================================
+
+        const statusSelect =
+            document.getElementById(
+                "modalStatus"
+            );
+
+        if (statusSelect) {
+
+            statusSelect.value =
+                row.dataset.status;
+
+        }
+
+
+        // =================================================
+        // UPDATE FORM URL
+        // =================================================
+
+        const form =
+            document.getElementById(
+                "statusUpdateForm"
+            );
+
+        if (form) {
+
+            form.action =
+                "{% url 'docrequestmodule:update_request_status' 0 %}"
+                    .replace(
+                        "/0/",
+                        "/" +
+                        row.dataset.requestId +
+                        "/"
+                    );
+
+        }
+
+
+        // =================================================
+        // SHOW MODAL
+        // =================================================
+
+        modal.classList.add(
+            "show"
+        );
+
+        document.body.classList.add(
+            "dr-modal-open"
+        );
+
+    }
+
+
+    // =====================================================
+    // CLOSE REQUEST MODAL
+    // =====================================================
+
+    function closeRequestModal() {
+
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove(
+            "show"
+        );
+
+        document.body.classList.remove(
+            "dr-modal-open"
+        );
+
+    }
+
+
+    // =====================================================
+    // SET MODAL TEXT
+    // =====================================================
+
+    function setModalText(
+        id,
+        value
+    ) {
+
+        const element =
+            document.getElementById(
+                id
+            );
+
+        if (!element) {
+            return;
+        }
+
+        element.textContent =
+            value &&
+            value.trim()
+                ? value
+                : "—";
+
+    }
+
+
+    // =====================================================
+    // ESCAPE KEY
+    // =====================================================
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeRequestModal();
+
+            }
+
+        }
+    );
+
+</script>
+
+{% endblock %}

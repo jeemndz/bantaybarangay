@@ -33,6 +33,9 @@ urlpatterns = [
     path('evidence/', include('evidencemodule.urls')),
     path('usermanagement/', include('usermanagement.urls')),
     path('auditlogs/', include('auditlogs.urls')),
+    path('hearingmodule/', include('hearingmodule.urls')),
+    path('docrequest/', include('docrequest.urls')),
+    path('reportsmodule/', include('reportsmodule.urls')),
 ]
 
 if settings.DEBUG:

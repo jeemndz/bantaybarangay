@@ -28,11 +28,9 @@ ALLOWED_EVIDENCE_EXTENSIONS = {
     ".png",
     ".gif",
     ".webp",
-
     ".mp4",
     ".webm",
     ".mov",
-
     ".pdf",
     ".doc",
     ".docx",
@@ -50,15 +48,20 @@ def get_session_context(request):
     """
 
     return {
-        "user_id": request.session.get("user_id"),
+        "user_id": request.session.get(
+            "user_id"
+        ),
+
         "username": request.session.get(
             "username",
             ""
         ),
+
         "email": request.session.get(
             "email",
             ""
         ),
+
         "role": request.session.get(
             "role",
             ""
@@ -97,7 +100,9 @@ def get_resident_by_user_id(user_id):
             WHERE user_id = %s
             LIMIT 1
             """,
-            [user_id]
+            [
+                user_id
+            ]
         )
 
         row = cursor.fetchone()
@@ -106,16 +111,237 @@ def get_resident_by_user_id(user_id):
         return None
 
     return {
-        "resident_id": row[0],
-        "first_name": row[1],
-        "middle_name": row[2],
-        "last_name": row[3],
-        "suffix": row[4],
-        "email": row[5],
-        "contact_number": row[6],
-        "address": row[7],
-        "verification_status": row[8],
+        "resident_id":
+            row[0],
+
+        "first_name":
+            row[1],
+
+        "middle_name":
+            row[2],
+
+        "last_name":
+            row[3],
+
+        "suffix":
+            row[4],
+
+        "email":
+            row[5],
+
+        "contact_number":
+            row[6],
+
+        "address":
+            row[7],
+
+        "verification_status":
+            row[8],
     }
+
+
+# =====================================================
+# HELPER: BUILD RESIDENT FULL NAME
+# =====================================================
+
+def build_resident_full_name(resident):
+    """
+    Build a resident's full name while safely
+    ignoring empty name fields.
+    """
+
+    if not resident:
+        return ""
+
+    name_parts = [
+        resident.get(
+            "first_name"
+        ),
+
+        resident.get(
+            "middle_name"
+        ),
+
+        resident.get(
+            "last_name"
+        ),
+
+        resident.get(
+            "suffix"
+        ),
+    ]
+
+    return " ".join(
+        str(part).strip()
+
+        for part in name_parts
+
+        if part and str(part).strip()
+    )
+
+
+# =====================================================
+# HELPER: PREPARE RESIDENT PROFILE
+# =====================================================
+
+def prepare_resident_profile(resident):
+    """
+    Add template-friendly values to the resident
+    dictionary without requiring duplicate columns
+    in the database.
+    """
+
+    if not resident:
+        return None
+
+    resident = resident.copy()
+
+    full_name = build_resident_full_name(
+        resident
+    )
+
+    resident["full_name"] = (
+        full_name
+    )
+
+    resident["mobile_number"] = (
+        resident.get(
+            "contact_number"
+        )
+        or ""
+    )
+
+    resident["address_line"] = (
+        resident.get(
+            "address"
+        )
+        or ""
+    )
+
+    resident["full_address"] = (
+        resident.get(
+            "address"
+        )
+        or ""
+    )
+
+    # =================================================
+    # DISPLAY RESIDENT NUMBER
+    # =================================================
+
+    resident_id = resident.get(
+        "resident_id"
+    )
+
+    if resident_id:
+
+        try:
+
+            resident["resident_number"] = (
+                f"BB-RES-{int(resident_id):06d}"
+            )
+
+        except (
+            TypeError,
+            ValueError
+        ):
+
+            resident["resident_number"] = (
+                f"BB-RES-{resident_id}"
+            )
+
+    else:
+
+        resident["resident_number"] = ""
+
+    # =================================================
+    # VERIFICATION
+    # =================================================
+
+    verification_status = (
+        resident.get(
+            "verification_status"
+        )
+        or ""
+    )
+
+    resident["is_verified"] = (
+        str(
+            verification_status
+        )
+        .strip()
+        .lower()
+        in {
+            "verified",
+            "approved",
+        }
+    )
+
+    # =================================================
+    # OPTIONAL PROFILE FIELDS
+    # =================================================
+
+    resident.setdefault(
+        "profile_picture",
+        None
+    )
+
+    resident.setdefault(
+        "birth_date",
+        None
+    )
+
+    resident.setdefault(
+        "age",
+        None
+    )
+
+    resident.setdefault(
+        "gender",
+        ""
+    )
+
+    resident.setdefault(
+        "civil_status",
+        ""
+    )
+
+    resident.setdefault(
+        "registration_date",
+        None
+    )
+
+    resident.setdefault(
+        "barangay",
+        ""
+    )
+
+    resident.setdefault(
+        "zone",
+        ""
+    )
+
+    resident.setdefault(
+        "geo_id",
+        ""
+    )
+
+    resident.setdefault(
+        "household_head",
+        ""
+    )
+
+    resident.setdefault(
+        "family_count",
+        ""
+    )
+
+    resident.setdefault(
+        "identity_hash",
+        ""
+    )
+
+    return resident
 
 
 # =====================================================
@@ -127,7 +353,7 @@ def build_complaint_reference(
     submitted_at=None
 ):
     """
-    Generate the display reference number.
+    Generate complaint display reference.
 
     Example:
     CMP-2026-0001
@@ -135,12 +361,40 @@ def build_complaint_reference(
 
     if submitted_at:
         year = submitted_at.year
+
     else:
         year = datetime.now().year
 
     return (
         f"CMP-{year}-"
         f"{complaint_id:04d}"
+    )
+
+
+# =====================================================
+# HELPER: DOCUMENT REQUEST REFERENCE NUMBER
+# =====================================================
+
+def build_document_request_reference(
+    request_id,
+    submitted_at=None
+):
+    """
+    Generate document request display reference.
+
+    Example:
+    DOC-2026-0001
+    """
+
+    if submitted_at:
+        year = submitted_at.year
+
+    else:
+        year = datetime.now().year
+
+    return (
+        f"DOC-{year}-"
+        f"{request_id:04d}"
     )
 
 
@@ -221,16 +475,6 @@ def get_complaint_status_message(
 def validate_evidence_files(
     evidence_files
 ):
-    """
-    Validate all evidence uploaded together with
-    the complaint.
-
-    Maximum:
-        5 files
-
-    Maximum size:
-        10 MB per file
-    """
 
     if len(evidence_files) > MAX_EVIDENCE_FILES:
 
@@ -239,11 +483,10 @@ def validate_evidence_files(
             "5 evidence files."
         )
 
-
     for uploaded_file in evidence_files:
 
         # =============================================
-        # VALIDATE FILE SIZE
+        # FILE SIZE
         # =============================================
 
         if (
@@ -256,9 +499,8 @@ def validate_evidence_files(
                 "the 10MB file size limit."
             )
 
-
         # =============================================
-        # VALIDATE EXTENSION
+        # EXTENSION
         # =============================================
 
         extension = (
@@ -278,7 +520,6 @@ def validate_evidence_files(
                 "unsupported file type."
             )
 
-
     return None
 
 
@@ -289,22 +530,14 @@ def validate_evidence_files(
 def calculate_file_hash(
     uploaded_file
 ):
-    """
-    Generate SHA-256 hash for uploaded evidence.
-    """
 
     sha256 = hashlib.sha256()
-
 
     for chunk in uploaded_file.chunks():
 
         sha256.update(
             chunk
         )
-
-
-    # Reset the uploaded file pointer so Django
-    # can save the file afterward.
 
     try:
 
@@ -313,7 +546,6 @@ def calculate_file_hash(
     except Exception:
 
         pass
-
 
     return sha256.hexdigest()
 
@@ -325,12 +557,6 @@ def calculate_file_hash(
 def build_evidence_file_name(
     uploaded_file
 ):
-    """
-    Generate a unique storage filename.
-
-    The original filename is still stored in the
-    database as file_name.
-    """
 
     extension = (
         os.path.splitext(
@@ -339,11 +565,9 @@ def build_evidence_file_name(
         .lower()
     )
 
-
     unique_name = (
         uuid.uuid4().hex
     )
-
 
     return (
         f"{unique_name}"
@@ -360,27 +584,12 @@ def save_complaint_evidence(
     uploaded_by,
     evidence_files
 ):
-    """
-    Save evidence files to Django media storage and
-    insert their metadata into the evidence table.
-
-    Database relationship:
-
-        complaints.complaint_id
-                ↓
-        evidence.complaint_id
-    """
 
     saved_storage_paths = []
-
 
     try:
 
         for uploaded_file in evidence_files:
-
-            # =========================================
-            # ORIGINAL FILE INFORMATION
-            # =========================================
 
             original_file_name = (
                 uploaded_file.name
@@ -396,21 +605,11 @@ def save_complaint_evidence(
                 "application/octet-stream"
             )
 
-
-            # =========================================
-            # CALCULATE SHA-256 HASH
-            # =========================================
-
             file_hash = (
                 calculate_file_hash(
                     uploaded_file
                 )
             )
-
-
-            # =========================================
-            # UNIQUE PHYSICAL FILE NAME
-            # =========================================
 
             stored_file_name = (
                 build_evidence_file_name(
@@ -418,30 +617,11 @@ def save_complaint_evidence(
                 )
             )
 
-
-            # =========================================
-            # STORAGE DIRECTORY
-            # =========================================
-            #
-            # Example:
-            #
-            # media/
-            #   evidence/
-            #       complaint_25/
-            #           abc123.jpg
-            #
-            # =========================================
-
             storage_path = (
                 f"evidence/"
                 f"complaint_{complaint_id}/"
                 f"{stored_file_name}"
             )
-
-
-            # =========================================
-            # SAVE PHYSICAL FILE
-            # =========================================
 
             saved_path = (
                 default_storage.save(
@@ -450,15 +630,9 @@ def save_complaint_evidence(
                 )
             )
 
-
             saved_storage_paths.append(
                 saved_path
             )
-
-
-            # =========================================
-            # FILE URL
-            # =========================================
 
             try:
 
@@ -474,11 +648,6 @@ def save_complaint_evidence(
                     f"{settings.MEDIA_URL}"
                     f"{saved_path}"
                 )
-
-
-            # =========================================
-            # INSERT EVIDENCE INTO DATABASE
-            # =========================================
 
             with connection.cursor() as cursor:
 
@@ -518,15 +687,9 @@ def save_complaint_evidence(
                     ]
                 )
 
-
         return saved_storage_paths
 
-
     except Exception:
-
-        # =============================================
-        # REMOVE FILES IF DATABASE INSERT FAILS
-        # =============================================
 
         for saved_path in saved_storage_paths:
 
@@ -543,7 +706,6 @@ def save_complaint_evidence(
             except Exception:
 
                 pass
-
 
         raise
 
@@ -596,7 +758,6 @@ def submit_complaint(request):
         "user_id"
     )
 
-
     if not user_id:
 
         messages.error(
@@ -609,18 +770,16 @@ def submit_complaint(request):
             "login"
         )
 
-
     # =================================================
-    # GET SESSION INFORMATION
+    # SESSION
     # =================================================
 
     context = get_session_context(
         request
     )
 
-
     # =================================================
-    # CHECK USER ROLE
+    # ROLE
     # =================================================
 
     role = (
@@ -631,7 +790,6 @@ def submit_complaint(request):
         .strip()
         .lower()
     )
-
 
     if role != "resident":
 
@@ -645,9 +803,8 @@ def submit_complaint(request):
             "home"
         )
 
-
     # =================================================
-    # GET RESIDENT PROFILE
+    # RESIDENT
     # =================================================
 
     resident = (
@@ -655,7 +812,6 @@ def submit_complaint(request):
             user_id
         )
     )
-
 
     if not resident:
 
@@ -669,9 +825,8 @@ def submit_complaint(request):
             "home"
         )
 
-
     # =================================================
-    # DEFAULT TEMPLATE CONTEXT
+    # DEFAULT CONTEXT
     # =================================================
 
     context.update({
@@ -681,8 +836,6 @@ def submit_complaint(request):
 
         "form_data":
             {},
-
-        # Success popup
 
         "complaint_submitted":
             False,
@@ -707,12 +860,10 @@ def submit_complaint(request):
 
         "submitted_status":
             "",
-
     })
 
-
     # =================================================
-    # GET REQUEST
+    # GET
     # =================================================
 
     if request.method == "GET":
@@ -723,7 +874,6 @@ def submit_complaint(request):
                 None
             )
         )
-
 
         if submitted_complaint:
 
@@ -770,9 +920,7 @@ def submit_complaint(request):
                         "status",
                         "Submitted"
                     ),
-
             })
-
 
         return render(
             request,
@@ -780,16 +928,11 @@ def submit_complaint(request):
             context
         )
 
-
     # =================================================
-    # POST REQUEST
+    # POST
     # =================================================
 
     if request.method == "POST":
-
-        # =================================================
-        # REPORT TYPE
-        # =================================================
 
         report_type = (
             request.POST.get(
@@ -799,11 +942,6 @@ def submit_complaint(request):
             .strip()
         )
 
-
-        # =================================================
-        # RESPONDENT INFORMATION
-        # =================================================
-
         respondent_name = (
             request.POST.get(
                 "respondent_name",
@@ -811,7 +949,6 @@ def submit_complaint(request):
             )
             .strip()
         )
-
 
         respondent_address = (
             request.POST.get(
@@ -821,7 +958,6 @@ def submit_complaint(request):
             .strip()
         )
 
-
         respondent_relationship = (
             request.POST.get(
                 "respondent_relationship",
@@ -829,7 +965,6 @@ def submit_complaint(request):
             )
             .strip()
         )
-
 
         respondent_contact = (
             request.POST.get(
@@ -839,11 +974,6 @@ def submit_complaint(request):
             .strip()
         )
 
-
-        # =================================================
-        # COMPLAINT INFORMATION
-        # =================================================
-
         complaint_type = (
             request.POST.get(
                 "complaint_type",
@@ -851,7 +981,6 @@ def submit_complaint(request):
             )
             .strip()
         )
-
 
         subject = (
             request.POST.get(
@@ -861,7 +990,6 @@ def submit_complaint(request):
             .strip()
         )
 
-
         description = (
             request.POST.get(
                 "description",
@@ -869,11 +997,6 @@ def submit_complaint(request):
             )
             .strip()
         )
-
-
-        # =================================================
-        # INCIDENT INFORMATION
-        # =================================================
 
         location = (
             request.POST.get(
@@ -883,7 +1006,6 @@ def submit_complaint(request):
             .strip()
         )
 
-
         incident_date = (
             request.POST.get(
                 "incident_date",
@@ -891,7 +1013,6 @@ def submit_complaint(request):
             )
             .strip()
         )
-
 
         incident_time = (
             request.POST.get(
@@ -901,27 +1022,16 @@ def submit_complaint(request):
             .strip()
         )
 
-
-        # =================================================
-        # EVIDENCE FILES
-        # =================================================
-
         evidence_files = (
             request.FILES.getlist(
                 "evidence"
             )
         )
 
-
-        # =================================================
-        # PRIORITY
-        # =================================================
-
         priority = "N/A"
 
-
         # =================================================
-        # PRESERVE FORM DATA
+        # PRESERVE FORM
         # =================================================
 
         context["form_data"] = {
@@ -961,19 +1071,16 @@ def submit_complaint(request):
 
             "priority":
                 priority,
-
         }
 
-
         # =================================================
-        # VALIDATE REPORT TYPE
+        # VALIDATION
         # =================================================
 
         allowed_report_types = [
             "Formal Complaint",
             "Community Issue",
         ]
-
 
         if (
             report_type not in
@@ -990,11 +1097,6 @@ def submit_complaint(request):
                 "website/submit_complaint.html",
                 context
             )
-
-
-        # =================================================
-        # VALIDATE RESPONDENT
-        # =================================================
 
         if (
             report_type ==
@@ -1015,7 +1117,6 @@ def submit_complaint(request):
                     context
                 )
 
-
             if not respondent_address:
 
                 messages.error(
@@ -1030,18 +1131,12 @@ def submit_complaint(request):
                     context
                 )
 
-
         else:
 
             respondent_name = None
             respondent_address = None
             respondent_relationship = None
             respondent_contact = None
-
-
-        # =================================================
-        # VALIDATE COMPLAINT CATEGORY
-        # =================================================
 
         if not complaint_type:
 
@@ -1056,11 +1151,6 @@ def submit_complaint(request):
                 context
             )
 
-
-        # =================================================
-        # VALIDATE SUBJECT
-        # =================================================
-
         if not subject:
 
             messages.error(
@@ -1073,11 +1163,6 @@ def submit_complaint(request):
                 "website/submit_complaint.html",
                 context
             )
-
-
-        # =================================================
-        # VALIDATE DESCRIPTION
-        # =================================================
 
         if not description:
 
@@ -1092,11 +1177,6 @@ def submit_complaint(request):
                 context
             )
 
-
-        # =================================================
-        # VALIDATE LOCATION
-        # =================================================
-
         if not location:
 
             messages.error(
@@ -1109,11 +1189,6 @@ def submit_complaint(request):
                 "website/submit_complaint.html",
                 context
             )
-
-
-        # =================================================
-        # VALIDATE INCIDENT DATE
-        # =================================================
 
         if not incident_date:
 
@@ -1128,11 +1203,6 @@ def submit_complaint(request):
                 context
             )
 
-
-        # =================================================
-        # PARSE INCIDENT DATE
-        # =================================================
-
         try:
 
             parsed_incident_date = (
@@ -1142,7 +1212,6 @@ def submit_complaint(request):
                 )
                 .date()
             )
-
 
         except ValueError:
 
@@ -1157,11 +1226,6 @@ def submit_complaint(request):
                 context
             )
 
-
-        # =================================================
-        # VALIDATE INCIDENT TIME
-        # =================================================
-
         if not incident_time:
 
             messages.error(
@@ -1175,11 +1239,6 @@ def submit_complaint(request):
                 context
             )
 
-
-        # =================================================
-        # PARSE INCIDENT TIME
-        # =================================================
-
         try:
 
             parsed_incident_time = (
@@ -1189,7 +1248,6 @@ def submit_complaint(request):
                 )
                 .time()
             )
-
 
         except ValueError:
 
@@ -1204,17 +1262,11 @@ def submit_complaint(request):
                 context
             )
 
-
-        # =================================================
-        # VALIDATE EVIDENCE
-        # =================================================
-
         evidence_error = (
             validate_evidence_files(
                 evidence_files
             )
         )
-
 
         if evidence_error:
 
@@ -1229,21 +1281,15 @@ def submit_complaint(request):
                 context
             )
 
-
         # =================================================
-        # INSERT COMPLAINT + EVIDENCE
+        # INSERT COMPLAINT
         # =================================================
 
         saved_evidence_paths = []
 
-
         try:
 
             with transaction.atomic():
-
-                # =========================================
-                # INSERT COMPLAINT
-                # =========================================
 
                 with connection.cursor() as cursor:
 
@@ -1322,15 +1368,9 @@ def submit_complaint(request):
                         ]
                     )
 
-
-                    # =====================================
-                    # GET NEW COMPLAINT ID
-                    # =====================================
-
                     complaint_id = (
                         cursor.lastrowid
                     )
-
 
                     if not complaint_id:
 
@@ -1338,19 +1378,6 @@ def submit_complaint(request):
                             "Unable to retrieve "
                             "new complaint ID."
                         )
-
-
-                # =========================================
-                # SAVE EVIDENCE
-                # =========================================
-                #
-                # user_id comes directly from the
-                # authenticated session.
-                #
-                # evidence.uploaded_by references
-                # users.user_id.
-                #
-                # =========================================
 
                 if evidence_files:
 
@@ -1367,11 +1394,6 @@ def submit_complaint(request):
                         )
                     )
 
-
-                # =========================================
-                # GET DATABASE SUBMISSION DATE
-                # =========================================
-
                 with connection.cursor() as cursor:
 
                     cursor.execute(
@@ -1387,11 +1409,9 @@ def submit_complaint(request):
                         ]
                     )
 
-
                     submitted_row = (
                         cursor.fetchone()
                     )
-
 
                     if submitted_row:
 
@@ -1403,18 +1423,7 @@ def submit_complaint(request):
 
                         submitted_at = None
 
-
         except Exception as e:
-
-            # =============================================
-            # DELETE PHYSICAL FILES ON FAILURE
-            # =============================================
-            #
-            # transaction.atomic() rolls back the database,
-            # but files saved to MEDIA_ROOT are not part of
-            # the SQL transaction.
-            #
-            # =============================================
 
             for saved_path in saved_evidence_paths:
 
@@ -1432,13 +1441,11 @@ def submit_complaint(request):
 
                     pass
 
-
             print(
                 "COMPLAINT / EVIDENCE "
                 "INSERT ERROR:",
                 e
             )
-
 
             messages.error(
                 request,
@@ -1446,17 +1453,11 @@ def submit_complaint(request):
                 "Please try again."
             )
 
-
             return render(
                 request,
                 "website/submit_complaint.html",
                 context
             )
-
-
-        # =================================================
-        # BUILD COMPLAINT REFERENCE
-        # =================================================
 
         complaint_reference = (
             build_complaint_reference(
@@ -1464,11 +1465,6 @@ def submit_complaint(request):
                 submitted_at
             )
         )
-
-
-        # =================================================
-        # SAVE SUCCESS INFORMATION TO SESSION
-        # =================================================
 
         request.session[
             "submitted_complaint"
@@ -1496,25 +1492,13 @@ def submit_complaint(request):
                 len(
                     evidence_files
                 ),
-
         }
 
-
         request.session.modified = True
-
-
-        # =================================================
-        # REDIRECT BACK TO SUBMIT PAGE
-        # =================================================
 
         return redirect(
             "submit_complaint"
         )
-
-
-    # =================================================
-    # FALLBACK
-    # =================================================
 
     return render(
         request,
@@ -1537,7 +1521,6 @@ def my_complaints(request):
         "user_id"
     )
 
-
     if not user_id:
 
         messages.error(
@@ -1549,18 +1532,16 @@ def my_complaints(request):
             "login"
         )
 
-
     # =================================================
-    # SESSION CONTEXT
+    # SESSION
     # =================================================
 
     context = get_session_context(
         request
     )
 
-
     # =================================================
-    # CHECK ROLE
+    # ROLE
     # =================================================
 
     role = (
@@ -1571,7 +1552,6 @@ def my_complaints(request):
         .strip()
         .lower()
     )
-
 
     if role != "resident":
 
@@ -1585,9 +1565,8 @@ def my_complaints(request):
             "home"
         )
 
-
     # =================================================
-    # GET RESIDENT
+    # RESIDENT
     # =================================================
 
     resident = (
@@ -1595,7 +1574,6 @@ def my_complaints(request):
             user_id
         )
     )
-
 
     if not resident:
 
@@ -1609,9 +1587,7 @@ def my_complaints(request):
             "home"
         )
 
-
     complaints = []
-
 
     # =================================================
     # LOAD COMPLAINTS
@@ -1667,56 +1643,32 @@ def my_complaints(request):
                 ]
             )
 
-
             rows = cursor.fetchall()
-
-
-        # =================================================
-        # CONVERT DATABASE ROWS
-        # =================================================
 
         for row in rows:
 
             complaint_id = row[0]
-
             complaint_type = row[2]
-
             subject = row[3]
-
             description = row[4]
-
             location = row[5]
-
             incident_date = row[6]
-
             priority = row[7]
-
             status = row[8]
-
             assigned_official = row[9]
-
             resolution = row[10]
-
             submitted_at = row[11]
-
             updated_at = row[12]
-
             report_type = row[13]
-
             respondent_name = row[14]
-
             respondent_address = row[15]
-
             respondent_relationship = row[16]
-
             respondent_contact = row[17]
-
             incident_time = row[18]
 
             evidence_count = (
                 row[19] or 0
             )
-
 
             complaint = {
 
@@ -1796,14 +1748,11 @@ def my_complaints(request):
                         status,
                         resolution
                     ),
-
             }
-
 
             complaints.append(
                 complaint
             )
-
 
     except Exception as e:
 
@@ -1812,12 +1761,10 @@ def my_complaints(request):
             e
         )
 
-
         messages.error(
             request,
             "Unable to load your complaints."
         )
-
 
     # =================================================
     # STATISTICS
@@ -1827,10 +1774,11 @@ def my_complaints(request):
         complaints
     )
 
-
     active_count = sum(
         1
+
         for complaint in complaints
+
         if complaint["status"] in [
             "Submitted",
             "Under Review",
@@ -1838,28 +1786,25 @@ def my_complaints(request):
         ]
     )
 
-
     resolved_count = sum(
         1
+
         for complaint in complaints
+
         if complaint["status"] in [
             "Resolved",
             "Closed",
         ]
     )
 
-
     rejected_count = sum(
         1
+
         for complaint in complaints
+
         if complaint["status"] ==
         "Rejected"
     )
-
-
-    # =================================================
-    # COMPLAINT CATEGORIES
-    # =================================================
 
     categories = sorted(
         {
@@ -1875,39 +1820,11 @@ def my_complaints(request):
         }
     )
 
-
-    # =================================================
-    # RESIDENT FULL NAME
-    # =================================================
-
-    name_parts = [
-        resident.get(
-            "first_name"
-        ),
-        resident.get(
-            "middle_name"
-        ),
-        resident.get(
-            "last_name"
-        ),
-        resident.get(
-            "suffix"
-        ),
-    ]
-
-
-    resident_full_name = " ".join(
-        part.strip()
-
-        for part in name_parts
-
-        if part and part.strip()
+    resident_full_name = (
+        build_resident_full_name(
+            resident
+        )
     )
-
-
-    # =================================================
-    # UPDATE CONTEXT
-    # =================================================
 
     context.update({
 
@@ -1937,13 +1854,7 @@ def my_complaints(request):
 
         "rejected_count":
             rejected_count,
-
     })
-
-
-    # =================================================
-    # RENDER MY COMPLAINTS
-    # =================================================
 
     return render(
         request,
@@ -2000,7 +1911,6 @@ def request_document(request):
         "user_id"
     )
 
-
     if not user_id:
 
         messages.error(
@@ -2013,18 +1923,41 @@ def request_document(request):
             "login"
         )
 
-
     # =================================================
-    # SESSION CONTEXT
+    # SESSION
     # =================================================
 
     context = get_session_context(
         request
     )
 
+    # =================================================
+    # ROLE
+    # =================================================
+
+    role = (
+        context.get(
+            "role",
+            ""
+        )
+        .strip()
+        .lower()
+    )
+
+    if role != "resident":
+
+        messages.error(
+            request,
+            "Only resident accounts can "
+            "request barangay documents."
+        )
+
+        return redirect(
+            "home"
+        )
 
     # =================================================
-    # GET RESIDENT
+    # RESIDENT
     # =================================================
 
     resident = (
@@ -2032,7 +1965,6 @@ def request_document(request):
             user_id
         )
     )
-
 
     if not resident:
 
@@ -2046,14 +1978,734 @@ def request_document(request):
             "home"
         )
 
-
-    context[
-        "resident"
-    ] = resident
-
+    resident_id = resident[
+        "resident_id"
+    ]
 
     # =================================================
-    # RENDER PAGE
+    # PREPARE RESIDENT DATA
+    # =================================================
+
+    resident = (
+        prepare_resident_profile(
+            resident
+        )
+    )
+
+    # =================================================
+    # DOCUMENT TYPES
+    # =================================================
+
+    document_types = []
+
+    try:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute(
+                """
+                SELECT
+                    document_type_id,
+                    type_name,
+                    description,
+                    file_path,
+                    status
+
+                FROM document_types
+
+                WHERE
+                    status = 'Active'
+
+                ORDER BY
+                    type_name ASC
+                """
+            )
+
+            rows = cursor.fetchall()
+
+        for row in rows:
+
+            document_types.append({
+
+                "id":
+                    row[0],
+
+                "document_type_id":
+                    row[0],
+
+                "name":
+                    row[1],
+
+                "type_name":
+                    row[1],
+
+                "description":
+                    row[2] or "",
+
+                "file_path":
+                    row[3],
+
+                "status":
+                    row[4],
+
+                # No fee column currently exists
+                # in document_types.
+                "fee":
+                    0,
+
+                "processing_time":
+                    "1 business day",
+
+                "requirements":
+                    "",
+            })
+
+    except Exception as e:
+
+        print(
+            "DOCUMENT TYPE LOAD ERROR:",
+            e
+        )
+
+        messages.error(
+            request,
+            "Unable to load available "
+            "document types."
+        )
+
+    # =================================================
+    # DELIVERY METHODS
+    # =================================================
+
+    delivery_methods = [
+
+        {
+            "id":
+                "Barangay Pickup",
+
+            "name":
+                "Barangay Pickup",
+
+            "description":
+                "Pick up your completed document "
+                "at the barangay office.",
+
+            "fee":
+                0,
+        },
+
+    ]
+
+    # =================================================
+    # PAYMENT METHODS
+    # =================================================
+
+    payment_methods = [
+
+        {
+            "id":
+                "Cash",
+
+            "name":
+                "Cash at Barangay",
+        },
+
+    ]
+
+    # =================================================
+    # DEFAULT FORM DATA
+    # =================================================
+
+    form_data = {
+
+        "document_type":
+            "",
+
+        "purpose":
+            "",
+
+        "institution":
+            "",
+
+        "request_notes":
+            "",
+
+        "delivery_method":
+            "",
+
+        "payment_method":
+            "",
+    }
+
+    # =================================================
+    # POST
+    # =================================================
+
+    if request.method == "POST":
+
+        document_type_id = (
+            request.POST.get(
+                "document_type",
+                ""
+            )
+            .strip()
+        )
+
+        purpose = (
+            request.POST.get(
+                "purpose",
+                ""
+            )
+            .strip()
+        )
+
+        institution = (
+            request.POST.get(
+                "institution",
+                ""
+            )
+            .strip()
+        )
+
+        request_notes = (
+            request.POST.get(
+                "request_notes",
+                ""
+            )
+            .strip()
+        )
+
+        delivery_method = (
+            request.POST.get(
+                "delivery_method",
+                ""
+            )
+            .strip()
+        )
+
+        payment_method = (
+            request.POST.get(
+                "payment_method",
+                ""
+            )
+            .strip()
+        )
+
+        # =================================================
+        # PRESERVE FORM
+        # =================================================
+
+        form_data = {
+
+            "document_type":
+                document_type_id,
+
+            "purpose":
+                purpose,
+
+            "institution":
+                institution,
+
+            "request_notes":
+                request_notes,
+
+            "delivery_method":
+                delivery_method,
+
+            "payment_method":
+                payment_method,
+        }
+
+        # =================================================
+        # VALIDATION
+        # =================================================
+
+        if not document_type_id:
+
+            messages.error(
+                request,
+                "Please select a document type."
+            )
+
+        elif not purpose:
+
+            messages.error(
+                request,
+                "Please enter the purpose "
+                "of your request."
+            )
+
+        elif not delivery_method:
+
+            messages.error(
+                request,
+                "Please select a release method."
+            )
+
+        elif not payment_method:
+
+            messages.error(
+                request,
+                "Please select a payment method."
+            )
+
+        else:
+
+            # =============================================
+            # DOCUMENT TYPE ID
+            # =============================================
+
+            try:
+
+                parsed_document_type_id = int(
+                    document_type_id
+                )
+
+            except (
+                TypeError,
+                ValueError
+            ):
+
+                parsed_document_type_id = None
+
+            if not parsed_document_type_id:
+
+                messages.error(
+                    request,
+                    "Invalid document type."
+                )
+
+            else:
+
+                # =========================================
+                # VERIFY DOCUMENT
+                # =========================================
+
+                selected_document = None
+
+                try:
+
+                    with connection.cursor() as cursor:
+
+                        cursor.execute(
+                            """
+                            SELECT
+                                document_type_id,
+                                type_name
+
+                            FROM document_types
+
+                            WHERE
+                                document_type_id = %s
+                                AND status = 'Active'
+
+                            LIMIT 1
+                            """,
+                            [
+                                parsed_document_type_id
+                            ]
+                        )
+
+                        selected_document = (
+                            cursor.fetchone()
+                        )
+
+                except Exception as e:
+
+                    print(
+                        "DOCUMENT TYPE "
+                        "VALIDATION ERROR:",
+                        e
+                    )
+
+                if not selected_document:
+
+                    messages.error(
+                        request,
+                        "The selected document type "
+                        "is unavailable."
+                    )
+
+                else:
+
+                    # =====================================
+                    # INSERT DOCUMENT REQUEST
+                    # =====================================
+
+                    try:
+
+                        with transaction.atomic():
+
+                            with connection.cursor() as cursor:
+
+                                cursor.execute(
+                                    """
+                                    INSERT INTO document_requests
+                                    (
+                                        resident_id,
+                                        document_type_id,
+                                        purpose,
+                                        institution,
+                                        request_notes,
+                                        delivery_method,
+                                        payment_method,
+                                        status,
+                                        created_at,
+                                        updated_at
+                                    )
+                                    VALUES
+                                    (
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        'Submitted',
+                                        NOW(),
+                                        NOW()
+                                    )
+                                    """,
+                                    [
+                                        resident_id,
+                                        parsed_document_type_id,
+
+                                        purpose,
+
+                                        institution
+                                        if institution
+                                        else None,
+
+                                        request_notes
+                                        if request_notes
+                                        else None,
+
+                                        delivery_method,
+                                        payment_method,
+                                    ]
+                                )
+
+                                document_request_id = (
+                                    cursor.lastrowid
+                                )
+
+                                if not document_request_id:
+
+                                    raise Exception(
+                                        "Unable to retrieve "
+                                        "new document request ID."
+                                    )
+
+                            # =================================
+                            # GET SUBMISSION DATE
+                            # =================================
+
+                            with connection.cursor() as cursor:
+
+                                cursor.execute(
+                                    """
+                                    SELECT created_at
+                                    FROM document_requests
+                                    WHERE request_id = %s
+                                    LIMIT 1
+                                    """,
+                                    [
+                                        document_request_id
+                                    ]
+                                )
+
+                                submitted_row = (
+                                    cursor.fetchone()
+                                )
+
+                            if submitted_row:
+
+                                submitted_at = (
+                                    submitted_row[0]
+                                )
+
+                            else:
+
+                                submitted_at = None
+
+                        # =====================================
+                        # REFERENCE
+                        # =====================================
+
+                        reference_number = (
+                            build_document_request_reference(
+                                document_request_id,
+                                submitted_at
+                            )
+                        )
+
+                        messages.success(
+                            request,
+                            (
+                                "Your document request "
+                                "has been submitted "
+                                "successfully. "
+                                "Reference number: "
+                                f"{reference_number}"
+                            )
+                        )
+
+                        # =====================================
+                        # POST / REDIRECT / GET
+                        # =====================================
+
+                        return redirect(
+                            "request_document"
+                        )
+
+                    except Exception as e:
+
+                        print(
+                            "DOCUMENT REQUEST "
+                            "INSERT ERROR:",
+                            e
+                        )
+
+                        messages.error(
+                            request,
+                            "Unable to submit your "
+                            "document request. "
+                            "Please try again."
+                        )
+
+    # =================================================
+    # RECENT REQUESTS
+    # =================================================
+
+    recent_requests = []
+
+    try:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute(
+                """
+                SELECT
+                    dr.request_id,
+
+                    dt.type_name,
+
+                    dr.purpose,
+                    dr.institution,
+                    dr.request_notes,
+
+                    dr.delivery_method,
+                    dr.payment_method,
+
+                    dr.status,
+
+                    dr.submitted_at,
+                    dr.updated_at
+
+                FROM document_requests dr
+
+                INNER JOIN document_types dt
+                    ON
+                    dt.document_type_id =
+                    dr.document_type_id
+
+                WHERE
+                    dr.resident_id = %s
+
+                ORDER BY
+                    dr.submitted_at DESC
+
+                LIMIT 5
+                """,
+                [
+                    resident_id
+                ]
+            )
+
+            rows = cursor.fetchall()
+
+        for row in rows:
+
+            request_id = row[0]
+            submitted_at = row[8]
+
+            recent_requests.append({
+
+                "request_id":
+                    request_id,
+
+                "reference_number":
+                    build_document_request_reference(
+                        request_id,
+                        submitted_at
+                    ),
+
+                "document_name":
+                    row[1],
+
+                "purpose":
+                    row[2],
+
+                "institution":
+                    row[3],
+
+                "request_notes":
+                    row[4],
+
+                "delivery_method":
+                    row[5],
+
+                "payment_method":
+                    row[6],
+
+                "status":
+                    row[7],
+
+                "created_at":
+                    submitted_at,
+
+                "submitted_at":
+                    submitted_at,
+
+                "updated_at":
+                    row[9],
+            })
+
+    except Exception as e:
+
+        print(
+            "RECENT DOCUMENT REQUEST "
+            "LOAD ERROR:",
+            e
+        )
+
+        messages.error(
+            request,
+            "Unable to load your recent "
+            "document requests."
+        )
+
+    # =================================================
+    # REQUEST STATISTICS
+    # =================================================
+
+    total_request_count = 0
+    active_request_count = 0
+    ready_request_count = 0
+
+    try:
+
+        with connection.cursor() as cursor:
+
+            cursor.execute(
+                """
+                SELECT
+
+                    COUNT(*),
+
+                    SUM(
+                        CASE
+
+                            WHEN status IN
+                            (
+                                'Submitted',
+                                'Under Verification',
+                                'Ready for Signature'
+                            )
+
+                            THEN 1
+
+                            ELSE 0
+
+                        END
+                    ),
+
+                    SUM(
+                        CASE
+
+                            WHEN status =
+                                'Ready for Pickup'
+
+                            THEN 1
+
+                            ELSE 0
+
+                        END
+                    )
+
+                FROM document_requests
+
+                WHERE
+                    resident_id = %s
+                """,
+                [
+                    resident_id
+                ]
+            )
+
+            statistics = (
+                cursor.fetchone()
+            )
+
+        if statistics:
+
+            total_request_count = (
+                statistics[0] or 0
+            )
+
+            active_request_count = (
+                statistics[1] or 0
+            )
+
+            ready_request_count = (
+                statistics[2] or 0
+            )
+
+    except Exception as e:
+
+        print(
+            "DOCUMENT REQUEST "
+            "STATISTICS ERROR:",
+            e
+        )
+
+    # =================================================
+    # CONTEXT
+    # =================================================
+
+    context.update({
+
+        "resident":
+            resident,
+
+        "document_types":
+            document_types,
+
+        "delivery_methods":
+            delivery_methods,
+
+        "payment_methods":
+            payment_methods,
+
+        "form_data":
+            form_data,
+
+        "recent_requests":
+            recent_requests,
+
+        "total_request_count":
+            total_request_count,
+
+        "active_request_count":
+            active_request_count,
+
+        "ready_request_count":
+            ready_request_count,
+    })
+
+    # =================================================
+    # RENDER
     # =================================================
 
     return render(
@@ -2093,5 +2745,387 @@ def contact(request):
     return render(
         request,
         "website/contact.html",
+        context
+    )
+
+
+# =====================================================
+# MY PROFILE
+# =====================================================
+
+def my_profile(request):
+
+    # =================================================
+    # CHECK LOGIN
+    # =================================================
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    if not user_id:
+
+        messages.error(
+            request,
+            "Please log in to view your profile."
+        )
+
+        return redirect(
+            "login"
+        )
+
+    # =================================================
+    # SESSION
+    # =================================================
+
+    context = get_session_context(
+        request
+    )
+
+    # =================================================
+    # ROLE
+    # =================================================
+
+    role = (
+        context.get(
+            "role",
+            ""
+        )
+        .strip()
+        .lower()
+    )
+
+    if role != "resident":
+
+        messages.error(
+            request,
+            "Only resident accounts can "
+            "access the resident profile."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    # =================================================
+    # GET RESIDENT
+    # =================================================
+
+    try:
+
+        resident = (
+            get_resident_by_user_id(
+                user_id
+            )
+        )
+
+    except Exception as e:
+
+        print(
+            "PROFILE DATABASE ERROR:",
+            e
+        )
+
+        messages.error(
+            request,
+            "Unable to load your resident profile."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    if not resident:
+
+        messages.error(
+            request,
+            "Your resident profile could "
+            "not be found."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    # =================================================
+    # PREPARE PROFILE
+    # =================================================
+
+    resident = (
+        prepare_resident_profile(
+            resident
+        )
+    )
+
+    # =================================================
+    # POST - UPDATE CONTACT
+    # =================================================
+
+    if request.method == "POST":
+
+        mobile_number = (
+            request.POST.get(
+                "mobile_number",
+                ""
+            )
+            .strip()
+        )
+
+        email = (
+            request.POST.get(
+                "email",
+                ""
+            )
+            .strip()
+            .lower()
+        )
+
+        # =================================================
+        # MOBILE VALIDATION
+        # =================================================
+
+        if not mobile_number:
+
+            messages.error(
+                request,
+                "Please enter your mobile number."
+            )
+
+            resident[
+                "mobile_number"
+            ] = mobile_number
+
+            resident[
+                "contact_number"
+            ] = mobile_number
+
+            resident[
+                "email"
+            ] = email
+
+            context.update({
+
+                "resident":
+                    resident,
+
+                "resident_full_name":
+                    resident[
+                        "full_name"
+                    ],
+
+                "verification_status":
+                    resident.get(
+                        "verification_status",
+                        ""
+                    ),
+
+                "is_verified":
+                    resident[
+                        "is_verified"
+                    ],
+            })
+
+            return render(
+                request,
+                "website/my_profile.html",
+                context
+            )
+
+        # =================================================
+        # EMAIL VALIDATION
+        # =================================================
+
+        if not email:
+
+            messages.error(
+                request,
+                "Please enter your email address."
+            )
+
+            resident[
+                "mobile_number"
+            ] = mobile_number
+
+            resident[
+                "contact_number"
+            ] = mobile_number
+
+            resident[
+                "email"
+            ] = email
+
+            context.update({
+
+                "resident":
+                    resident,
+
+                "resident_full_name":
+                    resident[
+                        "full_name"
+                    ],
+
+                "verification_status":
+                    resident.get(
+                        "verification_status",
+                        ""
+                    ),
+
+                "is_verified":
+                    resident[
+                        "is_verified"
+                    ],
+            })
+
+            return render(
+                request,
+                "website/my_profile.html",
+                context
+            )
+
+        # =================================================
+        # UPDATE DATABASE
+        # =================================================
+
+        try:
+
+            with transaction.atomic():
+
+                # =========================================
+                # RESIDENT
+                # =========================================
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE residents
+
+                        SET
+                            contact_number = %s,
+                            email = %s
+
+                        WHERE
+                            resident_id = %s
+                            AND user_id = %s
+                        """,
+                        [
+                            mobile_number,
+                            email,
+
+                            resident[
+                                "resident_id"
+                            ],
+
+                            user_id,
+                        ]
+                    )
+
+                    if cursor.rowcount == 0:
+
+                        raise Exception(
+                            "Resident profile "
+                            "was not updated."
+                        )
+
+                # =========================================
+                # USER
+                # =========================================
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE users
+
+                        SET
+                            email = %s
+
+                        WHERE
+                            user_id = %s
+                        """,
+                        [
+                            email,
+                            user_id,
+                        ]
+                    )
+
+            # =================================================
+            # UPDATE SESSION
+            # =================================================
+
+            request.session[
+                "email"
+            ] = email
+
+            request.session.modified = True
+
+            messages.success(
+                request,
+                "Your contact information has "
+                "been updated successfully."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        except Exception as e:
+
+            print(
+                "PROFILE UPDATE ERROR:",
+                e
+            )
+
+            messages.error(
+                request,
+                "Unable to update your profile. "
+                "Please try again."
+            )
+
+            resident[
+                "mobile_number"
+            ] = mobile_number
+
+            resident[
+                "contact_number"
+            ] = mobile_number
+
+            resident[
+                "email"
+            ] = email
+
+    # =================================================
+    # CONTEXT
+    # =================================================
+
+    context.update({
+
+        "resident":
+            resident,
+
+        "resident_full_name":
+            resident[
+                "full_name"
+            ],
+
+        "verification_status":
+            resident.get(
+                "verification_status",
+                ""
+            ),
+
+        "is_verified":
+            resident[
+                "is_verified"
+            ],
+    })
+
+    # =================================================
+    # RENDER
+    # =================================================
+
+    return render(
+        request,
+        "website/my_profile.html",
         context
     )

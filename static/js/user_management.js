@@ -1,6 +1,6 @@
 /* =========================================================
    BANTAYBARANGAY
-   USER MANAGEMENT JAVASCRIPT
+   USER MANAGEMENT
 ========================================================= */
 
 let selectedUser = null;
@@ -12,279 +12,90 @@ let selectedUser = null;
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    initializeIcons();
+    initializeLucideIcons();
 
-    initializeSearch();
+    initializeUserSearch();
 
-    initializeFilters();
-
-    initializeCreateForm();
+    initializeUserFilters();
 
     initializeModalEvents();
+
+    initializeForms();
+
+    updateUserCount();
 
 });
 
 
 /* =========================================================
-   LUCIDE ICONS
+   LUCIDE
 ========================================================= */
 
-function initializeIcons() {
+function initializeLucideIcons() {
 
-    if (typeof lucide !== "undefined") {
+    if (
+        window.lucide &&
+        typeof window.lucide.createIcons === "function"
+    ) {
 
-        lucide.createIcons();
+        window.lucide.createIcons();
 
     }
 
 }
 
 
-function refreshIcons() {
+function refreshLucideIcons() {
 
-    if (typeof lucide !== "undefined") {
-
-        lucide.createIcons();
-
-    }
+    initializeLucideIcons();
 
 }
 
 
 /* =========================================================
-   SEARCH
+   GET USER FROM ROW
 ========================================================= */
 
-function initializeSearch() {
+function getUserFromRow(row) {
 
-    const searchInput =
-        document.getElementById("userSearch");
-
-    if (!searchInput) {
-        return;
+    if (!row) {
+        return null;
     }
 
-    searchInput.addEventListener(
-        "input",
-        filterUsers
-    );
 
-}
+    return {
 
+        id:
+            row.dataset.userId || "",
 
-function focusSearch() {
+        username:
+            row.dataset.username || "",
 
-    const searchInput =
-        document.getElementById("userSearch");
+        email:
+            row.dataset.email || "",
 
-    if (searchInput) {
+        role:
+            row.dataset.role || "",
 
-        searchInput.focus();
+        status:
+            row.dataset.status || "",
 
-    }
+        active:
+            row.dataset.active === "true",
+
+        created:
+            row.dataset.created || "—",
+
+        row:
+            row
+
+    };
 
 }
 
 
 /* =========================================================
-   FILTERS
-========================================================= */
-
-function initializeFilters() {
-
-    const roleFilter =
-        document.getElementById("roleFilter");
-
-    const statusFilter =
-        document.getElementById("statusFilter");
-
-    const clearFilters =
-        document.getElementById("clearFilters");
-
-
-    if (roleFilter) {
-
-        roleFilter.addEventListener(
-            "change",
-            filterUsers
-        );
-
-    }
-
-
-    if (statusFilter) {
-
-        statusFilter.addEventListener(
-            "change",
-            filterUsers
-        );
-
-    }
-
-
-    if (clearFilters) {
-
-        clearFilters.addEventListener(
-            "click",
-            function () {
-
-                const search =
-                    document.getElementById(
-                        "userSearch"
-                    );
-
-                if (search) {
-                    search.value = "";
-                }
-
-                if (roleFilter) {
-                    roleFilter.value = "";
-                }
-
-                if (statusFilter) {
-                    statusFilter.value = "";
-                }
-
-                filterUsers();
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   FILTER USERS
-========================================================= */
-
-function filterUsers() {
-
-    const searchInput =
-        document.getElementById("userSearch");
-
-    const roleFilter =
-        document.getElementById("roleFilter");
-
-    const statusFilter =
-        document.getElementById("statusFilter");
-
-
-    const searchValue =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    const roleValue =
-        roleFilter
-            ? roleFilter.value.toLowerCase()
-            : "";
-
-
-    const statusValue =
-        statusFilter
-            ? statusFilter.value.toLowerCase()
-            : "";
-
-
-    const rows =
-        document.querySelectorAll(
-            "#usersTableBody .user-row"
-        );
-
-
-    let visibleCount = 0;
-
-
-    rows.forEach(function (row) {
-
-        const username =
-            row.dataset.username || "";
-
-        const email =
-            row.dataset.email || "";
-
-        const role =
-            row.dataset.role || "";
-
-        const status =
-            row.dataset.status || "";
-
-
-        const matchesSearch =
-            !searchValue ||
-            username.includes(searchValue) ||
-            email.includes(searchValue) ||
-            role.includes(searchValue) ||
-            status.includes(searchValue);
-
-
-        const matchesRole =
-            !roleValue ||
-            role === roleValue;
-
-
-        const matchesStatus =
-            !statusValue ||
-            status === statusValue;
-
-
-        const shouldDisplay =
-            matchesSearch &&
-            matchesRole &&
-            matchesStatus;
-
-
-        row.style.display =
-            shouldDisplay
-                ? ""
-                : "none";
-
-
-        if (shouldDisplay) {
-
-            visibleCount++;
-
-        }
-
-    });
-
-
-    updateVisibleUserCount(visibleCount);
-
-}
-
-
-/* =========================================================
-   USER COUNT
-========================================================= */
-
-function updateVisibleUserCount(count) {
-
-    const counter =
-        document.getElementById(
-            "userCountText"
-        );
-
-    if (!counter) {
-        return;
-    }
-
-    counter.textContent =
-        "Showing " +
-        count +
-        " user" +
-        (count === 1 ? "" : "s");
-
-}
-
-
-/* =========================================================
-   SELECT USER ROW
+   SELECT USER
 ========================================================= */
 
 function selectUserRow(row) {
@@ -294,136 +105,153 @@ function selectUserRow(row) {
     }
 
 
+    /* REMOVE PREVIOUS SELECTION */
+
     document
         .querySelectorAll(".user-row")
-        .forEach(function (item) {
+        .forEach(function (currentRow) {
 
-            item.classList.remove(
+            currentRow.classList.remove(
                 "selected"
             );
 
         });
 
 
-    row.classList.add("selected");
+    /* SELECT ROW */
+
+    row.classList.add(
+        "selected"
+    );
 
 
-    const actionButtons =
-        row.querySelectorAll(
-            ".table-actions button"
-        );
+    /* STORE USER */
+
+    selectedUser =
+        getUserFromRow(row);
 
 
-    if (actionButtons.length > 0) {
-
-        actionButtons[0].click();
-
+    if (!selectedUser) {
+        return;
     }
+
+
+    /* DISPLAY PROFILE */
+
+    displaySelectedUser();
 
 }
 
 
 /* =========================================================
-   SHOW USER DETAILS
+   DISPLAY SELECTED USER
 ========================================================= */
 
-function showUserDetails(
-    id,
-    username,
-    email,
-    role,
-    isActive,
-    created
-) {
+function displaySelectedUser() {
 
-    const active =
-        String(isActive).toLowerCase()
-        === "true";
+    if (!selectedUser) {
+        return;
+    }
 
 
-    selectedUser = {
-        id: id,
-        username: username,
-        email: email,
-        role: role,
-        isActive: active,
-        created: created
-    };
-
-
-    const empty =
+    const emptyState =
         document.getElementById(
             "profileEmpty"
         );
 
-    const content =
+    const profileContent =
         document.getElementById(
             "profileContent"
         );
 
 
-    if (empty) {
+    /* HIDE EMPTY STATE */
 
-        empty.classList.add("hidden");
+    if (emptyState) {
 
-    }
-
-
-    if (content) {
-
-        content.classList.remove("hidden");
+        emptyState.classList.add(
+            "hidden"
+        );
 
     }
 
 
-    setText(
+    /* SHOW PROFILE */
+
+    if (profileContent) {
+
+        profileContent.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    /* USERNAME */
+
+    setElementText(
         "profileUsername",
-        username
+        selectedUser.username
     );
 
-    setText(
+
+    /* ROLE */
+
+    setElementText(
         "profileRole",
-        formatRole(role)
+        formatRole(
+            selectedUser.role
+        )
     );
 
-    setText(
-        "profileEmail",
-        email
-    );
 
-    setText(
+    /* USER ID */
+
+    setElementText(
         "profileUserId",
-        id
+        selectedUser.id
     );
 
-    setText(
-        "profileRoleValue",
-        formatRole(role)
+
+    /* EMAIL */
+
+    setElementText(
+        "profileEmail",
+        selectedUser.email || "No email"
     );
 
-    setText(
+
+    /* STATUS */
+
+    setElementText(
         "profileStatus",
-        active
+        selectedUser.active
             ? "Active"
             : "Disabled"
     );
 
-    setText(
+
+    /* CREATED */
+
+    setElementText(
         "profileCreated",
-        created
+        selectedUser.created
     );
 
+
+    /* AVATAR */
 
     const avatar =
         document.getElementById(
             "profileAvatar"
         );
 
+
     if (avatar) {
 
         avatar.textContent =
-            username
-                ? username
+            selectedUser.username
+                ? selectedUser.username
                     .charAt(0)
                     .toUpperCase()
                 : "U";
@@ -431,90 +259,31 @@ function showUserDetails(
     }
 
 
-    updateProfileStatus(active);
-
-    refreshIcons();
-
-}
+    updateSelectedUserStatus();
 
 
-/* =========================================================
-   PROFILE STATUS
-========================================================= */
-
-function updateProfileStatus(active) {
-
-    const indicator =
-        document.getElementById(
-            "profileStatusIndicator"
-        );
-
-    const button =
-        document.getElementById(
-            "disableAccountButton"
-        );
-
-
-    if (indicator) {
-
-        indicator.classList.toggle(
-            "disabled",
-            !active
-        );
-
-    }
-
-
-    if (!button) {
-        return;
-    }
-
-
-    if (active) {
-
-        button.classList.remove(
-            "enable"
-        );
-
-        button.innerHTML = `
-            <i data-lucide="user-x"></i>
-            Disable Account
-        `;
-
-    } else {
-
-        button.classList.add(
-            "enable"
-        );
-
-        button.innerHTML = `
-            <i data-lucide="user-check"></i>
-            Enable Account
-        `;
-
-    }
-
-
-    refreshIcons();
+    refreshLucideIcons();
 
 }
 
 
 /* =========================================================
-   TEXT HELPER
+   SET TEXT
 ========================================================= */
 
-function setText(id, value) {
+function setElementText(id, text) {
 
     const element =
         document.getElementById(id);
 
-    if (element) {
 
-        element.textContent =
-            value || "—";
-
+    if (!element) {
+        return;
     }
+
+
+    element.textContent =
+        text || "—";
 
 }
 
@@ -525,194 +294,298 @@ function setText(id, value) {
 
 function formatRole(role) {
 
-    if (!role) {
-        return "—";
-    }
+    const value =
+        String(
+            role || ""
+        ).toLowerCase();
 
 
-    const normalized =
-        role.toLowerCase();
-
-
-    if (
-        normalized === "admin" ||
-        normalized === "administrator"
-    ) {
+    if (value === "admin") {
 
         return "Administrator";
 
     }
 
 
-    if (normalized === "officer") {
+    if (value === "official") {
 
-        return "Officer";
+        return "Barangay Official";
 
     }
 
 
-    if (normalized === "staff") {
+    if (!value) {
 
-        return "Staff";
+        return "—";
 
     }
 
 
     return (
-        role.charAt(0).toUpperCase() +
-        role.slice(1)
+        value.charAt(0).toUpperCase() +
+        value.slice(1)
     );
 
 }
 
 
 /* =========================================================
-   CREATE USER MODAL
+   UPDATE STATUS BUTTON
 ========================================================= */
 
-function openCreateUserModal() {
+function updateSelectedUserStatus() {
 
-    openModal("createUserModal");
+    if (!selectedUser) {
+        return;
+    }
 
 
-    const username =
+    const statusIndicator =
         document.getElementById(
-            "createUsername"
+            "profileStatusIndicator"
+        );
+
+    const button =
+        document.getElementById(
+            "disableAccountButton"
+        );
+
+    const text =
+        document.getElementById(
+            "disableAccountText"
+        );
+
+    const icon =
+        document.getElementById(
+            "disableAccountIcon"
         );
 
 
-    setTimeout(function () {
+    /* STATUS INDICATOR */
 
-        if (username) {
-            username.focus();
+    if (statusIndicator) {
+
+        if (selectedUser.active) {
+
+            statusIndicator.classList.remove(
+                "disabled"
+            );
+
+        } else {
+
+            statusIndicator.classList.add(
+                "disabled"
+            );
+
         }
 
-    }, 100);
-
-}
+    }
 
 
-function closeCreateUserModal() {
+    if (!button) {
+        return;
+    }
 
-    closeModal("createUserModal");
+
+    /* ACTIVE USER */
+
+    if (selectedUser.active) {
+
+        button.classList.remove(
+            "enable"
+        );
+
+
+        if (text) {
+
+            text.textContent =
+                "Disable Account";
+
+        }
+
+
+        if (icon) {
+
+            icon.setAttribute(
+                "data-lucide",
+                "user-x"
+            );
+
+        }
+
+    }
+
+
+    /* DISABLED USER */
+
+    else {
+
+        button.classList.add(
+            "enable"
+        );
+
+
+        if (text) {
+
+            text.textContent =
+                "Enable Account";
+
+        }
+
+
+        if (icon) {
+
+            icon.setAttribute(
+                "data-lucide",
+                "user-check"
+            );
+
+        }
+
+    }
+
+
+    refreshLucideIcons();
 
 }
 
 
 /* =========================================================
-   EDIT USER
+   VIEW BUTTON
 ========================================================= */
 
-function openEditUserModal(
-    id,
-    username,
-    email,
-    role,
-    isActive
+function viewUserFromButton(
+    event,
+    button
 ) {
 
-    document.getElementById(
-        "editUserId"
-    ).value = id;
+    event.preventDefault();
+
+    event.stopPropagation();
 
 
-    document.getElementById(
-        "editUsername"
-    ).value = username;
-
-
-    document.getElementById(
-        "editEmail"
-    ).value = email;
-
-
-    const roleSelect =
-        document.getElementById(
-            "editRole"
+    const row =
+        button.closest(
+            ".user-row"
         );
 
 
-    if (roleSelect) {
-
-        let normalizedRole =
-            String(role)
-                .toLowerCase();
-
-
-        if (
-            normalizedRole ===
-            "administrator"
-        ) {
-
-            normalizedRole = "admin";
-
-        }
-
-
-        roleSelect.value =
-            normalizedRole;
-
+    if (!row) {
+        return;
     }
 
 
-    document.getElementById(
-        "editStatus"
-    ).value =
-        String(isActive)
-            .toLowerCase()
-            === "true"
-            ? "1"
-            : "0";
-
-
-    openModal("editUserModal");
+    selectUserRow(row);
 
 }
 
+
+/* =========================================================
+   EDIT BUTTON
+========================================================= */
+
+function editUserFromButton(
+    event,
+    button
+) {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    const row =
+        button.closest(
+            ".user-row"
+        );
+
+
+    if (!row) {
+        return;
+    }
+
+
+    selectUserRow(row);
+
+
+    editSelectedUser();
+
+}
+
+
+/* =========================================================
+   MORE BUTTON
+========================================================= */
+
+function moreUserActions(
+    event,
+    button
+) {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    const row =
+        button.closest(
+            ".user-row"
+        );
+
+
+    if (!row) {
+        return;
+    }
+
+
+    selectUserRow(row);
+
+
+    openDisableModal();
+
+}
+
+
+/* =========================================================
+   EDIT SELECTED USER
+========================================================= */
 
 function editSelectedUser() {
 
     if (!selectedUser) {
 
+        alert(
+            "Please select a user first."
+        );
+
         return;
 
-    }
-
-
-    openEditUserModal(
-        selectedUser.id,
-        selectedUser.username,
-        selectedUser.email,
-        selectedUser.role,
-        selectedUser.isActive
-            ? "true"
-            : "false"
-    );
-
-}
-
-
-function closeEditUserModal() {
-
-    closeModal("editUserModal");
-
-}
-
-
-/* =========================================================
-   RESET PASSWORD
-========================================================= */
-
-function openResetPasswordModal() {
-
-    if (!selectedUser) {
-        return;
     }
 
 
     const userId =
         document.getElementById(
-            "resetPasswordUserId"
+            "editUserId"
+        );
+
+    const username =
+        document.getElementById(
+            "editUsername"
+        );
+
+    const email =
+        document.getElementById(
+            "editEmail"
+        );
+
+    const role =
+        document.getElementById(
+            "editRole"
+        );
+
+    const status =
+        document.getElementById(
+            "editStatus"
         );
 
 
@@ -724,10 +597,149 @@ function openResetPasswordModal() {
     }
 
 
+    if (username) {
+
+        username.value =
+            selectedUser.username;
+
+    }
+
+
+    if (email) {
+
+        email.value =
+            selectedUser.email;
+
+    }
+
+
+    if (role) {
+
+        role.value =
+            selectedUser.role;
+
+    }
+
+
+    if (status) {
+
+        status.value =
+            selectedUser.active
+                ? "1"
+                : "0";
+
+    }
+
+
+    openModal(
+        "editUserModal"
+    );
+
+}
+
+
+/* =========================================================
+   CREATE USER
+========================================================= */
+
+function openCreateUserModal() {
+
+    const form =
+        document.getElementById(
+            "createUserForm"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+    openModal(
+        "createUserModal"
+    );
+
+
+    setTimeout(
+        function () {
+
+            const username =
+                document.getElementById(
+                    "createUsername"
+                );
+
+
+            if (username) {
+
+                username.focus();
+
+            }
+
+        },
+        100
+    );
+
+}
+
+
+function closeCreateUserModal() {
+
+    closeModal(
+        "createUserModal"
+    );
+
+}
+
+
+/* =========================================================
+   EDIT MODAL
+========================================================= */
+
+function closeEditUserModal() {
+
+    closeModal(
+        "editUserModal"
+    );
+
+}
+
+
+/* =========================================================
+   RESET PASSWORD
+========================================================= */
+
+function openResetPasswordModal() {
+
+    if (!selectedUser) {
+
+        alert(
+            "Please select a user first."
+        );
+
+        return;
+
+    }
+
+
+    const userId =
+        document.getElementById(
+            "resetPasswordUserId"
+        );
+
     const password =
         document.getElementById(
             "newPassword"
         );
+
+
+    if (userId) {
+
+        userId.value =
+            selectedUser.id;
+
+    }
 
 
     if (password) {
@@ -739,6 +751,20 @@ function openResetPasswordModal() {
 
     openModal(
         "resetPasswordModal"
+    );
+
+
+    setTimeout(
+        function () {
+
+            if (password) {
+
+                password.focus();
+
+            }
+
+        },
+        100
     );
 
 }
@@ -754,13 +780,19 @@ function closeResetPasswordModal() {
 
 
 /* =========================================================
-   DISABLE / ENABLE USER
+   ENABLE / DISABLE
 ========================================================= */
 
 function openDisableModal() {
 
     if (!selectedUser) {
+
+        alert(
+            "Please select a user first."
+        );
+
         return;
+
     }
 
 
@@ -798,26 +830,35 @@ function openDisableModal() {
     }
 
 
-    if (selectedUser.isActive) {
+    /* DISABLE */
+
+    if (selectedUser.active) {
 
         if (action) {
+
             action.value =
                 "disable_user";
+
         }
 
+
         if (title) {
+
             title.textContent =
                 "Disable Account?";
+
         }
+
 
         if (message) {
 
             message.textContent =
                 selectedUser.username +
-                " will no longer be able " +
-                "to access BantayBarangay.";
+                " will no longer be able to access " +
+                "BantayBarangay until the account is enabled again.";
 
         }
+
 
         if (button) {
 
@@ -829,26 +870,37 @@ function openDisableModal() {
 
         }
 
-    } else {
+    }
+
+
+    /* ENABLE */
+
+    else {
 
         if (action) {
+
             action.value =
                 "enable_user";
+
         }
 
+
         if (title) {
+
             title.textContent =
                 "Enable Account?";
+
         }
+
 
         if (message) {
 
             message.textContent =
                 selectedUser.username +
-                " will regain access " +
-                "to BantayBarangay.";
+                " will regain access to BantayBarangay.";
 
         }
+
 
         if (button) {
 
@@ -880,7 +932,7 @@ function closeDisableModal() {
 
 
 /* =========================================================
-   GENERIC MODAL
+   MODALS
 ========================================================= */
 
 function openModal(id) {
@@ -890,17 +942,27 @@ function openModal(id) {
 
 
     if (!modal) {
+
+        console.error(
+            "Modal not found:",
+            id
+        );
+
         return;
+
     }
 
 
-    modal.classList.remove("hidden");
+    modal.classList.remove(
+        "hidden"
+    );
+
 
     document.body.style.overflow =
         "hidden";
 
 
-    refreshIcons();
+    refreshLucideIcons();
 
 }
 
@@ -916,16 +978,18 @@ function closeModal(id) {
     }
 
 
-    modal.classList.add("hidden");
+    modal.classList.add(
+        "hidden"
+    );
 
 
-    const openModal =
+    const remainingModal =
         document.querySelector(
             ".modal-overlay:not(.hidden)"
         );
 
 
-    if (!openModal) {
+    if (!remainingModal) {
 
         document.body.style.overflow =
             "";
@@ -952,7 +1016,8 @@ function initializeModalEvents() {
                 function (event) {
 
                     if (
-                        event.target === modal
+                        event.target ===
+                        modal
                     ) {
 
                         closeModal(
@@ -972,22 +1037,23 @@ function initializeModalEvents() {
         function (event) {
 
             if (
-                event.key !== "Escape"
+                event.key !==
+                "Escape"
             ) {
                 return;
             }
 
 
-            const openModal =
+            const modal =
                 document.querySelector(
                     ".modal-overlay:not(.hidden)"
                 );
 
 
-            if (openModal) {
+            if (modal) {
 
                 closeModal(
-                    openModal.id
+                    modal.id
                 );
 
             }
@@ -999,90 +1065,7 @@ function initializeModalEvents() {
 
 
 /* =========================================================
-   CREATE FORM VALIDATION
-========================================================= */
-
-function initializeCreateForm() {
-
-    const form =
-        document.getElementById(
-            "createUserForm"
-        );
-
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            const password =
-                document.getElementById(
-                    "createPassword"
-                );
-
-            const confirm =
-                document.getElementById(
-                    "confirmPassword"
-                );
-
-            const error =
-                document.getElementById(
-                    "passwordMatchError"
-                );
-
-
-            if (
-                !password ||
-                !confirm
-            ) {
-                return;
-            }
-
-
-            if (
-                password.value !==
-                confirm.value
-            ) {
-
-                event.preventDefault();
-
-
-                if (error) {
-
-                    error.classList.remove(
-                        "hidden"
-                    );
-
-                }
-
-
-                confirm.focus();
-
-                return;
-
-            }
-
-
-            if (error) {
-
-                error.classList.add(
-                    "hidden"
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PASSWORD VISIBILITY
+   PASSWORD TOGGLE
 ========================================================= */
 
 function togglePassword(
@@ -1101,12 +1084,13 @@ function togglePassword(
     }
 
 
-    const showPassword =
-        input.type === "password";
+    const hidden =
+        input.type ===
+        "password";
 
 
     input.type =
-        showPassword
+        hidden
             ? "text"
             : "password";
 
@@ -1114,20 +1098,410 @@ function togglePassword(
     if (button) {
 
         button.innerHTML =
-            showPassword
+            hidden
                 ? '<i data-lucide="eye-off"></i>'
                 : '<i data-lucide="eye"></i>';
 
     }
 
 
-    refreshIcons();
+    refreshLucideIcons();
 
 }
 
 
 /* =========================================================
-   EXPORT USERS
+   SEARCH
+========================================================= */
+
+function initializeUserSearch() {
+
+    const search =
+        document.getElementById(
+            "userSearchInput"
+        );
+
+
+    if (!search) {
+        return;
+    }
+
+
+    search.addEventListener(
+        "input",
+        filterUsers
+    );
+
+}
+
+
+function focusSearch() {
+
+    const search =
+        document.getElementById(
+            "userSearchInput"
+        );
+
+
+    if (search) {
+
+        search.focus();
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER EVENTS
+========================================================= */
+
+function initializeUserFilters() {
+
+    const role =
+        document.getElementById(
+            "roleFilter"
+        );
+
+    const status =
+        document.getElementById(
+            "statusFilter"
+        );
+
+    const clear =
+        document.getElementById(
+            "clearFilters"
+        );
+
+
+    if (role) {
+
+        role.addEventListener(
+            "change",
+            filterUsers
+        );
+
+    }
+
+
+    if (status) {
+
+        status.addEventListener(
+            "change",
+            filterUsers
+        );
+
+    }
+
+
+    if (clear) {
+
+        clear.addEventListener(
+            "click",
+            clearUserFilters
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER USERS
+========================================================= */
+
+function filterUsers() {
+
+    const searchElement =
+        document.getElementById(
+            "userSearchInput"
+        );
+
+    const roleElement =
+        document.getElementById(
+            "roleFilter"
+        );
+
+    const statusElement =
+        document.getElementById(
+            "statusFilter"
+        );
+
+
+    const search =
+        searchElement
+            ? searchElement.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const role =
+        roleElement
+            ? roleElement.value
+                .toLowerCase()
+            : "";
+
+
+    const status =
+        statusElement
+            ? statusElement.value
+                .toLowerCase()
+            : "";
+
+
+    let visible =
+        0;
+
+
+    document
+        .querySelectorAll(
+            "#usersTableBody .user-row"
+        )
+        .forEach(function (row) {
+
+            const username =
+                (
+                    row.dataset.username ||
+                    ""
+                ).toLowerCase();
+
+            const email =
+                (
+                    row.dataset.email ||
+                    ""
+                ).toLowerCase();
+
+            const userRole =
+                (
+                    row.dataset.role ||
+                    ""
+                ).toLowerCase();
+
+            const userStatus =
+                (
+                    row.dataset.status ||
+                    ""
+                ).toLowerCase();
+
+
+            const searchMatch =
+                !search ||
+                username.includes(search) ||
+                email.includes(search) ||
+                userRole.includes(search) ||
+                userStatus.includes(search);
+
+
+            const roleMatch =
+                !role ||
+                userRole === role;
+
+
+            const statusMatch =
+                !status ||
+                userStatus === status;
+
+
+            const show =
+                searchMatch &&
+                roleMatch &&
+                statusMatch;
+
+
+            row.style.display =
+                show
+                    ? ""
+                    : "none";
+
+
+            if (show) {
+
+                visible++;
+
+            }
+
+        });
+
+
+    updateUserCount(
+        visible
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR FILTERS
+========================================================= */
+
+function clearUserFilters() {
+
+    const search =
+        document.getElementById(
+            "userSearchInput"
+        );
+
+    const role =
+        document.getElementById(
+            "roleFilter"
+        );
+
+    const status =
+        document.getElementById(
+            "statusFilter"
+        );
+
+
+    if (search) {
+        search.value = "";
+    }
+
+
+    if (role) {
+        role.value = "";
+    }
+
+
+    if (status) {
+        status.value = "";
+    }
+
+
+    filterUsers();
+
+}
+
+
+/* =========================================================
+   USER COUNT
+========================================================= */
+
+function updateUserCount(
+    count = null
+) {
+
+    const counter =
+        document.getElementById(
+            "userCountText"
+        );
+
+
+    if (!counter) {
+        return;
+    }
+
+
+    if (count === null) {
+
+        count =
+            document.querySelectorAll(
+                "#usersTableBody .user-row"
+            ).length;
+
+    }
+
+
+    counter.textContent =
+        "Showing " +
+        count +
+        " user" +
+        (
+            count === 1
+                ? ""
+                : "s"
+        );
+
+}
+
+
+/* =========================================================
+   FORM VALIDATION
+========================================================= */
+
+function initializeForms() {
+
+    const createForm =
+        document.getElementById(
+            "createUserForm"
+        );
+
+    const resetForm =
+        document.getElementById(
+            "resetPasswordForm"
+        );
+
+
+    if (createForm) {
+
+        createForm.addEventListener(
+            "submit",
+            function (event) {
+
+                const password =
+                    document.getElementById(
+                        "createPassword"
+                    );
+
+
+                if (
+                    password &&
+                    password.value.length < 8
+                ) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Password must contain at least 8 characters."
+                    );
+
+                    password.focus();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (resetForm) {
+
+        resetForm.addEventListener(
+            "submit",
+            function (event) {
+
+                const password =
+                    document.getElementById(
+                        "newPassword"
+                    );
+
+
+                if (
+                    password &&
+                    password.value.length < 8
+                ) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Password must contain at least 8 characters."
+                    );
+
+                    password.focus();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   EXPORT
 ========================================================= */
 
 function exportUsers() {
@@ -1138,7 +1512,45 @@ function exportUsers() {
         );
 
 
-    if (!rows.length) {
+    const data = [
+        [
+            "User ID",
+            "Username",
+            "Email",
+            "Role",
+            "Status",
+            "Created"
+        ]
+    ];
+
+
+    rows.forEach(function (row) {
+
+        if (
+            row.style.display ===
+            "none"
+        ) {
+            return;
+        }
+
+
+        data.push(
+            [
+                row.dataset.userId || "",
+                row.dataset.username || "",
+                row.dataset.email || "",
+                formatRole(
+                    row.dataset.role
+                ),
+                row.dataset.status || "",
+                row.dataset.created || ""
+            ]
+        );
+
+    });
+
+
+    if (data.length === 1) {
 
         alert(
             "There are no users to export."
@@ -1149,43 +1561,14 @@ function exportUsers() {
     }
 
 
-    const data = [
-        [
-            "User ID",
-            "Username",
-            "Email",
-            "Role",
-            "Status"
-        ]
-    ];
-
-
-    rows.forEach(function (row) {
-
-        if (
-            row.style.display === "none"
-        ) {
-            return;
-        }
-
-
-        data.push([
-            row.dataset.userId || "",
-            row.dataset.username || "",
-            row.dataset.email || "",
-            row.dataset.role || "",
-            row.dataset.status || ""
-        ]);
-
-    });
-
-
     const csv =
         data
             .map(function (row) {
 
                 return row
-                    .map(escapeCSV)
+                    .map(
+                        escapeCSV
+                    )
                     .join(",");
 
             })
@@ -1203,44 +1586,57 @@ function exportUsers() {
 
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
 
     const link =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
 
-    link.href = url;
+    link.href =
+        url;
 
     link.download =
         "bantaybarangay_users.csv";
 
 
-    document.body.appendChild(link);
+    document.body.appendChild(
+        link
+    );
+
 
     link.click();
 
-    document.body.removeChild(link);
+
+    link.remove();
 
 
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(
+        url
+    );
 
 }
 
 
 /* =========================================================
-   CSV HELPER
+   CSV ESCAPE
 ========================================================= */
 
 function escapeCSV(value) {
 
-    const stringValue =
-        String(value ?? "");
+    const string =
+        String(
+            value ?? ""
+        );
 
 
     return (
         '"' +
-        stringValue.replace(
+        string.replace(
             /"/g,
             '""'
         ) +

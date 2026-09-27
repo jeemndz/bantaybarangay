@@ -23,6 +23,31 @@ User Management | BantayBarangay
 
 
     <!-- =====================================================
+         DJANGO MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="user-management-messages">
+
+            {% for message in messages %}
+
+                <div class="management-message {{ message.tags }}">
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
          PAGE HEADER
     ====================================================== -->
 
@@ -35,8 +60,7 @@ User Management | BantayBarangay
             </h1>
 
             <p class="page-subtitle">
-                Manage administrative access, barangay officials,
-                and resident accounts.
+                Manage administrative access and barangay official accounts.
             </p>
 
         </div>
@@ -47,21 +71,26 @@ User Management | BantayBarangay
             class="btn-primary create-user-button"
             onclick="openCreateUserModal()"
         >
+
             <i data-lucide="user-plus"></i>
 
             <span>
                 Create New User
             </span>
+
         </button>
 
     </header>
 
 
     <!-- =====================================================
-         FILTERS
+         SEARCH AND FILTERS
     ====================================================== -->
 
     <section class="management-toolbar">
+
+
+        <!-- SEARCH -->
 
         <div class="search-box">
 
@@ -77,30 +106,58 @@ User Management | BantayBarangay
         </div>
 
 
+        <!-- FILTERS -->
+
         <div class="toolbar-actions">
+
+
+            <!-- ROLE FILTER -->
 
             <select
                 id="roleFilter"
                 class="toolbar-select"
                 aria-label="Filter users by role"
             >
-                <option value="">All Roles</option>
-                <option value="admin">Administrator</option>
-                <option value="official">Barangay Official</option>
-                <option value="resident">Resident</option>
+
+                <option value="">
+                    All Roles
+                </option>
+
+                <option value="admin">
+                    Administrator
+                </option>
+
+                <option value="official">
+                    Barangay Official
+                </option>
+
             </select>
 
+
+            <!-- STATUS FILTER -->
 
             <select
                 id="statusFilter"
                 class="toolbar-select"
                 aria-label="Filter users by status"
             >
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="disabled">Disabled</option>
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="disabled">
+                    Disabled
+                </option>
+
             </select>
 
+
+            <!-- CLEAR FILTERS -->
 
             <button
                 type="button"
@@ -109,7 +166,9 @@ User Management | BantayBarangay
                 title="Clear filters"
                 aria-label="Clear filters"
             >
+
                 <i data-lucide="rotate-ccw"></i>
+
             </button>
 
         </div>
@@ -139,10 +198,11 @@ User Management | BantayBarangay
                 </strong>
 
                 <span class="stat-description">
-                    Registered accounts
+                    System accounts
                 </span>
 
             </div>
+
 
             <div class="stat-icon">
                 <i data-lucide="users"></i>
@@ -171,6 +231,7 @@ User Management | BantayBarangay
 
             </div>
 
+
             <div class="stat-icon">
                 <i data-lucide="circle-check"></i>
             </div>
@@ -189,7 +250,7 @@ User Management | BantayBarangay
                 </span>
 
                 <strong class="stat-value">
-                    {{ administrators|default:0 }}
+                    {{ administrator_count|default:0 }}
                 </strong>
 
                 <span class="stat-description">
@@ -198,6 +259,7 @@ User Management | BantayBarangay
 
             </div>
 
+
             <div class="stat-icon">
                 <i data-lucide="shield-check"></i>
             </div>
@@ -205,7 +267,7 @@ User Management | BantayBarangay
         </article>
 
 
-        <!-- BARANGAY OFFICIALS -->
+        <!-- OFFICIALS -->
 
         <article class="stat-card">
 
@@ -216,7 +278,7 @@ User Management | BantayBarangay
                 </span>
 
                 <strong class="stat-value">
-                    {{ barangay_officials|default:0 }}
+                    {{ official_count|default:0 }}
                 </strong>
 
                 <span class="stat-description">
@@ -225,6 +287,7 @@ User Management | BantayBarangay
 
             </div>
 
+
             <div class="stat-icon">
                 <i data-lucide="briefcase-business"></i>
             </div>
@@ -232,7 +295,7 @@ User Management | BantayBarangay
         </article>
 
 
-        <!-- DISABLED -->
+        <!-- DISABLED USERS -->
 
         <article class="stat-card">
 
@@ -252,6 +315,7 @@ User Management | BantayBarangay
 
             </div>
 
+
             <div class="stat-icon danger">
                 <i data-lucide="circle-slash"></i>
             </div>
@@ -262,14 +326,14 @@ User Management | BantayBarangay
 
 
     <!-- =====================================================
-         MAIN GRID
+         MAIN USER MANAGEMENT GRID
     ====================================================== -->
 
     <section class="user-management-grid">
 
 
         <!-- =================================================
-             DIRECTORY
+             USER DIRECTORY
         ================================================== -->
 
         <div class="directory-card">
@@ -286,7 +350,7 @@ User Management | BantayBarangay
                     </h2>
 
                     <p>
-                        Manage registered BantayBarangay users.
+                        Manage administrators and barangay officials.
                     </p>
 
                 </div>
@@ -294,15 +358,23 @@ User Management | BantayBarangay
 
                 <div class="directory-header-actions">
 
+
+                    <!-- FOCUS SEARCH -->
+
                     <button
                         type="button"
                         class="icon-button"
-                        title="Filter users"
-                        aria-label="Filter users"
+                        title="Search users"
+                        aria-label="Search users"
+                        onclick="focusSearch()"
                     >
+
                         <i data-lucide="list-filter"></i>
+
                     </button>
 
+
+                    <!-- EXPORT -->
 
                     <button
                         type="button"
@@ -311,7 +383,9 @@ User Management | BantayBarangay
                         aria-label="Export users"
                         onclick="exportUsers()"
                     >
+
                         <i data-lucide="download"></i>
+
                     </button>
 
                 </div>
@@ -320,29 +394,50 @@ User Management | BantayBarangay
 
 
             <!-- =================================================
-                 USERS TABLE
+                 USER TABLE
             ================================================== -->
 
             <div class="table-wrapper">
 
                 <table class="users-table">
 
+
+                    <!-- TABLE HEADER -->
+
                     <thead>
 
                         <tr>
-                            <th>User</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Email</th>
-                            <th>Created</th>
+
+                            <th>
+                                User
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
 
                             <th class="actions-column">
                                 Actions
                             </th>
+
                         </tr>
 
                     </thead>
 
+
+                    <!-- TABLE BODY -->
 
                     <tbody id="usersTableBody">
 
@@ -350,36 +445,53 @@ User Management | BantayBarangay
 
                         <tr
                             class="user-row"
+
                             data-user-id="{{ user.user_id }}"
-                            data-username="{{ user.username|default:''|lower }}"
-                            data-email="{{ user.email|default:''|lower }}"
+
+                            data-username="{{ user.username|default:''|escape }}"
+
+                            data-email="{{ user.email|default:''|escape }}"
+
                             data-role="{{ user.role|default:''|lower }}"
+
                             data-status="{% if user.is_active %}active{% else %}disabled{% endif %}"
+
+                            data-active="{% if user.is_active %}true{% else %}false{% endif %}"
+
+                            data-created="{% if user.created_at %}{{ user.created_at|date:'M d, Y' }}{% else %}—{% endif %}"
+
+                            onclick="selectUserRow(this)"
                         >
 
 
-                            <!-- USER -->
+                            <!-- =================================
+                                 USER
+                            ================================== -->
 
-                            <td
-                                class="user-select-cell"
-                                onclick="selectUserFromElement(this)"
-                            >
+                            <td>
 
                                 <div class="table-user">
 
                                     <div class="table-avatar">
+
                                         {{ user.username|slice:":1"|upper }}
+
                                     </div>
 
 
                                     <div class="table-user-information">
 
                                         <strong>
+
                                             {{ user.username }}
+
                                         </strong>
 
+
                                         <span>
+
                                             ID: {{ user.user_id }}
+
                                         </span>
 
                                     </div>
@@ -389,11 +501,15 @@ User Management | BantayBarangay
                             </td>
 
 
-                            <!-- ROLE -->
+                            <!-- =================================
+                                 ROLE
+                            ================================== -->
 
-                            <td onclick="selectUserFromElement(this)">
+                            <td>
 
-                                <span class="role-badge role-{{ user.role|lower }}">
+                                <span
+                                    class="role-badge role-{{ user.role|lower }}"
+                                >
 
                                     {% if user.role == "admin" %}
 
@@ -401,11 +517,7 @@ User Management | BantayBarangay
 
                                     {% elif user.role == "official" %}
 
-                                        Official
-
-                                    {% elif user.role == "resident" %}
-
-                                        Resident
+                                        Barangay Official
 
                                     {% else %}
 
@@ -418,52 +530,64 @@ User Management | BantayBarangay
                             </td>
 
 
-                            <!-- STATUS -->
+                            <!-- =================================
+                                 STATUS
+                            ================================== -->
 
-                            <td onclick="selectUserFromElement(this)">
+                            <td>
 
                                 {% if user.is_active %}
 
-                                <span class="status-badge status-active">
+                                    <span
+                                        class="status-badge status-active"
+                                    >
 
-                                    <span class="status-dot"></span>
+                                        <span class="status-dot"></span>
 
-                                    Active
+                                        Active
 
-                                </span>
+                                    </span>
 
                                 {% else %}
 
-                                <span class="status-badge status-disabled">
+                                    <span
+                                        class="status-badge status-disabled"
+                                    >
 
-                                    <span class="status-dot"></span>
+                                        <span class="status-dot"></span>
 
-                                    Disabled
+                                        Disabled
 
-                                </span>
+                                    </span>
 
                                 {% endif %}
 
                             </td>
 
 
-                            <!-- EMAIL -->
+                            <!-- =================================
+                                 EMAIL
+                            ================================== -->
 
-                            <td onclick="selectUserFromElement(this)">
+                            <td>
 
                                 <span
                                     class="email-cell"
                                     title="{{ user.email|default:'No email' }}"
                                 >
+
                                     {{ user.email|default:"No email" }}
+
                                 </span>
 
                             </td>
 
 
-                            <!-- CREATED -->
+                            <!-- =================================
+                                 CREATED DATE
+                            ================================== -->
 
-                            <td onclick="selectUserFromElement(this)">
+                            <td>
 
                                 {% if user.created_at %}
 
@@ -478,7 +602,9 @@ User Management | BantayBarangay
                             </td>
 
 
-                            <!-- ACTIONS -->
+                            <!-- =================================
+                                 ACTION BUTTONS
+                            ================================== -->
 
                             <td>
 
@@ -489,11 +615,13 @@ User Management | BantayBarangay
 
                                     <button
                                         type="button"
-                                        title="View user"
-                                        aria-label="View user"
+                                        title="View User"
+                                        aria-label="View User"
                                         onclick="viewUserFromButton(event, this)"
                                     >
+
                                         <i data-lucide="eye"></i>
+
                                     </button>
 
 
@@ -501,23 +629,27 @@ User Management | BantayBarangay
 
                                     <button
                                         type="button"
-                                        title="Edit user"
-                                        aria-label="Edit user"
+                                        title="Edit User"
+                                        aria-label="Edit User"
                                         onclick="editUserFromButton(event, this)"
                                     >
+
                                         <i data-lucide="square-pen"></i>
+
                                     </button>
 
 
-                                    <!-- MORE -->
+                                    <!-- ACCOUNT ACTION -->
 
                                     <button
                                         type="button"
-                                        title="More actions"
-                                        aria-label="More actions"
+                                        title="Account Actions"
+                                        aria-label="Account Actions"
                                         onclick="moreUserActions(event, this)"
                                     >
+
                                         <i data-lucide="ellipsis"></i>
+
                                     </button>
 
                                 </div>
@@ -529,22 +661,32 @@ User Management | BantayBarangay
 
                         {% empty %}
 
-                        <tr>
+
+                        <!-- =====================================
+                             EMPTY TABLE
+                        ====================================== -->
+
+                        <tr class="empty-table-row">
 
                             <td colspan="6">
 
                                 <div class="empty-users">
 
                                     <div class="empty-users-icon">
+
                                         <i data-lucide="users"></i>
+
                                     </div>
+
 
                                     <strong>
                                         No users found
                                     </strong>
 
+
                                     <span>
-                                        There are currently no registered users.
+                                        There are currently no administrators
+                                        or barangay officials.
                                     </span>
 
                                 </div>
@@ -568,7 +710,10 @@ User Management | BantayBarangay
 
             <div class="directory-footer">
 
-                <span class="directory-count">
+                <span
+                    class="directory-count"
+                    id="userCountText"
+                >
 
                     Showing {{ users|length }}
                     of {{ total_users|default:0 }} users
@@ -576,7 +721,11 @@ User Management | BantayBarangay
                 </span>
 
 
-                {% if page_obj %}
+                <!-- =============================================
+                     PAGINATION
+                ============================================== -->
+
+                {% if page_obj and page_obj.paginator.num_pages > 1 %}
 
                 <nav
                     class="pagination"
@@ -588,22 +737,26 @@ User Management | BantayBarangay
 
                     {% if page_obj.has_previous %}
 
-                    <a
-                        href="?page={{ page_obj.previous_page_number }}"
-                        class="pagination-button"
-                        aria-label="Previous page"
-                    >
-                        <i data-lucide="chevron-left"></i>
-                    </a>
+                        <a
+                            href="?page={{ page_obj.previous_page_number }}"
+                            class="pagination-button"
+                            aria-label="Previous page"
+                        >
+
+                            <i data-lucide="chevron-left"></i>
+
+                        </a>
 
                     {% else %}
 
-                    <span
-                        class="pagination-button disabled"
-                        aria-hidden="true"
-                    >
-                        <i data-lucide="chevron-left"></i>
-                    </span>
+                        <span
+                            class="pagination-button disabled"
+                            aria-hidden="true"
+                        >
+
+                            <i data-lucide="chevron-left"></i>
+
+                        </span>
 
                     {% endif %}
 
@@ -614,18 +767,22 @@ User Management | BantayBarangay
 
                         {% if number == page_obj.number %}
 
-                        <span class="pagination-active">
-                            {{ number }}
-                        </span>
+                            <span class="pagination-active">
+
+                                {{ number }}
+
+                            </span>
 
                         {% elif number >= page_obj.number|add:"-2" and number <= page_obj.number|add:"2" %}
 
-                        <a
-                            href="?page={{ number }}"
-                            class="pagination-number"
-                        >
-                            {{ number }}
-                        </a>
+                            <a
+                                href="?page={{ number }}"
+                                class="pagination-number"
+                            >
+
+                                {{ number }}
+
+                            </a>
 
                         {% endif %}
 
@@ -636,22 +793,26 @@ User Management | BantayBarangay
 
                     {% if page_obj.has_next %}
 
-                    <a
-                        href="?page={{ page_obj.next_page_number }}"
-                        class="pagination-button"
-                        aria-label="Next page"
-                    >
-                        <i data-lucide="chevron-right"></i>
-                    </a>
+                        <a
+                            href="?page={{ page_obj.next_page_number }}"
+                            class="pagination-button"
+                            aria-label="Next page"
+                        >
+
+                            <i data-lucide="chevron-right"></i>
+
+                        </a>
 
                     {% else %}
 
-                    <span
-                        class="pagination-button disabled"
-                        aria-hidden="true"
-                    >
-                        <i data-lucide="chevron-right"></i>
-                    </span>
+                        <span
+                            class="pagination-button disabled"
+                            aria-hidden="true"
+                        >
+
+                            <i data-lucide="chevron-right"></i>
+
+                        </span>
 
                     {% endif %}
 
@@ -665,7 +826,7 @@ User Management | BantayBarangay
 
 
         <!-- =================================================
-             USER PROFILE PANEL
+             SELECTED USER PROFILE
         ================================================== -->
 
         <aside
@@ -674,7 +835,9 @@ User Management | BantayBarangay
         >
 
 
-            <!-- EMPTY -->
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
 
             <div
                 class="profile-empty"
@@ -682,12 +845,16 @@ User Management | BantayBarangay
             >
 
                 <div class="profile-empty-icon">
+
                     <i data-lucide="user-round"></i>
+
                 </div>
+
 
                 <h3>
                     Select a user
                 </h3>
+
 
                 <p>
                     Select a user from the directory to view
@@ -697,13 +864,17 @@ User Management | BantayBarangay
             </div>
 
 
-            <!-- SELECTED USER -->
+            <!-- =================================================
+                 SELECTED USER CONTENT
+            ================================================== -->
 
             <div
                 class="profile-content hidden"
                 id="profileContent"
             >
 
+
+                <!-- PROFILE HEADER -->
 
                 <div class="profile-header">
 
@@ -715,6 +886,7 @@ User Management | BantayBarangay
                         >
                             U
                         </div>
+
 
                         <span
                             class="profile-status-indicator"
@@ -728,6 +900,7 @@ User Management | BantayBarangay
                         User
                     </h3>
 
+
                     <p id="profileRole">
                         Role
                     </p>
@@ -735,7 +908,9 @@ User Management | BantayBarangay
                 </div>
 
 
-                <!-- ACCOUNT INFORMATION -->
+                <!-- =============================================
+                     ACCOUNT INFORMATION
+                ============================================== -->
 
                 <div class="profile-information">
 
@@ -744,9 +919,13 @@ User Management | BantayBarangay
                     </h4>
 
 
+                    <!-- USER ID -->
+
                     <div class="information-row">
 
-                        <span>User ID</span>
+                        <span>
+                            User ID
+                        </span>
 
                         <strong id="profileUserId">
                             —
@@ -755,9 +934,13 @@ User Management | BantayBarangay
                     </div>
 
 
+                    <!-- EMAIL -->
+
                     <div class="information-row">
 
-                        <span>Email</span>
+                        <span>
+                            Email
+                        </span>
 
                         <strong id="profileEmail">
                             —
@@ -766,9 +949,13 @@ User Management | BantayBarangay
                     </div>
 
 
+                    <!-- STATUS -->
+
                     <div class="information-row">
 
-                        <span>Status</span>
+                        <span>
+                            Status
+                        </span>
 
                         <strong id="profileStatus">
                             —
@@ -777,9 +964,13 @@ User Management | BantayBarangay
                     </div>
 
 
+                    <!-- CREATED -->
+
                     <div class="information-row">
 
-                        <span>Created</span>
+                        <span>
+                            Created
+                        </span>
 
                         <strong id="profileCreated">
                             —
@@ -790,37 +981,51 @@ User Management | BantayBarangay
                 </div>
 
 
-                <!-- PROFILE ACTIONS -->
+                <!-- =============================================
+                     PROFILE ACTIONS
+                ============================================== -->
 
                 <div class="profile-actions">
+
+
+                    <!-- RESET PASSWORD -->
 
                     <button
                         type="button"
                         class="reset-password-button"
                         onclick="openResetPasswordModal()"
                     >
+
                         <i data-lucide="key-round"></i>
 
                         <span>
                             Reset Password
                         </span>
+
                     </button>
 
 
                     <div class="profile-secondary-actions">
+
+
+                        <!-- EDIT PROFILE -->
 
                         <button
                             type="button"
                             class="edit-profile-button"
                             onclick="editSelectedUser()"
                         >
+
                             <i data-lucide="pencil"></i>
 
                             <span>
                                 Edit Profile
                             </span>
+
                         </button>
 
+
+                        <!-- ENABLE / DISABLE -->
 
                         <button
                             type="button"
@@ -828,11 +1033,18 @@ User Management | BantayBarangay
                             id="disableAccountButton"
                             onclick="openDisableModal()"
                         >
-                            <i data-lucide="user-x"></i>
+
+                            <i
+                                id="disableAccountIcon"
+                                data-lucide="user-x"
+                            ></i>
 
                             <span id="disableAccountText">
+
                                 Disable Account
+
                             </span>
+
                         </button>
 
                     </div>
@@ -862,6 +1074,9 @@ User Management | BantayBarangay
 
     <div class="modal-card">
 
+
+        <!-- MODAL HEADER -->
+
         <div class="modal-header">
 
             <div>
@@ -871,7 +1086,7 @@ User Management | BantayBarangay
                 </h2>
 
                 <p>
-                    Add a new BantayBarangay system account.
+                    Add a new system account.
                 </p>
 
             </div>
@@ -883,11 +1098,15 @@ User Management | BantayBarangay
                 onclick="closeCreateUserModal()"
                 aria-label="Close create user dialog"
             >
+
                 <i data-lucide="x"></i>
+
             </button>
 
         </div>
 
+
+        <!-- CREATE FORM -->
 
         <form
             id="createUserForm"
@@ -895,6 +1114,13 @@ User Management | BantayBarangay
         >
 
             {% csrf_token %}
+
+
+            <input
+                type="hidden"
+                name="action"
+                value="create_user"
+            >
 
 
             <div class="modal-body">
@@ -908,6 +1134,7 @@ User Management | BantayBarangay
                         Username
                     </label>
 
+
                     <div class="input-with-icon">
 
                         <i data-lucide="user"></i>
@@ -917,6 +1144,7 @@ User Management | BantayBarangay
                             name="username"
                             type="text"
                             autocomplete="username"
+                            placeholder="Enter username"
                             required
                         >
 
@@ -933,6 +1161,7 @@ User Management | BantayBarangay
                         Email
                     </label>
 
+
                     <div class="input-with-icon">
 
                         <i data-lucide="mail"></i>
@@ -942,6 +1171,7 @@ User Management | BantayBarangay
                             name="email"
                             type="email"
                             autocomplete="email"
+                            placeholder="Enter email address"
                             required
                         >
 
@@ -950,10 +1180,12 @@ User Management | BantayBarangay
                 </div>
 
 
-                <!-- ROLE + STATUS -->
+                <!-- ROLE / STATUS -->
 
                 <div class="form-grid">
 
+
+                    <!-- ROLE -->
 
                     <div class="form-group">
 
@@ -966,9 +1198,6 @@ User Management | BantayBarangay
                             name="role"
                             required
                         >
-                            <option value="resident">
-                                Resident
-                            </option>
 
                             <option value="official">
                                 Barangay Official
@@ -977,10 +1206,13 @@ User Management | BantayBarangay
                             <option value="admin">
                                 Administrator
                             </option>
+
                         </select>
 
                     </div>
 
+
+                    <!-- STATUS -->
 
                     <div class="form-group">
 
@@ -992,6 +1224,7 @@ User Management | BantayBarangay
                             id="createStatus"
                             name="is_active"
                         >
+
                             <option value="1">
                                 Active
                             </option>
@@ -999,6 +1232,7 @@ User Management | BantayBarangay
                             <option value="0">
                                 Disabled
                             </option>
+
                         </select>
 
                     </div>
@@ -1014,6 +1248,7 @@ User Management | BantayBarangay
                         Password
                     </label>
 
+
                     <div class="password-input">
 
                         <i data-lucide="lock-keyhole"></i>
@@ -1022,16 +1257,21 @@ User Management | BantayBarangay
                             id="createPassword"
                             name="password"
                             type="password"
+                            minlength="8"
                             autocomplete="new-password"
+                            placeholder="Minimum 8 characters"
                             required
                         >
+
 
                         <button
                             type="button"
                             aria-label="Show or hide password"
                             onclick="togglePassword('createPassword', this)"
                         >
+
                             <i data-lucide="eye"></i>
+
                         </button>
 
                     </div>
@@ -1040,6 +1280,8 @@ User Management | BantayBarangay
 
             </div>
 
+
+            <!-- MODAL FOOTER -->
 
             <div class="modal-footer">
 
@@ -1056,11 +1298,13 @@ User Management | BantayBarangay
                     type="submit"
                     class="btn-primary"
                 >
+
                     <i data-lucide="user-plus"></i>
 
                     <span>
                         Create User
                     </span>
+
                 </button>
 
             </div>
@@ -1086,6 +1330,9 @@ User Management | BantayBarangay
 
     <div class="modal-card">
 
+
+        <!-- MODAL HEADER -->
+
         <div class="modal-header">
 
             <div>
@@ -1107,11 +1354,15 @@ User Management | BantayBarangay
                 onclick="closeEditUserModal()"
                 aria-label="Close edit user dialog"
             >
+
                 <i data-lucide="x"></i>
+
             </button>
 
         </div>
 
+
+        <!-- EDIT FORM -->
 
         <form
             id="editUserForm"
@@ -1119,6 +1370,14 @@ User Management | BantayBarangay
         >
 
             {% csrf_token %}
+
+
+            <input
+                type="hidden"
+                name="action"
+                value="edit_user"
+            >
+
 
             <input
                 type="hidden"
@@ -1130,11 +1389,14 @@ User Management | BantayBarangay
             <div class="modal-body">
 
 
+                <!-- USERNAME -->
+
                 <div class="form-group">
 
                     <label for="editUsername">
                         Username
                     </label>
+
 
                     <div class="input-with-icon">
 
@@ -1152,11 +1414,14 @@ User Management | BantayBarangay
                 </div>
 
 
+                <!-- EMAIL -->
+
                 <div class="form-group">
 
                     <label for="editEmail">
                         Email
                     </label>
+
 
                     <div class="input-with-icon">
 
@@ -1174,8 +1439,12 @@ User Management | BantayBarangay
                 </div>
 
 
+                <!-- ROLE / STATUS -->
+
                 <div class="form-grid">
 
+
+                    <!-- ROLE -->
 
                     <div class="form-group">
 
@@ -1188,9 +1457,6 @@ User Management | BantayBarangay
                             name="role"
                             required
                         >
-                            <option value="resident">
-                                Resident
-                            </option>
 
                             <option value="official">
                                 Barangay Official
@@ -1199,10 +1465,13 @@ User Management | BantayBarangay
                             <option value="admin">
                                 Administrator
                             </option>
+
                         </select>
 
                     </div>
 
+
+                    <!-- STATUS -->
 
                     <div class="form-group">
 
@@ -1214,6 +1483,7 @@ User Management | BantayBarangay
                             id="editStatus"
                             name="is_active"
                         >
+
                             <option value="1">
                                 Active
                             </option>
@@ -1221,6 +1491,7 @@ User Management | BantayBarangay
                             <option value="0">
                                 Disabled
                             </option>
+
                         </select>
 
                     </div>
@@ -1229,6 +1500,8 @@ User Management | BantayBarangay
 
             </div>
 
+
+            <!-- MODAL FOOTER -->
 
             <div class="modal-footer">
 
@@ -1245,11 +1518,13 @@ User Management | BantayBarangay
                     type="submit"
                     class="btn-primary"
                 >
+
                     <i data-lucide="save"></i>
 
                     <span>
                         Save Changes
                     </span>
+
                 </button>
 
             </div>
@@ -1275,6 +1550,9 @@ User Management | BantayBarangay
 
     <div class="modal-card modal-small">
 
+
+        <!-- MODAL HEADER -->
+
         <div class="modal-header">
 
             <div>
@@ -1284,7 +1562,7 @@ User Management | BantayBarangay
                 </h2>
 
                 <p>
-                    Enter a new password for this user.
+                    Enter a new password for the selected user.
                 </p>
 
             </div>
@@ -1296,11 +1574,15 @@ User Management | BantayBarangay
                 onclick="closeResetPasswordModal()"
                 aria-label="Close reset password dialog"
             >
+
                 <i data-lucide="x"></i>
+
             </button>
 
         </div>
 
+
+        <!-- RESET FORM -->
 
         <form
             id="resetPasswordForm"
@@ -1310,13 +1592,29 @@ User Management | BantayBarangay
             {% csrf_token %}
 
 
+            <input
+                type="hidden"
+                name="action"
+                value="reset_password"
+            >
+
+
+            <input
+                type="hidden"
+                id="resetPasswordUserId"
+                name="user_id"
+            >
+
+
             <div class="modal-body">
+
 
                 <div class="form-group">
 
                     <label for="newPassword">
                         New Password
                     </label>
+
 
                     <div class="password-input">
 
@@ -1326,16 +1624,21 @@ User Management | BantayBarangay
                             id="newPassword"
                             name="password"
                             type="password"
+                            minlength="8"
                             autocomplete="new-password"
+                            placeholder="Minimum 8 characters"
                             required
                         >
+
 
                         <button
                             type="button"
                             aria-label="Show or hide password"
                             onclick="togglePassword('newPassword', this)"
                         >
+
                             <i data-lucide="eye"></i>
+
                         </button>
 
                     </div>
@@ -1344,6 +1647,8 @@ User Management | BantayBarangay
 
             </div>
 
+
+            <!-- MODAL FOOTER -->
 
             <div class="modal-footer">
 
@@ -1360,11 +1665,13 @@ User Management | BantayBarangay
                     type="submit"
                     class="btn-primary"
                 >
+
                     <i data-lucide="key-round"></i>
 
                     <span>
                         Reset Password
                     </span>
+
                 </button>
 
             </div>
@@ -1377,7 +1684,7 @@ User Management | BantayBarangay
 
 
 <!-- =========================================================
-     DISABLE / ENABLE USER MODAL
+     ENABLE / DISABLE USER MODAL
 ========================================================= -->
 
 <div
@@ -1390,51 +1697,86 @@ User Management | BantayBarangay
 
     <div class="modal-card modal-small">
 
-        <div class="confirmation-content">
 
-            <div class="confirmation-icon danger">
-                <i data-lucide="triangle-alert"></i>
+        <form
+            id="statusUserForm"
+            method="post"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- ACTION -->
+
+            <input
+                type="hidden"
+                id="statusAction"
+                name="action"
+            >
+
+
+            <!-- USER ID -->
+
+            <input
+                type="hidden"
+                id="disableUserId"
+                name="user_id"
+            >
+
+
+            <!-- CONFIRMATION -->
+
+            <div class="confirmation-content">
+
+                <div
+                    class="confirmation-icon danger"
+                    id="statusConfirmationIcon"
+                >
+
+                    <i data-lucide="triangle-alert"></i>
+
+                </div>
+
+
+                <h2 id="disableModalTitle">
+                    Disable Account?
+                </h2>
+
+
+                <p id="disableModalMessage">
+
+                    This user will no longer be able to access
+                    BantayBarangay until the account is enabled again.
+
+                </p>
+
             </div>
 
 
-            <h2 id="disableModalTitle">
-                Disable Account?
-            </h2>
+            <!-- MODAL FOOTER -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="closeDisableModal()"
+                >
+                    Cancel
+                </button>
 
 
-            <p id="disableModalDescription">
-                This user will no longer be able to access
-                BantayBarangay until their account is enabled again.
-            </p>
-
-        </div>
-
-
-        <div class="modal-footer">
-
-            <button
-                type="button"
-                class="btn-cancel"
-                onclick="closeDisableModal()"
-            >
-                Cancel
-            </button>
-
-
-            <button
-                type="button"
-                class="btn-danger"
-                id="confirmDisableButton"
-                onclick="confirmToggleUserStatus()"
-            >
-                <i data-lucide="user-x"></i>
-
-                <span id="confirmDisableText">
+                <button
+                    type="submit"
+                    class="btn-danger"
+                    id="confirmStatusButton"
+                >
                     Disable Account
-                </span>
-            </button>
+                </button>
 
-        </div>
+            </div>
+
+        </form>
 
     </div>
 
@@ -1445,152 +1787,20 @@ User Management | BantayBarangay
 
 {% block extra_js %}
 
-<!-- Lucide -->
+<!-- =========================================================
+     LUCIDE ICONS
+========================================================= -->
+
 <script src="https://unpkg.com/lucide@latest"></script>
 
 
 <!-- =========================================================
-     SAFE TABLE ACTION HELPERS
-
-     Django variables are NOT inserted inside JavaScript.
-     The user ID is read from data-user-id on the <tr>.
+     USER MANAGEMENT JAVASCRIPT
 ========================================================= -->
 
-<script>
-
-    function getUserIdFromElement(element) {
-
-        if (!element) {
-            return null;
-        }
-
-        const row = element.closest(".user-row");
-
-        if (!row) {
-            return null;
-        }
-
-        const userId = row.dataset.userId;
-
-        if (!userId) {
-            return null;
-        }
-
-        return Number(userId);
-    }
-
-
-    function selectUserFromElement(element) {
-
-        const userId = getUserIdFromElement(element);
-
-        if (!userId) {
-            return;
-        }
-
-        if (typeof selectUser === "function") {
-            selectUser(userId);
-        }
-
-    }
-
-
-    function viewUserFromButton(event, button) {
-
-        if (event) {
-            event.stopPropagation();
-        }
-
-        const userId = getUserIdFromElement(button);
-
-        if (!userId) {
-            return;
-        }
-
-        if (typeof selectUser === "function") {
-            selectUser(userId);
-        }
-
-    }
-
-
-    function editUserFromButton(event, button) {
-
-        if (event) {
-            event.stopPropagation();
-        }
-
-        const userId = getUserIdFromElement(button);
-
-        if (!userId) {
-            return;
-        }
-
-        if (typeof selectUser === "function") {
-            selectUser(userId);
-        }
-
-        /*
-         Give selectUser() a chance to finish updating
-         the selected-user state before opening Edit.
-        */
-
-        window.setTimeout(function () {
-
-            if (typeof editSelectedUser === "function") {
-                editSelectedUser();
-            }
-
-        }, 0);
-
-    }
-
-
-    function moreUserActions(event, button) {
-
-        if (event) {
-            event.stopPropagation();
-        }
-
-        const userId = getUserIdFromElement(button);
-
-        if (!userId) {
-            return;
-        }
-
-        if (typeof selectUser === "function") {
-            selectUser(userId);
-        }
-
-    }
-
-</script>
-
-
-<!-- User Management JS -->
 <script
     src="{% static 'js/user_management.js' %}"
     defer
 ></script>
-
-
-<!-- Initialize Lucide -->
-<script>
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            if (
-                window.lucide &&
-                typeof window.lucide.createIcons === "function"
-            ) {
-                window.lucide.createIcons();
-            }
-
-        }
-    );
-
-</script>
 
 {% endblock %}

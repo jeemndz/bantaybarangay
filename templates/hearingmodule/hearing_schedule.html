@@ -1,0 +1,1321 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Hearing Schedule | BantayBarangay
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/hearing_schedule.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div
+    class="hearing-page"
+    data-today="{{ today|date:'Y-m-d' }}"
+>
+
+    <!-- =====================================================
+         DJANGO MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="hearing-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="hearing-message hearing-message-{{ message.tags|default:'info' }}"
+                    data-hearing-message
+                >
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        type="button"
+                        data-close-message
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="hearing-page-header">
+
+        <div class="hearing-page-heading">
+
+            <div class="hearing-title-line">
+
+                <div class="hearing-title-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="16"
+                            rx="2"
+                        ></rect>
+
+                        <path
+                            d="M8 3v4M16 3v4M3 10h18"
+                        ></path>
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <div class="hearing-title-with-badge">
+
+                        <h1>
+                            Hearing Schedule
+                        </h1>
+
+                        <span class="protocol-badge">
+                            Katarungang Pambarangay
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Schedule hearings, view the hearing calendar,
+                        conduct sessions, upload hearing records,
+                        and complete mediation proceedings.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="hearing-header-actions">
+
+            <button
+                type="button"
+                class="hearing-button hearing-button-primary"
+                id="openScheduleModalButton"
+            >
+                Schedule Hearing
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <section class="hearing-summary-grid">
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Today's Hearings
+                </span>
+
+                <div class="summary-value">
+                    {{ today_count }}
+                </div>
+
+            </div>
+
+            <div class="summary-footer">
+
+                <span>
+                    {{ in_progress_count }}
+                    In Progress
+                </span>
+
+                <span>
+                    {{ upcoming_today_count }}
+                    Scheduled
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Active Mediations
+                </span>
+
+                <div class="summary-value">
+                    {{ active_mediations }}
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Completed Hearings
+                </span>
+
+                <div class="summary-value">
+                    {{ completed_count }}
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="hearing-summary-card">
+
+            <div class="summary-content">
+
+                <span class="summary-label">
+                    Total Hearing Records
+                </span>
+
+                <div class="summary-value">
+                    {{ total_hearing_records }}
+                </div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         CALENDAR TOOLBAR
+    ====================================================== -->
+
+    <section class="hearing-calendar-toolbar">
+
+        <div class="hearing-view-tabs">
+
+            <button
+                type="button"
+                class="hearing-view-tab"
+                id="calendarTodayButton"
+            >
+                Today
+            </button>
+
+            <button
+                type="button"
+                class="hearing-view-tab active"
+            >
+                Monthly Calendar
+            </button>
+
+        </div>
+
+
+        <div class="hearing-date-navigation">
+
+            <button
+                type="button"
+                class="date-navigation-button"
+                id="previousHearingMonth"
+            >
+                &lsaquo;
+            </button>
+
+            <strong id="currentHearingMonth">
+                {{ today|date:"F Y" }}
+            </strong>
+
+            <button
+                type="button"
+                class="date-navigation-button"
+                id="nextHearingMonth"
+            >
+                &rsaquo;
+            </button>
+
+        </div>
+
+
+        <div class="hearing-calendar-legend">
+
+            <span>
+                <span class="legend-dot legend-scheduled"></span>
+                Scheduled
+            </span>
+
+            <span>
+                <span class="legend-dot legend-active"></span>
+                In Progress
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CALENDAR
+    ====================================================== -->
+
+    <section class="hearing-calendar">
+
+        <div class="hearing-calendar-weekdays">
+
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+
+        </div>
+
+        <div
+            class="hearing-calendar-grid"
+            id="hearingCalendarGrid"
+        ></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CALENDAR DATA
+    ====================================================== -->
+
+    <div
+        id="hearingCalendarData"
+        hidden
+    >
+
+        {% for hearing in calendar_hearings %}
+
+            <div
+                data-hearing-event
+                data-id="{{ hearing.hearing_id }}"
+                data-date="{{ hearing.hearing_date|date:'Y-m-d' }}"
+                data-time="{{ hearing.start_time|time:'H:i' }}"
+                data-case="{{ hearing.case_number|escape }}"
+                data-status="{{ hearing.status|escape }}"
+                data-chamber="{{ hearing.chamber|escape }}"
+            ></div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =====================================================
+         RECORDS
+    ====================================================== -->
+
+    <section class="hearing-records-section">
+
+        <div class="hearing-filter-bar">
+
+            <div class="hearing-search">
+
+                <input
+                    type="search"
+                    id="hearingSearchInput"
+                    placeholder="Search case, complainant, respondent..."
+                >
+
+            </div>
+
+
+            <div class="hearing-filter-controls">
+
+                <select id="hearingStatusFilter">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Scheduled">
+                        Scheduled
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                    <option value="Postponed">
+                        Postponed
+                    </option>
+
+                    <option value="Cancelled">
+                        Cancelled
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="button"
+                    class="advanced-filter-button"
+                    id="resetHearingFilters"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="hearing-table-wrapper">
+
+            <table class="hearing-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Case</th>
+                        <th>Parties</th>
+                        <th>Schedule</th>
+                        <th>Chamber</th>
+                        <th>Stage</th>
+                        <th>Status</th>
+                        <th class="table-actions-heading">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="hearingTableBody">
+
+                    {% for record in hearing_records %}
+
+                        {% with hearing=record.hearing %}
+
+                        <tr
+                            data-status="{{ hearing.status }}"
+                            data-date="{{ hearing.hearing_date|date:'Y-m-d' }}"
+                            data-hearing-id="{{ hearing.hearing_id }}"
+                        >
+
+                            <td>
+
+                                <strong class="table-case-id">
+                                    {{ hearing.case_number }}
+                                </strong>
+
+                                <span class="table-secondary">
+                                    Complaint #CP-{{ hearing.complaint_id|stringformat:"04d" }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    {{ hearing.complainant_name }}
+                                </strong>
+
+                                <span class="table-secondary">
+                                    vs. {{ hearing.respondent_name }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    {{ hearing.hearing_date|date:"M d, Y" }}
+                                </strong>
+
+                                <span class="table-secondary">
+                                    {{ hearing.start_time|time:"g:i A" }}
+                                    -
+                                    {{ hearing.end_time|time:"g:i A" }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                {{ hearing.chamber }}
+                            </td>
+
+
+                            <td>
+                                {{ hearing.hearing_stage }}
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="table-badge hearing-status-{{ hearing.status|slugify }}"
+                                >
+                                    {{ hearing.status }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="hearing-table-actions">
+
+                                    <button
+                                        type="button"
+                                        class="hearing-small-button"
+                                        data-open-session="{{ hearing.hearing_id }}"
+                                    >
+                                        View
+                                    </button>
+
+
+                                    {% if record.can_manage %}
+
+                                        {% if hearing.status == "Scheduled" %}
+
+                                            {% if hearing.hearing_date == today %}
+
+                                                <form
+                                                    method="POST"
+                                                    action="{% url 'hearingmodule:start_hearing' hearing.hearing_id %}"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="hearing-small-button hearing-small-button-primary"
+                                                    >
+                                                        Start
+                                                    </button>
+
+                                                </form>
+
+                                            {% endif %}
+
+                                        {% elif hearing.status == "In Progress" %}
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'hearingmodule:complete_hearing' hearing.hearing_id %}"
+                                                data-confirm="Mark this hearing as completed?"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="hearing-small-button hearing-complete-button"
+                                                >
+                                                    Complete
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endwith %}
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="hearing-no-records"
+                            >
+                                No hearing records yet.
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HEARING SESSION CARDS / MODALS
+    ====================================================== -->
+
+    {% for record in hearing_records %}
+
+        {% with hearing=record.hearing %}
+
+        <div
+            class="hearing-modal hearing-session-modal"
+            id="hearingSession{{ hearing.hearing_id }}"
+            aria-hidden="true"
+        >
+
+            <div
+                class="hearing-modal-backdrop"
+                data-close-session
+            ></div>
+
+
+            <div class="hearing-modal-dialog hearing-session-dialog">
+
+                <div class="hearing-modal-header">
+
+                    <div>
+
+                        <span class="modal-eyebrow">
+                            HEARING SESSION
+                        </span>
+
+                        <h2>
+                            {{ hearing.case_number }}
+                        </h2>
+
+                        <p>
+                            {{ hearing.hearing_date|date:"F d, Y" }}
+                            •
+                            {{ hearing.start_time|time:"g:i A" }}
+                            -
+                            {{ hearing.end_time|time:"g:i A" }}
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="hearing-modal-close"
+                        data-close-session
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+
+                <div class="hearing-modal-body">
+
+                    <div class="hearing-session-information">
+
+                        <div>
+                            <span>Complainant</span>
+                            <strong>
+                                {{ hearing.complainant_name }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Respondent</span>
+                            <strong>
+                                {{ hearing.respondent_name }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Chamber</span>
+                            <strong>
+                                {{ hearing.chamber }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Status</span>
+                            <strong>
+                                {{ hearing.status }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         NOTES
+                    ====================================== -->
+
+                    <section class="hearing-session-section">
+
+                        <h3>
+                            Hearing Notes / Minutes
+                        </h3>
+
+                        {% if record.can_manage and hearing.status == "In Progress" %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'hearingmodule:save_hearing_notes' hearing.hearing_id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <textarea
+                                    name="notes"
+                                    class="hearing-session-notes"
+                                    placeholder="Enter proceedings, statements, agreements, actions taken, and hearing minutes..."
+                                >{{ hearing.notes|default:'' }}</textarea>
+
+                                <button
+                                    type="submit"
+                                    class="hearing-button hearing-button-outline"
+                                >
+                                    Save Notes
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <div class="hearing-readonly-notes">
+
+                                {{ hearing.notes|default:"No hearing notes recorded."|linebreaksbr }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </section>
+
+
+                    <!-- =====================================
+                         ATTACHMENTS
+                    ====================================== -->
+
+                    <section class="hearing-session-section">
+
+                        <div class="hearing-session-section-header">
+
+                            <div>
+
+                                <h3>
+                                    Voice Records &amp; Documents
+                                </h3>
+
+                                <p>
+                                    Audio recordings, hearing minutes,
+                                    PDFs, documents, and scanned records.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if record.can_manage and hearing.status == "In Progress" %}
+
+                            <form
+                                method="POST"
+                                enctype="multipart/form-data"
+                                action="{% url 'hearingmodule:upload_hearing_attachment' hearing.hearing_id %}"
+                                class="hearing-upload-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <select
+                                    name="attachment_type"
+                                    required
+                                >
+
+                                    <option value="Audio Recording">
+                                        Audio Recording
+                                    </option>
+
+                                    <option value="Hearing Minutes">
+                                        Hearing Minutes
+                                    </option>
+
+                                    <option value="Document">
+                                        Document
+                                    </option>
+
+                                    <option value="Image">
+                                        Image / Scan
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+
+                                <input
+                                    type="file"
+                                    name="file"
+                                    required
+                                    accept=".jpg,.jpeg,.png,.gif,.webp,.mp3,.wav,.ogg,.m4a,.aac,.pdf,.doc,.docx,.txt"
+                                >
+
+
+                                <input
+                                    type="text"
+                                    name="description"
+                                    placeholder="Optional description"
+                                >
+
+
+                                <button
+                                    type="submit"
+                                    class="hearing-button hearing-button-primary"
+                                >
+                                    Upload File
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+
+                        <div class="hearing-attachment-list">
+
+                            {% for attachment in hearing.attachments.all %}
+
+                                <article class="hearing-attachment">
+
+                                    <div>
+
+                                        <strong>
+                                            {{ attachment.original_filename }}
+                                        </strong>
+
+                                        <span>
+                                            {{ attachment.attachment_type }}
+                                            •
+                                            {{ attachment.uploaded_at|date:"M d, Y g:i A" }}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="hearing-attachment-actions">
+
+                                        <a
+                                            href="{{ attachment.file.url }}"
+                                            target="_blank"
+                                            rel="noopener"
+                                            class="hearing-small-button"
+                                        >
+                                            Open
+                                        </a>
+
+
+                                        {% if record.can_manage %}
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'hearingmodule:delete_hearing_attachment' attachment.attachment_id %}"
+                                                data-confirm="Remove this hearing file?"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="hearing-small-button hearing-danger-button"
+                                                >
+                                                    Remove
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </article>
+
+                            {% empty %}
+
+                                <div class="hearing-no-attachments">
+                                    No hearing records uploaded.
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =====================================
+                         ACTIONS
+                    ====================================== -->
+
+                    {% if record.can_manage %}
+
+                        <section class="hearing-session-actions">
+
+                            {% if hearing.status == "Scheduled" %}
+
+                                {% if hearing.hearing_date == today %}
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'hearingmodule:start_hearing' hearing.hearing_id %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="hearing-button hearing-button-primary"
+                                        >
+                                            Start Hearing
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+
+                                <button
+                                    type="button"
+                                    class="hearing-button hearing-button-outline"
+                                    data-show-postpone="{{ hearing.hearing_id }}"
+                                >
+                                    Postpone
+                                </button>
+
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'hearingmodule:cancel_hearing' hearing.hearing_id %}"
+                                    data-confirm="Cancel this hearing?"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="hearing-button hearing-danger-button"
+                                    >
+                                        Cancel Hearing
+                                    </button>
+
+                                </form>
+
+                            {% elif hearing.status == "In Progress" %}
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'hearingmodule:complete_hearing' hearing.hearing_id %}"
+                                    data-confirm="Mark this hearing as completed?"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="hearing-button hearing-complete-button"
+                                    >
+                                        Complete Hearing
+                                    </button>
+
+                                </form>
+
+
+                                <button
+                                    type="button"
+                                    class="hearing-button hearing-button-outline"
+                                    data-show-postpone="{{ hearing.hearing_id }}"
+                                >
+                                    Postpone
+                                </button>
+
+                            {% endif %}
+
+                        </section>
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'hearingmodule:postpone_hearing' hearing.hearing_id %}"
+                            class="hearing-postpone-form"
+                            id="postponeForm{{ hearing.hearing_id }}"
+                            hidden
+                        >
+
+                            {% csrf_token %}
+
+                            <label>
+                                New Hearing Date
+                            </label>
+
+                            <div>
+
+                                <input
+                                    type="date"
+                                    name="hearing_date"
+                                    min="{{ today|date:'Y-m-d' }}"
+                                    required
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="hearing-button hearing-button-primary"
+                                >
+                                    Reschedule
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endwith %}
+
+    {% endfor %}
+
+
+    <!-- =====================================================
+         SCHEDULE MODAL
+    ====================================================== -->
+
+    <div
+        class="hearing-modal"
+        id="scheduleHearingModal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="hearing-modal-backdrop"
+            data-close-hearing-modal
+        ></div>
+
+
+        <div class="hearing-modal-dialog">
+
+            <form
+                method="POST"
+                action="{% url 'hearingmodule:create_hearing' %}"
+                id="scheduleHearingForm"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="hearing-modal-header">
+
+                    <div>
+
+                        <span class="modal-eyebrow">
+                            HEARING CALENDAR
+                        </span>
+
+                        <h2>
+                            Schedule Hearing
+                        </h2>
+
+                        <p>
+                            Select a complaint and assign its
+                            hearing schedule.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="hearing-modal-close"
+                        data-close-hearing-modal
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+
+                <div class="hearing-modal-body">
+
+                    <div class="hearing-form-group hearing-form-full">
+
+                        <label>
+                            Complaint
+                        </label>
+
+                        <select
+                            name="complaint_id"
+                            required
+                        >
+
+                            <option value="">
+                                Select complaint
+                            </option>
+
+                            {% for complaint in hearing_complaints %}
+
+                                <option
+                                    value="{{ complaint.complaint_id }}"
+                                >
+                                    CP-{{ complaint.complaint_id|stringformat:"04d" }}
+                                    —
+                                    {{ complaint.subject }}
+                                </option>
+
+                            {% empty %}
+
+                                <option
+                                    value=""
+                                    disabled
+                                >
+                                    No complaints waiting for scheduling
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="hearing-form-grid">
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Hearing Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="hearingDate"
+                                name="hearing_date"
+                                min="{{ today|date:'Y-m-d' }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Chamber
+                            </label>
+
+                            <select
+                                name="chamber"
+                                required
+                            >
+
+                                <option value="">
+                                    Select chamber
+                                </option>
+
+                                <option value="Chamber 1">
+                                    Chamber 1
+                                </option>
+
+                                <option value="Chamber 2">
+                                    Chamber 2
+                                </option>
+
+                                <option value="Chamber 3">
+                                    Chamber 3
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Start Time
+                            </label>
+
+                            <input
+                                type="time"
+                                name="start_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                End Time
+                            </label>
+
+                            <input
+                                type="time"
+                                name="end_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Hearing Stage
+                            </label>
+
+                            <select
+                                name="hearing_stage"
+                                required
+                            >
+
+                                <option value="Mediation">
+                                    Mediation
+                                </option>
+
+                                <option value="Conciliation">
+                                    Conciliation
+                                </option>
+
+                                <option value="Pangkat">
+                                    Pangkat
+                                </option>
+
+                                <option value="Arbitration">
+                                    Arbitration
+                                </option>
+
+                                <option value="Settlement">
+                                    Settlement
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Mediator
+                            </label>
+
+                            <input
+                                type="text"
+                                name="mediator"
+                                placeholder="Mediator name"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="hearing-form-group hearing-form-full">
+
+                        <label>
+                            Initial Notes
+                        </label>
+
+                        <textarea
+                            name="notes"
+                            placeholder="Optional scheduling notes..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hearing-modal-footer">
+
+                    <button
+                        type="button"
+                        class="hearing-button hearing-button-outline"
+                        data-close-hearing-modal
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="hearing-button hearing-button-primary"
+                    >
+                        Save Hearing
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/hearing_schedule.js' %}"
+    defer
+></script>
+
+{% endblock %}

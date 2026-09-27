@@ -6,7 +6,10 @@ Blockchain Logs | BantayBarangay
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/blockchain_logs.css' %}">
+<link
+    rel="stylesheet"
+    href="{% static 'css/blockchain_logs.css' %}"
+>
 {% endblock %}
 
 
@@ -14,9 +17,9 @@ Blockchain Logs | BantayBarangay
 
 <div class="blockchain-page">
 
-    <!-- ===================================================== -->
-    <!-- PAGE HEADER -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
 
     <div class="blockchain-header">
 
@@ -36,12 +39,18 @@ Blockchain Logs | BantayBarangay
 
         <div class="header-actions">
 
-            <button class="filter-button">
+            <button
+                type="button"
+                class="filter-button"
+            >
                 <span>⚱</span>
                 Filters
             </button>
 
-            <button class="resync-button">
+            <button
+                type="button"
+                class="resync-button"
+            >
                 <span>↻</span>
                 Force Resync
             </button>
@@ -51,13 +60,11 @@ Blockchain Logs | BantayBarangay
     </div>
 
 
-
-    <!-- ===================================================== -->
-    <!-- SUMMARY CARDS -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
 
     <div class="blockchain-stats">
-
 
         <!-- VERIFIED DOCUMENTS -->
 
@@ -84,7 +91,6 @@ Blockchain Logs | BantayBarangay
             </span>
 
         </div>
-
 
 
         <!-- BLOCKCHAIN TRANSACTIONS -->
@@ -114,7 +120,6 @@ Blockchain Logs | BantayBarangay
         </div>
 
 
-
         <!-- TODAY'S TRANSACTIONS -->
 
         <div class="blockchain-stat-card">
@@ -142,10 +147,9 @@ Blockchain Logs | BantayBarangay
         </div>
 
 
-
         <!-- FAILED VERIFICATIONS -->
 
-        <div class="blockchain-stat-card failed-card">
+        <div class="blockchain-stat-card">
 
             <div class="stat-card-top">
 
@@ -172,39 +176,32 @@ Blockchain Logs | BantayBarangay
     </div>
 
 
-
-    <!-- ===================================================== -->
-    <!-- MAIN BLOCKCHAIN CONTENT -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         MAIN BLOCKCHAIN CONTENT
+    ====================================================== -->
 
     <div class="blockchain-content">
 
 
-        <!-- ================================================= -->
-        <!-- LEDGER FEED -->
-        <!-- ================================================= -->
+        <!-- =================================================
+             LEDGER FEED
+        ================================================== -->
 
         <section class="ledger-panel">
-
 
             <!-- PANEL HEADER -->
 
             <div class="panel-header">
 
-                <div>
-
-                    <h2>
-                        Ledger Feed
-                    </h2>
-
-                </div>
+                <h2>
+                    Ledger Feed
+                </h2>
 
                 <span class="live-status">
                     ● Real-time Updating
                 </span>
 
             </div>
-
 
 
             <!-- TRANSACTION TABLE -->
@@ -244,17 +241,17 @@ Blockchain Logs | BantayBarangay
 
                     <tbody>
 
-
                         <!-- TRANSACTION 1 -->
 
                         <tr
                             class="transaction-row active-row"
                             onclick="showTransaction(
+                                this,
                                 '0x8b2...fe94',
                                 'Indigency Certificate',
                                 '#48,291',
                                 '10:45 AM, May 24',
-                                '0x8b2f7a1c9e3d4b...'
+                                '0x8b2f7a1c9e3d4b98e45e2d1c0b9a8f7e6d5c4b3a2'
                             )"
                         >
 
@@ -270,7 +267,6 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
 
                                 <span class="document-badge">
@@ -279,16 +275,13 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
                                 #48,291
                             </td>
 
-
                             <td>
                                 10:45 AM, May 24
                             </td>
-
 
                             <td>
 
@@ -301,17 +294,17 @@ Blockchain Logs | BantayBarangay
                         </tr>
 
 
-
                         <!-- TRANSACTION 2 -->
 
                         <tr
                             class="transaction-row"
                             onclick="showTransaction(
+                                this,
                                 '0x4c9...d211',
                                 'Official Resolution',
                                 '#48,290',
                                 '09:12 AM, May 24',
-                                '0x4c9e12ab8d...'
+                                '0x4c9e12ab8d71e23f5a6c8d90b1f472'
                             )"
                         >
 
@@ -327,7 +320,6 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
 
                                 <span class="document-badge">
@@ -336,16 +328,13 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
                                 #48,290
                             </td>
 
-
                             <td>
                                 09:12 AM, May 24
                             </td>
-
 
                             <td>
 
@@ -358,17 +347,17 @@ Blockchain Logs | BantayBarangay
                         </tr>
 
 
-
                         <!-- TRANSACTION 3 -->
 
                         <tr
                             class="transaction-row"
                             onclick="showTransaction(
+                                this,
                                 '0x42d...6843',
                                 'Business Permit',
                                 '#48,289',
                                 '08:45 PM, May 23',
-                                '0x42d6a81bc...'
+                                '0x42d6a81bc729ef356d4712a84c906843'
                             )"
                         >
 
@@ -384,7 +373,6 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
 
                                 <span class="document-badge">
@@ -393,16 +381,13 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
                                 #48,289
                             </td>
 
-
                             <td>
                                 08:45 PM, May 23
                             </td>
-
 
                             <td>
 
@@ -415,17 +400,17 @@ Blockchain Logs | BantayBarangay
                         </tr>
 
 
-
                         <!-- TRANSACTION 4 -->
 
                         <tr
                             class="transaction-row"
                             onclick="showTransaction(
+                                this,
                                 '0x95...a12c',
                                 'Barangay Clearance',
                                 '#48,288',
                                 '06:20 PM, May 23',
-                                '0x95ab42d91c...'
+                                '0x95ab42d91ce53f827b46d8a1276fa12c'
                             )"
                         >
 
@@ -441,7 +426,6 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
 
                                 <span class="document-badge">
@@ -450,16 +434,13 @@ Blockchain Logs | BantayBarangay
 
                             </td>
 
-
                             <td>
                                 #48,288
                             </td>
 
-
                             <td>
                                 06:20 PM, May 23
                             </td>
-
 
                             <td>
 
@@ -478,7 +459,6 @@ Blockchain Logs | BantayBarangay
             </div>
 
 
-
             <!-- TABLE FOOTER -->
 
             <div class="ledger-footer">
@@ -490,27 +470,30 @@ Blockchain Logs | BantayBarangay
 
                 <div class="pagination">
 
-                    <button>
+                    <button type="button">
                         ‹
                     </button>
 
-                    <button class="active">
+                    <button
+                        type="button"
+                        class="active"
+                    >
                         1
                     </button>
 
-                    <button>
+                    <button type="button">
                         2
                     </button>
 
-                    <button>
+                    <button type="button">
                         3
                     </button>
 
-                    <button>
+                    <button type="button">
                         4
                     </button>
 
-                    <button>
+                    <button type="button">
                         ›
                     </button>
 
@@ -521,13 +504,11 @@ Blockchain Logs | BantayBarangay
         </section>
 
 
-
-        <!-- ================================================= -->
-        <!-- TRANSACTION DETAILS -->
-        <!-- ================================================= -->
+        <!-- =================================================
+             TRANSACTION DETAILS
+        ================================================== -->
 
         <aside class="transaction-panel">
-
 
             <!-- PANEL HEADER -->
 
@@ -544,15 +525,16 @@ Blockchain Logs | BantayBarangay
             </div>
 
 
-
             <!-- BLOCKCHAIN HASH CARD -->
 
             <div class="hash-card">
 
                 <div class="qr-placeholder">
+
                     <div class="qr-code">
                         ▦
                     </div>
+
                 </div>
 
 
@@ -566,7 +548,6 @@ Blockchain Logs | BantayBarangay
                 </p>
 
             </div>
-
 
 
             <!-- DOCUMENT INFORMATION -->
@@ -612,7 +593,6 @@ Blockchain Logs | BantayBarangay
                 </div>
 
             </div>
-
 
 
             <!-- VERIFICATION HISTORY -->
@@ -683,7 +663,6 @@ Blockchain Logs | BantayBarangay
             </div>
 
 
-
             <!-- PANEL ACTIONS -->
 
             <div class="transaction-actions">
@@ -710,10 +689,9 @@ Blockchain Logs | BantayBarangay
     </div>
 
 
-
-    <!-- ===================================================== -->
-    <!-- PAGE FOOTER -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         PAGE FOOTER
+    ====================================================== -->
 
     <div class="blockchain-footer">
 
@@ -737,63 +715,91 @@ Blockchain Logs | BantayBarangay
 
 </div>
 
+{% endblock %}
 
-<!-- ========================================================= -->
-<!-- JAVASCRIPT -->
-<!-- ========================================================= -->
+
+{% block extra_js %}
 
 <script>
 
-function showTransaction(
-    transactionId,
-    documentType,
-    blockNumber,
-    timestamp,
-    hash
-) {
+    /* =====================================================
+       SHOW SELECTED TRANSACTION
+    ====================================================== */
 
-    // Update block number
+    function showTransaction(
+        row,
+        transactionId,
+        documentType,
+        blockNumber,
+        timestamp,
+        hash
+    ) {
 
-    const blockElement =
-        document.querySelector(".block-number");
+        /* =============================================
+           UPDATE BLOCK NUMBER
+        ============================================== */
 
-    if (blockElement) {
+        const blockElement =
+            document.querySelector(
+                ".block-number"
+            );
 
-        blockElement.textContent =
-            "BLOCK " + blockNumber;
+        if (blockElement) {
+
+            blockElement.textContent =
+                "BLOCK " + blockNumber;
+
+        }
+
+
+        /* =============================================
+           UPDATE HASH
+        ============================================== */
+
+        const hashElement =
+            document.getElementById(
+                "hashValue"
+            );
+
+        if (hashElement) {
+
+            hashElement.textContent =
+                hash;
+
+        }
+
+
+        /* =============================================
+           REMOVE CURRENT ACTIVE ROW
+        ============================================== */
+
+        const rows =
+            document.querySelectorAll(
+                ".transaction-row"
+            );
+
+        rows.forEach(function (item) {
+
+            item.classList.remove(
+                "active-row"
+            );
+
+        });
+
+
+        /* =============================================
+           SET NEW ACTIVE ROW
+        ============================================== */
+
+        if (row) {
+
+            row.classList.add(
+                "active-row"
+            );
+
+        }
 
     }
-
-
-    // Update hash
-
-    const hashElement =
-        document.getElementById("hashValue");
-
-    if (hashElement) {
-
-        hashElement.textContent = hash;
-
-    }
-
-
-    // Highlight selected transaction
-
-    const rows =
-        document.querySelectorAll(".transaction-row");
-
-    rows.forEach(function(row) {
-
-        row.classList.remove("active-row");
-
-    });
-
-
-    event.currentTarget.classList.add(
-        "active-row"
-    );
-
-}
 
 </script>
 
