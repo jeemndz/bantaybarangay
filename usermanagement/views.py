@@ -8,11 +8,12 @@ from .models import User
 
 
 # =========================================================
-# ALLOWED USER ROLES
+# MANAGED USER ROLES
 # =========================================================
+# Residents are intentionally NOT managed in this module.
+# Resident accounts belong to the resident management flow.
 
-ALLOWED_ROLES = {
-    "resident",
+MANAGED_ROLES = {
     "official",
     "admin",
 }
@@ -34,7 +35,6 @@ def user_list(request):
             "action",
             ""
         ).strip()
-
 
         # =================================================
         # CREATE USER
@@ -66,10 +66,8 @@ def user_list(request):
                 request.POST.get(
                     "is_active",
                     "1"
-                )
-                == "1"
+                ) == "1"
             )
-
 
             # ---------------------------------------------
             # REQUIRED FIELDS
@@ -86,6 +84,16 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
+            if not email:
+
+                messages.error(
+                    request,
+                    "Email is required."
+                )
+
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             if not password:
 
@@ -98,9 +106,8 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
-
             # ---------------------------------------------
-            # PASSWORD LENGTH
+            # PASSWORD VALIDATION
             # ---------------------------------------------
 
             if len(password) < 8:
@@ -114,12 +121,11 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
-
             # ---------------------------------------------
             # ROLE VALIDATION
             # ---------------------------------------------
 
-            if role not in ALLOWED_ROLES:
+            if role not in MANAGED_ROLES:
 
                 messages.error(
                     request,
@@ -129,7 +135,6 @@ def user_list(request):
                 return redirect(
                     "usermanagement:user_list"
                 )
-
 
             # ---------------------------------------------
             # DUPLICATE USERNAME
@@ -148,58 +153,43 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
-
             # ---------------------------------------------
             # DUPLICATE EMAIL
             # ---------------------------------------------
 
-            if email:
+            if User.objects.filter(
+                email__iexact=email
+            ).exists():
 
-                if User.objects.filter(
-                    email__iexact=email
-                ).exists():
+                messages.error(
+                    request,
+                    "That email address is already being used."
+                )
 
-                    messages.error(
-                        request,
-                        "That email address is already being used."
-                    )
-
-                    return redirect(
-                        "usermanagement:user_list"
-                    )
-
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             # ---------------------------------------------
             # CREATE USER
             # ---------------------------------------------
 
             User.objects.create(
-
                 username=username,
-
-                password_hash=make_password(
-                    password
-                ),
-
-                email=email or None,
-
+                password_hash=make_password(password),
+                email=email,
                 role=role,
-
                 is_active=is_active,
-
             )
-
 
             messages.success(
                 request,
                 f'User "{username}" was created successfully.'
             )
 
-
             return redirect(
                 "usermanagement:user_list"
             )
-
 
         # =================================================
         # EDIT USER
@@ -230,10 +220,8 @@ def user_list(request):
                 request.POST.get(
                     "is_active",
                     "1"
-                )
-                == "1"
+                ) == "1"
             )
-
 
             # ---------------------------------------------
             # GET USER
@@ -244,6 +232,19 @@ def user_list(request):
                 user_id=user_id
             )
 
+            # Do not allow resident accounts to be edited
+            # through User Management.
+
+            if user.role == "resident":
+
+                messages.error(
+                    request,
+                    "Resident accounts cannot be managed here."
+                )
+
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             # ---------------------------------------------
             # VALIDATION
@@ -260,8 +261,18 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
+            if not email:
 
-            if role not in ALLOWED_ROLES:
+                messages.error(
+                    request,
+                    "Email is required."
+                )
+
+                return redirect(
+                    "usermanagement:user_list"
+                )
+
+            if role not in MANAGED_ROLES:
 
                 messages.error(
                     request,
@@ -271,7 +282,6 @@ def user_list(request):
                 return redirect(
                     "usermanagement:user_list"
                 )
-
 
             # ---------------------------------------------
             # DUPLICATE USERNAME
@@ -288,7 +298,6 @@ def user_list(request):
                 .exists()
             )
 
-
             if username_exists:
 
                 messages.error(
@@ -300,59 +309,51 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
-
             # ---------------------------------------------
             # DUPLICATE EMAIL
             # ---------------------------------------------
 
-            if email:
+            email_exists = (
+                User.objects
+                .filter(
+                    email__iexact=email
+                )
+                .exclude(
+                    user_id=user.user_id
+                )
+                .exists()
+            )
 
-                email_exists = (
-                    User.objects
-                    .filter(
-                        email__iexact=email
-                    )
-                    .exclude(
-                        user_id=user.user_id
-                    )
-                    .exists()
+            if email_exists:
+
+                messages.error(
+                    request,
+                    "That email address is already being used."
                 )
 
-
-                if email_exists:
-
-                    messages.error(
-                        request,
-                        "That email address is already being used."
-                    )
-
-                    return redirect(
-                        "usermanagement:user_list"
-                    )
-
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             # ---------------------------------------------
             # UPDATE USER
             # ---------------------------------------------
 
             user.username = username
-            user.email = email or None
+            user.email = email
             user.role = role
             user.is_active = is_active
 
             user.save()
-
 
             messages.success(
                 request,
                 f'User "{username}" was updated successfully.'
             )
 
-
             return redirect(
                 "usermanagement:user_list"
             )
-
 
         # =================================================
         # RESET PASSWORD
@@ -369,12 +370,25 @@ def user_list(request):
                 ""
             )
 
-
             user = get_object_or_404(
                 User,
                 user_id=user_id
             )
 
+            # ---------------------------------------------
+            # PREVENT RESIDENT MANAGEMENT
+            # ---------------------------------------------
+
+            if user.role == "resident":
+
+                messages.error(
+                    request,
+                    "Resident accounts cannot be managed here."
+                )
+
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             # ---------------------------------------------
             # PASSWORD VALIDATION
@@ -391,7 +405,6 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
-
             if len(password) < 8:
 
                 messages.error(
@@ -403,33 +416,24 @@ def user_list(request):
                     "usermanagement:user_list"
                 )
 
-
             # ---------------------------------------------
-            # UPDATE PASSWORD HASH
+            # UPDATE PASSWORD
             # ---------------------------------------------
 
             user.password_hash = make_password(
                 password
             )
 
-            user.save(
-                update_fields=[
-                    "password_hash",
-                    "updated_at",
-                ]
-            )
-
+            user.save()
 
             messages.success(
                 request,
                 f'Password for "{user.username}" was reset successfully.'
             )
 
-
             return redirect(
                 "usermanagement:user_list"
             )
-
 
         # =================================================
         # DISABLE USER
@@ -441,33 +445,34 @@ def user_list(request):
                 "user_id"
             )
 
-
             user = get_object_or_404(
                 User,
                 user_id=user_id
             )
 
+            if user.role == "resident":
+
+                messages.error(
+                    request,
+                    "Resident accounts cannot be managed here."
+                )
+
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             user.is_active = False
 
-            user.save(
-                update_fields=[
-                    "is_active",
-                    "updated_at",
-                ]
-            )
-
+            user.save()
 
             messages.success(
                 request,
                 f'User "{user.username}" was disabled.'
             )
 
-
             return redirect(
                 "usermanagement:user_list"
             )
-
 
         # =================================================
         # ENABLE USER
@@ -479,33 +484,34 @@ def user_list(request):
                 "user_id"
             )
 
-
             user = get_object_or_404(
                 User,
                 user_id=user_id
             )
 
+            if user.role == "resident":
+
+                messages.error(
+                    request,
+                    "Resident accounts cannot be managed here."
+                )
+
+                return redirect(
+                    "usermanagement:user_list"
+                )
 
             user.is_active = True
 
-            user.save(
-                update_fields=[
-                    "is_active",
-                    "updated_at",
-                ]
-            )
-
+            user.save()
 
             messages.success(
                 request,
                 f'User "{user.username}" was enabled.'
             )
 
-
             return redirect(
                 "usermanagement:user_list"
             )
-
 
         # =================================================
         # INVALID ACTION
@@ -518,24 +524,26 @@ def user_list(request):
                 "Invalid user management action."
             )
 
-
             return redirect(
                 "usermanagement:user_list"
             )
-
 
     # =====================================================
     # GET REQUEST
     # =====================================================
 
-    users_queryset = (
+    # IMPORTANT:
+    # Residents are excluded from this module.
+
+    managed_users = (
         User.objects
-        .all()
-        .order_by(
-            "-created_at"
-        )
+        .exclude(role="resident")
     )
 
+    users_queryset = (
+        managed_users
+        .order_by("-created_at")
+    )
 
     # =====================================================
     # SEARCH
@@ -546,34 +554,28 @@ def user_list(request):
         ""
     ).strip()
 
-
     if search_query:
 
         users_queryset = (
             users_queryset.filter(
 
                 Q(
-                    username__icontains=
-                    search_query
+                    username__icontains=search_query
                 )
 
                 |
 
                 Q(
-                    email__icontains=
-                    search_query
+                    email__icontains=search_query
                 )
 
                 |
 
                 Q(
-                    role__icontains=
-                    search_query
+                    role__icontains=search_query
                 )
-
             )
         )
-
 
     # =====================================================
     # ROLE FILTER
@@ -584,15 +586,13 @@ def user_list(request):
         ""
     ).strip().lower()
 
-
-    if role_filter in ALLOWED_ROLES:
+    if role_filter in MANAGED_ROLES:
 
         users_queryset = (
             users_queryset.filter(
                 role=role_filter
             )
         )
-
 
     # =====================================================
     # STATUS FILTER
@@ -603,7 +603,6 @@ def user_list(request):
         ""
     ).strip().lower()
 
-
     if status_filter == "active":
 
         users_queryset = (
@@ -611,7 +610,6 @@ def user_list(request):
                 is_active=True
             )
         )
-
 
     elif status_filter == "disabled":
 
@@ -621,50 +619,45 @@ def user_list(request):
             )
         )
 
-
     # =====================================================
-    # DASHBOARD STATISTICS
+    # STATISTICS
     # =====================================================
 
     total_users = (
-        User.objects.count()
+        managed_users.count()
     )
-
 
     active_users = (
-        User.objects.filter(
+        managed_users
+        .filter(
             is_active=True
-        ).count()
+        )
+        .count()
     )
-
 
     disabled_users = (
-        User.objects.filter(
+        managed_users
+        .filter(
             is_active=False
-        ).count()
+        )
+        .count()
     )
-
 
     administrator_count = (
-        User.objects.filter(
+        managed_users
+        .filter(
             role="admin"
-        ).count()
+        )
+        .count()
     )
-
 
     official_count = (
-        User.objects.filter(
+        managed_users
+        .filter(
             role="official"
-        ).count()
+        )
+        .count()
     )
-
-
-    resident_count = (
-        User.objects.filter(
-            role="resident"
-        ).count()
-    )
-
 
     # =====================================================
     # PAGINATION
@@ -675,16 +668,13 @@ def user_list(request):
         10
     )
 
-
     page_number = request.GET.get(
         "page"
     )
 
-
-    users = paginator.get_page(
+    page_obj = paginator.get_page(
         page_number
     )
-
 
     # =====================================================
     # CONTEXT
@@ -693,7 +683,10 @@ def user_list(request):
     context = {
 
         "users":
-            users,
+            page_obj,
+
+        "page_obj":
+            page_obj,
 
         "total_users":
             total_users,
@@ -710,8 +703,14 @@ def user_list(request):
         "official_count":
             official_count,
 
-        "resident_count":
-            resident_count,
+        # Keep these aliases so the current HTML
+        # statistics cards also work.
+
+        "administrators":
+            administrator_count,
+
+        "barangay_officials":
+            official_count,
 
         "search_query":
             search_query,
@@ -721,12 +720,10 @@ def user_list(request):
 
         "status_filter":
             status_filter,
-
     }
 
-
     # =====================================================
-    # RENDER TEMPLATE
+    # RENDER
     # =====================================================
 
     return render(

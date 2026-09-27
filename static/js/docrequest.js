@@ -1,6 +1,6 @@
 /* =========================================================
    BANTAYBARANGAY
-   DOCUMENT REQUEST & ISSUANCE
+   DOCUMENT REQUEST MANAGEMENT
 ========================================================= */
 
 document.addEventListener(
@@ -21,17 +21,13 @@ function initializeDocumentRequestModule() {
 
     initializeRequestRows();
 
-    initializeFilters();
+    initializeRequestModal();
 
-    initializeDateFilters();
+    initializeStatusForm();
 
-    initializeRefreshButton();
+    initializeSearch();
 
-    initializeAutoRefreshCountdown();
-
-    initializeDocumentActions();
-
-    initializePagination();
+    initializeDjangoMessages();
 
 }
 
@@ -49,33 +45,43 @@ function initializeRequestRows() {
 
     rows.forEach(function (row) {
 
+        /* -------------------------------------------------
+           ROW CLICK
+        ------------------------------------------------- */
+
         row.addEventListener(
             "click",
             function (event) {
 
                 /*
-                 * Do not select the row when one of the
-                 * action buttons is clicked.
+                 * Do not trigger the row when clicking
+                 * buttons, links, inputs, selects, or forms.
                  */
+
                 if (
                     event.target.closest(
-                        ".dr-action-btn"
+                        "button, a, input, select, textarea, form"
                     )
                 ) {
                     return;
                 }
 
-                selectRequestRow(row);
+                selectRequestRow(
+                    row
+                );
 
             }
         );
 
 
+        /* -------------------------------------------------
+           VIEW BUTTON
+        ------------------------------------------------- */
+
         const viewButton =
             row.querySelector(
                 ".dr-view-btn"
             );
-
 
         if (viewButton) {
 
@@ -83,9 +89,17 @@ function initializeRequestRows() {
                 "click",
                 function (event) {
 
+                    event.preventDefault();
+
                     event.stopPropagation();
 
-                    selectRequestRow(row);
+                    selectRequestRow(
+                        row
+                    );
+
+                    openRequestModalFromRow(
+                        row
+                    );
 
                 }
             );
@@ -98,7 +112,7 @@ function initializeRequestRows() {
 
 
 /* =========================================================
-   SELECT REQUEST
+   SELECT REQUEST ROW
 ========================================================= */
 
 function selectRequestRow(row) {
@@ -106,7 +120,6 @@ function selectRequestRow(row) {
     if (!row) {
         return;
     }
-
 
     document
         .querySelectorAll(
@@ -120,108 +133,500 @@ function selectRequestRow(row) {
 
         });
 
-
     row.classList.add(
         "selected"
     );
-
-
-    updateDossier(row);
 
 }
 
 
 /* =========================================================
-   UPDATE DOSSIER
+   INITIALIZE MODAL
 ========================================================= */
 
-function updateDossier(row) {
+function initializeRequestModal() {
 
-    const requestNumber =
-        row.dataset.request || "";
+    const modal =
+        document.getElementById(
+            "requestModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    /* -------------------------------------------------
+       OVERLAY
+    ------------------------------------------------- */
+
+    const overlay =
+        modal.querySelector(
+            ".dr-modal-overlay"
+        );
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            function () {
+
+                closeRequestModal();
+
+            }
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       CLOSE BUTTON
+    ------------------------------------------------- */
+
+    const closeButton =
+        modal.querySelector(
+            ".dr-modal-close"
+        );
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            function () {
+
+                closeRequestModal();
+
+            }
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       ESCAPE KEY
+    ------------------------------------------------- */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains(
+                    "show"
+                )
+            ) {
+
+                closeRequestModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   OPEN REQUEST MODAL
+========================================================= */
+
+function openRequestModalFromRow(row) {
+
+    if (!row) {
+        return;
+    }
+
+    const modal =
+        document.getElementById(
+            "requestModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    /* =====================================================
+       REQUEST INFORMATION
+    ===================================================== */
+
+    const requestId =
+        getDatasetValue(
+            row,
+            "requestId"
+        );
+
+    const reference =
+        getDatasetValue(
+            row,
+            "reference"
+        );
 
     const residentName =
-        row.dataset.name || "";
-
-    const documentName =
-        row.dataset.document || "";
-
-    const received =
-        row.dataset.received || "";
-
-    const address =
-        row.dataset.address || "";
+        getDatasetValue(
+            row,
+            "resident"
+        );
 
     const residentId =
-        row.dataset.id || "";
+        getDatasetValue(
+            row,
+            "residentId"
+        );
 
-    const voter =
-        row.dataset.voter || "";
+    const address =
+        getDatasetValue(
+            row,
+            "address"
+        );
 
-    const fee =
-        row.dataset.fee || "";
+    const email =
+        getDatasetValue(
+            row,
+            "email"
+        );
 
+    const contact =
+        getDatasetValue(
+            row,
+            "contact"
+        );
+
+    const documentName =
+        getDatasetValue(
+            row,
+            "document"
+        );
+
+    const purpose =
+        getDatasetValue(
+            row,
+            "purpose"
+        );
+
+    const institution =
+        getDatasetValue(
+            row,
+            "institution"
+        );
+
+    const notes =
+        getDatasetValue(
+            row,
+            "notes"
+        );
+
+    const delivery =
+        getDatasetValue(
+            row,
+            "delivery"
+        );
+
+    const payment =
+        getDatasetValue(
+            row,
+            "payment"
+        );
+
+    const status =
+        getDatasetValue(
+            row,
+            "status"
+        );
+
+    const submitted =
+        getDatasetValue(
+            row,
+            "submitted"
+        );
+
+
+    /* =====================================================
+       POPULATE MODAL
+    ===================================================== */
 
     setText(
-        "detailRequest",
-        requestNumber
+        "modalReference",
+        reference
     );
 
-
     setText(
-        "detailReceived",
-        "Received: " + received
-    );
-
-
-    setText(
-        "detailName",
+        "modalResident",
         residentName
     );
 
-
     setText(
-        "detailId",
+        "modalResidentId",
         residentId
     );
 
-
     setText(
-        "detailVoter",
-        voter
+        "modalEmail",
+        email
     );
 
-
     setText(
-        "detailFee",
-        fee
+        "modalContact",
+        contact
     );
 
-
     setText(
-        "previewResidentName",
-        residentName.toUpperCase()
-    );
-
-
-    setText(
-        "previewAddress",
+        "modalAddress",
         address
     );
 
+    setText(
+        "modalDocument",
+        documentName
+    );
 
     setText(
-        "previewDocumentTitle",
-        documentName.toUpperCase()
+        "modalPurpose",
+        purpose
+    );
+
+    setText(
+        "modalInstitution",
+        institution
+    );
+
+    setText(
+        "modalNotes",
+        notes
+    );
+
+    setText(
+        "modalDelivery",
+        delivery
+    );
+
+    setText(
+        "modalPayment",
+        payment
+    );
+
+    setText(
+        "modalSubmitted",
+        submitted
     );
 
 
-    setText(
-        "detailAvatar",
-        getInitials(
-            residentName
-        )
+    /* =====================================================
+       STATUS SELECT
+    ===================================================== */
+
+    const statusSelect =
+        document.getElementById(
+            "modalStatus"
+        );
+
+    if (statusSelect) {
+
+        const optionExists =
+            Array.from(
+                statusSelect.options
+            )
+            .some(function (option) {
+
+                return (
+                    option.value ===
+                    status
+                );
+
+            });
+
+        if (optionExists) {
+
+            statusSelect.value =
+                status;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE STATUS FORM
+    ===================================================== */
+
+    const statusForm =
+        document.getElementById(
+            "statusUpdateForm"
+        );
+
+    if (statusForm) {
+
+        /*
+         * The template should provide the base URL
+         * through data-update-url.
+         *
+         * Example:
+         *
+         * data-update-url="/document-requests/0/status/"
+         */
+
+        const baseUrl =
+            statusForm.dataset.updateUrl;
+
+        if (baseUrl) {
+
+            statusForm.action =
+                buildStatusUpdateUrl(
+                    baseUrl,
+                    requestId
+                );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       STORE CURRENT REQUEST
+    ===================================================== */
+
+    modal.dataset.requestId =
+        requestId;
+
+    modal.dataset.reference =
+        reference;
+
+
+    /* =====================================================
+       SHOW MODAL
+    ===================================================== */
+
+    modal.classList.add(
+        "show"
     );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "dr-modal-open"
+    );
+
+
+    /* =====================================================
+       FOCUS STATUS
+    ===================================================== */
+
+    window.setTimeout(
+        function () {
+
+            if (statusSelect) {
+
+                statusSelect.focus();
+
+            }
+
+        },
+        100
+    );
+
+}
+
+
+/* =========================================================
+   GLOBAL OPEN REQUEST MODAL
+========================================================= */
+
+/*
+ * This keeps compatibility if the HTML still contains:
+ *
+ * onclick="openRequestModal(this)"
+ */
+
+function openRequestModal(button) {
+
+    if (!button) {
+        return;
+    }
+
+    const row =
+        button.closest(
+            ".dr-request-row"
+        );
+
+    if (!row) {
+        return;
+    }
+
+    selectRequestRow(
+        row
+    );
+
+    openRequestModalFromRow(
+        row
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE REQUEST MODAL
+========================================================= */
+
+function closeRequestModal() {
+
+    const modal =
+        document.getElementById(
+            "requestModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "dr-modal-open"
+    );
+
+}
+
+
+/* =========================================================
+   GET DATASET VALUE
+========================================================= */
+
+function getDatasetValue(
+    element,
+    key
+) {
+
+    if (
+        !element ||
+        !element.dataset
+    ) {
+        return "";
+    }
+
+    const value =
+        element.dataset[key];
+
+    if (
+        value === undefined ||
+        value === null
+    ) {
+        return "";
+    }
+
+    return String(
+        value
+    ).trim();
 
 }
 
@@ -230,457 +635,225 @@ function updateDossier(row) {
    SET TEXT
 ========================================================= */
 
-function setText(id, value) {
+function setText(
+    id,
+    value
+) {
 
     const element =
-        document.getElementById(id);
-
+        document.getElementById(
+            id
+        );
 
     if (!element) {
         return;
     }
 
+    const cleanValue =
+        value === undefined ||
+        value === null
+            ? ""
+            : String(value).trim();
 
-    element.textContent = value;
-
-}
-
-
-/* =========================================================
-   GET INITIALS
-========================================================= */
-
-function getInitials(name) {
-
-    if (!name) {
-        return "--";
-    }
-
-
-    const parts =
-        name
-            .trim()
-            .split(/\s+/)
-            .filter(Boolean);
-
-
-    if (parts.length === 1) {
-
-        return parts[0]
-            .substring(0, 2)
-            .toUpperCase();
-
-    }
-
-
-    return (
-        parts[0][0] +
-        parts[parts.length - 1][0]
-    ).toUpperCase();
+    element.textContent =
+        cleanValue || "—";
 
 }
 
 
 /* =========================================================
-   FILTERS
+   BUILD STATUS UPDATE URL
 ========================================================= */
 
-function initializeFilters() {
-
-    const categoryFilter =
-        document.getElementById(
-            "categoryFilter"
-        );
-
-    const statusFilter =
-        document.getElementById(
-            "statusFilter"
-        );
-
-    const flaggedFilter =
-        document.getElementById(
-            "flaggedFilter"
-        );
-
-
-    if (categoryFilter) {
-
-        categoryFilter.addEventListener(
-            "change",
-            applyRequestFilters
-        );
-
-    }
-
-
-    if (statusFilter) {
-
-        statusFilter.addEventListener(
-            "change",
-            applyRequestFilters
-        );
-
-    }
-
-
-    if (flaggedFilter) {
-
-        flaggedFilter.addEventListener(
-            "change",
-            applyRequestFilters
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   APPLY FILTERS
-========================================================= */
-
-function applyRequestFilters() {
-
-    const categoryFilter =
-        document.getElementById(
-            "categoryFilter"
-        );
-
-    const statusFilter =
-        document.getElementById(
-            "statusFilter"
-        );
-
-    const flaggedFilter =
-        document.getElementById(
-            "flaggedFilter"
-        );
-
-
-    const category =
-        categoryFilter
-            ? categoryFilter.value
-            : "all";
-
-
-    const status =
-        statusFilter
-            ? statusFilter.value
-            : "all";
-
-
-    const flaggedOnly =
-        flaggedFilter
-            ? flaggedFilter.checked
-            : false;
-
-
-    const rows =
-        document.querySelectorAll(
-            ".dr-request-row"
-        );
-
-
-    let visibleCount = 0;
-
-
-    rows.forEach(function (row) {
-
-        const rowCategory =
-            row.dataset.category;
-
-        const rowStatus =
-            row.dataset.status;
-
-        const rowFlagged =
-            row.dataset.flagged === "true";
-
-
-        const categoryMatch =
-            category === "all" ||
-            category === rowCategory;
-
-
-        const statusMatch =
-            status === "all" ||
-            status === rowStatus;
-
-
-        const flaggedMatch =
-            !flaggedOnly ||
-            rowFlagged;
-
-
-        const visible =
-            categoryMatch &&
-            statusMatch &&
-            flaggedMatch;
-
-
-        if (visible) {
-
-            row.style.display = "";
-
-            visibleCount++;
-
-        } else {
-
-            row.style.display = "none";
-
-            row.classList.remove(
-                "selected"
-            );
-
-        }
-
-    });
-
-
-    updateVisibleCount(
-        visibleCount
-    );
-
-
-    updateEmptyFilterMessage(
-        visibleCount
-    );
-
-
-    ensureVisibleSelectedRow();
-
-}
-
-
-/* =========================================================
-   VISIBLE COUNT
-========================================================= */
-
-function updateVisibleCount(count) {
-
-    const element =
-        document.getElementById(
-            "visibleCount"
-        );
-
-
-    if (element) {
-
-        element.textContent = count;
-
-    }
-
-}
-
-
-/* =========================================================
-   EMPTY FILTER MESSAGE
-========================================================= */
-
-function updateEmptyFilterMessage(count) {
-
-    const tbody =
-        document.getElementById(
-            "requestTableBody"
-        );
-
-
-    if (!tbody) {
-        return;
-    }
-
-
-    const existing =
-        tbody.querySelector(
-            ".dr-empty-row"
-        );
-
-
-    if (existing) {
-
-        existing.remove();
-
-    }
-
-
-    if (count > 0) {
-        return;
-    }
-
-
-    const row =
-        document.createElement(
-            "tr"
-        );
-
-
-    row.className =
-        "dr-empty-row";
-
-
-    row.innerHTML = `
-        <td colspan="8">
-            <i class="fa-regular fa-folder-open"></i>
-            &nbsp;
-            No document requests match the selected filters.
-        </td>
-    `;
-
-
-    tbody.appendChild(row);
-
-}
-
-
-/* =========================================================
-   SELECT FIRST VISIBLE ROW
-========================================================= */
-
-function ensureVisibleSelectedRow() {
-
-    const selected =
-        document.querySelector(
-            ".dr-request-row.selected"
-        );
-
+function buildStatusUpdateUrl(
+    baseUrl,
+    requestId
+) {
 
     if (
-        selected &&
-        selected.style.display !== "none"
+        !baseUrl ||
+        !requestId
     ) {
-        return;
+        return baseUrl || "";
     }
 
+    /*
+     * Expected Django generated URL:
+     *
+     * /document-requests/0/status/
+     *
+     * Replace only the /0/ segment.
+     */
 
-    const rows =
-        document.querySelectorAll(
-            ".dr-request-row"
-        );
-
-
-    for (const row of rows) {
-
-        if (row.style.display !== "none") {
-
-            selectRequestRow(row);
-
-            return;
-
-        }
-
-    }
+    return baseUrl.replace(
+        /\/0\/status\/?$/,
+        "/" +
+        encodeURIComponent(
+            requestId
+        ) +
+        "/status/"
+    );
 
 }
 
 
 /* =========================================================
-   DATE FILTERS
+   STATUS FORM
 ========================================================= */
 
-function initializeDateFilters() {
+function initializeStatusForm() {
 
-    const buttons =
-        document.querySelectorAll(
-            ".dr-date-btn"
-        );
-
-
-    buttons.forEach(function (button) {
-
-        button.addEventListener(
-            "click",
-            function () {
-
-                buttons.forEach(
-                    function (item) {
-
-                        item.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-
-                button.classList.add(
-                    "active"
-                );
-
-
-                /*
-                 * The current page uses sample records.
-                 * When connected to Django, this can submit
-                 * the selected range as a GET parameter.
-                 */
-                const range =
-                    button.dataset.dateFilter;
-
-
-                console.log(
-                    "Selected date filter:",
-                    range
-                );
-
-            }
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   REFRESH QUEUE
-========================================================= */
-
-function initializeRefreshButton() {
-
-    const button =
+    const form =
         document.getElementById(
-            "refreshQueueBtn"
+            "statusUpdateForm"
         );
 
-
-    if (!button) {
+    if (!form) {
         return;
     }
 
+    form.addEventListener(
+        "submit",
+        function (event) {
 
-    button.addEventListener(
-        "click",
-        function () {
+            const statusSelect =
+                document.getElementById(
+                    "modalStatus"
+                );
 
-            button.disabled = true;
+            if (
+                !statusSelect ||
+                !statusSelect.value
+            ) {
+
+                event.preventDefault();
+
+                showDocumentToast(
+                    "Status required",
+                    "Please select a request status."
+                );
+
+                return;
+            }
 
 
-            const originalHTML =
-                button.innerHTML;
+            /* -------------------------------------------------
+               DISABLE SUBMIT BUTTON
+            ------------------------------------------------- */
 
+            const submitButton =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
 
-            button.innerHTML = `
-                <i class="fa-solid fa-arrows-rotate fa-spin"></i>
-                Refreshing...
+            if (!submitButton) {
+                return;
+            }
+
+            if (
+                submitButton.dataset.submitting ===
+                "true"
+            ) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+            submitButton.dataset.submitting =
+                "true";
+
+            submitButton.disabled =
+                true;
+
+            submitButton.dataset.originalHtml =
+                submitButton.innerHTML;
+
+            submitButton.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Updating...
             `;
 
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function initializeSearch() {
+
+    /*
+     * The Django view handles filtering using GET.
+     *
+     * This JavaScript simply allows Enter inside the
+     * search field to submit the existing filter form.
+     */
+
+    const searchInput =
+        document.querySelector(
+            '.dr-search input[name="search"]'
+        );
+
+    if (!searchInput) {
+        return;
+    }
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key !== "Enter"
+            ) {
+                return;
+            }
+
+            const form =
+                searchInput.closest(
+                    "form"
+                );
+
+            if (!form) {
+                return;
+            }
+
+            event.preventDefault();
+
+            form.submit();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DJANGO MESSAGES
+========================================================= */
+
+function initializeDjangoMessages() {
+
+    const messages =
+        document.querySelectorAll(
+            ".dr-message"
+        );
+
+    messages.forEach(
+        function (message) {
 
             window.setTimeout(
                 function () {
 
-                    button.disabled = false;
-
-                    button.innerHTML =
-                        originalHTML;
-
-
-                    resetRefreshCountdown();
-
-
-                    showDocumentToast(
-                        "Queue refreshed",
-                        "The document request queue has been refreshed."
+                    hideDjangoMessage(
+                        message
                     );
 
                 },
-                900
+                5000
             );
 
         }
@@ -690,315 +863,35 @@ function initializeRefreshButton() {
 
 
 /* =========================================================
-   AUTO REFRESH COUNTDOWN
+   HIDE DJANGO MESSAGE
 ========================================================= */
 
-let documentRefreshSeconds = 24;
+function hideDjangoMessage(
+    message
+) {
 
-
-function initializeAutoRefreshCountdown() {
-
-    window.setInterval(
-        function () {
-
-            documentRefreshSeconds--;
-
-
-            if (
-                documentRefreshSeconds <= 0
-            ) {
-
-                documentRefreshSeconds = 24;
-
-            }
-
-
-            updateRefreshCountdown();
-
-        },
-        1000
-    );
-
-}
-
-
-/* =========================================================
-   UPDATE COUNTDOWN
-========================================================= */
-
-function updateRefreshCountdown() {
-
-    const element =
-        document.getElementById(
-            "refreshCountdown"
-        );
-
-
-    if (!element) {
+    if (!message) {
         return;
     }
 
+    message.style.transition =
+        "opacity 0.25s ease, " +
+        "transform 0.25s ease";
 
-    element.textContent =
-        documentRefreshSeconds + "s";
+    message.style.opacity =
+        "0";
 
-}
+    message.style.transform =
+        "translateY(-5px)";
 
+    window.setTimeout(
+        function () {
 
-/* =========================================================
-   RESET COUNTDOWN
-========================================================= */
+            message.remove();
 
-function resetRefreshCountdown() {
-
-    documentRefreshSeconds = 24;
-
-    updateRefreshCountdown();
-
-}
-
-
-/* =========================================================
-   DOCUMENT ACTIONS
-========================================================= */
-
-function initializeDocumentActions() {
-
-    const signButton =
-        document.getElementById(
-            "signDocumentBtn"
-        );
-
-
-    const printButton =
-        document.getElementById(
-            "printSealBtn"
-        );
-
-
-    const notifyButton =
-        document.getElementById(
-            "notifySmsBtn"
-        );
-
-
-    const exportButton =
-        document.getElementById(
-            "exportReportBtn"
-        );
-
-
-    const moreFiltersButton =
-        document.getElementById(
-            "moreFiltersBtn"
-        );
-
-
-    if (signButton) {
-
-        signButton.addEventListener(
-            "click",
-            function () {
-
-                const request =
-                    getCurrentRequestNumber();
-
-
-                showDocumentToast(
-                    "Document signed",
-                    request +
-                    " has been marked for cryptographic signing."
-                );
-
-            }
-        );
-
-    }
-
-
-    if (printButton) {
-
-        printButton.addEventListener(
-            "click",
-            function () {
-
-                const request =
-                    getCurrentRequestNumber();
-
-
-                showDocumentToast(
-                    "Print prepared",
-                    request +
-                    " is ready for printing and sealing."
-                );
-
-            }
-        );
-
-    }
-
-
-    if (notifyButton) {
-
-        notifyButton.addEventListener(
-            "click",
-            function () {
-
-                const name =
-                    getCurrentResidentName();
-
-
-                showDocumentToast(
-                    "SMS notification",
-                    "Notification prepared for " +
-                    name +
-                    "."
-                );
-
-            }
-        );
-
-    }
-
-
-    if (exportButton) {
-
-        exportButton.addEventListener(
-            "click",
-            function () {
-
-                showDocumentToast(
-                    "DILG report",
-                    "Report export has been prepared."
-                );
-
-            }
-        );
-
-    }
-
-
-    if (moreFiltersButton) {
-
-        moreFiltersButton.addEventListener(
-            "click",
-            function () {
-
-                showDocumentToast(
-                    "Filters",
-                    "Additional filters can be connected here."
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CURRENT REQUEST
-========================================================= */
-
-function getCurrentRequestNumber() {
-
-    const element =
-        document.getElementById(
-            "detailRequest"
-        );
-
-
-    if (!element) {
-        return "Selected document";
-    }
-
-
-    return element.textContent.trim();
-
-}
-
-
-/* =========================================================
-   CURRENT RESIDENT
-========================================================= */
-
-function getCurrentResidentName() {
-
-    const element =
-        document.getElementById(
-            "detailName"
-        );
-
-
-    if (!element) {
-        return "the resident";
-    }
-
-
-    return element.textContent.trim();
-
-}
-
-
-/* =========================================================
-   PAGINATION
-========================================================= */
-
-function initializePagination() {
-
-    const buttons =
-        document.querySelectorAll(
-            ".dr-pagination button"
-        );
-
-
-    buttons.forEach(function (button) {
-
-        button.addEventListener(
-            "click",
-            function () {
-
-                const value =
-                    button.textContent.trim();
-
-
-                if (
-                    value !== "1" &&
-                    value !== "2" &&
-                    value !== "3"
-                ) {
-                    return;
-                }
-
-
-                buttons.forEach(
-                    function (item) {
-
-                        if (
-                            ["1", "2", "3"].includes(
-                                item.textContent.trim()
-                            )
-                        ) {
-
-                            item.classList.remove(
-                                "active"
-                            );
-
-                        }
-
-                    }
-                );
-
-
-                button.classList.add(
-                    "active"
-                );
-
-            }
-        );
-
-    });
+        },
+        260
+    );
 
 }
 
@@ -1020,40 +913,51 @@ function showDocumentToast(
             "documentToast"
         );
 
+    /*
+     * The updated template may not contain the old
+     * documentToast component.
+     *
+     * In that case, create one dynamically.
+     */
+
+    if (!toast) {
+
+        createDocumentToast(
+            title,
+            message
+        );
+
+        return;
+
+    }
 
     const titleElement =
         document.getElementById(
             "toastTitle"
         );
 
-
     const messageElement =
         document.getElementById(
             "toastMessage"
         );
 
+    if (titleElement) {
 
-    if (
-        !toast ||
-        !titleElement ||
-        !messageElement
-    ) {
-        return;
+        titleElement.textContent =
+            title || "";
+
     }
 
+    if (messageElement) {
 
-    titleElement.textContent =
-        title;
+        messageElement.textContent =
+            message || "";
 
-
-    messageElement.textContent =
-        message;
-
+    }
 
     toast.classList.add(
         "show"
     );
-
 
     if (documentToastTimer) {
 
@@ -1062,7 +966,6 @@ function showDocumentToast(
         );
 
     }
-
 
     documentToastTimer =
         window.setTimeout(
@@ -1075,5 +978,173 @@ function showDocumentToast(
             },
             3500
         );
+
+}
+
+
+/* =========================================================
+   CREATE TOAST
+========================================================= */
+
+function createDocumentToast(
+    title,
+    message
+) {
+
+    let toast =
+        document.getElementById(
+            "dynamicDocumentToast"
+        );
+
+    if (!toast) {
+
+        toast =
+            document.createElement(
+                "div"
+            );
+
+        toast.id =
+            "dynamicDocumentToast";
+
+        toast.className =
+            "dr-dynamic-toast";
+
+        toast.setAttribute(
+            "role",
+            "status"
+        );
+
+        toast.setAttribute(
+            "aria-live",
+            "polite"
+        );
+
+        toast.innerHTML = `
+            <div class="dr-dynamic-toast-icon">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+
+            <div class="dr-dynamic-toast-content">
+                <strong
+                    id="dynamicToastTitle"
+                ></strong>
+
+                <span
+                    id="dynamicToastMessage"
+                ></span>
+            </div>
+        `;
+
+        document.body.appendChild(
+            toast
+        );
+
+    }
+
+    const titleElement =
+        document.getElementById(
+            "dynamicToastTitle"
+        );
+
+    const messageElement =
+        document.getElementById(
+            "dynamicToastMessage"
+        );
+
+    if (titleElement) {
+
+        titleElement.textContent =
+            title || "";
+
+    }
+
+    if (messageElement) {
+
+        messageElement.textContent =
+            message || "";
+
+    }
+
+    toast.classList.add(
+        "show"
+    );
+
+    if (documentToastTimer) {
+
+        window.clearTimeout(
+            documentToastTimer
+        );
+
+    }
+
+    documentToastTimer =
+        window.setTimeout(
+            function () {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3500
+        );
+
+}
+
+
+/* =========================================================
+   REFRESH REQUESTS
+========================================================= */
+
+function refreshDocumentRequests() {
+
+    window.location.reload();
+
+}
+
+
+/* =========================================================
+   RESET FILTERS
+========================================================= */
+
+function resetDocumentRequestFilters() {
+
+    const form =
+        document.querySelector(
+            ".dr-filter-form"
+        );
+
+    if (!form) {
+        return;
+    }
+
+    const search =
+        form.querySelector(
+            '[name="search"]'
+        );
+
+    const documentType =
+        form.querySelector(
+            '[name="document_type"]'
+        );
+
+    const status =
+        form.querySelector(
+            '[name="status"]'
+        );
+
+    if (search) {
+        search.value = "";
+    }
+
+    if (documentType) {
+        documentType.value = "";
+    }
+
+    if (status) {
+        status.value = "";
+    }
+
+    form.submit();
 
 }

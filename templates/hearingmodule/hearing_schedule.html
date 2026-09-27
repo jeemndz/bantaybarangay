@@ -1,22 +1,65 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Hearing Schedule | BantayBarangay{% endblock %}
+{% block title %}
+Hearing Schedule | BantayBarangay
+{% endblock %}
+
 
 {% block extra_css %}
+
 <link
     rel="stylesheet"
     href="{% static 'css/hearing_schedule.css' %}"
 >
+
 {% endblock %}
 
 
 {% block content %}
 
-<div class="hearing-page">
+<div
+    class="hearing-page"
+    data-today="{{ today|date:'Y-m-d' }}"
+>
 
     <!-- =====================================================
-         PAGE HEADER
+         DJANGO MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="hearing-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="hearing-message hearing-message-{{ message.tags|default:'info' }}"
+                    data-hearing-message
+                >
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        type="button"
+                        data-close-message
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         HEADER
     ====================================================== -->
 
     <section class="hearing-page-header">
@@ -26,6 +69,7 @@
             <div class="hearing-title-line">
 
                 <div class="hearing-title-icon">
+
                     <svg
                         viewBox="0 0 24 24"
                         fill="none"
@@ -41,15 +85,10 @@
                         ></rect>
 
                         <path
-                            stroke-linecap="round"
                             d="M8 3v4M16 3v4M3 10h18"
                         ></path>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M8 14h3M8 17h6"
-                        ></path>
                     </svg>
+
                 </div>
 
                 <div>
@@ -57,19 +96,19 @@
                     <div class="hearing-title-with-badge">
 
                         <h1>
-                            Scheduled Hearings &amp; Mediation
+                            Hearing Schedule
                         </h1>
 
                         <span class="protocol-badge">
-                            RA 7160 Protocol
+                            Katarungang Pambarangay
                         </span>
 
                     </div>
 
                     <p>
-                        Manage Katarungang Pambarangay conciliation
-                        dockets, hearing schedules, mediation sessions,
-                        and Lupon summons.
+                        Schedule hearings, view the hearing calendar,
+                        conduct sessions, upload hearing records,
+                        and complete mediation proceedings.
                     </p>
 
                 </div>
@@ -83,94 +122,10 @@
 
             <button
                 type="button"
-                class="hearing-button hearing-button-outline"
-                id="exportCalendarButton"
-            >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14"
-                    ></path>
-                </svg>
-
-                <span>
-                    Export Calendar
-                </span>
-
-            </button>
-
-
-            <button
-                type="button"
-                class="hearing-button hearing-button-outline"
-                id="issueSummonsButton"
-            >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <rect
-                        x="3"
-                        y="5"
-                        width="18"
-                        height="14"
-                        rx="2"
-                    ></rect>
-
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m3 7 9 6 9-6"
-                    ></path>
-                </svg>
-
-                <span>
-                    Issue Summons
-                </span>
-
-            </button>
-
-
-            <button
-                type="button"
                 class="hearing-button hearing-button-primary"
                 id="openScheduleModalButton"
             >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <rect
-                        x="3"
-                        y="5"
-                        width="18"
-                        height="16"
-                        rx="2"
-                    ></rect>
-
-                    <path
-                        stroke-linecap="round"
-                        d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4"
-                    ></path>
-                </svg>
-
-                <span>
-                    Schedule Hearing
-                </span>
-
+                Schedule Hearing
             </button>
 
         </div>
@@ -178,53 +133,13 @@
     </section>
 
 
-
     <!-- =====================================================
-         SUMMARY CARDS
+         SUMMARY
     ====================================================== -->
 
     <section class="hearing-summary-grid">
 
-        <!-- TODAY -->
-
         <article class="hearing-summary-card">
-
-            <div class="summary-card-top">
-
-                <div class="summary-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <rect
-                            x="3"
-                            y="5"
-                            width="18"
-                            height="16"
-                            rx="2"
-                        ></rect>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M8 3v4M16 3v4M3 10h18"
-                        ></path>
-                    </svg>
-
-                </div>
-
-                <span class="summary-status">
-
-                    <span class="summary-dot"></span>
-
-                    Live Today
-
-                </span>
-
-            </div>
-
 
             <div class="summary-content">
 
@@ -233,22 +148,21 @@
                 </span>
 
                 <div class="summary-value">
-                    6
-                    <span>Sessions</span>
+                    {{ today_count }}
                 </div>
 
             </div>
 
-
             <div class="summary-footer">
 
                 <span>
-                    <strong>2</strong>
+                    {{ in_progress_count }}
                     In Progress
                 </span>
 
                 <span>
-                    4 Upcoming
+                    {{ upcoming_today_count }}
+                    Scheduled
                 </span>
 
             </div>
@@ -256,41 +170,7 @@
         </article>
 
 
-        <!-- ACTIVE MEDIATIONS -->
-
         <article class="hearing-summary-card">
-
-            <div class="summary-card-top">
-
-                <div class="summary-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m14 5 5 5M12 7l5 5M5 19l6-6M4 20h6"
-                        ></path>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m13 4 7 7-3 3-7-7 3-3Z"
-                        ></path>
-                    </svg>
-
-                </div>
-
-                <span class="summary-status">
-                    Active Stage
-                </span>
-
-            </div>
-
 
             <div class="summary-content">
 
@@ -299,161 +179,42 @@
                 </span>
 
                 <div class="summary-value">
-                    18
-                    <span>Ongoing</span>
+                    {{ active_mediations }}
                 </div>
-
-            </div>
-
-
-            <div class="summary-footer summary-footer-three">
-
-                <span>
-                    1st Concil (8)
-                </span>
-
-                <span>
-                    2nd (6)
-                </span>
-
-                <span>
-                    Pangkat (4)
-                </span>
 
             </div>
 
         </article>
 
 
-        <!-- SUMMONS -->
-
         <article class="hearing-summary-card">
-
-            <div class="summary-card-top">
-
-                <div class="summary-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="9"
-                        ></circle>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m8 12 2.5 2.5L16 9"
-                        ></path>
-                    </svg>
-
-                </div>
-
-                <span class="summary-status">
-                    Verified Compliance
-                </span>
-
-            </div>
-
 
             <div class="summary-content">
 
                 <span class="summary-label">
-                    Summons Served
+                    Completed Hearings
                 </span>
 
                 <div class="summary-value">
-                    94.2%
+                    {{ completed_count }}
                 </div>
-
-            </div>
-
-
-            <div class="summary-footer">
-
-                <span>
-                    <strong>38</strong>
-                    Served
-                </span>
-
-                <span class="summary-danger">
-                    3 Pending
-                </span>
 
             </div>
 
         </article>
 
 
-        <!-- SETTLEMENT RATE -->
-
         <article class="hearing-summary-card">
-
-            <div class="summary-card-top">
-
-                <div class="summary-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m8 12 3 3 5-6"
-                        ></path>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 3a9 9 0 1 0 9 9"
-                        ></path>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M16 3h5v5"
-                        ></path>
-                    </svg>
-
-                </div>
-
-                <span class="summary-status">
-                    DILG Benchmark
-                </span>
-
-            </div>
-
 
             <div class="summary-content">
 
                 <span class="summary-label">
-                    Settlement Rate
+                    Total Hearing Records
                 </span>
 
                 <div class="summary-value">
-                    82.5%
+                    {{ total_hearing_records }}
                 </div>
-
-            </div>
-
-
-            <div class="summary-footer">
-
-                <span>
-                    41 Amicable
-                </span>
-
-                <span>
-                    RA 7160 Compliant
-                </span>
 
             </div>
 
@@ -462,9 +223,8 @@
     </section>
 
 
-
     <!-- =====================================================
-         CALENDAR CONTROL
+         CALENDAR TOOLBAR
     ====================================================== -->
 
     <section class="hearing-calendar-toolbar">
@@ -473,26 +233,17 @@
 
             <button
                 type="button"
-                class="hearing-view-tab active"
-                data-hearing-view="today"
+                class="hearing-view-tab"
+                id="calendarTodayButton"
             >
                 Today
             </button>
 
             <button
                 type="button"
-                class="hearing-view-tab"
-                data-hearing-view="weekly"
+                class="hearing-view-tab active"
             >
-                Weekly
-            </button>
-
-            <button
-                type="button"
-                class="hearing-view-tab"
-                data-hearing-view="monthly"
-            >
-                Monthly
+                Monthly Calendar
             </button>
 
         </div>
@@ -503,75 +254,21 @@
             <button
                 type="button"
                 class="date-navigation-button"
-                id="previousHearingDate"
-                aria-label="Previous date"
+                id="previousHearingMonth"
             >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m15 18-6-6 6-6"
-                    ></path>
-                </svg>
-
+                &lsaquo;
             </button>
 
-
-            <div class="current-hearing-date">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <rect
-                        x="3"
-                        y="5"
-                        width="18"
-                        height="16"
-                        rx="2"
-                    ></rect>
-
-                    <path
-                        stroke-linecap="round"
-                        d="M8 3v4M16 3v4M3 10h18"
-                    ></path>
-                </svg>
-
-                <strong id="currentHearingDate">
-                    Thursday, October 24, 2024
-                </strong>
-
-            </div>
-
+            <strong id="currentHearingMonth">
+                {{ today|date:"F Y" }}
+            </strong>
 
             <button
                 type="button"
                 class="date-navigation-button"
-                id="nextHearingDate"
-                aria-label="Next date"
+                id="nextHearingMonth"
             >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m9 18 6-6-6-6"
-                    ></path>
-                </svg>
-
+                &rsaquo;
             </button>
 
         </div>
@@ -580,19 +277,13 @@
         <div class="hearing-calendar-legend">
 
             <span>
-
-                <span class="legend-dot legend-active"></span>
-
-                1 In Session
-
+                <span class="legend-dot legend-scheduled"></span>
+                Scheduled
             </span>
 
             <span>
-
-                <span class="legend-dot legend-scheduled"></span>
-
-                2 Scheduled Today
-
+                <span class="legend-dot legend-active"></span>
+                In Progress
             </span>
 
         </div>
@@ -600,469 +291,72 @@
     </section>
 
 
-
     <!-- =====================================================
-         CHAMBER CARDS
+         CALENDAR
     ====================================================== -->
 
-    <section class="hearing-chamber-grid">
-
-        <!-- =================================================
-             CHAMBER 1
-        ================================================== -->
-
-        <article class="hearing-chamber-card">
-
-            <div class="chamber-card-header">
-
-                <div>
-
-                    <span class="chamber-number">
-                        Chamber 1
-                    </span>
-
-                    <h3>
-                        Main Session Hall
-                    </h3>
-
-                </div>
-
-
-                <span class="chamber-status chamber-status-active">
-
-                    <span class="chamber-status-dot"></span>
-
-                    In Session
-
-                </span>
-
-            </div>
-
-
-            <div class="chamber-case">
-
-                <div class="chamber-case-top">
-
-                    <strong>
-                        #KP-2024-0382
-                    </strong>
-
-                    <span>
-                        09:30 AM - 11:30 AM
-                    </span>
-
-                </div>
-
-
-                <h4>
-                    Property Boundary Dispute
-                </h4>
-
-
-                <div class="chamber-parties">
-
-                    <p>
-                        <span>Complainant</span>
-                        <strong>Ernesto Dela Cruz</strong>
-                    </p>
-
-                    <p>
-                        <span>Respondent</span>
-                        Roberto Mendoza
-                    </p>
-
-                </div>
-
-
-                <div class="chamber-mediator">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3 21h18M5 21V10h14v11M4 10l8-6 8 6M9 14h6M9 17h6"
-                        ></path>
-                    </svg>
-
-                    <span>
-                        Mediator: Hon. Rogelio Morales (PB)
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="chamber-card-footer">
-
-                <span class="chamber-info">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <rect
-                            x="9"
-                            y="3"
-                            width="6"
-                            height="11"
-                            rx="3"
-                        ></rect>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M5 11a7 7 0 0 0 14 0M12 18v3"
-                        ></path>
-                    </svg>
-
-                    Audio Recording On
-
-                </span>
-
-
-                <button
-                    type="button"
-                    class="hearing-small-button hearing-small-button-primary"
-                >
-                    Log Minutes
-                </button>
-
-            </div>
-
-        </article>
-
-
-        <!-- =================================================
-             CHAMBER 2
-        ================================================== -->
-
-        <article class="hearing-chamber-card">
-
-            <div class="chamber-card-header">
-
-                <div>
-
-                    <span class="chamber-number">
-                        Chamber 2
-                    </span>
-
-                    <h3>
-                        Peace &amp; Order Room
-                    </h3>
-
-                </div>
-
-
-                <span class="chamber-status chamber-status-scheduled">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="9"
-                        ></circle>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M12 7v5l3 2"
-                        ></path>
-                    </svg>
-
-                    Scheduled 2:00 PM
-
-                </span>
-
-            </div>
-
-
-            <div class="chamber-case">
-
-                <div class="chamber-case-top">
-
-                    <strong>
-                        #KP-2024-0455
-                    </strong>
-
-                    <span>
-                        02:00 PM - 03:00 PM
-                    </span>
-
-                </div>
-
-
-                <h4>
-                    Public Disturbance &amp; Noise
-                </h4>
-
-
-                <div class="chamber-parties">
-
-                    <p>
-                        <span>Complainant</span>
-                        <strong>Purok 4 HOA</strong>
-                    </p>
-
-                    <p>
-                        <span>Respondent</span>
-                        Armando Castro
-                    </p>
-
-                </div>
-
-
-                <div class="chamber-mediator">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m14 5 5 5M12 7l5 5M5 19l6-6M4 20h6"
-                        ></path>
-                    </svg>
-
-                    <span>
-                        Mediator: Kgd. Fernando Gomez
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="chamber-card-footer">
-
-                <span class="chamber-info">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="9"
-                        ></circle>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="m8 12 2.5 2.5L16 9"
-                        ></path>
-                    </svg>
-
-                    Summons Signed
-
-                </span>
-
-
-                <button
-                    type="button"
-                    class="hearing-small-button"
-                >
-                    Prepare Settlement
-                </button>
-
-            </div>
-
-        </article>
-
-
-        <!-- =================================================
-             CHAMBER 3
-        ================================================== -->
-
-        <article class="hearing-chamber-card">
-
-            <div class="chamber-card-header">
-
-                <div>
-
-                    <span class="chamber-number">
-                        Chamber 3
-                    </span>
-
-                    <h3>
-                        Kagawad Arbitration Room
-                    </h3>
-
-                </div>
-
-
-                <span class="chamber-status chamber-status-panel">
-                    Pangkat 3:30 PM
-                </span>
-
-            </div>
-
-
-            <div class="chamber-case">
-
-                <div class="chamber-case-top">
-
-                    <strong>
-                        #KP-2024-0391
-                    </strong>
-
-                    <span>
-                        03:30 PM - 05:00 PM
-                    </span>
-
-                </div>
-
-
-                <h4>
-                    Tenancy Dispute &amp; Default
-                </h4>
-
-
-                <div class="chamber-parties">
-
-                    <p>
-                        <span>Complainant</span>
-                        <strong>Eduardo Reyes</strong>
-                    </p>
-
-                    <p>
-                        <span>Respondent</span>
-                        Helen Grace
-                    </p>
-
-                </div>
-
-
-                <div class="chamber-mediator">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <circle
-                            cx="9"
-                            cy="8"
-                            r="3"
-                        ></circle>
-
-                        <circle
-                            cx="17"
-                            cy="9"
-                            r="2"
-                        ></circle>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M3 20a6 6 0 0 1 12 0M15 15a5 5 0 0 1 6 5"
-                        ></path>
-                    </svg>
-
-                    <span>
-                        Lupon 3-Member Panel Selected
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="chamber-card-footer">
-
-                <span class="chamber-info">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <circle
-                            cx="9"
-                            cy="8"
-                            r="3"
-                        ></circle>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M3 20a6 6 0 0 1 12 0"
-                        ></path>
-                    </svg>
-
-                    Quorum Verified
-
-                </span>
-
-
-                <button
-                    type="button"
-                    class="hearing-small-button"
-                >
-                    View Panelists
-                </button>
-
-            </div>
-
-        </article>
+    <section class="hearing-calendar">
+
+        <div class="hearing-calendar-weekdays">
+
+            <span>Sun</span>
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+
+        </div>
+
+        <div
+            class="hearing-calendar-grid"
+            id="hearingCalendarGrid"
+        ></div>
 
     </section>
 
 
+    <!-- =====================================================
+         CALENDAR DATA
+    ====================================================== -->
+
+    <div
+        id="hearingCalendarData"
+        hidden
+    >
+
+        {% for hearing in calendar_hearings %}
+
+            <div
+                data-hearing-event
+                data-id="{{ hearing.hearing_id }}"
+                data-date="{{ hearing.hearing_date|date:'Y-m-d' }}"
+                data-time="{{ hearing.start_time|time:'H:i' }}"
+                data-case="{{ hearing.case_number|escape }}"
+                data-status="{{ hearing.status|escape }}"
+                data-chamber="{{ hearing.chamber|escape }}"
+            ></div>
+
+        {% endfor %}
+
+    </div>
+
 
     <!-- =====================================================
-         TABLE SECTION
+         RECORDS
     ====================================================== -->
 
     <section class="hearing-records-section">
-
-        <!-- =================================================
-             FILTER BAR
-        ================================================== -->
 
         <div class="hearing-filter-bar">
 
             <div class="hearing-search">
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <circle
-                        cx="11"
-                        cy="11"
-                        r="7"
-                    ></circle>
-
-                    <path
-                        stroke-linecap="round"
-                        d="m20 20-4-4"
-                    ></path>
-                </svg>
-
                 <input
                     type="search"
                     id="hearingSearchInput"
-                    placeholder="Filter by Case #, complainant or respondent..."
-                    autocomplete="off"
+                    placeholder="Search case, complainant, respondent..."
                 >
 
             </div>
@@ -1073,65 +367,27 @@
                 <select id="hearingStatusFilter">
 
                     <option value="all">
-                        Status: All Stages
+                        All Status
                     </option>
 
-                    <option value="in-progress">
-                        In Progress
-                    </option>
-
-                    <option value="scheduled">
+                    <option value="Scheduled">
                         Scheduled
                     </option>
 
-                    <option value="pangkat">
-                        Pangkat Formation
+                    <option value="In Progress">
+                        In Progress
                     </option>
 
-                    <option value="upcoming">
-                        Upcoming
+                    <option value="Completed">
+                        Completed
                     </option>
 
-                    <option value="resolved">
-                        Amicable Resolution
+                    <option value="Postponed">
+                        Postponed
                     </option>
 
-                </select>
-
-
-                <select id="hearingChamberFilter">
-
-                    <option value="all">
-                        Chamber: All Chambers
-                    </option>
-
-                    <option value="chamber-1">
-                        Chamber 1
-                    </option>
-
-                    <option value="chamber-2">
-                        Chamber 2
-                    </option>
-
-                    <option value="chamber-3">
-                        Chamber 3
-                    </option>
-
-                </select>
-
-
-                <select id="hearingDateFilter">
-
-                    <option value="all">
-                        All Dates
-                    </option>
-
-                    <option value="today">
-                        Today
-                    </option>
-
-                    <option value="upcoming">
-                        Upcoming
+                    <option value="Cancelled">
+                        Cancelled
                     </option>
 
                 </select>
@@ -1142,32 +398,13 @@
                     class="advanced-filter-button"
                     id="resetHearingFilters"
                 >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            d="M4 7h16M7 12h10M10 17h4"
-                        ></path>
-                    </svg>
-
                     Reset
-
                 </button>
 
             </div>
 
         </div>
 
-
-
-        <!-- =================================================
-             TABLE
-        ================================================== -->
 
         <div class="hearing-table-wrapper">
 
@@ -1177,37 +414,12 @@
 
                     <tr>
 
-                        <th>
-                            Case Number
-                        </th>
-
-                        <th>
-                            Complainant &amp;<br>
-                            Respondent
-                        </th>
-
-                        <th>
-                            Dispute Nature
-                        </th>
-
-                        <th>
-                            Scheduled Date &amp;<br>
-                            Time
-                        </th>
-
-                        <th>
-                            Chamber &amp;<br>
-                            Mediator
-                        </th>
-
-                        <th>
-                            Summons Status
-                        </th>
-
-                        <th>
-                            KP Action / Stage
-                        </th>
-
+                        <th>Case</th>
+                        <th>Parties</th>
+                        <th>Schedule</th>
+                        <th>Chamber</th>
+                        <th>Stage</th>
+                        <th>Status</th>
                         <th class="table-actions-heading">
                             Actions
                         </th>
@@ -1219,880 +431,160 @@
 
                 <tbody id="hearingTableBody">
 
-                    <!-- =========================================
-                         ROW 1
-                    ========================================== -->
+                    {% for record in hearing_records %}
 
-                    <tr
-                        data-status="in-progress"
-                        data-chamber="chamber-1"
-                        data-date="today"
-                    >
+                        {% with hearing=record.hearing %}
 
-                        <td>
+                        <tr
+                            data-status="{{ hearing.status }}"
+                            data-date="{{ hearing.hearing_date|date:'Y-m-d' }}"
+                            data-hearing-id="{{ hearing.hearing_id }}"
+                        >
 
-                            <strong class="table-case-id">
-                                #KP-2024-0382
-                            </strong>
+                            <td>
 
-                            <span class="table-secondary">
-                                Hash: 0x8a92...b4
-                            </span>
+                                <strong class="table-case-id">
+                                    {{ hearing.case_number }}
+                                </strong>
 
-                        </td>
+                                <span class="table-secondary">
+                                    Complaint #CP-{{ hearing.complaint_id|stringformat:"04d" }}
+                                </span>
 
-
-                        <td>
-
-                            <strong>
-                                Ernesto Dela Cruz
-                            </strong>
-
-                            <span class="table-secondary">
-                                vs Roberto Mendoza
-                            </span>
-
-                        </td>
+                            </td>
 
 
-                        <td>
+                            <td>
 
-                            <span>
-                                Property Boundary
-                            </span>
+                                <strong>
+                                    {{ hearing.complainant_name }}
+                                </strong>
 
-                            <span class="table-secondary">
-                                Land Encroachment
-                            </span>
+                                <span class="table-secondary">
+                                    vs. {{ hearing.respondent_name }}
+                                </span>
 
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Oct 24, 2024
-                            </strong>
-
-                            <span class="table-secondary">
-                                09:30 AM
-                            </span>
-
-                        </td>
+                            </td>
 
 
-                        <td>
+                            <td>
 
-                            <span>
-                                Chamber 1
-                            </span>
+                                <strong>
+                                    {{ hearing.hearing_date|date:"M d, Y" }}
+                                </strong>
 
-                            <span class="table-secondary">
-                                Hon. Rogelio Morales
-                            </span>
+                                <span class="table-secondary">
+                                    {{ hearing.start_time|time:"g:i A" }}
+                                    -
+                                    {{ hearing.end_time|time:"g:i A" }}
+                                </span>
 
-                        </td>
+                            </td>
 
 
-                        <td>
+                            <td>
+                                {{ hearing.chamber }}
+                            </td>
 
-                            <span class="table-badge table-badge-served">
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
+                            <td>
+                                {{ hearing.hearing_stage }}
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="table-badge hearing-status-{{ hearing.status|slugify }}"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m5 12 4 4L19 6"
-                                    ></path>
-                                </svg>
+                                    {{ hearing.status }}
+                                </span>
 
-                                Served
-
-                            </span>
-
-                        </td>
+                            </td>
 
 
-                        <td>
+                            <td>
 
-                            <span class="table-badge table-badge-progress">
+                                <div class="hearing-table-actions">
 
-                                <span class="table-status-dot"></span>
-
-                                In Progress
-
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="hearing-table-actions">
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="View hearing"
-                                >
-
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
+                                    <button
+                                        type="button"
+                                        class="hearing-small-button"
+                                        data-open-session="{{ hearing.hearing_id }}"
                                     >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-                                        ></path>
+                                        View
+                                    </button>
 
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="2.5"
-                                        ></circle>
-                                    </svg>
 
-                                </button>
+                                    {% if record.can_manage %}
 
+                                        {% if hearing.status == "Scheduled" %}
 
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Edit hearing"
-                                >
+                                            {% if hearing.hearing_date == today %}
 
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
-                                        ></path>
-                                    </svg>
+                                                <form
+                                                    method="POST"
+                                                    action="{% url 'hearingmodule:start_hearing' hearing.hearing_id %}"
+                                                >
 
-                                </button>
+                                                    {% csrf_token %}
 
+                                                    <button
+                                                        type="submit"
+                                                        class="hearing-small-button hearing-small-button-primary"
+                                                    >
+                                                        Start
+                                                    </button>
 
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Print"
-                                >
+                                                </form>
 
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
-                                        ></path>
+                                            {% endif %}
 
-                                        <rect
-                                            x="6"
-                                            y="14"
-                                            width="12"
-                                            height="7"
-                                        ></rect>
-                                    </svg>
+                                        {% elif hearing.status == "In Progress" %}
 
-                                </button>
+                                            <form
+                                                method="POST"
+                                                action="{% url 'hearingmodule:complete_hearing' hearing.hearing_id %}"
+                                                data-confirm="Mark this hearing as completed?"
+                                            >
 
-                            </div>
+                                                {% csrf_token %}
 
-                        </td>
+                                                <button
+                                                    type="submit"
+                                                    class="hearing-small-button hearing-complete-button"
+                                                >
+                                                    Complete
+                                                </button>
 
-                    </tr>
+                                            </form>
 
+                                        {% endif %}
 
-                    <!-- =========================================
-                         ROW 2
-                    ========================================== -->
+                                    {% endif %}
 
-                    <tr
-                        data-status="scheduled"
-                        data-chamber="chamber-2"
-                        data-date="today"
-                    >
+                                </div>
 
-                        <td>
+                            </td>
 
-                            <strong class="table-case-id">
-                                #KP-2024-0455
-                            </strong>
+                        </tr>
 
-                            <span class="table-secondary">
-                                Hash: 0x4f12...e1
-                            </span>
+                        {% endwith %}
 
-                        </td>
+                    {% empty %}
 
+                        <tr>
 
-                        <td>
+                            <td
+                                colspan="7"
+                                class="hearing-no-records"
+                            >
+                                No hearing records yet.
+                            </td>
 
-                            <strong>
-                                Purok 4 HOA
-                            </strong>
+                        </tr>
 
-                            <span class="table-secondary">
-                                vs Armando Castro
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Noise Nuisance
-                            </span>
-
-                            <span class="table-secondary">
-                                Repeated Videoke
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Oct 24, 2024
-                            </strong>
-
-                            <span class="table-secondary">
-                                02:00 PM
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Chamber 2
-                            </span>
-
-                            <span class="table-secondary">
-                                Kgd. Fernando Gomez
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-served">
-                                Served
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-scheduled">
-                                Scheduled
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="hearing-table-actions">
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="View hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-                                        ></path>
-
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="2.5"
-                                        ></circle>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Edit hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
-                                        ></path>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Print"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
-                                        ></path>
-
-                                        <rect
-                                            x="6"
-                                            y="14"
-                                            width="12"
-                                            height="7"
-                                        ></rect>
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- =========================================
-                         ROW 3
-                    ========================================== -->
-
-                    <tr
-                        data-status="pangkat"
-                        data-chamber="chamber-3"
-                        data-date="today"
-                    >
-
-                        <td>
-
-                            <strong class="table-case-id">
-                                #KP-2024-0391
-                            </strong>
-
-                            <span class="table-secondary">
-                                Hash: 0x9c31...8a
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Eduardo Reyes
-                            </strong>
-
-                            <span class="table-secondary">
-                                vs Helen Grace
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Rental Tenancy
-                            </span>
-
-                            <span class="table-secondary">
-                                Unpaid 4 Months
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Oct 24, 2024
-                            </strong>
-
-                            <span class="table-secondary">
-                                03:30 PM
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Chamber 3
-                            </span>
-
-                            <span class="table-secondary">
-                                Lupon Panel
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-notice">
-                                2nd Notice Sent
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-pangkat">
-                                Pangkat Formation
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="hearing-table-actions">
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="View hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-                                        ></path>
-
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="2.5"
-                                        ></circle>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Edit hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
-                                        ></path>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Print"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
-                                        ></path>
-
-                                        <rect
-                                            x="6"
-                                            y="14"
-                                            width="12"
-                                            height="7"
-                                        ></rect>
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- =========================================
-                         ROW 4
-                    ========================================== -->
-
-                    <tr
-                        data-status="upcoming"
-                        data-chamber="chamber-1"
-                        data-date="upcoming"
-                    >
-
-                        <td>
-
-                            <strong class="table-case-id">
-                                #KP-2024-0412
-                            </strong>
-
-                            <span class="table-secondary">
-                                Hash: 0x3d41...77
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Maria Santos
-                            </strong>
-
-                            <span class="table-secondary">
-                                vs Danilo Carpio
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Unsettled Debt
-                            </span>
-
-                            <span class="table-secondary">
-                                Promissory Note Default
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Oct 25, 2024
-                            </strong>
-
-                            <span class="table-secondary">
-                                10:00 AM
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Chamber 1
-                            </span>
-
-                            <span class="table-secondary">
-                                Hon. Rogelio Morales
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-pending">
-                                Pending Service
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-upcoming">
-                                Upcoming
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="hearing-table-actions">
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="View hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-                                        ></path>
-
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="2.5"
-                                        ></circle>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Edit hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M4 20h4L19 9l-4-4L4 16v4Z"
-                                        ></path>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="Issue summons"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <rect
-                                            x="3"
-                                            y="5"
-                                            width="18"
-                                            height="14"
-                                            rx="2"
-                                        ></rect>
-
-                                        <path
-                                            stroke-linecap="round"
-                                            d="m3 7 9 6 9-6"
-                                        ></path>
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- =========================================
-                         ROW 5
-                    ========================================== -->
-
-                    <tr
-                        data-status="resolved"
-                        data-chamber="chamber-2"
-                        data-date="upcoming"
-                    >
-
-                        <td>
-
-                            <strong class="table-case-id">
-                                #KP-2024-0365
-                            </strong>
-
-                            <span class="table-secondary">
-                                Hash: 0x11bb...09
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Lito Valenzuela
-                            </strong>
-
-                            <span class="table-secondary">
-                                vs Barangay Utility
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Right of Way
-                            </span>
-
-                            <span class="table-secondary">
-                                Drainage Easement
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <strong>
-                                Oct 26, 2024
-                            </strong>
-
-                            <span class="table-secondary">
-                                01:30 PM
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span>
-                                Chamber 2
-                            </span>
-
-                            <span class="table-secondary">
-                                Atty. Manuel Diaz
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-served">
-                                Served
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="table-badge table-badge-resolution">
-                                Amicable Resolution
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
-                            <div class="hearing-table-actions">
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="View hearing"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-                                        ></path>
-
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="2.5"
-                                        ></circle>
-                                    </svg>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="table-action-button"
-                                    title="View document"
-                                >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M6 3h8l4 4v14H6V3Z"
-                                        ></path>
-
-                                        <path
-                                            stroke-linecap="round"
-                                            d="M14 3v5h5M9 13h6M9 17h6"
-                                        ></path>
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
+                    {% endfor %}
 
                 </tbody>
 
@@ -2100,510 +592,717 @@
 
         </div>
 
-
-
-        <!-- =================================================
-             EMPTY STATE
-        ================================================== -->
-
-        <div
-            class="hearing-empty-state"
-            id="hearingEmptyState"
-        >
-
-            <div class="empty-state-icon">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.7"
-                >
-                    <circle
-                        cx="11"
-                        cy="11"
-                        r="7"
-                    ></circle>
-
-                    <path
-                        stroke-linecap="round"
-                        d="m20 20-4-4"
-                    ></path>
-                </svg>
-
-            </div>
-
-            <strong>
-                No hearings found
-            </strong>
-
-            <p>
-                Try changing your search or filters.
-            </p>
-
-        </div>
-
-
-
-        <!-- =================================================
-             TABLE FOOTER
-        ================================================== -->
-
-        <div class="hearing-table-footer">
-
-            <div class="hearing-table-summary">
-
-                Showing
-
-                <strong id="visibleHearingCount">
-                    5
-                </strong>
-
-                of
-
-                <strong id="totalHearingCount">
-                    5
-                </strong>
-
-                hearing records
-
-                <span class="table-summary-divider">
-                    •
-                </span>
-
-                <span class="ledger-sync">
-
-                    <span class="ledger-dot"></span>
-
-                    BantayBarangay case records synchronized
-
-                </span>
-
-            </div>
-
-
-            <div class="hearing-pagination">
-
-                <button
-                    type="button"
-                    class="pagination-navigation"
-                    disabled
-                >
-                    Previous
-                </button>
-
-                <button
-                    type="button"
-                    class="pagination-number active"
-                >
-                    1
-                </button>
-
-                <button
-                    type="button"
-                    class="pagination-number"
-                >
-                    2
-                </button>
-
-                <button
-                    type="button"
-                    class="pagination-number"
-                >
-                    3
-                </button>
-
-                <button
-                    type="button"
-                    class="pagination-navigation"
-                >
-                    Next
-                </button>
-
-            </div>
-
-        </div>
-
     </section>
 
 
-
     <!-- =====================================================
-         PAGE FOOTER
+         HEARING SESSION CARDS / MODALS
     ====================================================== -->
 
-    <footer class="hearing-module-footer">
+    {% for record in hearing_records %}
 
-        <span>
-            BantayBarangay • Katarungang Pambarangay
-            Hearing Management
-        </span>
+        {% with hearing=record.hearing %}
 
-        <span>
+        <div
+            class="hearing-modal hearing-session-modal"
+            id="hearingSession{{ hearing.hearing_id }}"
+            aria-hidden="true"
+        >
 
-            <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 3 4 6v5c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-3Z"
-                ></path>
-
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m9 12 2 2 4-4"
-                ></path>
-            </svg>
-
-            Secure Case Management
-
-        </span>
-
-    </footer>
-
-</div>
+            <div
+                class="hearing-modal-backdrop"
+                data-close-session
+            ></div>
 
 
+            <div class="hearing-modal-dialog hearing-session-dialog">
 
-<!-- =========================================================
-     SCHEDULE HEARING MODAL
-========================================================== -->
+                <div class="hearing-modal-header">
 
-<div
-    class="hearing-modal"
-    id="scheduleHearingModal"
-    aria-hidden="true"
->
+                    <div>
 
-    <div
-        class="hearing-modal-backdrop"
-        data-close-hearing-modal
-    ></div>
+                        <span class="modal-eyebrow">
+                            HEARING SESSION
+                        </span>
+
+                        <h2>
+                            {{ hearing.case_number }}
+                        </h2>
+
+                        <p>
+                            {{ hearing.hearing_date|date:"F d, Y" }}
+                            •
+                            {{ hearing.start_time|time:"g:i A" }}
+                            -
+                            {{ hearing.end_time|time:"g:i A" }}
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="hearing-modal-close"
+                        data-close-session
+                    >
+                        &times;
+                    </button>
+
+                </div>
 
 
-    <div
-        class="hearing-modal-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="scheduleHearingModalTitle"
-    >
+                <div class="hearing-modal-body">
 
-        <!-- MODAL HEADER -->
+                    <div class="hearing-session-information">
 
-        <div class="hearing-modal-header">
+                        <div>
+                            <span>Complainant</span>
+                            <strong>
+                                {{ hearing.complainant_name }}
+                            </strong>
+                        </div>
 
-            <div>
+                        <div>
+                            <span>Respondent</span>
+                            <strong>
+                                {{ hearing.respondent_name }}
+                            </strong>
+                        </div>
 
-                <span class="modal-eyebrow">
-                    HEARING CALENDAR
-                </span>
+                        <div>
+                            <span>Chamber</span>
+                            <strong>
+                                {{ hearing.chamber }}
+                            </strong>
+                        </div>
 
-                <h2 id="scheduleHearingModalTitle">
-                    Schedule Hearing
-                </h2>
+                        <div>
+                            <span>Status</span>
+                            <strong>
+                                {{ hearing.status }}
+                            </strong>
+                        </div>
 
-                <p>
-                    Assign a hearing date, chamber, and
-                    Katarungang Pambarangay stage.
-                </p>
+                    </div>
+
+
+                    <!-- =====================================
+                         NOTES
+                    ====================================== -->
+
+                    <section class="hearing-session-section">
+
+                        <h3>
+                            Hearing Notes / Minutes
+                        </h3>
+
+                        {% if record.can_manage and hearing.status == "In Progress" %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'hearingmodule:save_hearing_notes' hearing.hearing_id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <textarea
+                                    name="notes"
+                                    class="hearing-session-notes"
+                                    placeholder="Enter proceedings, statements, agreements, actions taken, and hearing minutes..."
+                                >{{ hearing.notes|default:'' }}</textarea>
+
+                                <button
+                                    type="submit"
+                                    class="hearing-button hearing-button-outline"
+                                >
+                                    Save Notes
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <div class="hearing-readonly-notes">
+
+                                {{ hearing.notes|default:"No hearing notes recorded."|linebreaksbr }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </section>
+
+
+                    <!-- =====================================
+                         ATTACHMENTS
+                    ====================================== -->
+
+                    <section class="hearing-session-section">
+
+                        <div class="hearing-session-section-header">
+
+                            <div>
+
+                                <h3>
+                                    Voice Records &amp; Documents
+                                </h3>
+
+                                <p>
+                                    Audio recordings, hearing minutes,
+                                    PDFs, documents, and scanned records.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if record.can_manage and hearing.status == "In Progress" %}
+
+                            <form
+                                method="POST"
+                                enctype="multipart/form-data"
+                                action="{% url 'hearingmodule:upload_hearing_attachment' hearing.hearing_id %}"
+                                class="hearing-upload-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <select
+                                    name="attachment_type"
+                                    required
+                                >
+
+                                    <option value="Audio Recording">
+                                        Audio Recording
+                                    </option>
+
+                                    <option value="Hearing Minutes">
+                                        Hearing Minutes
+                                    </option>
+
+                                    <option value="Document">
+                                        Document
+                                    </option>
+
+                                    <option value="Image">
+                                        Image / Scan
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+
+                                <input
+                                    type="file"
+                                    name="file"
+                                    required
+                                    accept=".jpg,.jpeg,.png,.gif,.webp,.mp3,.wav,.ogg,.m4a,.aac,.pdf,.doc,.docx,.txt"
+                                >
+
+
+                                <input
+                                    type="text"
+                                    name="description"
+                                    placeholder="Optional description"
+                                >
+
+
+                                <button
+                                    type="submit"
+                                    class="hearing-button hearing-button-primary"
+                                >
+                                    Upload File
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+
+                        <div class="hearing-attachment-list">
+
+                            {% for attachment in hearing.attachments.all %}
+
+                                <article class="hearing-attachment">
+
+                                    <div>
+
+                                        <strong>
+                                            {{ attachment.original_filename }}
+                                        </strong>
+
+                                        <span>
+                                            {{ attachment.attachment_type }}
+                                            •
+                                            {{ attachment.uploaded_at|date:"M d, Y g:i A" }}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="hearing-attachment-actions">
+
+                                        <a
+                                            href="{{ attachment.file.url }}"
+                                            target="_blank"
+                                            rel="noopener"
+                                            class="hearing-small-button"
+                                        >
+                                            Open
+                                        </a>
+
+
+                                        {% if record.can_manage %}
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'hearingmodule:delete_hearing_attachment' attachment.attachment_id %}"
+                                                data-confirm="Remove this hearing file?"
+                                            >
+
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="hearing-small-button hearing-danger-button"
+                                                >
+                                                    Remove
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </article>
+
+                            {% empty %}
+
+                                <div class="hearing-no-attachments">
+                                    No hearing records uploaded.
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =====================================
+                         ACTIONS
+                    ====================================== -->
+
+                    {% if record.can_manage %}
+
+                        <section class="hearing-session-actions">
+
+                            {% if hearing.status == "Scheduled" %}
+
+                                {% if hearing.hearing_date == today %}
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'hearingmodule:start_hearing' hearing.hearing_id %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="hearing-button hearing-button-primary"
+                                        >
+                                            Start Hearing
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+
+                                <button
+                                    type="button"
+                                    class="hearing-button hearing-button-outline"
+                                    data-show-postpone="{{ hearing.hearing_id }}"
+                                >
+                                    Postpone
+                                </button>
+
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'hearingmodule:cancel_hearing' hearing.hearing_id %}"
+                                    data-confirm="Cancel this hearing?"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="hearing-button hearing-danger-button"
+                                    >
+                                        Cancel Hearing
+                                    </button>
+
+                                </form>
+
+                            {% elif hearing.status == "In Progress" %}
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'hearingmodule:complete_hearing' hearing.hearing_id %}"
+                                    data-confirm="Mark this hearing as completed?"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="hearing-button hearing-complete-button"
+                                    >
+                                        Complete Hearing
+                                    </button>
+
+                                </form>
+
+
+                                <button
+                                    type="button"
+                                    class="hearing-button hearing-button-outline"
+                                    data-show-postpone="{{ hearing.hearing_id }}"
+                                >
+                                    Postpone
+                                </button>
+
+                            {% endif %}
+
+                        </section>
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'hearingmodule:postpone_hearing' hearing.hearing_id %}"
+                            class="hearing-postpone-form"
+                            id="postponeForm{{ hearing.hearing_id }}"
+                            hidden
+                        >
+
+                            {% csrf_token %}
+
+                            <label>
+                                New Hearing Date
+                            </label>
+
+                            <div>
+
+                                <input
+                                    type="date"
+                                    name="hearing_date"
+                                    min="{{ today|date:'Y-m-d' }}"
+                                    required
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="hearing-button hearing-button-primary"
+                                >
+                                    Reschedule
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    {% endif %}
+
+                </div>
 
             </div>
-
-
-            <button
-                type="button"
-                class="hearing-modal-close"
-                data-close-hearing-modal
-                aria-label="Close schedule hearing modal"
-            >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        d="M6 6l12 12M18 6 6 18"
-                    ></path>
-                </svg>
-
-            </button>
 
         </div>
 
+        {% endwith %}
 
-        <!-- MODAL FORM -->
+    {% endfor %}
 
-        <form
-            id="scheduleHearingForm"
-            method="post"
-        >
 
-            {% csrf_token %}
+    <!-- =====================================================
+         SCHEDULE MODAL
+    ====================================================== -->
 
-            <div class="hearing-modal-body">
+    <div
+        class="hearing-modal"
+        id="scheduleHearingModal"
+        aria-hidden="true"
+    >
 
-                <!-- CASE -->
+        <div
+            class="hearing-modal-backdrop"
+            data-close-hearing-modal
+        ></div>
 
-                <div class="hearing-form-group hearing-form-full">
 
-                    <label for="hearingCaseNumber">
-                        Case Number
-                    </label>
+        <div class="hearing-modal-dialog">
 
-                    <input
-                        type="text"
-                        id="hearingCaseNumber"
-                        name="case_number"
-                        placeholder="Example: KP-2024-0456"
-                        required
+            <form
+                method="POST"
+                action="{% url 'hearingmodule:create_hearing' %}"
+                id="scheduleHearingForm"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="hearing-modal-header">
+
+                    <div>
+
+                        <span class="modal-eyebrow">
+                            HEARING CALENDAR
+                        </span>
+
+                        <h2>
+                            Schedule Hearing
+                        </h2>
+
+                        <p>
+                            Select a complaint and assign its
+                            hearing schedule.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="hearing-modal-close"
+                        data-close-hearing-modal
                     >
+                        &times;
+                    </button>
 
                 </div>
 
 
-                <!-- GRID -->
+                <div class="hearing-modal-body">
 
-                <div class="hearing-form-grid">
+                    <div class="hearing-form-group hearing-form-full">
 
-                    <div class="hearing-form-group">
-
-                        <label for="hearingDate">
-                            Hearing Date
-                        </label>
-
-                        <input
-                            type="date"
-                            id="hearingDate"
-                            name="hearing_date"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="hearing-form-group">
-
-                        <label for="hearingTime">
-                            Hearing Time
-                        </label>
-
-                        <input
-                            type="time"
-                            id="hearingTime"
-                            name="hearing_time"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="hearing-form-group">
-
-                        <label for="hearingChamber">
-                            Hearing Chamber
+                        <label>
+                            Complaint
                         </label>
 
                         <select
-                            id="hearingChamber"
-                            name="chamber"
+                            name="complaint_id"
                             required
                         >
 
                             <option value="">
-                                Select chamber
+                                Select complaint
                             </option>
 
-                            <option value="chamber-1">
-                                Chamber 1 - Main Session Hall
-                            </option>
+                            {% for complaint in hearing_complaints %}
 
-                            <option value="chamber-2">
-                                Chamber 2 - Peace &amp; Order Room
-                            </option>
+                                <option
+                                    value="{{ complaint.complaint_id }}"
+                                >
+                                    CP-{{ complaint.complaint_id|stringformat:"04d" }}
+                                    —
+                                    {{ complaint.subject }}
+                                </option>
 
-                            <option value="chamber-3">
-                                Chamber 3 - Kagawad Arbitration Room
-                            </option>
+                            {% empty %}
+
+                                <option
+                                    value=""
+                                    disabled
+                                >
+                                    No complaints waiting for scheduling
+                                </option>
+
+                            {% endfor %}
 
                         </select>
 
                     </div>
 
 
-                    <div class="hearing-form-group">
+                    <div class="hearing-form-grid">
 
-                        <label for="hearingStage">
-                            KP Stage
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Hearing Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="hearingDate"
+                                name="hearing_date"
+                                min="{{ today|date:'Y-m-d' }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Chamber
+                            </label>
+
+                            <select
+                                name="chamber"
+                                required
+                            >
+
+                                <option value="">
+                                    Select chamber
+                                </option>
+
+                                <option value="Chamber 1">
+                                    Chamber 1
+                                </option>
+
+                                <option value="Chamber 2">
+                                    Chamber 2
+                                </option>
+
+                                <option value="Chamber 3">
+                                    Chamber 3
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Start Time
+                            </label>
+
+                            <input
+                                type="time"
+                                name="start_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                End Time
+                            </label>
+
+                            <input
+                                type="time"
+                                name="end_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Hearing Stage
+                            </label>
+
+                            <select
+                                name="hearing_stage"
+                                required
+                            >
+
+                                <option value="Mediation">
+                                    Mediation
+                                </option>
+
+                                <option value="Conciliation">
+                                    Conciliation
+                                </option>
+
+                                <option value="Pangkat">
+                                    Pangkat
+                                </option>
+
+                                <option value="Arbitration">
+                                    Arbitration
+                                </option>
+
+                                <option value="Settlement">
+                                    Settlement
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="hearing-form-group">
+
+                            <label>
+                                Mediator
+                            </label>
+
+                            <input
+                                type="text"
+                                name="mediator"
+                                placeholder="Mediator name"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="hearing-form-group hearing-form-full">
+
+                        <label>
+                            Initial Notes
                         </label>
 
-                        <select
-                            id="hearingStage"
-                            name="stage"
-                            required
-                        >
-
-                            <option value="">
-                                Select stage
-                            </option>
-
-                            <option value="mediation">
-                                Mediation
-                            </option>
-
-                            <option value="conciliation">
-                                Conciliation
-                            </option>
-
-                            <option value="pangkat">
-                                Pangkat
-                            </option>
-
-                            <option value="arbitration">
-                                Arbitration
-                            </option>
-
-                        </select>
+                        <textarea
+                            name="notes"
+                            placeholder="Optional scheduling notes..."
+                        ></textarea>
 
                     </div>
 
                 </div>
 
 
-                <!-- MEDIATOR -->
+                <div class="hearing-modal-footer">
 
-                <div class="hearing-form-group hearing-form-full">
-
-                    <label for="hearingMediator">
-                        Assigned Mediator / Lupon Member
-                    </label>
-
-                    <input
-                        type="text"
-                        id="hearingMediator"
-                        name="mediator"
-                        placeholder="Enter mediator or Lupon member"
+                    <button
+                        type="button"
+                        class="hearing-button hearing-button-outline"
+                        data-close-hearing-modal
                     >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="hearing-button hearing-button-primary"
+                    >
+                        Save Hearing
+                    </button>
 
                 </div>
 
+            </form>
 
-                <!-- NOTES -->
-
-                <div class="hearing-form-group hearing-form-full">
-
-                    <label for="hearingNotes">
-                        Hearing Notes
-                    </label>
-
-                    <textarea
-                        id="hearingNotes"
-                        name="notes"
-                        rows="4"
-                        placeholder="Enter hearing instructions or notes..."
-                    ></textarea>
-
-                </div>
-
-            </div>
-
-
-            <!-- MODAL FOOTER -->
-
-            <div class="hearing-modal-footer">
-
-                <button
-                    type="button"
-                    class="hearing-button hearing-button-outline"
-                    data-close-hearing-modal
-                >
-                    Cancel
-                </button>
-
-
-                <button
-                    type="submit"
-                    class="hearing-button hearing-button-primary"
-                >
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <rect
-                            x="3"
-                            y="5"
-                            width="18"
-                            height="16"
-                            rx="2"
-                        ></rect>
-
-                        <path
-                            stroke-linecap="round"
-                            d="M8 3v4M16 3v4M3 10h18m-7 5 2 2 4-4"
-                        ></path>
-                    </svg>
-
-                    Save Hearing
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================================================
-     PAGE TOAST
-========================================================== -->
-
-<div
-    class="hearing-toast"
-    id="hearingToast"
-    role="status"
-    aria-live="polite"
->
-
-    <div class="hearing-toast-icon">
-
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-        >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m5 12 4 4L19 6"
-            ></path>
-        </svg>
-
-    </div>
-
-    <div>
-
-        <strong id="hearingToastTitle">
-            Success
-        </strong>
-
-        <p id="hearingToastMessage">
-            Operation completed.
-        </p>
+        </div>
 
     </div>
 

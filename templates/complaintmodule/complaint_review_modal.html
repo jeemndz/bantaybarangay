@@ -23,7 +23,7 @@
     >
 
         <!-- =================================================
-             MODAL HEADER
+             HEADER
         ================================================== -->
 
         <div class="review-modal-header">
@@ -60,15 +60,15 @@
 
 
         <!-- =================================================
-             MODAL BODY
+             BODY
         ================================================== -->
 
         <div class="review-modal-body">
 
 
-            <!-- =============================================
+            <!-- =================================================
                  COMPLAINT INFORMATION
-            ============================================== -->
+            ================================================== -->
 
             <section class="review-card">
 
@@ -81,7 +81,6 @@
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
-                            aria-hidden="true"
                         >
                             <path
                                 d="M7 3.5h10a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"
@@ -221,9 +220,9 @@
             </section>
 
 
-            <!-- =============================================
-                 RESPONDENT INFORMATION
-            ============================================== -->
+            <!-- =================================================
+                 RESPONDENT
+            ================================================== -->
 
             <section
                 id="reviewRespondentSection"
@@ -239,7 +238,6 @@
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
-                            aria-hidden="true"
                         >
 
                             <circle
@@ -274,7 +272,6 @@
 
 
                 <div class="review-info-grid">
-
 
                     <div class="review-info-item">
 
@@ -332,9 +329,9 @@
             </section>
 
 
-            <!-- =============================================
-                 EXISTING EVIDENCE & ATTACHMENTS
-            ============================================== -->
+            <!-- =================================================
+                 EVIDENCE
+            ================================================== -->
 
             <section class="review-card review-evidence-card">
 
@@ -347,13 +344,14 @@
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
-                            aria-hidden="true"
                         >
+
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 d="M8.5 12.5 13 8a3 3 0 0 1 4.25 4.25l-6 6a5 5 0 0 1-7.07-7.07l6.5-6.5"
                             />
+
                         </svg>
 
                     </div>
@@ -366,7 +364,7 @@
                         </h3>
 
                         <p>
-                            Review photos, videos, audio recordings and documents attached to this complaint.
+                            Review evidence and documents attached to this complaint.
                         </p>
 
                     </div>
@@ -381,10 +379,6 @@
 
                 </div>
 
-
-                <!-- =========================================
-                     EVIDENCE LOADING
-                ========================================== -->
 
                 <div
                     id="reviewEvidenceLoading"
@@ -401,39 +395,11 @@
                 </div>
 
 
-                <!-- =========================================
-                     NO EVIDENCE
-                ========================================== -->
-
                 <div
                     id="reviewEvidenceEmpty"
                     class="review-evidence-empty"
                     hidden
                 >
-
-                    <div class="review-evidence-empty-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            aria-hidden="true"
-                        >
-
-                            <path
-                                d="M5 4h14v16H5z"
-                            />
-
-                            <path
-                                stroke-linecap="round"
-                                d="M8 9h8M8 13h5"
-                            />
-
-                        </svg>
-
-                    </div>
-
 
                     <strong>
                         No evidence attached
@@ -446,10 +412,6 @@
                 </div>
 
 
-                <!-- =========================================
-                     EVIDENCE GRID
-                ========================================== -->
-
                 <div
                     id="reviewEvidenceGrid"
                     class="review-evidence-grid"
@@ -459,9 +421,9 @@
             </section>
 
 
-            <!-- =============================================
-                 REVIEW & PROCESSING
-            ============================================== -->
+            <!-- =================================================
+                 PROCESSING
+            ================================================== -->
 
             <section class="review-card">
 
@@ -474,12 +436,9 @@
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
-                            aria-hidden="true"
                         >
 
-                            <path
-                                d="M5 4.5h14v15H5z"
-                            />
+                            <path d="M5 4.5h14v15H5z" />
 
                             <path
                                 stroke-linecap="round"
@@ -498,18 +457,13 @@
                         </h3>
 
                         <p>
-                            Update the complaint priority, status, official notes,
-                            and attach additional supporting files.
+                            Process and update this complaint.
                         </p>
 
                     </div>
 
                 </div>
 
-
-                <!-- =========================================
-                     REVIEW FORM
-                ========================================== -->
 
                 <form
                     id="complaintReviewForm"
@@ -524,9 +478,126 @@
                     <div class="review-form-grid">
 
 
-                        <!-- =================================
+                        <!-- =================================================
+                             ASSIGNED USER
+                        ================================================== -->
+
+                        <div class="review-form-group review-form-full">
+
+                            <label>
+                                Assigned Admin / Barangay Official
+                            </label>
+
+
+                            <div
+                                id="assignedOfficialDisplay"
+                                class="assigned-official-display"
+                            >
+
+                                <div
+                                    id="assignedOfficialAvatar"
+                                    class="assigned-official-avatar"
+                                >
+                                    ?
+                                </div>
+
+
+                                <div class="assigned-official-information">
+
+                                    <strong id="assignedOfficialName">
+                                        Unassigned
+                                    </strong>
+
+                                    <span id="assignedOfficialRole">
+                                        No handler assigned
+                                    </span>
+
+                                </div>
+
+
+                                <div
+                                    id="assignedOfficialBadge"
+                                    class="assigned-official-current"
+                                >
+
+                                    <span class="assigned-official-dot"></span>
+
+                                    <span id="assignedOfficialBadgeText">
+                                        Unassigned
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <p
+                                id="assignedOfficialHelper"
+                                class="assigned-official-helper"
+                            >
+                                This complaint has not been assigned yet.
+                                Change its status to Under Review to take responsibility for it.
+                            </p>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             LOCK NOTICE
+                        ================================================== -->
+
+                        <div
+                            id="complaintLockedNotice"
+                            class="review-form-group review-form-full"
+                            hidden
+                        >
+
+                            <div class="assigned-official-unavailable">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                >
+
+                                    <rect
+                                        x="5"
+                                        y="10"
+                                        width="14"
+                                        height="10"
+                                        rx="2"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        d="M8 10V7a4 4 0 0 1 8 0v3"
+                                    />
+
+                                </svg>
+
+
+                                <div>
+
+                                    <strong>
+                                        View only
+                                    </strong>
+
+                                    <span>
+                                        This complaint is assigned to another
+                                        Admin or Barangay Official.
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
                              PRIORITY
-                        ================================== -->
+                        ================================================== -->
 
                         <div class="review-form-group">
 
@@ -566,9 +637,9 @@
                         </div>
 
 
-                        <!-- =================================
+                        <!-- =================================================
                              STATUS
-                        ================================== -->
+                        ================================================== -->
 
                         <div class="review-form-group">
 
@@ -591,36 +662,32 @@
                                     Under Review
                                 </option>
 
-                                <option value="Under Investigation">
-                                    Under Investigation
-                                </option>
-                                
-                                <option value="Under Investigation">
-                                   Summons Issued
+                                <option value="Summons Issued">
+                                    Summons Issued
                                 </option>
 
-                                <option value="Under Investigation">
-                                   Hearing Scheduled
+                                <option value="Hearing Scheduled">
+                                    Hearing Scheduled
                                 </option>
 
-                                <option value="Under Investigation">
-                                   Under Mediation
+                                <option value="Under Mediation">
+                                    Under Mediation
                                 </option>
 
-                                <option value="Under Investigation">
-                                   For Verification
+                                <option value="For Verification">
+                                    For Verification
                                 </option>
 
-                                <option value="Under Investigation">
-                                   Settled
+                                <option value="Settled">
+                                    Settled
                                 </option>
 
-                                <option value="Under Investigation">
-                                   For Document Released
+                                <option value="For Document Released">
+                                    For Document Released
                                 </option>
 
-                                <option value="Under Investigation">
-                                   Referred
+                                <option value="Referred">
+                                    Referred
                                 </option>
 
                                 <option value="Resolved">
@@ -640,9 +707,9 @@
                         </div>
 
 
-                        <!-- =================================
-                             RESOLUTION / REVIEW NOTES
-                        ================================== -->
+                        <!-- =================================================
+                             RESOLUTION
+                        ================================================== -->
 
                         <div class="review-form-group review-form-full">
 
@@ -661,16 +728,14 @@
                         </div>
 
 
-                        <!-- =================================
-                             UPLOAD FILES / DOCUMENTS
-                        ================================== -->
+                        <!-- =================================================
+                             UPLOAD
+                        ================================================== -->
 
-                        <div class="review-form-group review-form-full">
-
-
-                            <!-- =============================
-                                 UPLOAD HEADER
-                            ============================== -->
+                        <div
+                            id="reviewUploadSection"
+                            class="review-form-group review-form-full"
+                        >
 
                             <div class="review-upload-header">
 
@@ -681,9 +746,7 @@
                                     </label>
 
                                     <p>
-                                        Add supporting evidence, official documents,
-                                        photos, videos, audio recordings, or other
-                                        files related to this complaint.
+                                        Add supporting evidence or official documents.
                                     </p>
 
                                 </div>
@@ -699,32 +762,22 @@
                             </div>
 
 
-                            <!-- =============================
-                                 UPLOAD / DROP AREA
-                            ============================== -->
-
                             <div
                                 id="reviewUploadArea"
                                 class="review-upload-area"
                                 tabindex="0"
                                 role="button"
-                                aria-label="Select files to upload"
                             >
-
-
-                                <!-- FILE INPUT -->
 
                                 <input
                                     type="file"
                                     id="reviewEvidenceFiles"
                                     name="evidence"
                                     class="review-upload-input"
-                                    accept="image/*,video/*,audio/*,.pdf,.doc,.docx"
+                                    accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
                                     multiple
                                 >
 
-
-                                <!-- UPLOAD ICON -->
 
                                 <div class="review-upload-icon">
 
@@ -733,7 +786,6 @@
                                         fill="none"
                                         stroke="currentColor"
                                         stroke-width="1.8"
-                                        aria-hidden="true"
                                     >
 
                                         <path
@@ -752,8 +804,6 @@
                                 </div>
 
 
-                                <!-- UPLOAD INFORMATION -->
-
                                 <div class="review-upload-content">
 
                                     <strong>
@@ -765,14 +815,11 @@
                                     </span>
 
                                     <small>
-                                        Images, videos, audio, PDF, DOC and DOCX
-                                        • Maximum 10MB per file
+                                        Maximum 10MB per file
                                     </small>
 
                                 </div>
 
-
-                                <!-- BROWSE BUTTON -->
 
                                 <button
                                     type="button"
@@ -785,30 +832,18 @@
                             </div>
 
 
-                            <!-- =============================
-                                 UPLOAD ERROR
-                            ============================== -->
-
                             <div
                                 id="reviewUploadError"
                                 class="review-upload-error"
-                                role="alert"
                                 hidden
                             ></div>
 
-
-                            <!-- =============================
-                                 SELECTED FILES
-                            ============================== -->
 
                             <div
                                 id="reviewSelectedFiles"
                                 class="review-selected-files"
                                 hidden
                             >
-
-
-                                <!-- SELECTED FILE HEADER -->
 
                                 <div class="review-selected-files-header">
 
@@ -828,8 +863,6 @@
                                 </div>
 
 
-                                <!-- SELECTED FILE LIST -->
-
                                 <div
                                     id="reviewSelectedFilesList"
                                     class="review-selected-files-list"
@@ -842,25 +875,20 @@
                     </div>
 
 
-                    <!-- =====================================
-                         FORM ACTIONS
-                    ====================================== -->
+                    <!-- =================================================
+                         ACTIONS
+                    ================================================== -->
 
                     <div class="review-form-actions">
-
-
-                        <!-- CANCEL -->
 
                         <button
                             type="button"
                             class="review-cancel-btn"
                             data-close-review
                         >
-                            Cancel
+                            Close
                         </button>
 
-
-                        <!-- SAVE -->
 
                         <button
                             type="submit"
@@ -873,15 +901,12 @@
                                 fill="none"
                                 stroke="currentColor"
                                 stroke-width="2"
-                                aria-hidden="true"
                             >
-
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                     d="M5 12.5 9.5 17 19 7.5"
                                 />
-
                             </svg>
 
 
@@ -904,6 +929,18 @@
 </div>
 
 
+<!-- =========================================================
+     CURRENT LOGGED-IN USER INFORMATION
+========================================================= -->
+
+<div
+    id="complaintCurrentUser"
+    hidden
+    data-user-id="{% if logged_in_user %}{{ logged_in_user.user_id }}{% endif %}"
+    data-username="{% if logged_in_user %}{{ logged_in_user.username|escape }}{% endif %}"
+    data-role="{% if logged_in_user %}{{ logged_in_user.role|escape }}{% endif %}"
+></div>
+
 
 <!-- =========================================================
      EVIDENCE PREVIEW MODAL
@@ -915,31 +952,17 @@
     aria-hidden="true"
 >
 
-    <!-- =====================================================
-         BACKDROP
-    ====================================================== -->
-
     <div
         class="evidence-preview-backdrop"
         data-close-evidence-preview
     ></div>
 
 
-    <!-- =====================================================
-         PREVIEW DIALOG
-    ====================================================== -->
-
     <div
         class="evidence-preview-dialog"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="evidencePreviewTitle"
     >
-
-
-        <!-- =================================================
-             PREVIEW HEADER
-        ================================================== -->
 
         <div class="evidence-preview-header">
 
@@ -960,7 +983,6 @@
                 type="button"
                 class="evidence-preview-close"
                 data-close-evidence-preview
-                aria-label="Close evidence preview"
             >
                 &times;
             </button>
@@ -968,24 +990,13 @@
         </div>
 
 
-        <!-- =================================================
-             PREVIEW CONTENT
-        ================================================== -->
-
         <div
             id="evidencePreviewContent"
             class="evidence-preview-content"
         ></div>
 
 
-        <!-- =================================================
-             PREVIEW FOOTER
-        ================================================== -->
-
         <div class="evidence-preview-footer">
-
-
-            <!-- FILE INFORMATION -->
 
             <div class="evidence-preview-meta">
 
@@ -1004,8 +1015,6 @@
             </div>
 
 
-            <!-- OPEN ORIGINAL -->
-
             <a
                 id="evidenceOpenOriginal"
                 href="#"
@@ -1013,34 +1022,7 @@
                 rel="noopener noreferrer"
                 class="evidence-open-original"
             >
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    aria-hidden="true"
-                >
-
-                    <path
-                        d="M14 5h5v5"
-                    />
-
-                    <path
-                        d="m19 5-8 8"
-                    />
-
-                    <path
-                        d="M17 13v6H5V7h6"
-                    />
-
-                </svg>
-
-
-                <span>
-                    Open Original
-                </span>
-
+                Open Original
             </a>
 
         </div>

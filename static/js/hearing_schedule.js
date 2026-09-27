@@ -1,686 +1,90 @@
 /* =========================================================
    BANTAYBARANGAY
-   HEARING SCHEDULE MODULE
+   HEARING SCHEDULE
+========================================================= */
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let hearingCalendarDate =
+    new Date();
+
+
+/* =========================================================
+   READY
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        initializeHearingCalendar();
+        initializeMessages();
 
-        initializeHearingViewTabs();
+        initializeScheduleModal();
 
-        initializeHearingFilters();
+        initializeCalendar();
 
-        initializeHearingModal();
+        initializeHearingSessions();
 
-        initializeHearingPagination();
+        initializeFilters();
 
-        initializeHearingHeaderActions();
+        initializeConfirmForms();
 
-        initializeHearingTableActions();
+        initializePostponeForms();
 
     }
 );
 
 
 /* =========================================================
-   HEARING CALENDAR STATE
+   MESSAGES
 ========================================================= */
 
-let hearingSelectedDate =
-    new Date(
-        2024,
-        9,
-        24
-    );
+function initializeMessages() {
 
+    document
+        .querySelectorAll(
+            "[data-close-message]"
+        )
+        .forEach(
+            function (button) {
 
-let hearingCurrentView =
-    "today";
+                button.addEventListener(
+                    "click",
+                    function () {
 
-
-/* =========================================================
-   INITIALIZE CALENDAR
-========================================================= */
-
-function initializeHearingCalendar() {
-
-    const previousButton =
-        document.getElementById(
-            "previousHearingDate"
-        );
-
-
-    const nextButton =
-        document.getElementById(
-            "nextHearingDate"
-        );
-
-
-    updateHearingDateDisplay();
-
-
-    if (previousButton) {
-
-        previousButton.addEventListener(
-            "click",
-            function () {
-
-                changeHearingDate(
-                    -1
-                );
-
-            }
-        );
-
-    }
-
-
-    if (nextButton) {
-
-        nextButton.addEventListener(
-            "click",
-            function () {
-
-                changeHearingDate(
-                    1
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CHANGE CALENDAR DATE
-========================================================= */
-
-function changeHearingDate(direction) {
-
-    if (
-        hearingCurrentView ===
-        "weekly"
-    ) {
-
-        hearingSelectedDate.setDate(
-            hearingSelectedDate.getDate() +
-            (7 * direction)
-        );
-
-    } else if (
-        hearingCurrentView ===
-        "monthly"
-    ) {
-
-        hearingSelectedDate.setMonth(
-            hearingSelectedDate.getMonth() +
-            direction
-        );
-
-    } else {
-
-        hearingSelectedDate.setDate(
-            hearingSelectedDate.getDate() +
-            direction
-        );
-
-    }
-
-
-    updateHearingDateDisplay();
-
-}
-
-
-/* =========================================================
-   UPDATE CALENDAR LABEL
-========================================================= */
-
-function updateHearingDateDisplay() {
-
-    const dateLabel =
-        document.getElementById(
-            "currentHearingDate"
-        );
-
-
-    if (!dateLabel) {
-        return;
-    }
-
-
-    let formatter;
-
-
-    if (
-        hearingCurrentView ===
-        "monthly"
-    ) {
-
-        formatter =
-            new Intl.DateTimeFormat(
-                "en-US",
-                {
-                    month: "long",
-                    year: "numeric"
-                }
-            );
-
-    } else {
-
-        formatter =
-            new Intl.DateTimeFormat(
-                "en-US",
-                {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                }
-            );
-
-    }
-
-
-    dateLabel.textContent =
-        formatter.format(
-            hearingSelectedDate
-        );
-
-}
-
-
-/* =========================================================
-   VIEW TABS
-========================================================= */
-
-function initializeHearingViewTabs() {
-
-    const tabs =
-        document.querySelectorAll(
-            ".hearing-view-tab"
-        );
-
-
-    tabs.forEach(
-        function (tab) {
-
-            tab.addEventListener(
-                "click",
-                function () {
-
-                    tabs.forEach(
-                        function (item) {
-
-                            item.classList.remove(
-                                "active"
+                        const message =
+                            button.closest(
+                                "[data-hearing-message]"
                             );
 
+                        if (message) {
+
+                            message.remove();
+
                         }
-                    );
-
-
-                    tab.classList.add(
-                        "active"
-                    );
-
-
-                    hearingCurrentView =
-                        tab.dataset.hearingView ||
-                        "today";
-
-
-                    updateHearingDateDisplay();
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   FILTER INITIALIZATION
-========================================================= */
-
-function initializeHearingFilters() {
-
-    const searchInput =
-        document.getElementById(
-            "hearingSearchInput"
-        );
-
-
-    const statusFilter =
-        document.getElementById(
-            "hearingStatusFilter"
-        );
-
-
-    const chamberFilter =
-        document.getElementById(
-            "hearingChamberFilter"
-        );
-
-
-    const dateFilter =
-        document.getElementById(
-            "hearingDateFilter"
-        );
-
-
-    const resetButton =
-        document.getElementById(
-            "resetHearingFilters"
-        );
-
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            filterHearingRecords
-        );
-
-    }
-
-
-    if (statusFilter) {
-
-        statusFilter.addEventListener(
-            "change",
-            filterHearingRecords
-        );
-
-    }
-
-
-    if (chamberFilter) {
-
-        chamberFilter.addEventListener(
-            "change",
-            filterHearingRecords
-        );
-
-    }
-
-
-    if (dateFilter) {
-
-        dateFilter.addEventListener(
-            "change",
-            filterHearingRecords
-        );
-
-    }
-
-
-    if (resetButton) {
-
-        resetButton.addEventListener(
-            "click",
-            resetHearingFilters
-        );
-
-    }
-
-
-    updateHearingRecordCount();
-
-}
-
-
-/* =========================================================
-   FILTER RECORDS
-========================================================= */
-
-function filterHearingRecords() {
-
-    const searchInput =
-        document.getElementById(
-            "hearingSearchInput"
-        );
-
-
-    const statusFilter =
-        document.getElementById(
-            "hearingStatusFilter"
-        );
-
-
-    const chamberFilter =
-        document.getElementById(
-            "hearingChamberFilter"
-        );
-
-
-    const dateFilter =
-        document.getElementById(
-            "hearingDateFilter"
-        );
-
-
-    const rows =
-        document.querySelectorAll(
-            "#hearingTableBody tr"
-        );
-
-
-    const searchValue =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    const selectedStatus =
-        statusFilter
-            ? statusFilter.value
-            : "all";
-
-
-    const selectedChamber =
-        chamberFilter
-            ? chamberFilter.value
-            : "all";
-
-
-    const selectedDate =
-        dateFilter
-            ? dateFilter.value
-            : "all";
-
-
-    let visibleRows =
-        0;
-
-
-    rows.forEach(
-        function (row) {
-
-            const searchableText =
-                row.textContent
-                    .replace(/\s+/g, " ")
-                    .trim()
-                    .toLowerCase();
-
-
-            const rowStatus =
-                row.dataset.status || "";
-
-
-            const rowChamber =
-                row.dataset.chamber || "";
-
-
-            const rowDate =
-                row.dataset.date || "";
-
-
-            const matchesSearch =
-                searchValue === "" ||
-                searchableText.includes(
-                    searchValue
-                );
-
-
-            const matchesStatus =
-                selectedStatus === "all" ||
-                rowStatus === selectedStatus;
-
-
-            const matchesChamber =
-                selectedChamber === "all" ||
-                rowChamber === selectedChamber;
-
-
-            const matchesDate =
-                selectedDate === "all" ||
-                rowDate === selectedDate;
-
-
-            const shouldDisplay =
-                matchesSearch &&
-                matchesStatus &&
-                matchesChamber &&
-                matchesDate;
-
-
-            row.classList.toggle(
-                "hearing-filter-hidden",
-                !shouldDisplay
-            );
-
-
-            if (shouldDisplay) {
-
-                visibleRows++;
-
-            }
-
-        }
-    );
-
-
-    updateHearingRecordCount(
-        visibleRows
-    );
-
-
-    updateHearingEmptyState(
-        visibleRows
-    );
-
-}
-
-
-/* =========================================================
-   RESET FILTERS
-========================================================= */
-
-function resetHearingFilters() {
-
-    const searchInput =
-        document.getElementById(
-            "hearingSearchInput"
-        );
-
-
-    const statusFilter =
-        document.getElementById(
-            "hearingStatusFilter"
-        );
-
-
-    const chamberFilter =
-        document.getElementById(
-            "hearingChamberFilter"
-        );
-
-
-    const dateFilter =
-        document.getElementById(
-            "hearingDateFilter"
-        );
-
-
-    if (searchInput) {
-
-        searchInput.value =
-            "";
-
-    }
-
-
-    if (statusFilter) {
-
-        statusFilter.value =
-            "all";
-
-    }
-
-
-    if (chamberFilter) {
-
-        chamberFilter.value =
-            "all";
-
-    }
-
-
-    if (dateFilter) {
-
-        dateFilter.value =
-            "all";
-
-    }
-
-
-    filterHearingRecords();
-
-}
-
-
-/* =========================================================
-   RECORD COUNT
-========================================================= */
-
-function updateHearingRecordCount(
-    visibleCount
-) {
-
-    const rows =
-        document.querySelectorAll(
-            "#hearingTableBody tr"
-        );
-
-
-    const visibleCountElement =
-        document.getElementById(
-            "visibleHearingCount"
-        );
-
-
-    const totalCountElement =
-        document.getElementById(
-            "totalHearingCount"
-        );
-
-
-    const totalRows =
-        rows.length;
-
-
-    if (
-        typeof visibleCount !==
-        "number"
-    ) {
-
-        visibleCount =
-            Array.from(rows)
-                .filter(
-                    function (row) {
-
-                        return !row.classList.contains(
-                            "hearing-filter-hidden"
-                        );
 
                     }
-                )
-                .length;
+                );
 
-    }
-
-
-    if (visibleCountElement) {
-
-        visibleCountElement.textContent =
-            visibleCount;
-
-    }
-
-
-    if (totalCountElement) {
-
-        totalCountElement.textContent =
-            totalRows;
-
-    }
+            }
+        );
 
 }
 
 
 /* =========================================================
-   EMPTY STATE
+   SCHEDULE MODAL
 ========================================================= */
 
-function updateHearingEmptyState(
-    visibleRows
-) {
+function initializeScheduleModal() {
 
-    const emptyState =
+    const modal =
         document.getElementById(
-            "hearingEmptyState"
+            "scheduleHearingModal"
         );
-
-
-    const tableWrapper =
-        document.querySelector(
-            ".hearing-table-wrapper"
-        );
-
-
-    if (!emptyState) {
-        return;
-    }
-
-
-    if (visibleRows === 0) {
-
-        emptyState.classList.add(
-            "visible"
-        );
-
-
-        if (tableWrapper) {
-
-            tableWrapper.style.display =
-                "none";
-
-        }
-
-    } else {
-
-        emptyState.classList.remove(
-            "visible"
-        );
-
-
-        if (tableWrapper) {
-
-            tableWrapper.style.display =
-                "";
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   MODAL INITIALIZATION
-========================================================= */
-
-function initializeHearingModal() {
 
     const openButton =
         document.getElementById(
@@ -688,153 +92,77 @@ function initializeHearingModal() {
         );
 
 
-    const closeButtons =
-        document.querySelectorAll(
-            "[data-close-hearing-modal]"
-        );
-
-
-    const form =
-        document.getElementById(
-            "scheduleHearingForm"
-        );
-
-
-    if (openButton) {
+    if (
+        openButton
+        &&
+        modal
+    ) {
 
         openButton.addEventListener(
             "click",
-            openHearingModal
-        );
+            function () {
 
-    }
-
-
-    closeButtons.forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                closeHearingModal
-            );
-
-        }
-    );
-
-
-    if (form) {
-
-        form.addEventListener(
-            "submit",
-            submitHearingSchedule
-        );
-
-    }
-
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeHearingModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   OPEN MODAL
-========================================================= */
-
-function openHearingModal() {
-
-    const modal =
-        document.getElementById(
-            "scheduleHearingModal"
-        );
-
-
-    if (!modal) {
-        return;
-    }
-
-
-    modal.classList.add(
-        "open"
-    );
-
-
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
-
-
-    setDefaultHearingFormDate();
-
-
-    window.setTimeout(
-        function () {
-
-            const caseInput =
-                document.getElementById(
-                    "hearingCaseNumber"
+                modal.classList.add(
+                    "open"
                 );
 
+                modal.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
 
-            if (caseInput) {
-
-                caseInput.focus();
+                document.body.style.overflow =
+                    "hidden";
 
             }
+        );
 
-        },
-        100
-    );
+    }
+
+
+    document
+        .querySelectorAll(
+            "[data-close-hearing-modal]"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    closeScheduleModal
+                );
+
+            }
+        );
 
 }
 
 
 /* =========================================================
-   CLOSE MODAL
+   CLOSE SCHEDULE MODAL
 ========================================================= */
 
-function closeHearingModal() {
+function closeScheduleModal() {
 
     const modal =
         document.getElementById(
             "scheduleHearingModal"
         );
 
-
     if (!modal) {
-        return;
-    }
 
+        return;
+
+    }
 
     modal.classList.remove(
         "open"
     );
 
-
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
-
 
     document.body.style.overflow =
         "";
@@ -843,477 +171,1090 @@ function closeHearingModal() {
 
 
 /* =========================================================
-   DEFAULT FORM DATE
+   CALENDAR
 ========================================================= */
 
-function setDefaultHearingFormDate() {
+function initializeCalendar() {
 
-    const dateInput =
+    const page =
+        document.querySelector(
+            ".hearing-page"
+        );
+
+    if (page) {
+
+        const today =
+            page.dataset.today;
+
+        if (today) {
+
+            hearingCalendarDate =
+                parseLocalDate(
+                    today
+                );
+
+        }
+
+    }
+
+
+    const previous =
         document.getElementById(
-            "hearingDate"
+            "previousHearingMonth"
+        );
+
+    const next =
+        document.getElementById(
+            "nextHearingMonth"
+        );
+
+    const todayButton =
+        document.getElementById(
+            "calendarTodayButton"
         );
 
 
-    if (!dateInput) {
+    if (previous) {
+
+        previous.addEventListener(
+            "click",
+            function () {
+
+                hearingCalendarDate
+                    .setMonth(
+                        hearingCalendarDate
+                            .getMonth()
+                        -
+                        1
+                    );
+
+                renderCalendar();
+
+            }
+        );
+
+    }
+
+
+    if (next) {
+
+        next.addEventListener(
+            "click",
+            function () {
+
+                hearingCalendarDate
+                    .setMonth(
+                        hearingCalendarDate
+                            .getMonth()
+                        +
+                        1
+                    );
+
+                renderCalendar();
+
+            }
+        );
+
+    }
+
+
+    if (todayButton) {
+
+        todayButton.addEventListener(
+            "click",
+            function () {
+
+                const page =
+                    document.querySelector(
+                        ".hearing-page"
+                    );
+
+                hearingCalendarDate =
+                    page
+                    &&
+                    page.dataset.today
+
+                        ? parseLocalDate(
+                            page.dataset.today
+                        )
+
+                        : new Date();
+
+
+                renderCalendar();
+
+            }
+        );
+
+    }
+
+
+    renderCalendar();
+
+}
+
+
+/* =========================================================
+   CALENDAR EVENTS
+========================================================= */
+
+function getCalendarEvents() {
+
+    return Array.from(
+        document.querySelectorAll(
+            "[data-hearing-event]"
+        )
+    )
+    .map(
+        function (element) {
+
+            return {
+
+                id:
+                    element.dataset.id,
+
+                date:
+                    element.dataset.date,
+
+                time:
+                    element.dataset.time,
+
+                caseNumber:
+                    element.dataset.case,
+
+                status:
+                    element.dataset.status,
+
+                chamber:
+                    element.dataset.chamber
+
+            };
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENDER MONTH
+========================================================= */
+
+function renderCalendar() {
+
+    const grid =
+        document.getElementById(
+            "hearingCalendarGrid"
+        );
+
+    const label =
+        document.getElementById(
+            "currentHearingMonth"
+        );
+
+    if (!grid) {
+
         return;
+
     }
 
 
     const year =
-        hearingSelectedDate
+        hearingCalendarDate
             .getFullYear();
 
-
     const month =
-        String(
-            hearingSelectedDate
-                .getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
+        hearingCalendarDate
+            .getMonth();
 
 
-    const day =
-        String(
-            hearingSelectedDate
-                .getDate()
-        ).padStart(
-            2,
-            "0"
-        );
+    if (label) {
 
+        label.textContent =
+            new Intl.DateTimeFormat(
+                "en-US",
+                {
+                    month:
+                        "long",
 
-    dateInput.value =
-        year +
-        "-" +
-        month +
-        "-" +
-        day;
-
-}
-
-
-/* =========================================================
-   FORM SUBMISSION
-========================================================= */
-
-function submitHearingSchedule(
-    event
-) {
-
-    event.preventDefault();
-
-
-    const form =
-        event.currentTarget;
-
-
-    if (!form.checkValidity()) {
-
-        form.reportValidity();
-
-        return;
-
-    }
-
-
-    const formData =
-        new FormData(
-            form
-        );
-
-
-    const hearingData = {
-
-        caseNumber:
-            formData.get(
-                "case_number"
-            ),
-
-        hearingDate:
-            formData.get(
-                "hearing_date"
-            ),
-
-        hearingTime:
-            formData.get(
-                "hearing_time"
-            ),
-
-        chamber:
-            formData.get(
-                "chamber"
-            ),
-
-        stage:
-            formData.get(
-                "stage"
-            ),
-
-        mediator:
-            formData.get(
-                "mediator"
-            ),
-
-        notes:
-            formData.get(
-                "notes"
+                    year:
+                        "numeric"
+                }
             )
-
-    };
-
-
-    /*
-    =========================================================
-    DJANGO BACKEND CONNECTION
-    =========================================================
-
-    The current form is front-end only.
-
-    When your Django scheduling endpoint is ready,
-    replace the demo section below with:
-
-    fetch("/hearings/schedule/", {
-
-        method: "POST",
-
-        headers: {
-            "X-CSRFToken":
-                getHearingCsrfToken()
-        },
-
-        body:
-            formData
-
-    })
-    .then(function (response) {
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Unable to schedule hearing."
+            .format(
+                hearingCalendarDate
             );
 
-        }
-
-        return response.json();
-
-    })
-    .then(function (data) {
-
-        closeHearingModal();
-
-        form.reset();
-
-        showHearingToast(
-            "Hearing Scheduled",
-            "The hearing schedule was saved successfully."
-        );
-
-    })
-    .catch(function (error) {
-
-        showHearingToast(
-            "Unable to Schedule",
-            error.message
-        );
-
-    });
-
-    =========================================================
-    */
-
-
-    console.log(
-        "Hearing schedule:",
-        hearingData
-    );
-
-
-    closeHearingModal();
-
-
-    form.reset();
-
-
-    showHearingToast(
-        "Hearing Scheduled",
-        "The hearing schedule was prepared successfully."
-    );
-
-}
-
-
-/* =========================================================
-   HEADER ACTIONS
-========================================================= */
-
-function initializeHearingHeaderActions() {
-
-    const exportButton =
-        document.getElementById(
-            "exportCalendarButton"
-        );
-
-
-    const summonsButton =
-        document.getElementById(
-            "issueSummonsButton"
-        );
-
-
-    if (exportButton) {
-
-        exportButton.addEventListener(
-            "click",
-            function () {
-
-                showHearingToast(
-                    "Calendar Export",
-                    "Connect this action to your Django calendar export view."
-                );
-
-            }
-        );
-
     }
 
 
-    if (summonsButton) {
+    grid.innerHTML =
+        "";
 
-        summonsButton.addEventListener(
-            "click",
-            function () {
 
-                showHearingToast(
-                    "Issue Summons",
-                    "Connect this action to your summons generation module."
-                );
-
-            }
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
         );
 
-    }
+    const startDay =
+        firstDay.getDay();
 
-}
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        )
+        .getDate();
 
 
-/* =========================================================
-   TABLE ACTIONS
-========================================================= */
+    const previousMonthDays =
+        new Date(
+            year,
+            month,
+            0
+        )
+        .getDate();
 
-function initializeHearingTableActions() {
 
-    const buttons =
-        document.querySelectorAll(
-            ".table-action-button"
-        );
+    const totalCells =
+        42;
 
 
-    buttons.forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const title =
-                        button.getAttribute(
-                            "title"
-                        ) || "Hearing action";
-
-
-                    showHearingToast(
-                        title,
-                        "This action can now be connected to its Django view."
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PAGINATION
-========================================================= */
-
-function initializeHearingPagination() {
-
-    const pageNumbers =
-        document.querySelectorAll(
-            ".pagination-number"
-        );
-
-
-    pageNumbers.forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    pageNumbers.forEach(
-                        function (page) {
-
-                            page.classList.remove(
-                                "active"
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        "active"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let hearingToastTimeout =
-    null;
-
-
-function showHearingToast(
-    title,
-    message
-) {
-
-    const toast =
-        document.getElementById(
-            "hearingToast"
-        );
-
-
-    const titleElement =
-        document.getElementById(
-            "hearingToastTitle"
-        );
-
-
-    const messageElement =
-        document.getElementById(
-            "hearingToastMessage"
-        );
-
-
-    if (!toast) {
-        return;
-    }
-
-
-    if (titleElement) {
-
-        titleElement.textContent =
-            title;
-
-    }
-
-
-    if (messageElement) {
-
-        messageElement.textContent =
-            message;
-
-    }
-
-
-    if (hearingToastTimeout) {
-
-        window.clearTimeout(
-            hearingToastTimeout
-        );
-
-    }
-
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    hearingToastTimeout =
-        window.setTimeout(
-            function () {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            3500
-        );
-
-}
-
-
-/* =========================================================
-   CSRF TOKEN
-========================================================= */
-
-function getHearingCsrfToken() {
-
-    const csrfInput =
-        document.querySelector(
-            "input[name='csrfmiddlewaretoken']"
-        );
-
-
-    if (csrfInput) {
-
-        return csrfInput.value;
-
-    }
-
-
-    const cookies =
-        document.cookie
-            .split(";");
+    const events =
+        getCalendarEvents();
 
 
     for (
         let index = 0;
-        index < cookies.length;
+        index < totalCells;
         index++
     ) {
 
-        const cookie =
-            cookies[index]
-                .trim();
+        let cellDate;
+
+        let outsideMonth =
+            false;
 
 
-        if (
-            cookie.startsWith(
-                "csrftoken="
-            )
-        ) {
+        if (index < startDay) {
 
-            return decodeURIComponent(
-                cookie.substring(
-                    "csrftoken=".length
-                )
-            );
+            const day =
+                previousMonthDays
+                -
+                startDay
+                +
+                index
+                +
+                1;
+
+            cellDate =
+                new Date(
+                    year,
+                    month - 1,
+                    day
+                );
+
+            outsideMonth =
+                true;
 
         }
+
+        else if (
+            index
+            >=
+            startDay + daysInMonth
+        ) {
+
+            const day =
+                index
+                -
+                (
+                    startDay
+                    +
+                    daysInMonth
+                )
+                +
+                1;
+
+            cellDate =
+                new Date(
+                    year,
+                    month + 1,
+                    day
+                );
+
+            outsideMonth =
+                true;
+
+        }
+
+        else {
+
+            const day =
+                index
+                -
+                startDay
+                +
+                1;
+
+            cellDate =
+                new Date(
+                    year,
+                    month,
+                    day
+                );
+
+        }
+
+
+        grid.appendChild(
+            createCalendarDay(
+                cellDate,
+                events,
+                outsideMonth
+            )
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE CALENDAR DAY
+========================================================= */
+
+function createCalendarDay(
+    date,
+    events,
+    outsideMonth
+) {
+
+    const cell =
+        document.createElement(
+            "div"
+        );
+
+    cell.className =
+        "hearing-calendar-day";
+
+
+    if (outsideMonth) {
+
+        cell.classList.add(
+            "outside-month"
+        );
 
     }
 
 
-    return "";
+    const dateKey =
+        formatDateKey(
+            date
+        );
+
+
+    const page =
+        document.querySelector(
+            ".hearing-page"
+        );
+
+
+    if (
+        page
+        &&
+        page.dataset.today
+        ===
+        dateKey
+    ) {
+
+        cell.classList.add(
+            "today"
+        );
+
+    }
+
+
+    const number =
+        document.createElement(
+            "div"
+        );
+
+    number.className =
+        "hearing-calendar-day-number";
+
+    number.textContent =
+        date.getDate();
+
+
+    cell.appendChild(
+        number
+    );
+
+
+    const dayEvents =
+        events.filter(
+            function (event) {
+
+                return (
+                    event.date
+                    ===
+                    dateKey
+                );
+
+            }
+        );
+
+
+    dayEvents.forEach(
+        function (event) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type =
+                "button";
+
+            button.className =
+                "hearing-calendar-event";
+
+
+            button.classList.add(
+                "status-"
+                +
+                slugify(
+                    event.status
+                )
+            );
+
+
+            const time =
+                document.createElement(
+                    "span"
+                );
+
+            time.className =
+                "calendar-event-time";
+
+            time.textContent =
+                formatTime(
+                    event.time
+                );
+
+
+            const title =
+                document.createElement(
+                    "strong"
+                );
+
+            title.textContent =
+                event.caseNumber;
+
+
+            const chamber =
+                document.createElement(
+                    "small"
+                );
+
+            chamber.textContent =
+                event.chamber
+                +
+                " • "
+                +
+                event.status;
+
+
+            button.appendChild(
+                time
+            );
+
+            button.appendChild(
+                title
+            );
+
+            button.appendChild(
+                chamber
+            );
+
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    openHearingSession(
+                        event.id
+                    );
+
+                }
+            );
+
+
+            cell.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    return cell;
 
 }
+
+
+/* =========================================================
+   HEARING SESSION MODALS
+========================================================= */
+
+function initializeHearingSessions() {
+
+    document
+        .querySelectorAll(
+            "[data-open-session]"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        openHearingSession(
+                            button.dataset
+                                .openSession
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            "[data-close-session]"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        closeHearingSession(
+                            button
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key
+                ===
+                "Escape"
+            ) {
+
+                closeAllHearingSessions();
+
+                closeScheduleModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   OPEN SESSION
+========================================================= */
+
+function openHearingSession(
+    hearingId
+) {
+
+    const modal =
+        document.getElementById(
+            "hearingSession"
+            +
+            hearingId
+        );
+
+    if (!modal) {
+
+        return;
+
+    }
+
+
+    closeAllHearingSessions();
+
+
+    modal.classList.add(
+        "open"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE SESSION
+========================================================= */
+
+function closeHearingSession(
+    element
+) {
+
+    const modal =
+        element.closest(
+            ".hearing-session-modal"
+        );
+
+    if (!modal) {
+
+        return;
+
+    }
+
+    modal.classList.remove(
+        "open"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   CLOSE ALL
+========================================================= */
+
+function closeAllHearingSessions() {
+
+    document
+        .querySelectorAll(
+            ".hearing-session-modal.open"
+        )
+        .forEach(
+            function (modal) {
+
+                modal.classList.remove(
+                    "open"
+                );
+
+                modal.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+            }
+        );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   POSTPONE
+========================================================= */
+
+function initializePostponeForms() {
+
+    document
+        .querySelectorAll(
+            "[data-show-postpone]"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const form =
+                            document.getElementById(
+                                "postponeForm"
+                                +
+                                button.dataset
+                                    .showPostpone
+                            );
+
+                        if (!form) {
+
+                            return;
+
+                        }
+
+                        form.hidden =
+                            !form.hidden;
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function initializeFilters() {
+
+    const search =
+        document.getElementById(
+            "hearingSearchInput"
+        );
+
+    const status =
+        document.getElementById(
+            "hearingStatusFilter"
+        );
+
+    const reset =
+        document.getElementById(
+            "resetHearingFilters"
+        );
+
+
+    if (search) {
+
+        search.addEventListener(
+            "input",
+            filterHearingRows
+        );
+
+    }
+
+
+    if (status) {
+
+        status.addEventListener(
+            "change",
+            filterHearingRows
+        );
+
+    }
+
+
+    if (reset) {
+
+        reset.addEventListener(
+            "click",
+            function () {
+
+                if (search) {
+
+                    search.value =
+                        "";
+
+                }
+
+                if (status) {
+
+                    status.value =
+                        "all";
+
+                }
+
+                filterHearingRows();
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER ROWS
+========================================================= */
+
+function filterHearingRows() {
+
+    const search =
+        document.getElementById(
+            "hearingSearchInput"
+        );
+
+    const status =
+        document.getElementById(
+            "hearingStatusFilter"
+        );
+
+
+    const searchValue =
+        search
+            ? search.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const statusValue =
+        status
+            ? status.value
+            : "all";
+
+
+    document
+        .querySelectorAll(
+            "#hearingTableBody tr[data-hearing-id]"
+        )
+        .forEach(
+            function (row) {
+
+                const matchesSearch =
+                    !searchValue
+                    ||
+                    row.textContent
+                        .toLowerCase()
+                        .includes(
+                            searchValue
+                        );
+
+
+                const matchesStatus =
+                    statusValue
+                    ===
+                    "all"
+                    ||
+                    row.dataset.status
+                    ===
+                    statusValue;
+
+
+                row.hidden =
+                    !(
+                        matchesSearch
+                        &&
+                        matchesStatus
+                    );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   CONFIRM FORMS
+========================================================= */
+
+function initializeConfirmForms() {
+
+    document
+        .querySelectorAll(
+            "form[data-confirm]"
+        )
+        .forEach(
+            function (form) {
+
+                form.addEventListener(
+                    "submit",
+                    function (event) {
+
+                        const message =
+                            form.dataset.confirm;
+
+                        if (
+                            message
+                            &&
+                            !window.confirm(
+                                message
+                            )
+                        ) {
+
+                            event.preventDefault();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function parseLocalDate(
+    value
+) {
+
+    const parts =
+        String(
+            value
+        )
+        .split("-")
+        .map(Number);
+
+
+    return new Date(
+        parts[0],
+        parts[1] - 1,
+        parts[2]
+    );
+
+}
+
+
+function formatDateKey(
+    date
+) {
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+    const day =
+        String(
+            date.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        year
+        +
+        "-"
+        +
+        month
+        +
+        "-"
+        +
+        day
+    );
+
+}
+
+
+function formatTime(
+    value
+) {
+
+    if (!value) {
+
+        return "";
+
+    }
+
+    const parts =
+        value.split(":");
+
+    let hour =
+        Number(
+            parts[0]
+        );
+
+    const minute =
+        parts[1]
+        ||
+        "00";
+
+    const suffix =
+        hour >= 12
+            ? "PM"
+            : "AM";
+
+
+    hour =
+        hour % 12
+        ||
+        12;
+
+
+    return (
+        hour
+        +
+        ":"
+        +
+        minute
+        +
+        " "
+        +
+        suffix
+    );
+
+}
+
+
+function slugify(
+    value
+) {
+
+    return String(
+        value
+        ||
+        ""
+    )
+    .toLowerCase()
+    .trim()
+    .replace(
+        /[^a-z0-9]+/g,
+        "-"
+    )
+    .replace(
+        /^-|-$/g,
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+window.openHearingSession =
+    openHearingSession;

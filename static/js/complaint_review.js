@@ -3,6 +3,18 @@
    COMPLAINT REVIEW MODAL
 ========================================================= */
 
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let activeComplaintRow = null;
+
+
+/* =========================================================
+   DOCUMENT READY
+========================================================= */
+
 document.addEventListener(
     "DOMContentLoaded",
     function () {
@@ -61,7 +73,9 @@ function initializeComplaintReview() {
                             "a, button, input, select, textarea"
                         )
                     ) {
+
                         return;
+
                     }
 
 
@@ -128,7 +142,9 @@ function initializeComplaintReview() {
         function (event) {
 
             if (event.key !== "Escape") {
+
                 return;
+
             }
 
 
@@ -173,7 +189,105 @@ function initializeComplaintReview() {
 
     form.addEventListener(
         "submit",
-        function () {
+        function (event) {
+
+            /*
+             * There must be an active complaint row.
+             */
+
+            if (!activeComplaintRow) {
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            /*
+             * Determine whether this account has permission
+             * to edit the complaint.
+             */
+
+            const canEdit =
+                activeComplaintRow
+                    .dataset
+                    .canEdit === "true";
+
+
+            /*
+             * The backend also performs this ownership
+             * validation. This JavaScript check is only
+             * for the user interface.
+             */
+
+            if (!canEdit) {
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            const assignedOfficial =
+                cleanReviewValue(
+                    activeComplaintRow
+                        .dataset
+                        .assignedOfficial
+                );
+
+
+            const currentStatus =
+                cleanReviewValue(
+                    activeComplaintRow
+                        .dataset
+                        .status
+                );
+
+
+            const selectedStatus =
+                document.getElementById(
+                    "reviewStatus"
+                );
+
+
+            /*
+             * A newly submitted and unassigned complaint
+             * cannot skip directly to another workflow
+             * status.
+             *
+             * It must first become Under Review.
+             */
+
+            if (
+                !assignedOfficial
+                &&
+                currentStatus === "Submitted"
+                &&
+                selectedStatus
+                &&
+                selectedStatus.value !== "Submitted"
+                &&
+                selectedStatus.value !== "Under Review"
+            ) {
+
+                event.preventDefault();
+
+
+                window.alert(
+                    "A newly submitted complaint must first be changed to Under Review."
+                );
+
+
+                return;
+
+            }
+
+
+            /* =================================================
+               SAVING STATE
+            ================================================= */
 
             const button =
                 document.getElementById(
@@ -182,7 +296,9 @@ function initializeComplaintReview() {
 
 
             if (!button) {
+
                 return;
+
             }
 
 
@@ -233,12 +349,24 @@ function openComplaintReview(row) {
         ||
         !row
     ) {
+
         return;
+
     }
 
 
+    /* =====================================================
+       SAVE ACTIVE COMPLAINT
+    ===================================================== */
+
+    activeComplaintRow =
+        row;
+
+
     const complaintId =
-        row.dataset.complaintId || "";
+        row.dataset.complaintId
+        ||
+        "";
 
 
     /* =====================================================
@@ -272,35 +400,42 @@ function openComplaintReview(row) {
         row.dataset.complainant
     );
 
+
     setReviewText(
         "reviewReportType",
         row.dataset.reportType
     );
+
 
     setReviewText(
         "reviewCategory",
         row.dataset.category
     );
 
+
     setReviewText(
         "reviewIncidentDate",
         row.dataset.incidentDate
     );
+
 
     setReviewText(
         "reviewIncidentTime",
         row.dataset.incidentTime
     );
 
+
     setReviewText(
         "reviewLocation",
         row.dataset.location
     );
 
+
     setReviewText(
         "reviewSubject",
         row.dataset.subject
     );
+
 
     setReviewText(
         "reviewDescription",
@@ -317,15 +452,18 @@ function openComplaintReview(row) {
         row.dataset.respondentName
     );
 
+
     setReviewText(
         "reviewRespondentRelationship",
         row.dataset.respondentRelationship
     );
 
+
     setReviewText(
         "reviewRespondentContact",
         row.dataset.respondentContact
     );
+
 
     setReviewText(
         "reviewRespondentAddress",
@@ -380,7 +518,8 @@ function openComplaintReview(row) {
                     "hidden"
                 );
 
-        } else {
+        }
+        else {
 
             respondentSection
                 .classList
@@ -402,10 +541,12 @@ function openComplaintReview(row) {
             "reviewPriority"
         );
 
+
     const status =
         document.getElementById(
             "reviewStatus"
         );
+
 
     const resolution =
         document.getElementById(
@@ -444,6 +585,24 @@ function openComplaintReview(row) {
 
 
     /* =====================================================
+       ASSIGNED HANDLER
+    ===================================================== */
+
+    updateAssignedHandlerDisplay(
+        row
+    );
+
+
+    /* =====================================================
+       EDIT PERMISSIONS
+    ===================================================== */
+
+    updateComplaintEditPermissions(
+        row
+    );
+
+
+    /* =====================================================
        RESET SAVE BUTTON
     ===================================================== */
 
@@ -453,10 +612,18 @@ function openComplaintReview(row) {
         );
 
 
+    const canEdit =
+        row.dataset.canEdit === "true";
+
+
     if (saveButton) {
 
         saveButton.disabled =
-            false;
+            !canEdit;
+
+
+        saveButton.hidden =
+            !canEdit;
 
 
         const label =
@@ -530,6 +697,594 @@ function openComplaintReview(row) {
 
 
 /* =========================================================
+   ASSIGNED HANDLER DISPLAY
+========================================================= */
+
+function updateAssignedHandlerDisplay(row) {
+
+    const assignedOfficial =
+        cleanReviewValue(
+            row.dataset.assignedOfficial
+        );
+
+
+    const assignedUsername =
+        cleanReviewValue(
+            row.dataset.assignedUsername
+        );
+
+
+    const assignedRole =
+        cleanReviewValue(
+            row.dataset.assignedRole
+        );
+
+
+    const currentUser =
+        getComplaintCurrentUser();
+
+
+    const name =
+        document.getElementById(
+            "assignedOfficialName"
+        );
+
+
+    const role =
+        document.getElementById(
+            "assignedOfficialRole"
+        );
+
+
+    const avatar =
+        document.getElementById(
+            "assignedOfficialAvatar"
+        );
+
+
+    const badge =
+        document.getElementById(
+            "assignedOfficialBadge"
+        );
+
+
+    const badgeText =
+        document.getElementById(
+            "assignedOfficialBadgeText"
+        );
+
+
+    const helper =
+        document.getElementById(
+            "assignedOfficialHelper"
+        );
+
+
+    /* =====================================================
+       UNASSIGNED
+    ===================================================== */
+
+    if (!assignedOfficial) {
+
+        if (name) {
+
+            name.textContent =
+                "Unassigned";
+
+        }
+
+
+        if (role) {
+
+            role.textContent =
+                "No handler assigned";
+
+        }
+
+
+        if (avatar) {
+
+            avatar.textContent =
+                "?";
+
+        }
+
+
+        if (badgeText) {
+
+            badgeText.textContent =
+                "Unassigned";
+
+        }
+
+
+        if (badge) {
+
+            badge.classList.remove(
+                "assigned-to-you"
+            );
+
+
+            badge.classList.remove(
+                "assigned-to-other"
+            );
+
+
+            badge.classList.add(
+                "unassigned"
+            );
+
+        }
+
+
+        if (helper) {
+
+            helper.textContent =
+                "Change the status from Submitted to Under Review to assign this complaint to your account.";
+
+        }
+
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       ASSIGNED USER
+    ===================================================== */
+
+    if (name) {
+
+        name.textContent =
+            assignedUsername
+            ||
+            "Assigned User";
+
+    }
+
+
+    if (role) {
+
+        role.textContent =
+            formatComplaintRole(
+                assignedRole
+            );
+
+    }
+
+
+    if (avatar) {
+
+        avatar.textContent =
+            (
+                assignedUsername
+                ||
+                "U"
+            )
+            .charAt(0)
+            .toUpperCase();
+
+    }
+
+
+    /* =====================================================
+       ASSIGNED TO CURRENT USER
+    ===================================================== */
+
+    if (
+        currentUser.id
+        &&
+        String(
+            currentUser.id
+        )
+        ===
+        String(
+            assignedOfficial
+        )
+    ) {
+
+        if (badgeText) {
+
+            badgeText.textContent =
+                "Assigned to You";
+
+        }
+
+
+        if (badge) {
+
+            badge.classList.remove(
+                "unassigned"
+            );
+
+
+            badge.classList.remove(
+                "assigned-to-other"
+            );
+
+
+            badge.classList.add(
+                "assigned-to-you"
+            );
+
+        }
+
+
+        if (helper) {
+
+            helper.textContent =
+                "You are responsible for handling and updating this complaint.";
+
+        }
+
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       ASSIGNED TO ANOTHER USER
+    ===================================================== */
+
+    if (badgeText) {
+
+        badgeText.textContent =
+            "Assigned Handler";
+
+    }
+
+
+    if (badge) {
+
+        badge.classList.remove(
+            "unassigned"
+        );
+
+
+        badge.classList.remove(
+            "assigned-to-you"
+        );
+
+
+        badge.classList.add(
+            "assigned-to-other"
+        );
+
+    }
+
+
+    if (helper) {
+
+        helper.textContent =
+            "This complaint is being handled by another Admin or Barangay Official. You have view-only access.";
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPLAINT EDIT PERMISSIONS
+========================================================= */
+
+function updateComplaintEditPermissions(row) {
+
+    const canEdit =
+        row.dataset.canEdit === "true";
+
+
+    const priority =
+        document.getElementById(
+            "reviewPriority"
+        );
+
+
+    const status =
+        document.getElementById(
+            "reviewStatus"
+        );
+
+
+    const resolution =
+        document.getElementById(
+            "reviewResolution"
+        );
+
+
+    const evidenceInput =
+        document.getElementById(
+            "reviewEvidenceFiles"
+        );
+
+
+    const browseButton =
+        document.getElementById(
+            "reviewBrowseFilesButton"
+        );
+
+
+    const clearButton =
+        document.getElementById(
+            "reviewClearFilesButton"
+        );
+
+
+    const uploadArea =
+        document.getElementById(
+            "reviewUploadArea"
+        );
+
+
+    const uploadSection =
+        document.getElementById(
+            "reviewUploadSection"
+        );
+
+
+    const saveButton =
+        document.getElementById(
+            "reviewSaveButton"
+        );
+
+
+    const lockedNotice =
+        document.getElementById(
+            "complaintLockedNotice"
+        );
+
+
+    /* =====================================================
+       PRIORITY
+    ===================================================== */
+
+    if (priority) {
+
+        priority.disabled =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    if (status) {
+
+        status.disabled =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       RESOLUTION
+    ===================================================== */
+
+    if (resolution) {
+
+        resolution.disabled =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       FILE INPUT
+    ===================================================== */
+
+    if (evidenceInput) {
+
+        evidenceInput.disabled =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       BROWSE BUTTON
+    ===================================================== */
+
+    if (browseButton) {
+
+        browseButton.disabled =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       CLEAR BUTTON
+    ===================================================== */
+
+    if (clearButton) {
+
+        clearButton.disabled =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       UPLOAD AREA
+    ===================================================== */
+
+    if (uploadArea) {
+
+        if (canEdit) {
+
+            uploadArea.classList.remove(
+                "review-upload-disabled"
+            );
+
+
+            uploadArea.removeAttribute(
+                "aria-disabled"
+            );
+
+
+            uploadArea.setAttribute(
+                "tabindex",
+                "0"
+            );
+
+        }
+        else {
+
+            uploadArea.classList.add(
+                "review-upload-disabled"
+            );
+
+
+            uploadArea.setAttribute(
+                "aria-disabled",
+                "true"
+            );
+
+
+            uploadArea.setAttribute(
+                "tabindex",
+                "-1"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPLOAD SECTION
+    ===================================================== */
+
+    if (uploadSection) {
+
+        if (canEdit) {
+
+            uploadSection.classList.remove(
+                "review-section-readonly"
+            );
+
+        }
+        else {
+
+            uploadSection.classList.add(
+                "review-section-readonly"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE BUTTON
+    ===================================================== */
+
+    if (saveButton) {
+
+        saveButton.disabled =
+            !canEdit;
+
+
+        saveButton.hidden =
+            !canEdit;
+
+    }
+
+
+    /* =====================================================
+       LOCK NOTICE
+    ===================================================== */
+
+    if (lockedNotice) {
+
+        lockedNotice.hidden =
+            canEdit;
+
+    }
+
+}
+
+
+/* =========================================================
+   GET CURRENT LOGGED-IN USER
+========================================================= */
+
+function getComplaintCurrentUser() {
+
+    const element =
+        document.getElementById(
+            "complaintCurrentUser"
+        );
+
+
+    if (!element) {
+
+        return {
+
+            id: "",
+            username: "",
+            role: ""
+
+        };
+
+    }
+
+
+    return {
+
+        id:
+            cleanReviewValue(
+                element.dataset.userId
+            ),
+
+        username:
+            cleanReviewValue(
+                element.dataset.username
+            ),
+
+        role:
+            cleanReviewValue(
+                element.dataset.role
+            )
+
+    };
+
+}
+
+
+/* =========================================================
+   FORMAT COMPLAINT USER ROLE
+========================================================= */
+
+function formatComplaintRole(role) {
+
+    if (role === "admin") {
+
+        return "Administrator";
+
+    }
+
+
+    if (role === "official") {
+
+        return "Barangay Official";
+
+    }
+
+
+    return (
+        role
+        ||
+        "Assigned User"
+    );
+
+}
+
+
+/* =========================================================
    LOAD COMPLAINT EVIDENCE
 ========================================================= */
 
@@ -542,20 +1297,24 @@ async function loadComplaintEvidence(
             ".complaint-page"
         );
 
+
     const grid =
         document.getElementById(
             "reviewEvidenceGrid"
         );
+
 
     const loading =
         document.getElementById(
             "reviewEvidenceLoading"
         );
 
+
     const empty =
         document.getElementById(
             "reviewEvidenceEmpty"
         );
+
 
     const count =
         document.getElementById(
@@ -574,21 +1333,27 @@ async function loadComplaintEvidence(
         ||
         !count
     ) {
+
         return;
+
     }
 
 
     grid.innerHTML =
         "";
 
+
     grid.hidden =
         true;
+
 
     empty.hidden =
         true;
 
+
     loading.hidden =
         false;
+
 
     count.textContent =
         "Loading...";
@@ -622,6 +1387,7 @@ async function loadComplaintEvidence(
             "Unable to load evidence."
         );
 
+
         return;
 
     }
@@ -644,8 +1410,10 @@ async function loadComplaintEvidence(
                         "GET",
 
                     headers: {
+
                         "X-Requested-With":
                             "XMLHttpRequest"
+
                     },
 
                     credentials:
@@ -698,6 +1466,7 @@ async function loadComplaintEvidence(
             empty.hidden =
                 false;
 
+
             return;
 
         }
@@ -719,7 +1488,8 @@ async function loadComplaintEvidence(
         grid.hidden =
             false;
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
             "Evidence loading error:",
@@ -729,6 +1499,7 @@ async function loadComplaintEvidence(
 
         loading.hidden =
             true;
+
 
         count.textContent =
             "Unavailable";
@@ -758,6 +1529,7 @@ function createEvidenceCard(item) {
     button.type =
         "button";
 
+
     button.className =
         "review-evidence-item";
 
@@ -783,7 +1555,9 @@ function createEvidenceCard(item) {
         "review-evidence-thumbnail";
 
 
-    /* IMAGE */
+    /* =====================================================
+       IMAGE
+    ===================================================== */
 
     if (
         kind === "image"
@@ -800,10 +1574,12 @@ function createEvidenceCard(item) {
         image.src =
             item.file_path;
 
+
         image.alt =
             item.file_name
             ||
             "Complaint evidence";
+
 
         image.loading =
             "lazy";
@@ -815,6 +1591,7 @@ function createEvidenceCard(item) {
 
                 preview.innerHTML =
                     "";
+
 
                 preview.appendChild(
                     createEvidenceIcon(
@@ -830,7 +1607,8 @@ function createEvidenceCard(item) {
             image
         );
 
-    } else {
+    }
+    else {
 
         preview.appendChild(
             createEvidenceIcon(
@@ -841,7 +1619,9 @@ function createEvidenceCard(item) {
     }
 
 
-    /* VIDEO PLAY INDICATOR */
+    /* =====================================================
+       VIDEO PLAY INDICATOR
+    ===================================================== */
 
     if (kind === "video") {
 
@@ -854,6 +1634,7 @@ function createEvidenceCard(item) {
         play.className =
             "review-evidence-play";
 
+
         play.textContent =
             "▶";
 
@@ -865,7 +1646,9 @@ function createEvidenceCard(item) {
     }
 
 
-    /* VERIFIED */
+    /* =====================================================
+       VERIFIED
+    ===================================================== */
 
     if (
         cleanReviewValue(
@@ -882,6 +1665,7 @@ function createEvidenceCard(item) {
         verified.className =
             "review-evidence-verified";
 
+
         verified.textContent =
             "Verified";
 
@@ -893,7 +1677,9 @@ function createEvidenceCard(item) {
     }
 
 
-    /* FILE INFORMATION */
+    /* =====================================================
+       FILE INFORMATION
+    ===================================================== */
 
     const info =
         document.createElement(
@@ -915,6 +1701,7 @@ function createEvidenceCard(item) {
         item.file_name
         ||
         "Evidence file";
+
 
     name.title =
         item.file_name
@@ -961,21 +1748,26 @@ function createEvidenceCard(item) {
         size
     );
 
+
     meta.appendChild(
         type
     );
+
 
     info.appendChild(
         name
     );
 
+
     info.appendChild(
         meta
     );
 
+
     button.appendChild(
         preview
     );
+
 
     button.appendChild(
         info
@@ -987,6 +1779,7 @@ function createEvidenceCard(item) {
         function (event) {
 
             event.preventDefault();
+
             event.stopPropagation();
 
 
@@ -1026,38 +1819,62 @@ function determineEvidenceKind(
 
 
     if (
-        type.startsWith("image/")
+        type.startsWith(
+            "image/"
+        )
         ||
-        /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(name)
+        /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(
+            name
+        )
     ) {
+
         return "image";
+
     }
 
 
     if (
-        type.startsWith("video/")
+        type.startsWith(
+            "video/"
+        )
         ||
-        /\.(mp4|webm|mov|m4v|ogv)$/i.test(name)
+        /\.(mp4|webm|mov|m4v|ogv)$/i.test(
+            name
+        )
     ) {
+
         return "video";
+
     }
 
 
     if (
-        type.startsWith("audio/")
+        type.startsWith(
+            "audio/"
+        )
         ||
-        /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(name)
+        /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(
+            name
+        )
     ) {
+
         return "audio";
+
     }
 
 
     if (
-        type.includes("pdf")
+        type.includes(
+            "pdf"
+        )
         ||
-        /\.pdf$/i.test(name)
+        /\.pdf$/i.test(
+            name
+        )
     ) {
+
         return "pdf";
+
     }
 
 
@@ -1087,11 +1904,17 @@ function createEvidenceIcon(type) {
 
 
     const labels = {
+
         image: "IMG",
+
         video: "VIDEO",
+
         audio: "AUDIO",
+
         pdf: "PDF",
+
         document: "FILE"
+
     };
 
 
@@ -1146,30 +1969,36 @@ function openEvidencePreview(
             "evidencePreviewModal"
         );
 
+
     const content =
         document.getElementById(
             "evidencePreviewContent"
         );
+
 
     const title =
         document.getElementById(
             "evidencePreviewTitle"
         );
 
+
     const type =
         document.getElementById(
             "evidencePreviewType"
         );
+
 
     const size =
         document.getElementById(
             "evidencePreviewSize"
         );
 
+
     const date =
         document.getElementById(
             "evidencePreviewDate"
         );
+
 
     const original =
         document.getElementById(
@@ -1182,7 +2011,9 @@ function openEvidencePreview(
         ||
         !content
     ) {
+
         return;
+
     }
 
 
@@ -1242,14 +2073,17 @@ function openEvidencePreview(
             original.href =
                 item.file_path;
 
+
             original.style.display =
                 "inline-flex";
 
-        } else {
+        }
+        else {
 
             original.removeAttribute(
                 "href"
             );
+
 
             original.style.display =
                 "none";
@@ -1259,7 +2093,9 @@ function openEvidencePreview(
     }
 
 
-    /* IMAGE */
+    /* =====================================================
+       IMAGE
+    ===================================================== */
 
     if (
         kind === "image"
@@ -1276,10 +2112,12 @@ function openEvidencePreview(
         image.src =
             item.file_path;
 
+
         image.alt =
             item.file_name
             ||
             "Complaint evidence";
+
 
         image.className =
             "evidence-preview-image";
@@ -1291,7 +2129,10 @@ function openEvidencePreview(
 
     }
 
-    /* VIDEO */
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
 
     else if (
         kind === "video"
@@ -1308,14 +2149,18 @@ function openEvidencePreview(
         video.src =
             item.file_path;
 
+
         video.controls =
             true;
+
 
         video.preload =
             "metadata";
 
+
         video.playsInline =
             true;
+
 
         video.className =
             "evidence-preview-video";
@@ -1327,7 +2172,10 @@ function openEvidencePreview(
 
     }
 
-    /* AUDIO */
+
+    /* =====================================================
+       AUDIO
+    ===================================================== */
 
     else if (
         kind === "audio"
@@ -1354,8 +2202,10 @@ function openEvidencePreview(
         audio.src =
             item.file_path;
 
+
         audio.controls =
             true;
+
 
         audio.preload =
             "metadata";
@@ -1365,13 +2215,17 @@ function openEvidencePreview(
             audio
         );
 
+
         content.appendChild(
             wrapper
         );
 
     }
 
-    /* PDF */
+
+    /* =====================================================
+       PDF
+    ===================================================== */
 
     else if (
         kind === "pdf"
@@ -1388,8 +2242,10 @@ function openEvidencePreview(
         frame.src =
             item.file_path;
 
+
         frame.className =
             "evidence-preview-pdf";
+
 
         frame.title =
             item.file_name
@@ -1403,7 +2259,10 @@ function openEvidencePreview(
 
     }
 
-    /* DOCUMENT */
+
+    /* =====================================================
+       DOCUMENT
+    ===================================================== */
 
     else {
 
@@ -1479,9 +2338,11 @@ function createDocumentFallback(
         icon
     );
 
+
     documentPreview.appendChild(
         message
     );
+
 
     content.appendChild(
         documentPreview
@@ -1501,6 +2362,7 @@ function closeEvidencePreview() {
             "evidencePreviewModal"
         );
 
+
     const content =
         document.getElementById(
             "evidencePreviewContent"
@@ -1508,7 +2370,9 @@ function closeEvidencePreview() {
 
 
     if (!modal) {
+
         return;
+
     }
 
 
@@ -1546,7 +2410,9 @@ function closeComplaintReview() {
 
 
     if (!modal) {
+
         return;
+
     }
 
 
@@ -1569,22 +2435,35 @@ function closeComplaintReview() {
     );
 
 
-    /* RESET EVIDENCE */
+    /* =====================================================
+       RESET ACTIVE COMPLAINT
+    ===================================================== */
+
+    activeComplaintRow =
+        null;
+
+
+    /* =====================================================
+       RESET EVIDENCE
+    ===================================================== */
 
     const grid =
         document.getElementById(
             "reviewEvidenceGrid"
         );
 
+
     const loading =
         document.getElementById(
             "reviewEvidenceLoading"
         );
 
+
     const empty =
         document.getElementById(
             "reviewEvidenceEmpty"
         );
+
 
     const count =
         document.getElementById(
@@ -1596,6 +2475,7 @@ function closeComplaintReview() {
 
         grid.innerHTML =
             "";
+
 
         grid.hidden =
             true;
@@ -1646,11 +2526,22 @@ function getFriendlyFileType(
 
 
     const labels = {
-        image: "Image",
-        video: "Video",
-        audio: "Audio",
-        pdf: "PDF",
-        document: "Document"
+
+        image:
+            "Image",
+
+        video:
+            "Video",
+
+        audio:
+            "Audio",
+
+        pdf:
+            "PDF",
+
+        document:
+            "Document"
+
     };
 
 
@@ -1676,32 +2567,50 @@ function formatFileSize(bytes) {
 
 
     if (
-        !Number.isFinite(size)
+        !Number.isFinite(
+            size
+        )
         ||
         size <= 0
     ) {
+
         return "0 B";
+
     }
 
 
     const units = [
+
         "B",
+
         "KB",
+
         "MB",
+
         "GB",
+
         "TB"
+
     ];
 
 
     const index =
         Math.min(
+
             Math.floor(
-                Math.log(size)
+
+                Math.log(
+                    size
+                )
                 /
-                Math.log(1024)
+                Math.log(
+                    1024
+                )
+
             ),
 
             units.length - 1
+
         );
 
 
@@ -1716,8 +2625,14 @@ function formatFileSize(bytes) {
 
     const formatted =
         index === 0
-            ? value.toFixed(0)
-            : value.toFixed(1);
+
+            ? value.toFixed(
+                0
+            )
+
+            : value.toFixed(
+                1
+            );
 
 
     return (
@@ -1742,15 +2657,18 @@ function showEvidenceError(message) {
             "reviewEvidenceLoading"
         );
 
+
     const empty =
         document.getElementById(
             "reviewEvidenceEmpty"
         );
 
+
     const grid =
         document.getElementById(
             "reviewEvidenceGrid"
         );
+
 
     const count =
         document.getElementById(
@@ -1820,7 +2738,9 @@ function replaceReviewUrlId(
         ||
         !id
     ) {
+
         return template;
+
     }
 
 
@@ -1831,20 +2751,30 @@ function replaceReviewUrlId(
     ) {
 
         return template.replace(
+
             "/0/",
+
             "/"
             +
-            encodeURIComponent(id)
+            encodeURIComponent(
+                id
+            )
             +
             "/"
+
         );
 
     }
 
 
     return template.replace(
+
         /0(?=\/?$)/,
-        encodeURIComponent(id)
+
+        encodeURIComponent(
+            id
+        )
+
     );
 
 }
@@ -1866,12 +2796,16 @@ function setReviewText(
 
 
     if (!element) {
+
         return;
+
     }
 
 
     element.textContent =
-        cleanReviewValue(value)
+        cleanReviewValue(
+            value
+        )
         ||
         "—";
 
@@ -1889,7 +2823,9 @@ function cleanReviewValue(value) {
         ||
         value === null
     ) {
+
         return "";
+
     }
 
 
@@ -1907,11 +2843,14 @@ function cleanReviewValue(value) {
 window.openComplaintReview =
     openComplaintReview;
 
+
 window.closeComplaintReview =
     closeComplaintReview;
 
+
 window.openEvidencePreview =
     openEvidencePreview;
+
 
 window.closeEvidencePreview =
     closeEvidencePreview;

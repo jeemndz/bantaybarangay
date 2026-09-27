@@ -11,10 +11,12 @@ from django.utils import timezone
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
+from django.db import transaction
 
 from .models import Complaint
 from residentmodule.models import Resident
 from evidencemodule.views import save_evidence_file
+from usermanagement.models import User
 
 
 # =========================================================
@@ -24,7 +26,13 @@ from evidencemodule.views import save_evidence_file
 ALLOWED_COMPLAINT_STATUSES = [
     "Submitted",
     "Under Review",
-    "Under Investigation",
+    "Summons Issued",
+    "Hearing Scheduled",
+    "Under Mediation",
+    "For Verification",
+    "Settled",
+    "For Document Released",
+    "Referred",
     "Resolved",
     "Rejected",
     "Closed",
@@ -46,9 +54,11 @@ ALLOWED_REPORT_TYPES = [
 ]
 
 
-# =========================================================
-# PAGINATION SETTINGS
-# =========================================================
+ALLOWED_CASE_HANDLER_ROLES = [
+    "admin",
+    "official",
+]
+
 
 COMPLAINTS_PER_PAGE = 10
 
@@ -61,7 +71,7 @@ MAX_EVIDENCE_FILES = 5
 
 MAX_EVIDENCE_FILE_SIZE = (
     10 * 1024 * 1024
-)  # 10 MB
+)
 
 
 ALLOWED_EVIDENCE_EXTENSIONS = {
@@ -89,33 +99,40 @@ ALLOWED_EVIDENCE_EXTENSIONS = {
 
 
 # =========================================================
-# RESIDENT NAME HELPERS
+# GET LOGGED-IN STAFF USER
+# =========================================================
+
+def get_logged_in_staff_user(request):
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+
+    if not user_id:
+
+        return None
+
+
+    return (
+        User.objects
+        .filter(
+            user_id=user_id,
+            role__in=ALLOWED_CASE_HANDLER_ROLES,
+            is_active=True,
+        )
+        .first()
+    )
+
+
+# =========================================================
+# RESIDENT FIELD HELPER
 # =========================================================
 
 def get_resident_field(
     resident,
     *field_names
 ):
-
-    """
-    Return the first available value from the supplied
-    Resident model field names.
-
-    This allows the complaint module to work with common
-    Resident naming conventions such as:
-
-        first_name
-        firstname
-
-        middle_name
-        middlename
-
-        last_name
-        lastname
-
-        suffix
-        suffix_name
-    """
 
     for field_name in field_names:
 
@@ -129,6 +146,7 @@ def get_resident_field(
                 field_name
             )
 
+
             if value:
 
                 return str(
@@ -140,28 +158,17 @@ def get_resident_field(
 
 
 # =========================================================
-# GET RESIDENT FULL NAME
+# RESIDENT FULL NAME
 # =========================================================
 
 def get_resident_full_name(
     resident
 ):
 
-    """
-    Build the resident's display name.
-
-    If the Resident model already has a full_name field
-    or property, that value is used first.
-    """
-
     if not resident:
 
         return "Unknown Resident"
 
-
-    # =====================================================
-    # EXISTING FULL NAME FIELD / PROPERTY
-    # =====================================================
 
     full_name = get_resident_field(
         resident,
@@ -176,10 +183,6 @@ def get_resident_full_name(
 
         return full_name
 
-
-    # =====================================================
-    # INDIVIDUAL NAME PARTS
-    # =====================================================
 
     first_name = get_resident_field(
         resident,
@@ -233,10 +236,6 @@ def get_resident_full_name(
         return full_name
 
 
-    # =====================================================
-    # FALLBACK
-    # =====================================================
-
     resident_id = getattr(
         resident,
         "resident_id",
@@ -255,21 +254,12 @@ def get_resident_full_name(
 
 
 # =========================================================
-# ATTACH RESIDENT NAMES TO COMPLAINTS
+# ATTACH RESIDENT NAMES
 # =========================================================
 
 def attach_resident_names(
     complaints
 ):
-
-    """
-    Attach a temporary resident_name attribute to every
-    complaint object.
-
-    The complaints table stores resident_id rather than
-    a Django ForeignKey, so this avoids performing one
-    Resident query for every complaint row.
-    """
 
     complaint_list = list(
         complaints
@@ -281,10 +271,6 @@ def attach_resident_names(
         return complaint_list
 
 
-    # =====================================================
-    # COLLECT RESIDENT IDS
-    # =====================================================
-
     resident_ids = {
 
         complaint.resident_id
@@ -292,24 +278,8 @@ def attach_resident_names(
         for complaint in complaint_list
 
         if complaint.resident_id
-
     }
 
-
-    if not resident_ids:
-
-        for complaint in complaint_list:
-
-            complaint.resident_name = (
-                "Unknown Resident"
-            )
-
-        return complaint_list
-
-
-    # =====================================================
-    # LOAD RESIDENTS IN ONE QUERY
-    # =====================================================
 
     residents = (
         Resident.objects
@@ -325,13 +295,8 @@ def attach_resident_names(
             resident
 
         for resident in residents
-
     }
 
-
-    # =====================================================
-    # ATTACH RESIDENT INFORMATION
-    # =====================================================
 
     for complaint in complaint_list:
 
@@ -365,29 +330,112 @@ def attach_resident_names(
 
 
 # =========================================================
-# VALIDATE EVIDENCE FILES
+# ATTACH ASSIGNED USER INFORMATION
+# =========================================================
+
+def attach_assignment_information(
+    complaints,
+    logged_in_user
+):
+
+    complaint_list = list(
+        complaints
+    )
+
+
+    assigned_ids = {
+
+        complaint.assigned_official
+
+        for complaint in complaint_list
+
+        if complaint.assigned_official
+    }
+
+
+    assigned_users = (
+        User.objects
+        .filter(
+            user_id__in=assigned_ids
+        )
+    )
+
+
+    user_map = {
+
+        user.user_id:
+            user
+
+        for user in assigned_users
+    }
+
+
+    for complaint in complaint_list:
+
+        assigned_user = (
+            user_map.get(
+                complaint.assigned_official
+            )
+        )
+
+
+        if assigned_user:
+
+            complaint.assigned_username = (
+                assigned_user.username
+            )
+
+
+            complaint.assigned_role = (
+                assigned_user.role
+            )
+
+        else:
+
+            complaint.assigned_username = ""
+            complaint.assigned_role = ""
+
+
+        # -------------------------------------------------
+        # EDITING PERMISSION
+        # -------------------------------------------------
+        #
+        # Unassigned complaints:
+        # Any valid Admin / Official may review.
+        #
+        # Assigned complaints:
+        # Only the assigned account may edit.
+        # -------------------------------------------------
+
+        if not logged_in_user:
+
+            complaint.can_edit = False
+
+
+        elif not complaint.assigned_official:
+
+            complaint.can_edit = True
+
+
+        else:
+
+            complaint.can_edit = (
+                complaint.assigned_official
+                ==
+                logged_in_user.user_id
+            )
+
+
+    return complaint_list
+
+
+# =========================================================
+# VALIDATE EVIDENCE
 # =========================================================
 
 def validate_evidence_files(
     evidence_files
 ):
-
-    """
-    Validate evidence uploaded either while creating a
-    complaint or while reviewing an existing complaint.
-
-    Returns:
-
-        None
-            when all files are valid.
-
-        str
-            when validation fails.
-    """
-
-    # =====================================================
-    # MAXIMUM NUMBER OF FILES
-    # =====================================================
 
     if (
         len(evidence_files)
@@ -395,35 +443,19 @@ def validate_evidence_files(
     ):
 
         return (
-            "You may upload a maximum "
-            f"of {MAX_EVIDENCE_FILES} "
-            "evidence files."
+            f"You may upload a maximum of "
+            f"{MAX_EVIDENCE_FILES} evidence files."
         )
 
 
-    # =====================================================
-    # VALIDATE EACH FILE
-    # =====================================================
-
     for uploaded_file in evidence_files:
 
-        # -------------------------------------------------
-        # EMPTY FILE
-        # -------------------------------------------------
-
-        if (
-            uploaded_file.size <= 0
-        ):
+        if uploaded_file.size <= 0:
 
             return (
-                f"{uploaded_file.name} "
-                "is empty and cannot be uploaded."
+                f"{uploaded_file.name} is empty."
             )
 
-
-        # -------------------------------------------------
-        # FILE SIZE
-        # -------------------------------------------------
 
         if (
             uploaded_file.size
@@ -431,17 +463,12 @@ def validate_evidence_files(
         ):
 
             return (
-                f"{uploaded_file.name} "
-                "exceeds the 10 MB "
-                "file size limit."
+                f"{uploaded_file.name} exceeds "
+                "the 10 MB file size limit."
             )
 
 
-        # -------------------------------------------------
-        # FILE EXTENSION
-        # -------------------------------------------------
-
-        file_extension = (
+        extension = (
             Path(
                 uploaded_file.name
             )
@@ -451,14 +478,13 @@ def validate_evidence_files(
 
 
         if (
-            file_extension
+            extension
             not in ALLOWED_EVIDENCE_EXTENSIONS
         ):
 
             return (
-                f"{uploaded_file.name} "
-                "is not a supported "
-                "evidence file type."
+                f"{uploaded_file.name} is not "
+                "a supported evidence file type."
             )
 
 
@@ -475,13 +501,6 @@ def get_evidence_uploader(
     resident=None
 ):
 
-    """
-    Determine which user ID should be stored in the
-    evidence.uploaded_by field.
-
-    The logged-in session user is preferred.
-    """
-
     session_user_id = (
         request.session.get(
             "user_id"
@@ -493,10 +512,6 @@ def get_evidence_uploader(
 
         return session_user_id
 
-
-    # =====================================================
-    # RESIDENT USER ID
-    # =====================================================
 
     if resident:
 
@@ -511,10 +526,6 @@ def get_evidence_uploader(
 
             return resident_user_id
 
-
-    # =====================================================
-    # COMPLAINT RESIDENT
-    # =====================================================
 
     if complaint:
 
@@ -550,7 +561,7 @@ def get_evidence_uploader(
 
 
 # =========================================================
-# SAVE MULTIPLE EVIDENCE FILES
+# SAVE EVIDENCE
 # =========================================================
 
 def save_complaint_evidence(
@@ -558,16 +569,6 @@ def save_complaint_evidence(
     complaint,
     uploaded_by
 ):
-
-    """
-    Save all supplied evidence files using the existing
-    evidencemodule save_evidence_file() helper.
-
-    Returns:
-
-        evidence_saved
-        evidence_failed
-    """
 
     evidence_saved = 0
     evidence_failed = 0
@@ -584,7 +585,7 @@ def save_complaint_evidence(
     if not uploaded_by:
 
         return (
-            evidence_saved,
+            0,
             len(evidence_files),
         )
 
@@ -616,7 +617,6 @@ def save_complaint_evidence(
 
             evidence_failed += 1
 
-
             print(
                 "EVIDENCE SAVE ERROR:",
                 error
@@ -635,19 +635,24 @@ def save_complaint_evidence(
 
 def complaints(request):
 
-    # =====================================================
-    # ALL COMPLAINTS
-    # =====================================================
+    logged_in_user = (
+        get_logged_in_staff_user(
+            request
+        )
+    )
+
 
     all_complaints = (
         Complaint.objects
         .all()
-        .order_by("-submitted_at")
+        .order_by(
+            "-submitted_at"
+        )
     )
 
 
     # =====================================================
-    # FILTER VALUES
+    # FILTERS
     # =====================================================
 
     category = request.GET.get(
@@ -668,18 +673,10 @@ def complaints(request):
     ).strip()
 
 
-    # =====================================================
-    # FILTERED QUERYSET
-    # =====================================================
-
     complaints_list = (
         all_complaints
     )
 
-
-    # -----------------------------------------------------
-    # CATEGORY FILTER
-    # -----------------------------------------------------
 
     if category:
 
@@ -690,10 +687,6 @@ def complaints(request):
         )
 
 
-    # -----------------------------------------------------
-    # STATUS FILTER
-    # -----------------------------------------------------
-
     if status:
 
         complaints_list = (
@@ -703,15 +696,12 @@ def complaints(request):
         )
 
 
-    # -----------------------------------------------------
-    # LAST 30 DAYS
-    # -----------------------------------------------------
-
     if date_range == "30":
 
         thirty_days_ago = (
             timezone.now()
-            - timedelta(
+            -
+            timedelta(
                 days=30
             )
         )
@@ -727,7 +717,7 @@ def complaints(request):
 
 
     # =====================================================
-    # SPLIT INTO THREE TABLES
+    # SECTIONS
     # =====================================================
 
     new_complaints_queryset = (
@@ -742,9 +732,15 @@ def complaints(request):
 
     ongoing_complaints_queryset = (
         complaints_list.filter(
-            status=(
-                "Under Investigation"
-            )
+            status__in=[
+                "Summons Issued",
+                "Hearing Scheduled",
+                "Under Mediation",
+                "For Verification",
+                "Settled",
+                "For Document Released",
+                "Referred",
+            ]
         )
     )
 
@@ -764,32 +760,21 @@ def complaints(request):
     # PAGINATION
     # =====================================================
 
-    # -----------------------------------------------------
-    # NEW COMPLAINTS
-    # -----------------------------------------------------
-
     new_paginator = Paginator(
         new_complaints_queryset,
         COMPLAINTS_PER_PAGE
     )
 
 
-    new_page_number = request.GET.get(
-        "new_page",
-        1
-    )
-
-
     new_page = (
         new_paginator.get_page(
-            new_page_number
+            request.GET.get(
+                "new_page",
+                1
+            )
         )
     )
 
-
-    # -----------------------------------------------------
-    # ONGOING COMPLAINTS
-    # -----------------------------------------------------
 
     ongoing_paginator = Paginator(
         ongoing_complaints_queryset,
@@ -797,24 +782,15 @@ def complaints(request):
     )
 
 
-    ongoing_page_number = (
-        request.GET.get(
-            "ongoing_page",
-            1
-        )
-    )
-
-
     ongoing_page = (
         ongoing_paginator.get_page(
-            ongoing_page_number
+            request.GET.get(
+                "ongoing_page",
+                1
+            )
         )
     )
 
-
-    # -----------------------------------------------------
-    # COMPLETED COMPLAINTS
-    # -----------------------------------------------------
 
     completed_paginator = Paginator(
         completed_complaints_queryset,
@@ -822,37 +798,46 @@ def complaints(request):
     )
 
 
-    completed_page_number = (
-        request.GET.get(
-            "completed_page",
-            1
-        )
-    )
-
-
     completed_page = (
         completed_paginator.get_page(
-            completed_page_number
+            request.GET.get(
+                "completed_page",
+                1
+            )
         )
     )
 
 
     # =====================================================
-    # ATTACH RESIDENT NAMES
+    # ATTACH DISPLAY INFORMATION
     # =====================================================
 
     attach_resident_names(
         new_page.object_list
     )
 
-
     attach_resident_names(
         ongoing_page.object_list
     )
 
-
     attach_resident_names(
         completed_page.object_list
+    )
+
+
+    attach_assignment_information(
+        new_page.object_list,
+        logged_in_user
+    )
+
+    attach_assignment_information(
+        ongoing_page.object_list,
+        logged_in_user
+    )
+
+    attach_assignment_information(
+        completed_page.object_list,
+        logged_in_user
     )
 
 
@@ -866,46 +851,55 @@ def complaints(request):
 
 
     pending_complaints = (
-        all_complaints.filter(
+        all_complaints
+        .filter(
             status__in=[
                 "Submitted",
                 "Under Review",
-                "Under Investigation",
             ]
-        ).count()
+        )
+        .count()
     )
 
 
     ongoing_count = (
-        all_complaints.filter(
-            status=(
-                "Under Investigation"
-            )
-        ).count()
+        all_complaints
+        .filter(
+            status__in=[
+                "Summons Issued",
+                "Hearing Scheduled",
+                "Under Mediation",
+                "For Verification",
+                "Settled",
+                "For Document Released",
+                "Referred",
+            ]
+        )
+        .count()
     )
 
 
     resolved_complaints = (
-        all_complaints.filter(
+        all_complaints
+        .filter(
             status="Resolved"
-        ).count()
+        )
+        .count()
     )
 
 
     completed_count = (
-        all_complaints.filter(
+        all_complaints
+        .filter(
             status__in=[
                 "Resolved",
                 "Rejected",
                 "Closed",
             ]
-        ).count()
+        )
+        .count()
     )
 
-
-    # =====================================================
-    # RESOLVED PERCENTAGE
-    # =====================================================
 
     if total_complaints > 0:
 
@@ -915,8 +909,7 @@ def complaints(request):
                 /
                 total_complaints
             )
-            *
-            100
+            * 100
         )
 
     else:
@@ -925,7 +918,7 @@ def complaints(request):
 
 
     # =====================================================
-    # AVERAGE TIME TO CLOSE
+    # AVERAGE CLOSE TIME
     # =====================================================
 
     completed_for_average = (
@@ -962,11 +955,10 @@ def complaints(request):
                 0
             )
 
-
             close_count += 1
 
 
-    if close_count > 0:
+    if close_count:
 
         average_close_days = round(
             total_close_days
@@ -986,17 +978,8 @@ def complaints(request):
 
     context = {
 
-        # -------------------------------------------------
-        # FILTERED COMPLAINTS
-        # -------------------------------------------------
-
         "complaints":
             complaints_list,
-
-
-        # -------------------------------------------------
-        # PAGINATED TABLE DATA
-        # -------------------------------------------------
 
         "new_complaints":
             new_page,
@@ -1007,11 +990,6 @@ def complaints(request):
         "completed_complaints":
             completed_page,
 
-
-        # -------------------------------------------------
-        # PAGE OBJECTS
-        # -------------------------------------------------
-
         "new_page":
             new_page,
 
@@ -1020,11 +998,6 @@ def complaints(request):
 
         "completed_page":
             completed_page,
-
-
-        # -------------------------------------------------
-        # COUNTS
-        # -------------------------------------------------
 
         "total_complaints":
             total_complaints,
@@ -1038,21 +1011,11 @@ def complaints(request):
         "completed_count":
             completed_count,
 
-
-        # -------------------------------------------------
-        # STATISTICS
-        # -------------------------------------------------
-
         "resolved_percentage":
             resolved_percentage,
 
         "average_close_days":
             average_close_days,
-
-
-        # -------------------------------------------------
-        # FILTER VALUES
-        # -------------------------------------------------
 
         "selected_category":
             category,
@@ -1062,12 +1025,11 @@ def complaints(request):
 
         "selected_date_range":
             date_range,
+
+        "logged_in_user":
+            logged_in_user,
     }
 
-
-    # =====================================================
-    # RENDER
-    # =====================================================
 
     return render(
         request,
@@ -1077,7 +1039,7 @@ def complaints(request):
 
 
 # =========================================================
-# UPDATE COMPLAINT REVIEW
+# UPDATE COMPLAINT
 # =========================================================
 
 @require_POST
@@ -1087,13 +1049,29 @@ def update_complaint(
 ):
 
     # =====================================================
-    # GET COMPLAINT
+    # CURRENT STAFF USER
     # =====================================================
 
-    complaint = get_object_or_404(
-        Complaint,
-        complaint_id=complaint_id
+    logged_in_user = (
+        get_logged_in_staff_user(
+            request
+        )
     )
+
+
+    if not logged_in_user:
+
+        messages.error(
+            request,
+            (
+                "Only an active Administrator or "
+                "Barangay Official may process complaints."
+            )
+        )
+
+        return redirect(
+            "complaints"
+        )
 
 
     # =====================================================
@@ -1106,7 +1084,7 @@ def update_complaint(
     ).strip()
 
 
-    status = request.POST.get(
+    new_status = request.POST.get(
         "status",
         ""
     ).strip()
@@ -1126,7 +1104,7 @@ def update_complaint(
 
 
     # =====================================================
-    # VALIDATE PRIORITY
+    # BASIC VALIDATION
     # =====================================================
 
     if (
@@ -1144,12 +1122,8 @@ def update_complaint(
         )
 
 
-    # =====================================================
-    # VALIDATE STATUS
-    # =====================================================
-
     if (
-        status
+        new_status
         not in ALLOWED_COMPLAINT_STATUSES
     ):
 
@@ -1162,10 +1136,6 @@ def update_complaint(
             "complaints"
         )
 
-
-    # =====================================================
-    # VALIDATE NEW EVIDENCE
-    # =====================================================
 
     evidence_error = (
         validate_evidence_files(
@@ -1187,40 +1157,162 @@ def update_complaint(
 
 
     # =====================================================
-    # UPDATE COMPLAINT
+    # DATABASE-LEVEL OWNERSHIP CHECK
     # =====================================================
 
-    complaint.priority = (
-        priority
-    )
-
-    complaint.status = (
-        status
-    )
-
-    complaint.resolution = (
-        resolution
-        if resolution
-        else None
-    )
-
-    complaint.updated_at = (
-        timezone.now()
-    )
+    newly_assigned = False
 
 
-    complaint.save(
-        update_fields=[
+    with transaction.atomic():
+
+        complaint = (
+            Complaint.objects
+            .select_for_update()
+            .filter(
+                complaint_id=complaint_id
+            )
+            .first()
+        )
+
+
+        if not complaint:
+
+            messages.error(
+                request,
+                "Complaint not found."
+            )
+
+            return redirect(
+                "complaints"
+            )
+
+
+        # =================================================
+        # ALREADY ASSIGNED
+        # =================================================
+
+        if complaint.assigned_official:
+
+            if (
+                complaint.assigned_official
+                !=
+                logged_in_user.user_id
+            ):
+
+                messages.error(
+                    request,
+                    (
+                        f"Complaint #CP-"
+                        f"{complaint.complaint_id:04d} "
+                        "is assigned to another Admin or "
+                        "Barangay Official. You may view it, "
+                        "but you cannot modify it."
+                    )
+                )
+
+                return redirect(
+                    "complaints"
+                )
+
+
+        # =================================================
+        # NEWLY SUBMITTED / UNASSIGNED
+        # =================================================
+
+        else:
+
+            # ---------------------------------------------
+            # CLAIM ONLY WHEN:
+            #
+            # Current DB status = Submitted
+            # Requested status = Under Review
+            # ---------------------------------------------
+
+            if (
+                complaint.status == "Submitted"
+                and
+                new_status == "Under Review"
+            ):
+
+                complaint.assigned_official = (
+                    logged_in_user.user_id
+                )
+
+                newly_assigned = True
+
+
+            # ---------------------------------------------
+            # UNASSIGNED COMPLAINT CANNOT SKIP
+            # UNDER REVIEW
+            # ---------------------------------------------
+
+            elif (
+                complaint.status == "Submitted"
+                and
+                new_status != "Submitted"
+            ):
+
+                messages.error(
+                    request,
+                    (
+                        "A newly submitted complaint must "
+                        "first be changed to Under Review."
+                    )
+                )
+
+                return redirect(
+                    "complaints"
+                )
+
+
+        # =================================================
+        # SAVE COMPLAINT DETAILS
+        # =================================================
+
+        complaint.priority = (
+            priority
+        )
+
+
+        complaint.status = (
+            new_status
+        )
+
+
+        complaint.resolution = (
+            resolution
+            if resolution
+            else None
+        )
+
+
+        complaint.updated_at = (
+            timezone.now()
+        )
+
+
+        update_fields = [
             "priority",
             "status",
             "resolution",
             "updated_at",
         ]
-    )
+
+
+        if newly_assigned:
+
+            update_fields.append(
+                "assigned_official"
+            )
+
+
+        complaint.save(
+            update_fields=update_fields
+        )
 
 
     # =====================================================
-    # SAVE NEW EVIDENCE
+    # SAVE EVIDENCE
     # =====================================================
 
     evidence_saved = 0
@@ -1229,56 +1321,57 @@ def update_complaint(
 
     if evidence_files:
 
-        uploaded_by = (
-            get_evidence_uploader(
-                request,
-                complaint=complaint
+        (
+            evidence_saved,
+            evidence_failed,
+        ) = save_complaint_evidence(
+
+            evidence_files=(
+                evidence_files
+            ),
+
+            complaint=(
+                complaint
+            ),
+
+            uploaded_by=(
+                logged_in_user.user_id
+            ),
+        )
+
+
+    # =====================================================
+    # MESSAGE
+    # =====================================================
+
+    if newly_assigned:
+
+        if logged_in_user.role == "admin":
+
+            role_name = (
+                "Administrator"
+            )
+
+        else:
+
+            role_name = (
+                "Barangay Official"
+            )
+
+
+        messages.success(
+            request,
+            (
+                f"Complaint #CP-"
+                f"{complaint.complaint_id:04d} "
+                "is now Under Review and has been "
+                f"assigned to {logged_in_user.username} "
+                f"({role_name})."
             )
         )
 
 
-        if not uploaded_by:
-
-            evidence_failed = (
-                len(
-                    evidence_files
-                )
-            )
-
-
-            print(
-                "EVIDENCE SAVE ERROR: "
-                "No valid uploaded_by user "
-                "could be determined."
-            )
-
-
-        else:
-
-            (
-                evidence_saved,
-                evidence_failed,
-            ) = save_complaint_evidence(
-
-                evidence_files=(
-                    evidence_files
-                ),
-
-                complaint=(
-                    complaint
-                ),
-
-                uploaded_by=(
-                    uploaded_by
-                ),
-            )
-
-
-    # =====================================================
-    # SUCCESS / WARNING MESSAGE
-    # =====================================================
-
-    if (
+    elif (
         evidence_saved > 0
         and
         evidence_failed == 0
@@ -1289,32 +1382,9 @@ def update_complaint(
             (
                 f"Complaint #CP-"
                 f"{complaint.complaint_id:04d} "
-                "was updated successfully "
-                f"with {evidence_saved} "
-                "new evidence file"
+                "was updated successfully with "
+                f"{evidence_saved} evidence file"
                 f"{'s' if evidence_saved != 1 else ''}."
-            )
-        )
-
-
-    elif (
-        evidence_saved > 0
-        and
-        evidence_failed > 0
-    ):
-
-        messages.warning(
-            request,
-            (
-                f"Complaint #CP-"
-                f"{complaint.complaint_id:04d} "
-                "was updated. "
-                f"{evidence_saved} evidence "
-                "file"
-                f"{'s were' if evidence_saved != 1 else ' was'} "
-                "saved, but "
-                f"{evidence_failed} "
-                "could not be uploaded."
             )
         )
 
@@ -1326,8 +1396,9 @@ def update_complaint(
             (
                 f"Complaint #CP-"
                 f"{complaint.complaint_id:04d} "
-                "was updated, but the "
-                "selected evidence files "
+                "was updated, but "
+                f"{evidence_failed} evidence file"
+                f"{'s' if evidence_failed != 1 else ''} "
                 "could not be uploaded."
             )
         )
@@ -1345,10 +1416,6 @@ def update_complaint(
         )
 
 
-    # =====================================================
-    # REDIRECT
-    # =====================================================
-
     return redirect(
         "complaints"
     )
@@ -1360,119 +1427,122 @@ def update_complaint(
 
 def new_complaint(request):
 
-    # =====================================================
-    # RESIDENTS
-    # =====================================================
-
     residents = (
         Resident.objects
         .all()
-        .order_by("resident_id")
+        .order_by(
+            "resident_id"
+        )
     )
 
 
-    # =====================================================
-    # POST
-    # =====================================================
-
     if request.method == "POST":
 
-        # =================================================
-        # RESIDENT
-        # =================================================
-
-        resident_id = request.POST.get(
-            "resident_id"
+        resident_id = (
+            request.POST.get(
+                "resident_id"
+            )
         )
 
 
-        # =================================================
-        # REPORT TYPE
-        # =================================================
-
-        report_type = request.POST.get(
-            "report_type",
-            "Formal Complaint"
-        ).strip()
-
-
-        # =================================================
-        # COMPLAINT DETAILS
-        # =================================================
-
-        complaint_type = request.POST.get(
-            "complaint_type",
-            ""
-        ).strip()
+        report_type = (
+            request.POST.get(
+                "report_type",
+                "Formal Complaint"
+            )
+            .strip()
+        )
 
 
-        subject = request.POST.get(
-            "subject",
-            ""
-        ).strip()
+        complaint_type = (
+            request.POST.get(
+                "complaint_type",
+                ""
+            )
+            .strip()
+        )
 
 
-        description = request.POST.get(
-            "description",
-            ""
-        ).strip()
+        subject = (
+            request.POST.get(
+                "subject",
+                ""
+            )
+            .strip()
+        )
 
 
-        # =================================================
-        # INCIDENT INFORMATION
-        # =================================================
-
-        location = request.POST.get(
-            "location",
-            ""
-        ).strip()
-
-
-        incident_date = request.POST.get(
-            "incident_date",
-            ""
-        ).strip()
+        description = (
+            request.POST.get(
+                "description",
+                ""
+            )
+            .strip()
+        )
 
 
-        incident_time = request.POST.get(
-            "incident_time",
-            ""
-        ).strip()
+        location = (
+            request.POST.get(
+                "location",
+                ""
+            )
+            .strip()
+        )
 
 
-        # =================================================
-        # RESPONDENT INFORMATION
-        # =================================================
+        incident_date = (
+            request.POST.get(
+                "incident_date",
+                ""
+            )
+            .strip()
+        )
 
-        respondent_name = request.POST.get(
-            "respondent_name",
-            ""
-        ).strip()
+
+        incident_time = (
+            request.POST.get(
+                "incident_time",
+                ""
+            )
+            .strip()
+        )
 
 
-        respondent_address = request.POST.get(
-            "respondent_address",
-            ""
-        ).strip()
+        respondent_name = (
+            request.POST.get(
+                "respondent_name",
+                ""
+            )
+            .strip()
+        )
+
+
+        respondent_address = (
+            request.POST.get(
+                "respondent_address",
+                ""
+            )
+            .strip()
+        )
 
 
         respondent_relationship = (
             request.POST.get(
                 "respondent_relationship",
                 ""
-            ).strip()
+            )
+            .strip()
         )
 
 
-        respondent_contact = request.POST.get(
-            "respondent_contact",
-            ""
-        ).strip()
+        respondent_contact = (
+            request.POST.get(
+                "respondent_contact",
+                ""
+            )
+            .strip()
+        )
 
-
-        # =================================================
-        # EVIDENCE FILES
-        # =================================================
 
         evidence_files = (
             request.FILES.getlist(
@@ -1482,7 +1552,7 @@ def new_complaint(request):
 
 
         # =================================================
-        # VALIDATE RESIDENT
+        # VALIDATION
         # =================================================
 
         if not resident_id:
@@ -1507,10 +1577,6 @@ def new_complaint(request):
             resident_id=resident_id
         )
 
-
-        # =================================================
-        # VALIDATE REQUIRED FIELDS
-        # =================================================
 
         if not complaint_type:
 
@@ -1563,10 +1629,6 @@ def new_complaint(request):
             )
 
 
-        # =================================================
-        # VALIDATE REPORT TYPE
-        # =================================================
-
         if (
             report_type
             not in ALLOWED_REPORT_TYPES
@@ -1576,10 +1638,6 @@ def new_complaint(request):
                 "Formal Complaint"
             )
 
-
-        # =================================================
-        # COMMUNITY ISSUE
-        # =================================================
 
         if (
             report_type
@@ -1592,10 +1650,6 @@ def new_complaint(request):
             respondent_relationship = None
             respondent_contact = None
 
-
-        # =================================================
-        # VALIDATE EVIDENCE
-        # =================================================
 
         evidence_error = (
             validate_evidence_files(
@@ -1622,7 +1676,7 @@ def new_complaint(request):
 
 
         # =================================================
-        # CREATE COMPLAINT
+        # CREATE
         # =================================================
 
         try:
@@ -1694,6 +1748,8 @@ def new_complaint(request):
 
                     priority="N/A",
 
+                    # IMPORTANT:
+                    # NEW COMPLAINT STARTS UNASSIGNED
                     status="Submitted",
 
                     assigned_official=None,
@@ -1721,12 +1777,8 @@ def new_complaint(request):
 
             messages.error(
                 request,
-                (
-                    "The complaint could not "
-                    "be created. Please try again."
-                )
+                "The complaint could not be created."
             )
-
 
             return render(
                 request,
@@ -1739,7 +1791,7 @@ def new_complaint(request):
 
 
         # =================================================
-        # DETERMINE EVIDENCE UPLOADER
+        # EVIDENCE
         # =================================================
 
         uploaded_by = (
@@ -1750,10 +1802,6 @@ def new_complaint(request):
             )
         )
 
-
-        # =================================================
-        # SAVE EVIDENCE
-        # =================================================
 
         (
             evidence_saved,
@@ -1774,64 +1822,17 @@ def new_complaint(request):
         )
 
 
-        # =================================================
-        # SUCCESS MESSAGE
-        # =================================================
-
-        if (
-            evidence_saved > 0
-            and
-            evidence_failed == 0
-        ):
-
-            messages.success(
-                request,
-                (
-                    f"Complaint #CP-"
-                    f"{complaint.complaint_id:04d} "
-                    "was created successfully "
-                    f"with {evidence_saved} "
-                    "evidence file"
-                    f"{'s' if evidence_saved != 1 else ''}."
-                )
-            )
-
-
-        elif (
-            evidence_saved > 0
-            and
-            evidence_failed > 0
-        ):
+        if evidence_failed:
 
             messages.warning(
                 request,
                 (
                     f"Complaint #CP-"
                     f"{complaint.complaint_id:04d} "
-                    "was created. "
-                    f"{evidence_saved} evidence "
-                    "file"
-                    f"{'s were' if evidence_saved != 1 else ' was'} "
-                    "saved, but "
-                    f"{evidence_failed} "
-                    "could not be uploaded."
+                    "was created, but some evidence "
+                    "files could not be uploaded."
                 )
             )
-
-
-        elif evidence_failed > 0:
-
-            messages.warning(
-                request,
-                (
-                    f"Complaint #CP-"
-                    f"{complaint.complaint_id:04d} "
-                    "was created, but the "
-                    "evidence files could not "
-                    "be uploaded."
-                )
-            )
-
 
         else:
 
@@ -1840,33 +1841,21 @@ def new_complaint(request):
                 (
                     f"Complaint #CP-"
                     f"{complaint.complaint_id:04d} "
-                    "was created successfully."
+                    "was submitted successfully."
                 )
             )
 
-
-        # =================================================
-        # REDIRECT
-        # =================================================
 
         return redirect(
             "complaints"
         )
 
 
-    # =====================================================
-    # GET
-    # =====================================================
-
-    context = {
-
-        "residents":
-            residents,
-    }
-
-
     return render(
         request,
         "complaintmodule/newcomplaint.html",
-        context
+        {
+            "residents":
+                residents,
+        }
     )

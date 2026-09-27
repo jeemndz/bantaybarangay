@@ -1,1487 +1,1091 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Document Requests & Issuance | BantayBarangay{% endblock %}
+{% block title %}
+Document Requests | BantayBarangay
+{% endblock %}
+
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/docrequest.css' %}">
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/docrequest.css' %}"
+>
+
 {% endblock %}
+
 
 {% block content %}
 
 <div class="dr-page">
 
-    <!-- =====================================================
+    <!-- ==================================================
          PAGE HEADER
-    ====================================================== -->
-    <header class="dr-page-header">
+    =================================================== -->
 
-        <div class="dr-heading">
+    <div class="dr-header">
 
-            <div class="dr-title-row">
-                <h1>Document Request &amp; Issuance Management</h1>
+        <div>
 
-                <span class="dr-arta-badge">
-                    ARTA Compliant 24H SLA
-                </span>
-            </div>
+            <p class="dr-eyebrow">
+                Document Management
+            </p>
 
-            <p>
-                Review civic clearances, verify resident credentials,
-                cross-reference blotter database, and issue tamper-proof
-                notarized barangay credentials.
+            <h1>
+                Document Requests
+            </h1>
+
+            <p class="dr-subtitle">
+                Review and process document requests
+                submitted by residents.
             </p>
 
         </div>
 
-        <div class="dr-header-actions">
+    </div>
 
-            <span class="dr-sync-status">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                Auto-syncing with National ID PhilSys Registry • Active
-            </span>
 
-            <button
-                type="button"
-                class="dr-btn dr-btn-light"
-                id="refreshQueueBtn"
-            >
-                <i class="fa-solid fa-rotate-right"></i>
-                Refresh Queue
-            </button>
+    <!-- ==================================================
+         DJANGO MESSAGES
+    =================================================== -->
+
+    {% if messages %}
+
+        <div class="dr-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="
+                        dr-message
+                        {% if message.tags %}
+                            {{ message.tags }}
+                        {% endif %}
+                    "
+                >
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
 
         </div>
 
-    </header>
+    {% endif %}
 
 
-    <!-- =====================================================
-         SUMMARY CARDS
-    ====================================================== -->
-    <section class="dr-summary-grid">
+    <!-- ==================================================
+         STATISTICS
+    =================================================== -->
 
-        <!-- PENDING -->
-        <article class="dr-summary-card">
+    <div class="dr-stats">
 
-            <div class="dr-summary-head">
-                <span>Pending Applications</span>
+        <div class="dr-stat-card">
 
-                <div class="dr-summary-icon dr-icon-dark">
-                    <i class="fa-regular fa-file-lines"></i>
-                </div>
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-file-lines"></i>
             </div>
 
-            <div class="dr-summary-value-row">
+            <div>
 
-                <strong class="dr-summary-value">
-                    14
-                </strong>
-
-                <span class="dr-summary-alert">
-                    <i class="fa-solid fa-bolt"></i>
-                    8 Urgent (ARTA 24h)
+                <span class="dr-stat-label">
+                    Total Requests
                 </span>
 
-            </div>
-
-            <div class="dr-summary-footer">
-                <span>6 Regular Review</span>
-                <span>4 Ready for Signature</span>
-            </div>
-
-        </article>
-
-
-        <!-- VERIFIED -->
-        <article class="dr-summary-card">
-
-            <div class="dr-summary-head">
-                <span>Verified Today</span>
-
-                <div class="dr-summary-icon dr-icon-mint">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-            </div>
-
-            <div class="dr-summary-value-row">
-
-                <strong class="dr-summary-value">
-                    38
+                <strong>
+                    {{ total_requests }}
                 </strong>
 
-                <span class="dr-summary-positive">
-                    <i class="fa-solid fa-arrow-trend-up"></i>
-                    +12% vs yesterday
+            </div>
+
+        </div>
+
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Processing
                 </span>
 
-            </div>
-
-            <div class="dr-summary-footer">
-                <span>Approved &amp; Crypto Sealed</span>
-                <strong>32 Picked Up</strong>
-            </div>
-
-        </article>
-
-
-        <!-- REVENUE -->
-        <article class="dr-summary-card">
-
-            <div class="dr-summary-head">
-                <span>Revenue Collected</span>
-
-                <div class="dr-summary-icon dr-icon-soft">
-                    <i class="fa-solid fa-money-bill-wave"></i>
-                </div>
-            </div>
-
-            <div class="dr-summary-value-row">
-
-                <strong class="dr-summary-value dr-revenue">
-                    ₱4,850.00
+                <strong>
+                    {{ pending_requests }}
                 </strong>
 
-                <span class="dr-summary-positive">
-                    100% Reconciled
+            </div>
+
+        </div>
+
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-box-archive"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Ready for Pickup
                 </span>
 
-            </div>
-
-            <div class="dr-summary-footer">
-                <span>Cashier: ₱1,950</span>
-                <span>GCash/Maya: ₱2,900</span>
-            </div>
-
-        </article>
-
-
-        <!-- SLA -->
-        <article class="dr-summary-card">
-
-            <div class="dr-summary-head">
-                <span>SLA Compliance</span>
-
-                <div class="dr-summary-icon dr-icon-dark">
-                    <i class="fa-solid fa-gauge-high"></i>
-                </div>
-            </div>
-
-            <div class="dr-summary-value-row">
-
-                <strong class="dr-summary-value">
-                    98.4%
+                <strong>
+                    {{ ready_requests }}
                 </strong>
 
-                <span class="dr-summary-positive">
-                    RA 11032 Ease of Biz
+            </div>
+
+        </div>
+
+
+        <div class="dr-stat-card">
+
+            <div class="dr-stat-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <div>
+
+                <span class="dr-stat-label">
+                    Released
                 </span>
 
+                <strong>
+                    {{ released_requests }}
+                </strong>
+
             </div>
 
-            <div class="dr-summary-footer">
-                <span>Avg Processing Time</span>
-                <strong>18 Minutes</strong>
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         FILTERS
+    =================================================== -->
+
+    <div class="dr-filter-card">
+
+        <form
+            method="GET"
+            class="dr-filter-form"
+        >
+
+            <!-- SEARCH -->
+
+            <div class="dr-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search resident, document or purpose..."
+                >
+
             </div>
 
-        </article>
 
-    </section>
+            <!-- DOCUMENT TYPE -->
 
+            <select
+                name="document_type"
+                class="dr-filter-select"
+            >
 
-    <!-- =====================================================
-         FILTER BAR
-    ====================================================== -->
-    <section class="dr-filter-bar">
+                <option value="">
+                    All Documents
+                </option>
 
-        <div class="dr-filter-left">
+                {% for document in document_types %}
 
-            <!-- CATEGORY -->
-            <label class="dr-filter-group">
+                    <option
+                        value="{{ document.id }}"
+                        {% if selected_document_type == document.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ document.name }}
+                    </option>
 
-                <span>Category:</span>
+                {% endfor %}
 
-                <select id="categoryFilter">
-                    <option value="all">All Document Types (6)</option>
-                    <option value="clearance">Barangay Clearance</option>
-                    <option value="indigency">Certificate of Indigency</option>
-                    <option value="good-moral">Good Moral Character</option>
-                    <option value="business">Business Permit Endorsement</option>
-                    <option value="residency">Certificate of Residency</option>
-                </select>
-
-            </label>
+            </select>
 
 
             <!-- STATUS -->
-            <label class="dr-filter-group">
 
-                <span>Status:</span>
+            <select
+                name="status"
+                class="dr-filter-select"
+            >
 
-                <select id="statusFilter">
-                    <option value="all">All Processing Stages</option>
-                    <option value="verification">Under Verification</option>
-                    <option value="review">Lupon Clearance Review</option>
-                    <option value="signature">Ready for Signature</option>
-                    <option value="pickup">Ready for Pickup</option>
-                </select>
+                <option value="">
+                    All Statuses
+                </option>
 
-            </label>
+                {% for status in statuses %}
+
+                    <option
+                        value="{{ status }}"
+                        {% if selected_status == status %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ status }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
 
 
-            <!-- DATE FILTER -->
-            <div class="dr-date-filter">
+            <button
+                type="submit"
+                class="dr-filter-button"
+            >
+                <i class="fa-solid fa-filter"></i>
 
-                <button
-                    type="button"
-                    class="dr-date-btn active"
-                    data-date-filter="today"
-                >
-                    Today
-                </button>
+                Filter
+            </button>
 
-                <button
-                    type="button"
-                    class="dr-date-btn"
-                    data-date-filter="week"
-                >
-                    Last 7 Days
-                </button>
 
-                <button
-                    type="button"
-                    class="dr-date-btn"
-                    data-date-filter="month"
-                >
-                    This Month
-                </button>
+            <a
+                href="{% url 'docrequestmodule:request_documents' %}"
+                class="dr-clear-button"
+            >
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- ==================================================
+         REQUEST TABLE
+    =================================================== -->
+
+    <div class="dr-table-card">
+
+        <div class="dr-table-header">
+
+            <div>
+
+                <h2>
+                    Resident Requests
+                </h2>
+
+                <p>
+                    {{ document_requests|length }}
+                    request{{ document_requests|length|pluralize }}
+                    displayed
+                </p>
 
             </div>
 
-
-            <!-- FLAGGED -->
-            <label class="dr-flag-filter">
-
-                <input
-                    type="checkbox"
-                    id="flaggedFilter"
-                >
-
-                <i class="fa-regular fa-flag"></i>
-
-                <span>
-                    Flagged Blotter Hits (2)
-                </span>
-
-            </label>
-
         </div>
 
 
-        <div class="dr-filter-actions">
+        <div class="dr-table-wrapper">
 
-            <button
-                type="button"
-                class="dr-btn dr-btn-light"
-                id="moreFiltersBtn"
-            >
-                <i class="fa-solid fa-sliders"></i>
-                More Filters
-            </button>
+            <table class="dr-table">
 
-            <button
-                type="button"
-                class="dr-btn dr-btn-light"
-                id="exportReportBtn"
-            >
-                <i class="fa-solid fa-download"></i>
-                Export DILG Report
-            </button>
+                <thead>
 
-        </div>
+                    <tr>
 
-    </section>
+                        <th>
+                            Reference
+                        </th>
 
+                        <th>
+                            Resident
+                        </th>
 
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
-    <section class="dr-workspace">
+                        <th>
+                            Document
+                        </th>
 
+                        <th>
+                            Purpose
+                        </th>
 
-        <!-- =================================================
-             APPLICATION QUEUE
-        ================================================== -->
-        <div class="dr-queue-column">
+                        <th>
+                            Submitted
+                        </th>
 
-            <div class="dr-queue-card">
+                        <th>
+                            Status
+                        </th>
 
-                <!-- HEADER -->
-                <div class="dr-queue-header">
+                        <th>
+                            Action
+                        </th>
 
-                    <div class="dr-queue-title">
+                    </tr>
 
-                        <h2>
-                            Live Application Queue
-                        </h2>
+                </thead>
 
-                        <span>
-                            14 Active in Stream
-                        </span>
 
-                    </div>
+                <tbody id="requestTableBody">
 
-                    <div class="dr-auto-refresh">
-                        Auto-refreshing in
-                        <strong id="refreshCountdown">24s</strong>
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                    </div>
+                    {% for item in document_requests %}
 
-                </div>
+                        <tr
+                            class="dr-request-row"
 
+                            data-request-id="{{ item.request_id }}"
 
-                <!-- =========================================
-                     TABLE
-                ========================================== -->
-                <div class="dr-table-wrapper">
+                            data-reference="{{ item.reference_number|escape }}"
 
-                    <table class="dr-request-table">
+                            data-resident="{{ item.resident_name|escape }}"
 
-                        <thead>
+                            data-resident-id="{{ item.resident_id }}"
 
-                            <tr>
-                                <th>Tracking &amp; Hash</th>
-                                <th>Resident Applicant</th>
-                                <th>Document &amp; Purpose</th>
-                                <th>Blotter Check</th>
-                                <th>Fee / Payment</th>
-                                <th>SLA Timer</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
+                            data-address="{{ item.address|default:''|escape }}"
 
-                        </thead>
+                            data-email="{{ item.email|default:''|escape }}"
 
+                            data-contact="{{ item.contact_number|default:''|escape }}"
 
-                        <tbody id="requestTableBody">
+                            data-document="{{ item.document_name|escape }}"
 
+                            data-purpose="{{ item.purpose|escape }}"
 
-                            <!-- =====================================
-                                 MARIA
-                            ====================================== -->
-                            <tr
-                                class="dr-request-row selected"
-                                data-category="clearance"
-                                data-status="signature"
-                                data-flagged="false"
-                                data-request="#DOC-2024-1184"
-                                data-name="Maria Santos Cruz"
-                                data-document="Barangay Clearance"
-                                data-purpose="Local Employment (BPO)"
-                                data-received="Oct 24, 2024 · 09:14 AM"
-                                data-address="Purok 4, Ilang-Ilang St."
-                                data-id="PhilSys: 8941-2094-1102-3982"
-                                data-voter="Registered Voter · Precinct 0214-A"
-                                data-fee="₱50.00 Paid"
-                            >
+                            data-institution="{{ item.institution|default:''|escape }}"
 
-                                <td class="dr-tracking">
+                            data-notes="{{ item.request_notes|default:''|escape }}"
 
-                                    <strong>
-                                        #DOC-2024-1184
-                                    </strong>
+                            data-delivery="{{ item.delivery_method|default:''|escape }}"
 
-                                    <small>
-                                        <i class="fa-solid fa-qrcode"></i>
-                                        0x8f2a...c41e
-                                    </small>
+                            data-payment="{{ item.payment_method|default:''|escape }}"
 
-                                </td>
+                            data-status="{{ item.status|escape }}"
 
-
-                                <td>
-
-                                    <div class="dr-resident">
-
-                                        <div class="dr-avatar">
-                                            MS
-                                        </div>
-
-                                        <div class="dr-resident-info">
-
-                                            <strong>
-                                                Maria Santos Cruz
-                                            </strong>
-
-                                            <span>
-                                                Purok 4, Ilang-Ilang St.
-                                            </span>
-
-                                            <small>
-                                                <i class="fa-solid fa-circle-check"></i>
-                                                PhilSys
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        Barangay Clearance
-                                    </strong>
-
-                                    <small>
-                                        Local Employment (BPO)
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-record-badge clean">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        Clean Record
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        ₱50.00
-                                    </strong>
-
-                                    <small>
-                                        Paid (GCash)
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-timer urgent">
-                                        <i class="fa-regular fa-clock"></i>
-                                        1h 45m left
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-status signature">
-                                        Ready for Signature
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-row-actions">
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn dr-view-btn"
-                                            title="View"
-                                        >
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                            title="Verify"
-                                        >
-                                            <i class="fa-solid fa-fingerprint"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                            title="Print"
-                                        >
-                                            <i class="fa-solid fa-print"></i>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-                            <!-- =====================================
-                                 ERNESTO
-                            ====================================== -->
-                            <tr
-                                class="dr-request-row"
-                                data-category="indigency"
-                                data-status="verification"
-                                data-flagged="false"
-                                data-request="#DOC-2024-1185"
-                                data-name="Ernesto D. Reyes"
-                                data-document="Certificate of Indigency"
-                                data-purpose="Medical Assistance (DSWD)"
-                                data-received="Oct 24, 2024 · 09:32 AM"
-                                data-address="Purok 1, Riverside"
-                                data-id="Senior Citizen ID Verified"
-                                data-voter="Registered Resident"
-                                data-fee="WAIVED"
-                            >
-
-                                <td class="dr-tracking">
-
-                                    <strong>
-                                        #DOC-2024-1185
-                                    </strong>
-
-                                    <small>
-                                        <i class="fa-solid fa-qrcode"></i>
-                                        0x4b7c...91d2
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-resident">
-
-                                        <div class="dr-avatar">
-                                            ER
-                                        </div>
-
-                                        <div class="dr-resident-info">
-
-                                            <strong>
-                                                Ernesto D. Reyes
-                                            </strong>
-
-                                            <span>
-                                                Purok 1, Riverside
-                                            </span>
-
-                                            <small>
-                                                Senior ID
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        Certificate of Indigency
-                                    </strong>
-
-                                    <small>
-                                        Medical Assistance (DSWD)
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-record-badge clean">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        Clean Record
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        WAIVED
-                                    </strong>
-
-                                    <small>
-                                        Social Welfare Act
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-timer normal">
-                                        <i class="fa-regular fa-clock"></i>
-                                        4h 20m left
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-status verification">
-                                        Under Verification
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-row-actions">
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn dr-view-btn"
-                                        >
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-fingerprint"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-print"></i>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-                            <!-- =====================================
-                                 DANILO
-                            ====================================== -->
-                            <tr
-                                class="dr-request-row dr-flagged-row"
-                                data-category="good-moral"
-                                data-status="review"
-                                data-flagged="true"
-                                data-request="#DOC-2024-1186"
-                                data-name="Danilo V. Mercado"
-                                data-document="Good Moral Character"
-                                data-purpose="Overseas Employment (POEA)"
-                                data-received="Oct 24, 2024 · 10:06 AM"
-                                data-address="Purok 5, Sampaguita"
-                                data-id="PhilSys Verified"
-                                data-voter="Registered Resident"
-                                data-fee="₱100.00 Paid"
-                            >
-
-                                <td class="dr-tracking">
-
-                                    <strong>
-                                        #DOC-2024-1186
-                                    </strong>
-
-                                    <small>
-                                        <i class="fa-solid fa-qrcode"></i>
-                                        0x12c9...ee05
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-resident">
-
-                                        <div class="dr-avatar">
-                                            DM
-                                        </div>
-
-                                        <div class="dr-resident-info">
-
-                                            <strong>
-                                                Danilo V. Mercado
-                                            </strong>
-
-                                            <span>
-                                                Purok 5, Sampaguita
-                                            </span>
-
-                                            <small>
-                                                PhilSys
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        Good Moral Character
-                                    </strong>
-
-                                    <small>
-                                        Overseas Employment (POEA)
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-record-badge flagged">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        1 Blotter (Amicable Settled)
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        ₱100.00
-                                    </strong>
-
-                                    <small>
-                                        Cash at Counter
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-timer normal">
-                                        <i class="fa-regular fa-clock"></i>
-                                        6h 10m left
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-status review">
-                                        Lupon Clearance Review
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-row-actions">
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn dr-view-btn"
-                                        >
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-fingerprint"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-print"></i>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-                            <!-- =====================================
-                                 LUCIA
-                            ====================================== -->
-                            <tr
-                                class="dr-request-row"
-                                data-category="business"
-                                data-status="signature"
-                                data-flagged="false"
-                                data-request="#DOC-2024-1187"
-                                data-name="Lucia B. Alcantara"
-                                data-document="Business Permit Endorsement"
-                                data-purpose="Sari-Sari Store & Eatery"
-                                data-received="Oct 24, 2024 · 10:27 AM"
-                                data-address="Purok 2, Dahlia St."
-                                data-id="DTI Registration Verified"
-                                data-voter="Registered Resident"
-                                data-fee="₱250.00 Paid"
-                            >
-
-                                <td class="dr-tracking">
-
-                                    <strong>
-                                        #DOC-2024-1187
-                                    </strong>
-
-                                    <small>
-                                        <i class="fa-solid fa-qrcode"></i>
-                                        0x39aa...887f
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-resident">
-
-                                        <div class="dr-avatar">
-                                            LA
-                                        </div>
-
-                                        <div class="dr-resident-info">
-
-                                            <strong>
-                                                Lucia B. Alcantara
-                                            </strong>
-
-                                            <span>
-                                                Purok 2, Dahlia St.
-                                            </span>
-
-                                            <small>
-                                                DTI Reg
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        Business Permit Endorsement
-                                    </strong>
-
-                                    <small>
-                                        Sari-Sari Store &amp; Eatery
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-record-badge clean">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        Clean Record
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        ₱250.00
-                                    </strong>
-
-                                    <small>
-                                        Paid (Maya)
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-timer normal">
-                                        <i class="fa-regular fa-clock"></i>
-                                        7h 35m left
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-status signature">
-                                        Ready for Signature
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-row-actions">
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn dr-view-btn"
-                                        >
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-fingerprint"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-print"></i>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-
-                            <!-- =====================================
-                                 RAFAEL
-                            ====================================== -->
-                            <tr
-                                class="dr-request-row"
-                                data-category="residency"
-                                data-status="pickup"
-                                data-flagged="false"
-                                data-request="#DOC-2024-1188"
-                                data-name="Rafael M. Soriano"
-                                data-document="Certificate of Residency"
-                                data-purpose="Bank Account Opening"
-                                data-received="Oct 24, 2024 · 11:02 AM"
-                                data-address="Purok 3, Mabini St."
-                                data-id="Student ID Verified"
-                                data-voter="Registered Resident"
-                                data-fee="₱50.00 Paid"
-                            >
-
-                                <td class="dr-tracking">
-
-                                    <strong>
-                                        #DOC-2024-1188
-                                    </strong>
-
-                                    <small>
-                                        <i class="fa-solid fa-qrcode"></i>
-                                        0xdd32...bb18
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-resident">
-
-                                        <div class="dr-avatar">
-                                            RS
-                                        </div>
-
-                                        <div class="dr-resident-info">
-
-                                            <strong>
-                                                Rafael M. Soriano
-                                            </strong>
-
-                                            <span>
-                                                Purok 3, Mabini St.
-                                            </span>
-
-                                            <small>
-                                                Student
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        Certificate of Residency
-                                    </strong>
-
-                                    <small>
-                                        Bank Account Opening
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-record-badge clean">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        Clean Record
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <strong>
-                                        ₱50.00
-                                    </strong>
-
-                                    <small>
-                                        Paid (GCash)
-                                    </small>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-timer normal">
-                                        <i class="fa-regular fa-clock"></i>
-                                        9h 15m left
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="dr-status pickup">
-                                        Ready for Pickup
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="dr-row-actions">
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn dr-view-btn"
-                                        >
-                                            <i class="fa-regular fa-eye"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-fingerprint"></i>
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            class="dr-action-btn"
-                                        >
-                                            <i class="fa-solid fa-print"></i>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-
-                <!-- =========================================
-                     TABLE FOOTER
-                ========================================== -->
-                <div class="dr-table-footer">
-
-                    <div class="dr-table-info">
-
-                        <span>
-                            Showing
-                            <strong id="visibleCount">5</strong>
-                            of 14 records
-                        </span>
-
-                        <label>
-                            Rows per page:
-
-                            <select id="rowsPerPage">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
-
-                        </label>
-
-                    </div>
-
-
-                    <div class="dr-pagination">
-
-                        <button type="button">
-                            <i class="fa-solid fa-angles-left"></i>
-                        </button>
-
-                        <button type="button">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-
-                        <button
-                            type="button"
-                            class="active"
+                            data-submitted="{{ item.submitted_at|date:'M d, Y h:i A' }}"
                         >
-                            1
-                        </button>
 
-                        <button type="button">
-                            2
-                        </button>
+                            <!-- REFERENCE -->
 
-                        <button type="button">
-                            3
-                        </button>
+                            <td>
 
-                        <button type="button">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
+                                <div class="dr-reference">
 
-                        <button type="button">
-                            <i class="fa-solid fa-angles-right"></i>
-                        </button>
+                                    <strong>
+                                        {{ item.reference_number }}
+                                    </strong>
 
-                    </div>
+                                    <small>
+                                        Request #{{ item.request_id }}
+                                    </small>
 
-                </div>
+                                </div>
+
+                            </td>
+
+
+                            <!-- RESIDENT -->
+
+                            <td>
+
+                                <div class="dr-resident">
+
+                                    <div class="dr-avatar">
+
+                                        {{ item.first_name|first|upper }}
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            {{ item.resident_name }}
+                                        </strong>
+
+                                        <small>
+                                            Resident #{{ item.resident_id }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- DOCUMENT -->
+
+                            <td>
+
+                                <strong>
+                                    {{ item.document_name }}
+                                </strong>
+
+                                {% if item.institution %}
+
+                                    <small class="dr-cell-subtext">
+                                        {{ item.institution }}
+                                    </small>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- PURPOSE -->
+
+                            <td>
+
+                                <span>
+                                    {{ item.purpose }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                <span>
+                                    {{ item.submitted_at|date:"M d, Y" }}
+                                </span>
+
+                                <small class="dr-cell-subtext">
+                                    {{ item.submitted_at|date:"h:i A" }}
+                                </small>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <span
+                                    class="
+                                        dr-status-badge
+
+                                        {% if item.status == 'Submitted' %}
+                                            submitted
+
+                                        {% elif item.status == 'Under Verification' %}
+                                            verification
+
+                                        {% elif item.status == 'Ready for Signature' %}
+                                            signature
+
+                                        {% elif item.status == 'Ready for Pickup' %}
+                                            pickup
+
+                                        {% elif item.status == 'Released' %}
+                                            released
+
+                                        {% elif item.status == 'Rejected' %}
+                                            rejected
+
+                                        {% elif item.status == 'Cancelled' %}
+                                            cancelled
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{ item.status }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="dr-action-btn dr-view-btn"
+                                    onclick="openRequestModal(this)"
+                                >
+
+                                    <i class="fa-regular fa-eye"></i>
+
+                                    View
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="dr-empty"
+                            >
+
+                                <i class="fa-regular fa-folder-open"></i>
+
+                                <strong>
+                                    No document requests found
+                                </strong>
+
+                                <span>
+                                    Resident document requests
+                                    will appear here.
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     REQUEST DETAILS MODAL
+======================================================= -->
+
+<div
+    id="requestModal"
+    class="dr-modal"
+>
+
+    <div class="dr-modal-overlay"
+         onclick="closeRequestModal()">
+    </div>
+
+
+    <div class="dr-modal-panel">
+
+        <!-- HEADER -->
+
+        <div class="dr-modal-header">
+
+            <div>
+
+                <p class="dr-eyebrow">
+                    Document Request
+                </p>
+
+                <h2 id="modalReference">
+                    Request Details
+                </h2>
 
             </div>
 
 
-            <!-- =================================================
-                 AUDIT BAR
-            ================================================== -->
-            <div class="dr-audit-bar">
-
-                <div class="dr-audit-message">
-
-                    <i class="fa-solid fa-shield-halved"></i>
-
-                    <span>
-                        <strong>Audit Node:</strong>
-                        Document #DOC-2024-1182 sealed &amp; notarized
-                        by PB Hon. Ricardo Gomez at 14:22:09 PST
-                    </span>
-
-                </div>
-
-                <button
-                    type="button"
-                    class="dr-audit-link"
-                >
-                    View GovChain Log
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-
-            </div>
+            <button
+                type="button"
+                class="dr-modal-close"
+                onclick="closeRequestModal()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
         </div>
 
 
-        <!-- =================================================
-             DOSSIER / DOCUMENT PREVIEW
-        ================================================== -->
-        <aside class="dr-dossier">
+        <!-- BODY -->
 
-            <!-- HEADER -->
-            <div class="dr-dossier-header">
-
-                <div>
-
-                    <span class="dr-dossier-label">
-                        Active Dossier Inspection
-                    </span>
-
-                    <h2 id="detailRequest">
-                        #DOC-2024-1184
-                    </h2>
-
-                    <small id="detailReceived">
-                        Received: Oct 24, 2024 · 09:14 AM
-                    </small>
-
-                </div>
-
-                <span class="dr-priority">
-                    Priority: ARTA 24h
-                </span>
-
-            </div>
+        <div class="dr-modal-body">
 
 
-            <!-- APPLICANT -->
-            <div class="dr-applicant-card">
+            <!-- RESIDENT -->
 
-                <div
-                    class="dr-applicant-avatar"
-                    id="detailAvatar"
-                >
-                    MS
-                </div>
-
-                <div class="dr-applicant-info">
-
-                    <strong id="detailName">
-                        Maria Santos Cruz
-                    </strong>
-
-                    <span id="detailId">
-                        PhilSys: 8941-2094-1102-3982
-                    </span>
-
-                    <span id="detailVoter">
-                        Registered Voter · Precinct 0214-A
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 DOCUMENT PREVIEW
-            ================================================== -->
-            <div class="dr-document-preview">
-
-                <div class="dr-preview-country">
-                    REPUBLIC OF THE PHILIPPINES
-                </div>
-
-                <strong class="dr-preview-barangay">
-                    BARANGAY SAN ANTONIO CENTRAL
-                </strong>
-
-                <span class="dr-preview-city">
-                    City of Pasig • Metro Manila
-                </span>
-
-                <div class="dr-preview-divider"></div>
-
-                <h3 id="previewDocumentTitle">
-                    BARANGAY CLEARANCE
-                </h3>
-
-
-                <p>
-                    This is to certify that
-                    <strong id="previewResidentName">
-                        MARIA SANTOS CRUZ
-                    </strong>,
-                    of legal age, Filipino, is a bona fide resident of
-                    <span id="previewAddress">
-                        Purok 4, Ilang-Ilang St.
-                    </span>
-                </p>
-
-
-                <p>
-                    Records of this office show that the applicant
-                    has NO DEROGATORY RECORD nor criminal complaint
-                    filed before the Lupong Tagapamayapa.
-                </p>
-
-
-                <div class="dr-preview-signature">
-
-                    <span>
-                        R. Gomez
-                    </span>
-
-                    <strong>
-                        HON. RICARDO GOMEZ
-                    </strong>
-
-                    <small>
-                        Punong Barangay
-                    </small>
-
-                </div>
-
-
-                <div class="dr-official-seal">
-
-                    <i class="fa-solid fa-certificate"></i>
-
-                    <span>
-                        OFFICIAL<br>
-                        SEAL
-                    </span>
-
-                </div>
-
-
-                <span class="dr-document-valid">
-                    SHA-256 Valid
-                </span>
-
-            </div>
-
-
-            <!-- =================================================
-                 VERIFICATION
-            ================================================== -->
-            <div class="dr-verifications">
+            <section class="dr-detail-section">
 
                 <h3>
-                    Pre-Issuance Verifications:
+                    Resident Information
                 </h3>
 
+                <div class="dr-detail-grid">
 
-                <div class="dr-verification-row">
+                    <div>
 
-                    <span>
-                        <i class="fa-solid fa-check"></i>
-                        PhilSys National ID Live Match
-                    </span>
+                        <span>
+                            Resident
+                        </span>
 
-                    <strong>
-                        Matched 99.8%
-                    </strong>
+                        <strong id="modalResident">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Resident ID
+                        </span>
+
+                        <strong id="modalResidentId">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong id="modalEmail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Contact Number
+                        </span>
+
+                        <strong id="modalContact">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Address
+                        </span>
+
+                        <strong id="modalAddress">
+                            —
+                        </strong>
+
+                    </div>
 
                 </div>
 
+            </section>
 
-                <div class="dr-verification-row">
 
-                    <span>
-                        <i class="fa-solid fa-check"></i>
-                        Blotter &amp; KP Case Index
-                    </span>
+            <!-- REQUEST -->
 
-                    <strong>
-                        0 Active Cases
-                    </strong>
+            <section class="dr-detail-section">
+
+                <h3>
+                    Request Information
+                </h3>
+
+                <div class="dr-detail-grid">
+
+                    <div>
+
+                        <span>
+                            Document
+                        </span>
+
+                        <strong id="modalDocument">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Submitted
+                        </span>
+
+                        <strong id="modalSubmitted">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Purpose
+                        </span>
+
+                        <strong id="modalPurpose">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Institution
+                        </span>
+
+                        <strong id="modalInstitution">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="dr-detail-wide">
+
+                        <span>
+                            Notes
+                        </span>
+
+                        <strong id="modalNotes">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Release Method
+                        </span>
+
+                        <strong id="modalDelivery">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Payment Method
+                        </span>
+
+                        <strong id="modalPayment">
+                            —
+                        </strong>
+
+                    </div>
 
                 </div>
 
-
-                <div class="dr-verification-row">
-
-                    <span>
-                        <i class="fa-solid fa-check"></i>
-                        Official Barangay Fee
-                    </span>
-
-                    <strong id="detailFee">
-                        ₱50.00 Paid
-                    </strong>
-
-                </div>
-
-            </div>
+            </section>
 
 
-            <!-- =================================================
-                 ACTIONS
-            ================================================== -->
-            <div class="dr-dossier-actions">
+            <!-- STATUS -->
 
-                <button
-                    type="button"
-                    class="dr-sign-btn"
-                    id="signDocumentBtn"
+            <section class="dr-detail-section">
+
+                <h3>
+                    Update Status
+                </h3>
+
+                <form
+                    id="statusUpdateForm"
+                    method="POST"
                 >
-                    <i class="fa-solid fa-fingerprint"></i>
-                    Cryptographically Sign &amp; Notarize
-                </button>
+
+                    {% csrf_token %}
+
+                    <div class="dr-status-form">
+
+                        <select
+                            name="status"
+                            id="modalStatus"
+                            required
+                        >
+
+                            {% for status in statuses %}
+
+                                <option
+                                    value="{{ status }}"
+                                >
+                                    {{ status }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
 
 
-                <div class="dr-secondary-actions">
+                        <button
+                            type="submit"
+                            class="dr-primary-button"
+                        >
 
-                    <button
-                        type="button"
-                        id="printSealBtn"
-                    >
-                        <i class="fa-solid fa-print"></i>
-                        Print &amp; Seal
-                    </button>
+                            <i class="fa-solid fa-floppy-disk"></i>
 
+                            Update Status
 
-                    <button
-                        type="button"
-                        id="notifySmsBtn"
-                    >
-                        <i class="fa-regular fa-paper-plane"></i>
-                        Notify via SMS
-                    </button>
+                        </button>
 
-                </div>
+                    </div>
 
-            </div>
+                </form>
 
-        </aside>
+            </section>
 
-    </section>
+        </div>
+
+    </div>
 
 </div>
 
-
-<!-- =========================================================
-     TOAST
-========================================================= -->
-<div
-    class="dr-toast"
-    id="documentToast"
-    role="status"
-    aria-live="polite"
->
-    <div class="dr-toast-icon">
-        <i class="fa-solid fa-circle-check"></i>
-    </div>
-
-    <div>
-        <strong id="toastTitle">
-            Success
-        </strong>
-
-        <span id="toastMessage">
-            Operation completed.
-        </span>
-    </div>
-</div>
 
 {% endblock %}
 
 
 {% block extra_js %}
-<script src="{% static 'js/docquest.js' %}"></script>
+
+<script>
+
+    // =====================================================
+    // OPEN REQUEST MODAL
+    // =====================================================
+
+    function openRequestModal(button) {
+
+        const row = button.closest(
+            ".dr-request-row"
+        );
+
+        if (!row) {
+            return;
+        }
+
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
+
+
+        // =================================================
+        // POPULATE DATA
+        // =================================================
+
+        setModalText(
+            "modalReference",
+            row.dataset.reference
+        );
+
+        setModalText(
+            "modalResident",
+            row.dataset.resident
+        );
+
+        setModalText(
+            "modalResidentId",
+            row.dataset.residentId
+        );
+
+        setModalText(
+            "modalEmail",
+            row.dataset.email
+        );
+
+        setModalText(
+            "modalContact",
+            row.dataset.contact
+        );
+
+        setModalText(
+            "modalAddress",
+            row.dataset.address
+        );
+
+        setModalText(
+            "modalDocument",
+            row.dataset.document
+        );
+
+        setModalText(
+            "modalPurpose",
+            row.dataset.purpose
+        );
+
+        setModalText(
+            "modalInstitution",
+            row.dataset.institution
+        );
+
+        setModalText(
+            "modalNotes",
+            row.dataset.notes
+        );
+
+        setModalText(
+            "modalDelivery",
+            row.dataset.delivery
+        );
+
+        setModalText(
+            "modalPayment",
+            row.dataset.payment
+        );
+
+        setModalText(
+            "modalSubmitted",
+            row.dataset.submitted
+        );
+
+
+        // =================================================
+        // STATUS
+        // =================================================
+
+        const statusSelect =
+            document.getElementById(
+                "modalStatus"
+            );
+
+        if (statusSelect) {
+
+            statusSelect.value =
+                row.dataset.status;
+
+        }
+
+
+        // =================================================
+        // UPDATE FORM URL
+        // =================================================
+
+        const form =
+            document.getElementById(
+                "statusUpdateForm"
+            );
+
+        if (form) {
+
+            form.action =
+                "{% url 'docrequestmodule:update_request_status' 0 %}"
+                    .replace(
+                        "/0/",
+                        "/" +
+                        row.dataset.requestId +
+                        "/"
+                    );
+
+        }
+
+
+        // =================================================
+        // SHOW MODAL
+        // =================================================
+
+        modal.classList.add(
+            "show"
+        );
+
+        document.body.classList.add(
+            "dr-modal-open"
+        );
+
+    }
+
+
+    // =====================================================
+    // CLOSE REQUEST MODAL
+    // =====================================================
+
+    function closeRequestModal() {
+
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove(
+            "show"
+        );
+
+        document.body.classList.remove(
+            "dr-modal-open"
+        );
+
+    }
+
+
+    // =====================================================
+    // SET MODAL TEXT
+    // =====================================================
+
+    function setModalText(
+        id,
+        value
+    ) {
+
+        const element =
+            document.getElementById(
+                id
+            );
+
+        if (!element) {
+            return;
+        }
+
+        element.textContent =
+            value &&
+            value.trim()
+                ? value
+                : "—";
+
+    }
+
+
+    // =====================================================
+    // ESCAPE KEY
+    // =====================================================
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeRequestModal();
+
+            }
+
+        }
+    );
+
+</script>
+
 {% endblock %}

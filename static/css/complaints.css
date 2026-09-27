@@ -2536,6 +2536,203 @@ body.complaint-review-open {
 }
 
 
+
+/* =========================================================
+   ASSIGNED ADMIN / BARANGAY OFFICIAL
+========================================================= */
+
+.assigned-official-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 58px;
+
+    padding: 10px 14px;
+
+    border: 1px solid #d8e3df;
+    border-radius: 10px;
+
+    background: #ffffff;
+}
+
+
+/* AVATAR */
+
+.assigned-official-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #e8f5ef;
+    color: #08745d;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* INFORMATION */
+
+.assigned-official-information {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    min-width: 0;
+    flex: 1;
+}
+
+
+.assigned-official-information strong {
+    color: #263b35;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+.assigned-official-information span {
+    color: #7a8984;
+
+    font-size: 11px;
+    font-weight: 400;
+
+    line-height: 1.3;
+}
+
+
+/* CURRENT USER */
+
+.assigned-official-current {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 999px;
+
+    background: #edf8f3;
+    color: #08745d;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+.assigned-official-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #10a37f;
+}
+
+
+/* HELPER TEXT */
+
+.assigned-official-helper {
+    margin: 6px 0 0;
+    padding: 0;
+
+    color: #7a8984;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+
+/* INVALID / MISSING SESSION */
+
+.assigned-official-unavailable {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #f3c8c8;
+    border-radius: 10px;
+
+    background: #fff7f7;
+}
+
+
+.assigned-official-unavailable svg {
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    color: #b42318;
+}
+
+
+.assigned-official-unavailable div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.assigned-official-unavailable strong {
+    color: #8f1d18;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.assigned-official-unavailable span {
+    color: #8c6b68;
+
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+
+/* DISABLED SAVE */
+
+.review-save-btn:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.55;
+}
+
+
+
+/* =========================================================
+   ASSIGNED OFFICIAL HELPER TEXT
+========================================================= */
+
+.assigned-official-helper {
+    margin: 6px 0 0;
+    padding: 0;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+
+    color: #7a8984;
+}
+
 /* =========================================================
    MOBILE UPLOAD
 ========================================================= */
