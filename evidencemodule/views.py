@@ -136,16 +136,43 @@ def complaint_evidence(request, complaint_id):
                     item.file_size,
 
                 "file_hash":
-                    item.file_hash,
+    item.file_hash,
 
-                "uploaded_at":
-                    (
-                        item.uploaded_at.strftime(
-                            "%b %d, %Y %I:%M %p"
-                        )
-                        if item.uploaded_at
-                        else ""
-                    ),
+"blockchain_status":
+    item.blockchain_status,
+
+"blockchain_tx_id":
+    item.blockchain_tx_id or "",
+
+"blockchain_registered_at":
+    (
+        item.blockchain_registered_at.strftime(
+            "%b %d, %Y %I:%M %p"
+        )
+        if item.blockchain_registered_at
+        else ""
+    ),
+
+"integrity_status":
+    item.integrity_status,
+
+"last_verified_at":
+    (
+        item.last_verified_at.strftime(
+            "%b %d, %Y %I:%M %p"
+        )
+        if item.last_verified_at
+        else ""
+    ),
+
+"uploaded_at":
+    (
+        item.uploaded_at.strftime(
+            "%b %d, %Y %I:%M %p"
+        )
+        if item.uploaded_at
+        else ""
+    ),
             }
         )
 
