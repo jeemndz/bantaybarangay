@@ -1,86 +1,148 @@
-from django.urls import path
-from . import views
+import requests
 
 
-app_name = "evidencemodule"
+FABRIC_GATEWAY_URL = "http://localhost:3001"
 
 
-urlpatterns = [
-
-    # =====================================================
-    # EVIDENCE MANAGEMENT
-    # =====================================================
-
-    path(
-        "",
-        views.evidence_list,
-        name="evidence_list"
-    ),
+class FabricServiceError(Exception):
+    """Raised when communication with the Fabric Gateway fails."""
+    pass
 
 
-    # =====================================================
-    # CREATE
-    # =====================================================
+def register_document(
+    document_id,
+    complaint_id,
+    document_type,
+    file_name,
+    file_hash,
+    registered_by,
+):
+    """
+    Register a document hash on Hyperledger Fabric.
+    """
 
-    path(
-        "create/",
-        views.evidence_create,
-        name="evidence_create"
-    ),
+    url = f"{FABRIC_GATEWAY_URL}/api/documents/register"
 
+    payload = {
+        "documentId": str(document_id),
+        "complaintId": str(complaint_id),
+        "documentType": str(document_type),
+        "fileName": str(file_name),
+        "fileHash": str(file_hash),
+        "registeredBy": str(registered_by),
+    }
 
-    # =====================================================
-    # EVIDENCE BELONGING TO COMPLAINT
-    # =====================================================
+    try:
+        response = requests.post(
+            url,
+            json=payload,
+            timeout=15,
+        )
 
-    path(
-        "complaint/<int:complaint_id>/",
-        views.complaint_evidence,
-        name="complaint_evidence"
-    ),
+        data = response.json()
 
+    except requests.RequestException as exc:
+        raise FabricServiceError(
+            f"Unable to connect to Fabric Gateway: {exc}"
+        ) from exc
 
-    # =====================================================
-    # BLOCKCHAIN REGISTRATION
-    # =====================================================
+    except ValueError as exc:
+        raise FabricServiceError(
+            "Fabric Gateway returned an invalid response."
+        ) from exc
 
-    path(
-        "<int:evidence_id>/blockchain/register/",
-        views.register_evidence_blockchain,
-        name="register_evidence_blockchain"
-    ),
+    if not response.ok or not data.get("success"):
+        raise FabricServiceError(
+            data.get(
+                "error",
+                "Fabric document registration failed.",
+            )
+        )
 
-
-    # =====================================================
-    # BLOCKCHAIN INTEGRITY VERIFICATION
-    # =====================================================
-
-    path(
-        "<int:evidence_id>/blockchain/verify/",
-        views.verify_evidence_integrity,
-        name="verify_evidence_integrity"
-    ),
-
-
-    # =====================================================
-    # DETAIL
-    # =====================================================
-
-    path(
-        "<int:evidence_id>/",
-        views.evidence_detail,
-        name="evidence_detail"
-    ),
+    return data
 
 
-    # =====================================================
-    # DELETE
-    # =====================================================
+def get_document(document_id):
+    """
+    Retrieve a registered document from Hyperledger Fabric.
+    """
 
-    path(
-        "<int:evidence_id>/delete/",
-        views.evidence_delete,
-        name="evidence_delete"
-    ),
+    url = (
+        f"{FABRIC_GATEWAY_URL}/api/documents/"
+        f"{document_id}"
+    )
 
-]
+    try:
+        response = requests.get(
+            url,
+            timeout=15,
+        )
+
+        data = response.json()
+
+    except requests.RequestException as exc:
+        raise FabricServiceError(
+            f"Unable to connect to Fabric Gateway: {exc}"
+        ) from exc
+
+    except ValueError as exc:
+        raise FabricServiceError(
+            "Fabric Gateway returned an invalid response."
+        ) from exc
+
+    if not response.ok or not data.get("success"):
+        raise FabricServiceError(
+            data.get(
+                "error",
+                "Unable to retrieve document from Fabric.",
+            )
+        )
+
+    return data.get("document")
+
+
+def verify_document(
+    document_id,
+    file_hash,
+):
+    """
+    Compare a file hash with the hash registered on Fabric.
+    """
+
+    url = f"{FABRIC_GATEWAY_URL}/api/documents/verify"
+
+    payload = {
+        "documentId": str(document_id),
+        "fileHash": str(file_hash),
+    }
+
+    try:
+        response = requests.post(
+            url,
+            json=payload,
+            timeout=15,
+        )
+
+        data = response.json()
+
+    except requests.RequestException as exc:
+        raise FabricServiceError(
+            f"Unable to connect to Fabric Gateway: {exc}"
+        ) from exc
+
+    except ValueError as exc:
+        raise FabricServiceError(
+            "Fabric Gateway returned an invalid response."
+        ) from exc
+
+    if not response.ok or not data.get("success"):
+        raise FabricServiceError(
+            data.get(
+                "error",
+                "Fabric document verification failed.",
+            )
+        )
+
+    return bool(
+        data.get("verified")
+    )
