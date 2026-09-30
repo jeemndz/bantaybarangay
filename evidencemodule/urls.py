@@ -41,6 +41,28 @@ urlpatterns = [
 
 
     # =====================================================
+    # BLOCKCHAIN REGISTRATION
+    # =====================================================
+
+    path(
+        "<int:evidence_id>/blockchain/register/",
+        views.register_evidence_blockchain,
+        name="register_evidence_blockchain"
+    ),
+
+
+    # =====================================================
+    # BLOCKCHAIN INTEGRITY VERIFICATION
+    # =====================================================
+
+    path(
+        "<int:evidence_id>/blockchain/verify/",
+        views.verify_evidence_integrity,
+        name="verify_evidence_integrity"
+    ),
+
+
+    # =====================================================
     # DETAIL
     # =====================================================
 

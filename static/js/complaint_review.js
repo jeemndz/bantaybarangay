@@ -1520,18 +1520,23 @@ async function loadComplaintEvidence(
 
 function createEvidenceCard(item) {
 
-    const button =
-        document.createElement(
-            "button"
-        );
+   const button =
+    document.createElement(
+        "div"
+    );
 
+button.className =
+    "review-evidence-item";
 
-    button.type =
-        "button";
+button.setAttribute(
+    "role",
+    "button"
+);
 
-
-    button.className =
-        "review-evidence-item";
+button.setAttribute(
+    "tabindex",
+    "0"
+);
 
 
     const kind =
@@ -1650,31 +1655,64 @@ function createEvidenceCard(item) {
        VERIFIED
     ===================================================== */
 
-    if (
-        cleanReviewValue(
-            item.file_hash
-        )
-    ) {
+    /* =====================================================
+   BLOCKCHAIN / INTEGRITY STATUS
+===================================================== */
 
-        const verified =
-            document.createElement(
-                "span"
-            );
+const blockchainStatus =
+    cleanReviewValue(
+        item.blockchain_status
+    );
+
+const integrityStatus =
+    cleanReviewValue(
+        item.integrity_status
+    );
+
+const statusBadge =
+    document.createElement(
+        "span"
+    );
+
+statusBadge.className =
+    "review-evidence-verified";
 
 
-        verified.className =
-            "review-evidence-verified";
+if (integrityStatus === "Verified") {
+
+    statusBadge.textContent =
+        "Verified";
+
+}
+else if (integrityStatus === "Failed") {
+
+    statusBadge.textContent =
+        "Integrity Failed";
+
+}
+else if (blockchainStatus === "Registered") {
+
+    statusBadge.textContent =
+        "Registered";
+
+}
+else if (blockchainStatus === "Failed") {
+
+    statusBadge.textContent =
+        "Registration Failed";
+
+}
+else {
+
+    statusBadge.textContent =
+        "Pending Registration";
+
+}
 
 
-        verified.textContent =
-            "Verified";
-
-
-        preview.appendChild(
-            verified
-        );
-
-    }
+preview.appendChild(
+    statusBadge
+);
 
 
     /* =====================================================
@@ -1773,6 +1811,81 @@ function createEvidenceCard(item) {
         info
     );
 
+    /* =====================================================
+   BLOCKCHAIN ACTION
+===================================================== */
+
+const blockchainAction =
+    document.createElement(
+        "button"
+    );
+
+blockchainAction.type =
+    "button";
+
+blockchainAction.className =
+    "review-evidence-blockchain-action";
+
+
+if (integrityStatus === "Verified") {
+
+    blockchainAction.textContent =
+        "Verified";
+
+    blockchainAction.disabled =
+        true;
+
+}
+else if (blockchainStatus === "Registered") {
+
+    blockchainAction.textContent =
+        "Verify Integrity";
+
+    blockchainAction.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            verifyEvidenceOnBlockchain(
+                item.evidence_id
+            );
+
+        }
+    );
+
+}
+else {
+
+    blockchainAction.textContent =
+        blockchainStatus === "Failed"
+            ? "Retry Registration"
+            : "Register on Blockchain";
+
+    blockchainAction.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            registerEvidenceOnBlockchain(
+                item.evidence_id
+            );
+
+        }
+    );
+
+}
+
+
+info.appendChild(
+    blockchainAction
+);
+
+
+
 
     button.addEventListener(
         "click",
@@ -1794,6 +1907,192 @@ function createEvidenceCard(item) {
 
     return button;
 
+}
+
+
+/* =========================================================
+   REGISTER EVIDENCE ON BLOCKCHAIN
+========================================================= */
+
+async function registerEvidenceOnBlockchain(evidenceId) {
+
+    if (!evidenceId) {
+        return;
+    }
+
+    const url =
+        "/evidence/"
+        + encodeURIComponent(evidenceId)
+        + "/blockchain/register/";
+
+    try {
+
+        const response = await fetch(
+            url,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getReviewCsrfToken()
+                },
+
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message
+                || data.error
+                || "Blockchain registration failed."
+            );
+
+        }
+
+        window.alert(
+            data.message
+            || "Evidence successfully registered on Hyperledger Fabric."
+        );
+
+        if (activeComplaintRow) {
+
+            loadComplaintEvidence(
+                activeComplaintRow.dataset.complaintId
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Blockchain registration error:",
+            error
+        );
+
+        window.alert(
+            error.message
+            || "Unable to register evidence on the blockchain."
+        );
+
+    }
+}
+
+
+/* =========================================================
+   VERIFY EVIDENCE INTEGRITY
+========================================================= */
+
+async function verifyEvidenceOnBlockchain(evidenceId) {
+
+    if (!evidenceId) {
+        return;
+    }
+
+    const url =
+        "/evidence/"
+        + encodeURIComponent(evidenceId)
+        + "/blockchain/verify/";
+
+    try {
+
+        const response = await fetch(
+            url,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getReviewCsrfToken()
+                },
+
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message
+                || data.error
+                || "Evidence verification failed."
+            );
+
+        }
+
+        if (data.verified) {
+
+            window.alert(
+                "Evidence integrity verified successfully."
+            );
+
+        }
+        else {
+
+            window.alert(
+                "Integrity verification failed. The current file does not match the hash registered on Hyperledger Fabric."
+            );
+
+        }
+
+        if (activeComplaintRow) {
+
+            loadComplaintEvidence(
+                activeComplaintRow.dataset.complaintId
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Evidence verification error:",
+            error
+        );
+
+        window.alert(
+            error.message
+            || "Unable to verify evidence integrity."
+        );
+
+    }
+}
+
+
+/* =========================================================
+   GET CSRF TOKEN
+========================================================= */
+
+function getReviewCsrfToken() {
+
+    const cookies =
+        document.cookie
+            .split(";")
+            .map(function (cookie) {
+                return cookie.trim();
+            });
+
+    const csrfCookie =
+        cookies.find(function (cookie) {
+            return cookie.startsWith("csrftoken=");
+        });
+
+    if (!csrfCookie) {
+        return "";
+    }
+
+    return decodeURIComponent(
+        csrfCookie.substring(
+            "csrftoken=".length
+        )
+    );
 }
 
 
