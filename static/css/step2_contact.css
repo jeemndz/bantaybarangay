@@ -1,411 +1,554 @@
-* {
+/* =========================================================
+   BANTAYBARANGAY
+   STEP 2 - CONTACT & ADDRESS
+========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+    --primary: #064e3b;
+    --primary-dark: #022c22;
+    --primary-light: #047857;
+
+    --emerald-50: #ecfdf5;
+    --emerald-100: #d1fae5;
+    --emerald-200: #a7f3d0;
+    --emerald-300: #6ee7b7;
+    --emerald-500: #10b981;
+    --emerald-600: #059669;
+    --emerald-700: #047857;
+
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+
+    --danger: #dc2626;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #eaffed;
-    color: #092b24;
-}
-
-.registration-container {
     min-height: 100vh;
-    display: flex;
+    margin: 0;
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: var(--slate-50);
+    color: var(--slate-900);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button,
+select {
+    cursor: pointer;
 }
 
 
-/* =====================================
-   LEFT SIDEBAR
-===================================== */
+/* =========================================================
+   PAGE
+========================================================= */
 
-.registration-sidebar {
-    width: 40%;
+.registration-page {
+    width: 100%;
     min-height: 100vh;
-    background: #063d34;
-    color: white;
-    padding: 55px 60px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 100px;
-}
-
-.brand-icon {
-    width: 42px;
-    height: 42px;
-    border: 2px solid #ccefe1;
-    border-radius: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 24px;
-}
-
-.brand h2 {
-    font-size: 22px;
-    font-weight: 600;
 }
 
 
-/* Security badge */
+/* =========================================================
+   HERO PANEL
+========================================================= */
 
-.security-badge {
-    display: inline-block;
+.registration-hero {
+    isolation: isolate;
 
-    width: fit-content;
-
-    padding: 7px 14px;
-
-    border: 1px solid rgba(255,255,255,.35);
-    border-radius: 30px;
-
-    background: rgba(255,255,255,.08);
-
-    color: #cce7dd;
-
-    font-size: 12px;
-    letter-spacing: .5px;
-
-    margin-bottom: 35px;
+    background-color: var(--primary-dark);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 
-/* Heading */
+/* =========================================================
+   HERO OVERLAY
+========================================================= */
 
-.registration-sidebar h1 {
-    font-size: 52px;
-    line-height: 1.08;
-    margin-bottom: 28px;
-    font-weight: 600;
+.registration-hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: -3;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(2, 44, 34, 0.25),
+            rgba(6, 78, 59, 0.18)
+        );
+
+    pointer-events: none;
 }
 
-.sidebar-description {
-    max-width: 480px;
 
-    color: #9fc0b6;
+.registration-hero::after {
+    content: "";
 
-    font-size: 16px;
-    line-height: 1.7;
+    position: absolute;
+    inset: 0;
 
-    margin-bottom: 65px;
+    z-index: -2;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(2, 44, 34, 0.02),
+            rgba(2, 44, 34, 0.25)
+        );
+
+    pointer-events: none;
 }
 
 
-/* Benefits */
+/* =========================================================
+   NETWORK PATTERN
+========================================================= */
 
-.benefits {
-    display: flex;
-    flex-direction: column;
-    gap: 38px;
+.network-pattern {
+    position: absolute;
+    inset: 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    opacity: 0.15;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.07) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.07) 1px,
+            transparent 1px
+        );
+
+    background-size: 70px 70px;
 }
 
-.benefit {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
+
+/* =========================================================
+   HERO GLOW
+========================================================= */
+
+.hero-glow {
+    position: absolute;
+
+    z-index: -1;
+
+    border-radius: 9999px;
+
+    pointer-events: none;
+
+    filter: blur(45px);
 }
+
+
+.hero-glow-one {
+    width: 360px;
+    height: 360px;
+
+    top: 12%;
+    right: -180px;
+
+    background:
+        rgba(52, 211, 153, 0.14);
+}
+
+
+.hero-glow-two {
+    width: 320px;
+    height: 320px;
+
+    left: -160px;
+    bottom: 8%;
+
+    background:
+        rgba(16, 185, 129, 0.12);
+}
+
+
+/* =========================================================
+   IMAGES
+========================================================= */
+
+.registration-hero img {
+    display: block;
+
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   BENEFIT ICON
+========================================================= */
 
 .benefit-icon {
     width: 42px;
     height: 42px;
 
-    flex-shrink: 0;
+    min-width: 42px;
 
-    border: 1px solid rgba(255,255,255,.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(167, 243, 208, 0.22);
+
     border-radius: 50%;
 
+    background:
+        rgba(167, 243, 208, 0.09);
+
+    color: var(--emerald-200);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.benefit-icon:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(167, 243, 208, 0.4);
+
+    background:
+        rgba(167, 243, 208, 0.15);
+}
+
+
+.benefit-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =========================================================
+   SECTION ICON
+========================================================= */
+
+.section-icon-box {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    color: #d3eee5;
+    border:
+        1px solid
+        var(--emerald-100);
 
-    background: rgba(255,255,255,.08);
+    border-radius: 12px;
 
-    font-size: 20px;
-}
+    background:
+        var(--emerald-50);
 
-.benefit h3 {
-    font-size: 14px;
-    margin-bottom: 6px;
-}
-
-.benefit p {
-    color: #91b5aa;
-    font-size: 12px;
-    line-height: 1.5;
-    max-width: 330px;
+    color:
+        var(--emerald-700);
 }
 
 
-/* Footer */
-
-.sidebar-footer {
-    position: absolute;
-    bottom: 25px;
-    left: 60px;
-    right: 60px;
-
-    display: flex;
-    justify-content: space-between;
-
-    color: #6f988d;
-
-    font-size: 11px;
+.section-icon-box svg {
+    width: 21px;
+    height: 21px;
 }
 
 
-/* =====================================
-   RIGHT CONTENT
-===================================== */
+/* =========================================================
+   FORM LABEL
+========================================================= */
 
-.registration-content {
-    width: 60%;
-    min-height: 100vh;
-
-    background: #eaffed;
-
-    padding: 60px 70px;
-}
-
-.content-wrapper {
-    max-width: 760px;
-    margin: auto;
-}
-
-
-/* Header */
-
-.page-header {
-    position: relative;
-    margin-bottom: 22px;
-}
-
-.page-header h1 {
-    font-size: 45px;
-    font-weight: 600;
+.form-label {
+    display: block;
 
     margin-bottom: 8px;
-}
 
-.page-header p {
-    color: #557168;
-    font-size: 15px;
-}
+    color:
+        var(--slate-700);
 
-.step-label {
-    position: absolute;
-
-    right: 0;
-    bottom: 3px;
-
-    font-size: 12px;
-    font-weight: 600;
-}
-
-
-/* =====================================
-   PROGRESS
-===================================== */
-
-.progress-container {
-    margin-bottom: 48px;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 7px;
-
-    background: #cfe2d5;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-}
-
-.progress-fill {
-    width: 50%;
-    height: 100%;
-
-    background: #063d34;
-
-    border-radius: 10px;
-}
-
-.progress-info {
-    margin-top: 7px;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    color: #4d665e;
-
-    letter-spacing: .5px;
-}
-
-
-/* =====================================
-   FORM CARD
-===================================== */
-
-.form-card {
-    background: rgba(255,255,255,.65);
-
-    border-radius: 20px;
-
-    padding: 38px 40px;
-
-    margin-bottom: 4px;
-
-    box-shadow:
-        0 5px 20px rgba(20,70,50,.04);
-}
-
-
-/* Section heading */
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    margin-bottom: 28px;
-}
-
-.section-title h2 {
-    font-size: 24px;
-    font-weight: 500;
-}
-
-.section-icon {
-    width: 28px;
-    height: 28px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #06463b;
-
-    font-size: 22px;
-}
-
-
-/* =====================================
-   FORM GRID
-===================================== */
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 22px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-
-    margin-bottom: 22px;
-}
-
-.form-group.full-width {
-    width: 100%;
-}
-
-.form-group label {
     font-size: 13px;
     font-weight: 600;
 
-    color: #43554f;
-
-    margin-bottom: 8px;
-}
-
-.form-group label span {
-    color: #c95a4b;
+    line-height: 1.4;
 }
 
 
-/* Inputs */
+.required {
+    margin-left: 2px;
 
-.form-group input,
-.form-group select {
+    color:
+        var(--danger);
+}
+
+
+/* =========================================================
+   INPUT WRAPPER
+========================================================= */
+
+.form-input-wrapper {
+    position: relative;
+
     width: 100%;
+}
 
-    height: 52px;
 
-    border: 1px solid #aab8b2;
+/* =========================================================
+   INPUT ICON
+========================================================= */
 
-    border-radius: 5px;
+.form-icon {
+    position: absolute;
 
-    background: #ffffff;
+    z-index: 2;
 
-    padding: 0 16px;
+    top: 50%;
+    left: 15px;
 
-    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    color: #243b34;
+    color:
+        var(--slate-400);
+
+    pointer-events: none;
+
+    transform:
+        translateY(-50%);
+
+    transition:
+        color 0.18s ease;
+}
+
+
+.form-icon svg {
+    width: 19px;
+    height: 19px;
+}
+
+
+.form-input-wrapper:focus-within .form-icon {
+    color:
+        var(--emerald-600);
+}
+
+
+/* =========================================================
+   INPUT AND SELECT
+========================================================= */
+
+.form-input,
+.form-select {
+    display: block;
+
+    width: 100%;
+    min-height: 50px;
+
+    border:
+        1px solid
+        #d7dee7;
+
+    border-radius: 11px;
 
     outline: none;
 
-    transition: .2s;
+    background:
+        #ffffff;
+
+    color:
+        var(--slate-800);
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #063d34;
 
-    box-shadow:
-        0 0 0 3px rgba(6,61,52,.08);
-}
+/* INPUT */
 
-.form-group input::placeholder {
-    color: #9ca8a4;
+.form-input {
+    padding:
+        0 15px
+        0 46px;
 }
 
 
-/* Select */
+/* SELECT */
 
-.form-group select {
+.form-select {
+    padding:
+        0 44px
+        0 46px;
+
     cursor: pointer;
 
-    appearance: auto;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 
-/* Small information */
+/* NO ICON INPUT */
 
-.form-group small {
-    margin-top: 8px;
+.form-input-no-icon {
+    padding-left: 15px;
+}
+
+
+/* PLACEHOLDER */
+
+.form-input::placeholder {
+    color:
+        #a1aab7;
+}
+
+
+/* HOVER */
+
+.form-input:hover,
+.form-select:hover {
+    border-color:
+        #b7c2cf;
+}
+
+
+/* FOCUS */
+
+.form-input:focus,
+.form-select:focus {
+    border-color:
+        var(--emerald-600);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(16, 185, 129, 0.10);
+}
+
+
+/* =========================================================
+   SELECT ARROW
+========================================================= */
+
+.select-icon {
+    position: absolute;
+
+    z-index: 2;
+
+    top: 50%;
+    right: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color:
+        var(--slate-500);
+
+    pointer-events: none;
+
+    transform:
+        translateY(-50%);
+}
+
+
+.select-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+.form-input-wrapper:focus-within .select-icon {
+    color:
+        var(--emerald-700);
+}
+
+
+/* =========================================================
+   HELP TEXT
+========================================================= */
+
+.form-help {
+    display: block;
+
+    margin-top: 7px;
+
+    color:
+        var(--slate-400);
 
     font-size: 11px;
 
-    color: #71817b;
+    line-height: 1.5;
 }
 
 
-/* Zip */
-
-.zip-group {
-    width: 50%;
-}
-
-
-/* =====================================
+/* =========================================================
    ADDRESS NOTICE
-===================================== */
+========================================================= */
 
 .address-notice {
     display: flex;
@@ -414,250 +557,341 @@ body {
 
     gap: 12px;
 
-    padding: 13px 15px;
+    margin-top: 24px;
 
-    background: #dff4e2;
+    padding: 14px 15px;
 
-    border: 1px solid #c3dfc8;
-
-    border-radius: 8px;
-
-    margin-top: 5px;
-}
-
-.notice-icon {
-    font-size: 17px;
-
-    color: #39785d;
-}
-
-.address-notice p {
-    color: #40574d;
-
-    font-size: 11px;
-
-    line-height: 1.5;
-}
-
-
-/* =====================================
-   NAVIGATION
-===================================== */
-
-.navigation {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-top: 18px;
-}
-
-.back-button {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    text-decoration: none;
-
-    color: #35574e;
-
-    font-size: 13px;
-}
-
-.back-button > span {
-    font-size: 25px;
-}
-
-.back-button div {
-    display: flex;
-
-    flex-direction: column;
-
-    text-align: center;
-}
-
-.back-button strong {
-    font-weight: 600;
-}
-
-.back-button small {
-    font-size: 12px;
-}
-
-
-/* Next */
-
-.next-button {
-    width: 290px;
-    min-height: 55px;
-
-    border: none;
+    border:
+        1px solid
+        var(--emerald-100);
 
     border-radius: 12px;
 
-    background: #063d34;
+    background:
+        rgba(236, 253, 245, 0.82);
+}
 
-    color: white;
 
-    cursor: pointer;
+.address-notice-icon {
+    width: 36px;
+    height: 36px;
+
+    min-width: 36px;
 
     display: flex;
-
-    justify-content: space-between;
-
     align-items: center;
+    justify-content: center;
 
-    padding: 10px 22px;
+    border-radius: 10px;
 
-    font-family: inherit;
+    background:
+        var(--emerald-100);
 
-    transition: .2s;
+    color:
+        var(--emerald-700);
 }
 
-.next-button:hover {
-    background: #075447;
 
-    transform: translateY(-1px);
+.address-notice-icon svg {
+    width: 19px;
+    height: 19px;
 }
 
-.next-button div {
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.error-message {
     display: flex;
 
-    flex-direction: column;
+    align-items: flex-start;
 
-    text-align: center;
+    gap: 10px;
 
-    flex: 1;
-}
+    margin-top: 20px;
 
-.next-button strong {
+    padding: 14px 16px;
+
+    border:
+        1px solid
+        #fecaca;
+
+    border-radius: 12px;
+
+    background:
+        #fef2f2;
+
+    color:
+        #b91c1c;
+
     font-size: 13px;
-}
 
-.next-button small {
-    font-size: 12px;
-}
-
-.next-button > span {
-    font-size: 25px;
+    line-height: 1.6;
 }
 
 
-/* Login */
+/* =========================================================
+   DISABLED FIELDS
+========================================================= */
 
-.login-link {
-    text-align: center;
+.form-input:disabled,
+.form-select:disabled {
+    cursor: not-allowed;
 
-    margin-top: 25px;
+    border-color:
+        var(--slate-200);
 
-    font-size: 12px;
+    background:
+        var(--slate-100);
 
-    color: #64776f;
-}
-
-.login-link a {
-    color: #315d50;
-
-    text-decoration: none;
-
-    font-weight: 600;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
+    color:
+        var(--slate-400);
 }
 
 
-/* =====================================
-   RESPONSIVE
-===================================== */
+/* =========================================================
+   READ ONLY
+========================================================= */
 
-@media (max-width: 1000px) {
+.form-input[readonly] {
+    background:
+        var(--slate-50);
 
-    .registration-sidebar {
-        width: 35%;
-        padding: 40px 35px;
-    }
-
-    .registration-content {
-        width: 65%;
-        padding: 40px;
-    }
-
-    .registration-sidebar h1 {
-        font-size: 40px;
-    }
-
-    .page-header h1 {
-        font-size: 38px;
-    }
-
+    color:
+        var(--slate-600);
 }
 
 
-@media (max-width: 750px) {
+/* =========================================================
+   AUTOFILL
+========================================================= */
 
-    .registration-container {
-        flex-direction: column;
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus {
+    -webkit-text-fill-color:
+        var(--slate-800);
+
+    -webkit-box-shadow:
+        0 0 0 1000px
+        #ffffff
+        inset;
+
+    box-shadow:
+        0 0 0 1000px
+        #ffffff
+        inset;
+
+    transition:
+        background-color
+        9999s ease-in-out 0s;
+}
+
+
+/* =========================================================
+   BUTTON RESET
+========================================================= */
+
+button {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+button[name="action"][value="back"] {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   NEXT BUTTON
+========================================================= */
+
+button[name="action"][value="next"] {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   FOCUS ACCESSIBILITY
+========================================================= */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline:
+        2px solid
+        var(--emerald-500);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+    background:
+        var(--emerald-100);
+
+    color:
+        var(--primary);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+
+::-webkit-scrollbar-track {
+    background:
+        var(--slate-50);
+}
+
+
+::-webkit-scrollbar-thumb {
+    border:
+        2px solid
+        var(--slate-50);
+
+    border-radius:
+        999px;
+
+    background:
+        var(--slate-300);
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        var(--slate-400);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1023px) {
+
+    .registration-page {
+        display: block;
     }
 
-    .registration-sidebar {
-        width: 100%;
-        min-height: auto;
-        padding: 35px;
-    }
 
-    .brand {
-        margin-bottom: 50px;
-    }
-
-    .registration-sidebar h1 {
-        font-size: 40px;
-    }
-
-    .benefits {
+    .registration-hero {
         display: none;
     }
 
-    .sidebar-footer {
-        position: static;
+}
 
-        margin-top: 50px;
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 640px) {
+
+    body {
+        background:
+            var(--slate-50);
     }
 
-    .registration-content {
-        width: 100%;
-        padding: 35px 20px;
+
+    .form-input,
+    .form-select {
+        min-height: 50px;
+
+        font-size: 16px;
     }
 
-    .page-header h1 {
-        font-size: 34px;
+
+    .form-label {
+        font-size: 13px;
     }
 
-    .step-label {
-        position: static;
 
-        margin-top: 15px;
+    .address-notice {
+        padding: 13px;
     }
 
-    .form-grid {
-        grid-template-columns: 1fr;
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .form-input {
+        padding-left: 43px;
     }
 
-    .zip-group {
-        width: 100%;
+
+    .form-select {
+        padding-left: 43px;
+        padding-right: 40px;
     }
 
-    .navigation {
-        gap: 15px;
+
+    .form-input-no-icon {
+        padding-left: 14px;
     }
 
-    .next-button {
-        width: 220px;
+
+    .form-icon {
+        left: 13px;
+    }
+
+
+    .select-icon {
+        right: 13px;
+    }
+
+
+    .section-icon-box {
+        width: 38px;
+        height: 38px;
+
+        min-width: 38px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior:
+            auto !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
     }
 
 }

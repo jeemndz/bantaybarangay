@@ -22,22 +22,43 @@ Resident Management | BantayBarangay
 <div class="resident-page">
 
 
-    <!-- ===================================================== -->
-    <!-- PAGE HEADER -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
 
     <div class="resident-header">
 
-        <div>
+        <div class="resident-header-content">
 
-            <h1>
-                Resident Management
-            </h1>
+            <div class="resident-header-icon">
 
-            <p>
-                Manage and oversee community resident records with
-                blockchain-verified integrity.
-            </p>
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                    />
+                </svg>
+
+            </div>
+
+
+            <div>
+
+                <h1>
+                    Resident Management
+                </h1>
+
+                <p>
+                    Manage, verify, and maintain barangay resident records.
+                </p>
+
+            </div>
 
         </div>
 
@@ -46,16 +67,32 @@ Resident Management | BantayBarangay
             href="{% url 'resident_create' %}"
             class="add-resident-btn"
         >
-            + Add Resident
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                />
+            </svg>
+
+            <span>
+                Add Resident
+            </span>
+
         </a>
 
     </div>
 
 
-
-    <!-- ===================================================== -->
-    <!-- STAT CARDS -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
 
     <div class="resident-stats">
 
@@ -70,18 +107,19 @@ Resident Management | BantayBarangay
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="1.8"
                 >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.205-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.941 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+                    />
                 </svg>
 
             </div>
 
 
-            <div>
+            <div class="stat-content">
 
                 <span>
                     Total Residents
@@ -96,7 +134,6 @@ Resident Management | BantayBarangay
         </div>
 
 
-
         <!-- HOUSEHOLDS -->
 
         <div class="resident-stat-card">
@@ -107,17 +144,19 @@ Resident Management | BantayBarangay
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="1.8"
                 >
-                    <path d="M3 11 12 4l9 7"/>
-                    <path d="M5 10v10h14V10"/>
-                    <path d="M9 20v-6h6v6"/>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-6.75h4.5V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5"
+                    />
                 </svg>
 
             </div>
 
 
-            <div>
+            <div class="stat-content">
 
                 <span>
                     Households
@@ -132,7 +171,6 @@ Resident Management | BantayBarangay
         </div>
 
 
-
         <!-- SENIOR CITIZENS -->
 
         <div class="resident-stat-card">
@@ -143,16 +181,19 @@ Resident Management | BantayBarangay
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="1.8"
                 >
-                    <circle cx="12" cy="12" r="9"/>
-                    <path d="M12 7v5l3 2"/>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
                 </svg>
 
             </div>
 
 
-            <div>
+            <div class="stat-content">
 
                 <span>
                     Senior Citizens
@@ -167,7 +208,6 @@ Resident Management | BantayBarangay
         </div>
 
 
-
         <!-- PWD -->
 
         <div class="resident-stat-card">
@@ -178,18 +218,21 @@ Resident Management | BantayBarangay
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="1.8"
                 >
-                    <circle cx="9" cy="5" r="2"/>
-                    <path d="M9 8v5l4 1 2 5"/>
-                    <path d="M9 13l-3 4"/>
-                    <path d="M13 14h5"/>
+                    <circle cx="9" cy="5" r="2"></circle>
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 8v5l4 1 2 5M9 13l-3 4M13 14h5"
+                    />
                 </svg>
 
             </div>
 
 
-            <div>
+            <div class="stat-content">
 
                 <span>
                     PWD Residents
@@ -206,19 +249,14 @@ Resident Management | BantayBarangay
     </div>
 
 
+    <!-- =====================================================
+         RESIDENT RECORDS
+    ====================================================== -->
 
-    <!-- ===================================================== -->
-    <!-- RESIDENT RECORDS -->
-    <!-- ===================================================== -->
-
-    <section
-        class="overflow-hidden rounded-2xl
-               border border-slate-200
-               bg-white shadow-sm"
-    >
+    <section class="resident-section">
 
 
-        <!-- TABLE HEADER -->
+        <!-- HEADER -->
 
         <div class="resident-table-header">
 
@@ -240,33 +278,37 @@ Resident Management | BantayBarangay
 
                 <!-- SEARCH -->
 
-                <div class="relative">
+                <div class="resident-search-wrapper">
 
                     <svg
-                        class="pointer-events-none absolute
-                               left-3 top-1/2 h-4 w-4
-                               -translate-y-1/2
-                               text-slate-400"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
                     >
-                        <circle cx="11" cy="11" r="7"/>
-                        <path d="m20 20-4-4"/>
+                        <circle
+                            cx="11"
+                            cy="11"
+                            r="7"
+                        ></circle>
+
+                        <path
+                            stroke-linecap="round"
+                            d="m20 20-4-4"
+                        ></path>
                     </svg>
 
 
                     <input
                         type="text"
                         id="residentSearch"
+                        class="resident-search"
                         placeholder="Search residents..."
-                        class="resident-search !pl-9"
                         autocomplete="off"
+                        aria-label="Search residents"
                     >
 
                 </div>
-
 
 
                 <!-- FILTER -->
@@ -274,28 +316,31 @@ Resident Management | BantayBarangay
                 <button
                     type="button"
                     class="filter-btn"
+                    id="residentFilterButton"
                 >
 
                     <svg
-                        class="h-4 w-4"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
                     >
-                        <path d="M4 6h16"/>
-                        <path d="M7 12h10"/>
-                        <path d="M10 18h4"/>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 4.5h18M6.75 9.75h10.5M10.5 15h3"
+                        />
                     </svg>
 
-                    Filter
+                    <span>
+                        Filter
+                    </span>
 
                 </button>
 
             </div>
 
         </div>
-
 
 
         <!-- TABLE -->
@@ -313,7 +358,7 @@ Resident Management | BantayBarangay
                         </th>
 
                         <th>
-                            Name
+                            Resident
                         </th>
 
                         <th>
@@ -325,14 +370,14 @@ Resident Management | BantayBarangay
                         </th>
 
                         <th>
-                            Contact Number
+                            Contact
                         </th>
 
                         <th>
                             Status
                         </th>
 
-                        <th>
+                        <th class="actions-column">
                             Actions
                         </th>
 
@@ -346,18 +391,10 @@ Resident Management | BantayBarangay
 
                     {% for resident in residents %}
 
-
-                    <!-- ========================================= -->
-                    <!-- CLICKABLE RESIDENT ROW -->
-                    <!-- ========================================= -->
-
                     <tr
                         class="resident-row"
-
                         tabindex="0"
-
                         role="button"
-
                         title="Click to view resident details"
 
                         aria-label="View details for {{ resident.first_name }} {{ resident.last_name }}"
@@ -393,59 +430,111 @@ Resident Management | BantayBarangay
                         <td>
 
                             <span class="resident-id">
-                                {{ resident.resident_id }}
+                                #{{ resident.resident_id }}
                             </span>
 
                         </td>
 
 
-
-                        <!-- NAME -->
+                        <!-- RESIDENT -->
 
                         <td>
 
-                            <span class="font-medium text-slate-800">
+                            <div class="resident-name">
 
-                                {{ resident.first_name }}
+                                <div class="resident-avatar">
 
-                                {% if resident.middle_name %}
-                                    {{ resident.middle_name }}
-                                {% endif %}
+                                    {{ resident.first_name|first|upper }}
 
-                                {{ resident.last_name }}
+                                </div>
 
-                                {% if resident.suffix %}
-                                    {{ resident.suffix }}
-                                {% endif %}
 
-                            </span>
+                                <div class="resident-name-content">
+
+                                    <strong>
+
+                                        {{ resident.first_name }}
+
+                                        {% if resident.middle_name %}
+                                            {{ resident.middle_name }}
+                                        {% endif %}
+
+                                        {{ resident.last_name }}
+
+                                        {% if resident.suffix %}
+                                            {{ resident.suffix }}
+                                        {% endif %}
+
+                                    </strong>
+
+
+                                    <span>
+                                        {{ resident.email|default:"No email address" }}
+                                    </span>
+
+                                </div>
+
+                            </div>
 
                         </td>
-
 
 
                         <!-- GENDER -->
 
                         <td>
-                            {{ resident.gender|default:"—" }}
-                        </td>
 
+                            <span class="table-secondary-text">
+                                {{ resident.gender|default:"—" }}
+                            </span>
+
+                        </td>
 
 
                         <!-- ADDRESS -->
 
                         <td>
-                            {{ resident.address|default:"—" }}
-                        </td>
 
+                            <div class="resident-address">
+
+                                <strong>
+                                    {{ resident.address|default:"—" }}
+                                </strong>
+
+
+                                {% if resident.barangay or resident.municipality_city %}
+
+                                    <span>
+
+                                        {% if resident.barangay %}
+                                            {{ resident.barangay }}
+                                        {% endif %}
+
+                                        {% if resident.barangay and resident.municipality_city %}
+                                            ,
+                                        {% endif %}
+
+                                        {% if resident.municipality_city %}
+                                            {{ resident.municipality_city }}
+                                        {% endif %}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
 
 
                         <!-- CONTACT -->
 
                         <td>
-                            {{ resident.contact_number|default:"—" }}
-                        </td>
 
+                            <span class="resident-contact">
+                                {{ resident.contact_number|default:"—" }}
+                            </span>
+
+                        </td>
 
 
                         <!-- STATUS -->
@@ -454,38 +543,57 @@ Resident Management | BantayBarangay
 
                             {% if resident.verification_status == "Verified" %}
 
-                                <span class="status-active">
+                                <span class="status-badge status-verified">
+
+                                    <span class="status-dot"></span>
+
                                     Verified
+
                                 </span>
 
                             {% elif resident.verification_status == "Pending" %}
 
-                                <span class="status-pending">
+                                <span class="status-badge status-pending">
+
+                                    <span class="status-dot"></span>
+
                                     Pending
+
                                 </span>
 
                             {% elif resident.verification_status == "Rejected" %}
 
-                                <span class="status-inactive">
+                                <span class="status-badge status-rejected">
+
+                                    <span class="status-dot"></span>
+
                                     Rejected
+
                                 </span>
 
                             {% elif resident.verification_status == "Inactive" %}
 
-                                <span class="status-inactive">
+                                <span class="status-badge status-inactive">
+
+                                    <span class="status-dot"></span>
+
                                     Inactive
+
                                 </span>
 
                             {% else %}
 
-                                <span class="status-inactive">
+                                <span class="status-badge status-neutral">
+
+                                    <span class="status-dot"></span>
+
                                     {{ resident.verification_status|default:"—" }}
+
                                 </span>
 
                             {% endif %}
 
                         </td>
-
 
 
                         <!-- ACTIONS -->
@@ -499,51 +607,127 @@ Resident Management | BantayBarangay
 
                                 <a
                                     href="{% url 'resident_update' resident.resident_id %}"
-                                    class="action-edit"
+                                    class="action-button action-edit"
+                                    title="Edit resident"
+                                    aria-label="Edit {{ resident.first_name }} {{ resident.last_name }}"
                                 >
-                                    Edit
-                                </a>
 
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                                        />
+                                    </svg>
+
+                                    <span>
+                                        Edit
+                                    </span>
+
+                                </a>
 
 
                                 <!-- INACTIVE -->
 
-                                <button
-                                    type="button"
-                                    class="action-inactive"
-                                    data-inactive-resident
-                                    data-resident-id="{{ resident.resident_id }}"
-                                    data-resident-name="{{ resident.first_name|escape }} {{ resident.last_name|escape }}"
-                                >
-                                    Inactive
-                                </button>
+                                {% if resident.verification_status != "Inactive" %}
 
+                                    <button
+                                        type="button"
+                                        class="action-button action-inactive"
+                                        data-inactive-resident
+                                        data-resident-id="{{ resident.resident_id }}"
+                                        data-resident-name="{{ resident.first_name|escape }} {{ resident.last_name|escape }}"
+                                        title="Mark resident inactive"
+                                    >
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            ></circle>
+
+                                            <path
+                                                stroke-linecap="round"
+                                                d="M8 12h8"
+                                            ></path>
+                                        </svg>
+
+                                        <span>
+                                            Inactive
+                                        </span>
+
+                                    </button>
+
+                                {% else %}
+
+                                    <span class="already-inactive">
+                                        Inactive
+                                    </span>
+
+                                {% endif %}
 
                             </div>
 
                         </td>
-
 
                     </tr>
 
 
                     {% empty %}
 
-
-                    <tr>
+                    <tr class="empty-table-row">
 
                         <td
                             colspan="7"
                             class="no-residents"
                         >
-                            No residents found.
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.205-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                        />
+                                    </svg>
+
+                                </div>
+
+                                <strong>
+                                    No residents found
+                                </strong>
+
+                                <p>
+                                    Resident records will appear here
+                                    once they are added.
+                                </p>
+
+                            </div>
+
                         </td>
 
                     </tr>
 
-
                     {% endfor %}
-
 
                 </tbody>
 
@@ -554,58 +738,69 @@ Resident Management | BantayBarangay
     </section>
 
 
+    <!-- =====================================================
+         RESIDENT VERIFICATION
+    ====================================================== -->
 
-    <!-- ===================================================== -->
-    <!-- RESIDENT VERIFICATION -->
-    <!-- ===================================================== -->
-
-        <section
-        class="verification-section
-            mt-8
-            overflow-hidden rounded-2xl
-            border border-slate-200
-            bg-white shadow-sm"
-        >
+    <section class="resident-section verification-section">
 
 
         <!-- HEADER -->
 
-        <div
-            class="resident-table-header
-                   verification-header"
-        >
+        <div class="resident-table-header verification-header">
 
-            <div>
+            <div class="verification-title-wrapper">
 
-                <h2>
-                    Resident Verification
-                </h2>
+                <div class="verification-header-icon">
 
-                <p>
-                    Review and verify residents who registered
-                    through the BantayBarangay system.
-                </p>
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75m5.25-3.375c0 7.142-8.25 12.375-8.25 12.375S3.75 13.517 3.75 6.375c0-.621.504-1.125 1.125-1.125 2.098 0 4.079-.962 5.374-2.608a1.406 1.406 0 0 1 2.502 0c1.295 1.646 3.276 2.608 5.374 2.608.621 0 1.125.504 1.125 1.125Z"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Resident Verification
+                    </h2>
+
+                    <p>
+                        Review residents who registered through
+                        the BantayBarangay system.
+                    </p>
+
+                </div>
 
             </div>
 
 
-            <div class="verification-summary"></div>
+            <div class="verification-summary">
+
+                <span class="verification-summary-dot"></span>
+
+                Registration Review
+
+            </div>
 
         </div>
 
 
-
         <!-- TABLE -->
 
-        <div
-            class="resident-table-container
-                   verification-table-container"
-        >
+        <div class="resident-table-container verification-table-container">
 
-            <table
-                class="resident-table
-                       verification-table"
-            >
+            <table class="resident-table verification-table">
 
                 <thead>
 
@@ -635,7 +830,7 @@ Resident Management | BantayBarangay
                             Verification Status
                         </th>
 
-                        <th>
+                        <th class="actions-column">
                             Action
                         </th>
 
@@ -646,9 +841,7 @@ Resident Management | BantayBarangay
 
                 <tbody>
 
-
                     {% for resident in verification_residents %}
-
 
                     <tr>
 
@@ -657,12 +850,11 @@ Resident Management | BantayBarangay
 
                         <td>
 
-                            <strong>
+                            <span class="resident-id">
                                 #{{ resident.resident_id }}
-                            </strong>
+                            </span>
 
                         </td>
-
 
 
                         <!-- APPLICANT -->
@@ -671,7 +863,6 @@ Resident Management | BantayBarangay
 
                             <div class="verification-applicant">
 
-
                                 <div class="verification-avatar">
 
                                     {{ resident.first_name|first|upper }}
@@ -679,7 +870,7 @@ Resident Management | BantayBarangay
                                 </div>
 
 
-                                <div>
+                                <div class="verification-applicant-info">
 
                                     <strong>
 
@@ -699,7 +890,7 @@ Resident Management | BantayBarangay
 
 
                                     <small>
-                                        {{ resident.email|default:"—" }}
+                                        {{ resident.email|default:"No email address" }}
                                     </small>
 
                                 </div>
@@ -709,39 +900,52 @@ Resident Management | BantayBarangay
                         </td>
 
 
-
                         <!-- CONTACT -->
 
                         <td>
-                            {{ resident.contact_number|default:"—" }}
-                        </td>
 
+                            <span class="resident-contact">
+                                {{ resident.contact_number|default:"—" }}
+                            </span>
+
+                        </td>
 
 
                         <!-- ADDRESS -->
 
                         <td>
 
-                            {% if resident.barangay %}
-                                {{ resident.barangay }}
-                            {% endif %}
-
-                            {% if resident.municipality_city %}
+                            <div class="verification-address">
 
                                 {% if resident.barangay %}
-                                    ,
+
+                                    <strong>
+                                        {{ resident.barangay }}
+                                    </strong>
+
                                 {% endif %}
 
-                                {{ resident.municipality_city }}
 
-                            {% endif %}
+                                {% if resident.municipality_city %}
 
-                            {% if not resident.barangay and not resident.municipality_city %}
-                                —
-                            {% endif %}
+                                    <span>
+                                        {{ resident.municipality_city }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                {% if not resident.barangay and not resident.municipality_city %}
+
+                                    <span>
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
 
                         </td>
-
 
 
                         <!-- SUBMITTED -->
@@ -750,11 +954,17 @@ Resident Management | BantayBarangay
 
                             {% if resident.created_at %}
 
-                                {{ resident.created_at|date:"M d, Y" }}
+                                <div class="submitted-date">
 
-                                <small class="date-time">
-                                    {{ resident.created_at|date:"h:i A" }}
-                                </small>
+                                    <strong>
+                                        {{ resident.created_at|date:"M d, Y" }}
+                                    </strong>
+
+                                    <small>
+                                        {{ resident.created_at|date:"h:i A" }}
+                                    </small>
+
+                                </div>
 
                             {% else %}
 
@@ -765,7 +975,6 @@ Resident Management | BantayBarangay
                         </td>
 
 
-
                         <!-- STATUS -->
 
                         <td>
@@ -773,7 +982,11 @@ Resident Management | BantayBarangay
                             {% if resident.verification_status == "Pending" %}
 
                                 <span class="verification-badge pending">
+
+                                    <span class="verification-badge-dot"></span>
+
                                     Pending Review
+
                                 </span>
 
                             {% elif resident.verification_status == "Verified" %}
@@ -781,13 +994,16 @@ Resident Management | BantayBarangay
                                 <span class="verification-badge verified">
 
                                     <svg
-                                        class="inline h-3.5 w-3.5"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
                                         stroke-width="2.5"
                                     >
-                                        <path d="m5 12 4 4L19 6"/>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="m5 12 4 4L19 6"
+                                        />
                                     </svg>
 
                                     Verified
@@ -799,13 +1015,15 @@ Resident Management | BantayBarangay
                                 <span class="verification-badge rejected">
 
                                     <svg
-                                        class="inline h-3.5 w-3.5"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
                                         stroke-width="2.5"
                                     >
-                                        <path d="M6 6l12 12M18 6 6 18"/>
+                                        <path
+                                            stroke-linecap="round"
+                                            d="M6 6l12 12M18 6 6 18"
+                                        />
                                     </svg>
 
                                     Rejected
@@ -814,20 +1032,21 @@ Resident Management | BantayBarangay
 
                             {% elif resident.verification_status == "Inactive" %}
 
-                                <span class="verification-badge rejected">
+                                <span class="verification-badge inactive">
                                     Inactive
                                 </span>
 
                             {% else %}
 
-                                <span class="verification-badge pending">
+                                <span class="verification-badge neutral">
+
                                     {{ resident.verification_status|default:"—" }}
+
                                 </span>
 
                             {% endif %}
 
                         </td>
-
 
 
                         <!-- ACTION -->
@@ -836,28 +1055,60 @@ Resident Management | BantayBarangay
 
                             {% if resident.verification_status == "Pending" %}
 
-                                <div class="verification-actions">
+                                <a
+                                    href="{% url 'resident_verify' resident.resident_id %}"
+                                    class="verify-button"
+                                >
 
-                                    <a
-                                        href="{% url 'resident_verify' resident.resident_id %}"
-                                        class="verify-button"
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
                                     >
-                                        Review
-                                    </a>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                        />
 
-                                </div>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"
+                                        />
+                                    </svg>
+
+                                    Review
+
+                                </a>
 
                             {% elif resident.verification_status == "Verified" %}
 
                                 <span class="verified-label">
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="m5 12 4 4L19 6"
+                                        />
+                                    </svg>
+
                                     Completed
+
                                 </span>
 
                             {% else %}
 
                                 <a
                                     href="{% url 'resident_verify' resident.resident_id %}"
-                                    class="action-edit"
+                                    class="review-link"
                                 >
                                     Review
                                 </a>
@@ -866,12 +1117,10 @@ Resident Management | BantayBarangay
 
                         </td>
 
-
                     </tr>
 
 
                     {% empty %}
-
 
                     <tr>
 
@@ -880,19 +1129,21 @@ Resident Management | BantayBarangay
                             class="no-residents verification-empty"
                         >
 
-                            <div class="empty-verification">
+                            <div class="empty-state">
 
-                                <div class="empty-icon">
+                                <div class="empty-state-icon verification-empty-icon">
 
                                     <svg
-                                        class="h-6 w-6"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
-                                        stroke-width="2"
+                                        stroke-width="1.8"
                                     >
-                                        <path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6l-7-3Z"/>
-                                        <path d="m9 12 2 2 4-4"/>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M9 12.75 11.25 15 15 9.75m5.25-3.375c0 7.142-8.25 12.375-8.25 12.375S3.75 13.517 3.75 6.375c0-.621.504-1.125 1.125-1.125 2.098 0 4.079-.962 5.374-2.608a1.406 1.406 0 0 1 2.502 0c1.295 1.646 3.276 2.608 5.374 2.608.621 0 1.125.504 1.125 1.125Z"
+                                        />
                                     </svg>
 
                                 </div>
@@ -914,9 +1165,7 @@ Resident Management | BantayBarangay
 
                     </tr>
 
-
                     {% endfor %}
-
 
                 </tbody>
 
@@ -926,59 +1175,38 @@ Resident Management | BantayBarangay
 
     </section>
 
-
 </div>
 
 
-
-<!-- ========================================================= -->
-<!-- RESIDENT DETAILS DRAWER -->
-<!-- ========================================================= -->
+<!-- =========================================================
+     RESIDENT DETAILS DRAWER
+========================================================= -->
 
 {% include 'residentmodule/components/resident_drawer.html' %}
 
 
-
-<!-- ========================================================= -->
-<!-- INACTIVE CONFIRMATION MODAL -->
-<!-- ========================================================= -->
+<!-- =========================================================
+     INACTIVE CONFIRMATION MODAL
+========================================================= -->
 
 <div
     id="inactiveResidentModal"
-    class="fixed inset-0 z-[90]
-           invisible flex items-center justify-center
-           bg-slate-950/50 p-4 opacity-0
-           transition-all duration-200"
+    class="inactive-modal"
     aria-hidden="true"
 >
 
-
-    <!-- MODAL CARD -->
-
     <div
-        class="w-full max-w-md
-               scale-95 rounded-2xl
-               bg-white p-6
-               opacity-0 shadow-2xl
-               transition-all duration-200"
         id="inactiveResidentModalCard"
+        class="inactive-modal-card"
         role="dialog"
         aria-modal="true"
         aria-labelledby="inactiveModalTitle"
     >
 
 
-        <!-- ICON -->
-
-        <div
-            class="mb-4 flex h-12 w-12
-                   items-center justify-center
-                   rounded-xl bg-red-50
-                   text-red-600"
-        >
+        <div class="inactive-modal-icon">
 
             <svg
-                class="h-6 w-6"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -988,93 +1216,54 @@ Resident Management | BantayBarangay
                     cx="12"
                     cy="12"
                     r="9"
-                />
+                ></circle>
 
-                <path d="M8 12h8"/>
+                <path
+                    stroke-linecap="round"
+                    d="M8 12h8"
+                ></path>
             </svg>
 
         </div>
 
 
-
-        <!-- TITLE -->
-
-        <h2
-            id="inactiveModalTitle"
-            class="text-lg font-bold
-                   text-slate-900"
-        >
+        <h2 id="inactiveModalTitle">
             Mark Resident Inactive?
         </h2>
 
 
-
-        <!-- MESSAGE -->
-
-        <p
-            class="mt-2 text-sm
-                   leading-6 text-slate-500"
-        >
+        <p>
 
             You are about to mark
 
-            <strong
-                id="inactiveResidentName"
-                class="font-semibold text-slate-700"
-            >
+            <strong id="inactiveResidentName">
                 this resident
             </strong>
 
-            as inactive.
-
-            The resident record will not be deleted.
+            as inactive. The resident record will remain
+            in the system and will not be deleted.
 
         </p>
 
 
-
-        <!-- ACTIONS -->
-
-        <div
-            class="mt-6 flex
-                   justify-end gap-3"
-        >
-
-
-            <!-- CANCEL -->
+        <div class="inactive-modal-actions">
 
             <button
                 type="button"
                 id="cancelInactiveResident"
-                class="rounded-xl
-                       border border-slate-300
-                       bg-white px-4 py-2.5
-                       text-sm font-semibold
-                       text-slate-700
-                       transition
-                       hover:bg-slate-50"
+                class="modal-cancel-btn"
             >
                 Cancel
             </button>
 
 
-
-            <!-- CONFIRM -->
-
             <button
                 type="button"
                 id="confirmInactiveResident"
-                class="rounded-xl
-                       bg-red-600
-                       px-4 py-2.5
-                       text-sm font-semibold
-                       text-white
-                       transition
-                       hover:bg-red-700"
+                class="modal-confirm-btn"
             >
                 Mark Inactive
             </button>
-
 
         </div>
 
@@ -1083,7 +1272,6 @@ Resident Management | BantayBarangay
 </div>
 
 {% endblock %}
-
 
 
 {% block extra_js %}
