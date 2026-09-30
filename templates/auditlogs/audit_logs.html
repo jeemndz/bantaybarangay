@@ -3,11 +3,14 @@
 
 {% block title %}Audit Logs | BantayBarangay{% endblock %}
 
+
 {% block extra_css %}
+
 <link
     rel="stylesheet"
     href="{% static 'css/audit_logs.css' %}"
 >
+
 {% endblock %}
 
 
@@ -26,7 +29,7 @@
             <h1>Audit Logs</h1>
 
             <p>
-                Monitor and track all system activities and
+                Monitor and track system activities and
                 administrative actions.
             </p>
 
@@ -106,7 +109,7 @@
 
     <section class="audit-stats">
 
-        <!-- TOTAL ACTIVITIES -->
+        <!-- TOTAL -->
 
         <article class="audit-stat-card">
 
@@ -180,7 +183,6 @@
                     />
 
                     <path d="M8 3v4M16 3v4M3 10h18" />
-
                 </svg>
 
             </div>
@@ -217,7 +219,11 @@
                     stroke="currentColor"
                     stroke-width="1.8"
                 >
-                    <circle cx="9" cy="7" r="4" />
+                    <circle
+                        cx="9"
+                        cy="7"
+                        r="4"
+                    />
 
                     <path
                         stroke-linecap="round"
@@ -329,20 +335,22 @@
 
     <section class="audit-main-grid">
 
-
         <!-- =================================================
-             LOG TABLE
+             TABLE
         ================================================== -->
 
         <div class="audit-table-card">
 
-
             <!-- =============================================
-                 FILTER BAR
+                 SERVER-SIDE FILTERS
             ============================================== -->
 
-            <div class="audit-filter-bar">
-
+            <form
+                method="GET"
+                action=""
+                class="audit-filter-bar"
+                id="auditFilterForm"
+            >
 
                 <!-- SEARCH -->
 
@@ -370,26 +378,35 @@
                     <input
                         type="search"
                         id="auditSearch"
-                        placeholder="Search audit logs..."
+                        name="search"
+                        value="{{ search_query }}"
+                        placeholder="Search activities..."
                         autocomplete="off"
                     >
 
                 </div>
 
 
-                <!-- MODULE FILTER -->
+                <!-- MODULE -->
 
                 <select
                     id="moduleFilter"
+                    name="module"
                     class="audit-select"
                 >
+
                     <option value="">
                         All Modules
                     </option>
 
                     {% for module in modules %}
 
-                        <option value="{{ module|lower }}">
+                        <option
+                            value="{{ module }}"
+                            {% if selected_module == module %}
+                                selected
+                            {% endif %}
+                        >
                             {{ module }}
                         </option>
 
@@ -398,41 +415,71 @@
                 </select>
 
 
-                <!-- DATE FILTER -->
+                <!-- ACTION -->
 
                 <select
-                    id="dateFilter"
+                    id="actionFilter"
+                    name="action"
                     class="audit-select"
                 >
 
-                    <option value="all">
-                        All Dates
+                    <option value="">
+                        All Actions
                     </option>
 
-                    <option value="today">
-                        Today
-                    </option>
+                    {% for action in actions %}
 
-                    <option value="week">
-                        Last 7 Days
-                    </option>
+                        <option
+                            value="{{ action }}"
+                            {% if selected_action == action %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ action }}
+                        </option>
 
-                    <option value="month">
-                        Last 30 Days
-                    </option>
+                    {% endfor %}
 
                 </select>
 
 
-                <button
-                    type="button"
-                    id="clearFiltersBtn"
-                    class="clear-filter-button"
+                <!-- DATE -->
+
+                <input
+                    type="date"
+                    id="dateFilter"
+                    name="date"
+                    class="audit-select audit-date-filter"
+                    value="{{ selected_date }}"
+                    aria-label="Filter by date"
                 >
-                    Clear
+
+
+                <!-- FILTER -->
+
+                <button
+                    type="submit"
+                    class="audit-button audit-button-primary audit-filter-submit"
+                >
+                    Filter
                 </button>
 
-            </div>
+
+                <!-- CLEAR -->
+
+                {% if filters_active %}
+
+                    <a
+                        href="?"
+                        id="clearFiltersBtn"
+                        class="clear-filter-button"
+                    >
+                        Clear
+                    </a>
+
+                {% endif %}
+
+            </form>
 
 
             <!-- =============================================
@@ -454,7 +501,7 @@
 
                 <span id="visibleLogCount">
 
-                    {% if page_obj %}
+                    {% if page_obj.paginator.count %}
 
                         Showing
                         {{ page_obj.start_index }}
@@ -465,8 +512,7 @@
 
                     {% else %}
 
-                        {{ audit_logs|length }}
-                        activities
+                        0 activities
 
                     {% endif %}
 
@@ -486,19 +532,12 @@
                     <thead>
 
                         <tr>
-
                             <th>User</th>
-
                             <th>Module</th>
-
                             <th>Action</th>
-
                             <th>IP Address</th>
-
                             <th>Date / Time</th>
-
                             <th></th>
-
                         </tr>
 
                     </thead>
@@ -510,21 +549,13 @@
 
                             <tr
                                 class="audit-row"
-
                                 data-id="{{ log.audit_id }}"
-
                                 data-user-id="{{ log.user_id|default:'' }}"
-
-                                data-user="{% if log.user %}{{ log.user }}{% else %}User #{{ log.user_id }}{% endif %}"
-
-                                data-module="{{ log.module|default:'System' }}"
-
-                                data-action="{{ log.action|default:'Activity' }}"
-
-                                data-description="{{ log.description|default:'No description available.' }}"
-
-                                data-ip="{{ log.ip_address|default:'Not available' }}"
-
+                                data-user="{{ log.user|default:'System'|escape }}"
+                                data-module="{{ log.module|default:'System'|escape }}"
+                                data-action="{{ log.action|default:'Activity'|escape }}"
+                                data-description="{{ log.description|default:'No description available.'|escape }}"
+                                data-ip="{{ log.ip_address|default:'Not available'|escape }}"
                                 data-date="{{ log.created_at|date:'c' }}"
                             >
 
@@ -537,13 +568,9 @@
                                         <div class="audit-avatar">
 
                                             {% if log.user %}
-
                                                 {{ log.user|slice:":1"|upper }}
-
                                             {% else %}
-
-                                                U
-
+                                                S
                                             {% endif %}
 
                                         </div>
@@ -552,21 +579,17 @@
                                         <div>
 
                                             <strong>
-
-                                                {% if log.user %}
-
-                                                    {{ log.user }}
-
-                                                {% else %}
-
-                                                    User #{{ log.user_id }}
-
-                                                {% endif %}
-
+                                                {{ log.user|default:"System" }}
                                             </strong>
 
                                             <span>
-                                                ID: {{ log.user_id }}
+
+                                                {% if log.user_id %}
+                                                    ID: {{ log.user_id }}
+                                                {% else %}
+                                                    System activity
+                                                {% endif %}
+
                                             </span>
 
                                         </div>
@@ -639,7 +662,7 @@
                                 </td>
 
 
-                                <!-- ARROW -->
+                                <!-- VIEW -->
 
                                 <td>
 
@@ -690,20 +713,37 @@
                                                     d="M9 12h6M9 16h4M7 3h7l5 5v13H7z"
                                                 />
 
-                                                <path d="M14 3v5h5" />
-
+                                                <path
+                                                    d="M14 3v5h5"
+                                                />
                                             </svg>
 
                                         </div>
 
-                                        <strong>
-                                            No audit logs found
-                                        </strong>
 
-                                        <p>
-                                            System activities will appear here
-                                            once they are recorded.
-                                        </p>
+                                        {% if filters_active %}
+
+                                            <strong>
+                                                No matching activities
+                                            </strong>
+
+                                            <p>
+                                                Try changing or clearing
+                                                your filters.
+                                            </p>
+
+                                        {% else %}
+
+                                            <strong>
+                                                No audit logs found
+                                            </strong>
+
+                                            <p>
+                                                System activities will appear
+                                                here once they are recorded.
+                                            </p>
+
+                                        {% endif %}
 
                                     </div>
 
@@ -721,39 +761,19 @@
 
 
             <!-- =============================================
-                 CLIENT FILTER EMPTY STATE
-            ============================================== -->
-
-            <div
-                id="filterEmptyState"
-                class="filter-empty-state"
-                hidden
-            >
-
-                <strong>No matching activities</strong>
-
-                <p>
-                    Try changing your search or filters.
-                </p>
-
-            </div>
-
-
-            <!-- =============================================
                  PAGINATION
             ============================================== -->
 
-            {% if page_obj and page_obj.paginator.num_pages > 1 %}
+            {% if page_obj.paginator.num_pages > 1 %}
 
                 <div class="audit-pagination">
-
 
                     <!-- PREVIOUS -->
 
                     {% if page_obj.has_previous %}
 
                         <a
-                            href="?page={{ page_obj.previous_page_number }}"
+                            href="?page={{ page_obj.previous_page_number }}{% if filter_query_string %}&{{ filter_query_string }}{% endif %}"
                             class="pagination-arrow"
                             aria-label="Previous page"
                         >
@@ -775,9 +795,7 @@
 
                     {% else %}
 
-                        <span
-                            class="pagination-arrow disabled"
-                        >
+                        <span class="pagination-arrow disabled">
 
                             <svg
                                 viewBox="0 0 24 24"
@@ -797,7 +815,7 @@
                     {% endif %}
 
 
-                    <!-- PAGE NUMBERS -->
+                    <!-- PAGES -->
 
                     <div class="pagination-pages">
 
@@ -805,16 +823,14 @@
 
                             {% if number == page_obj.number %}
 
-                                <span
-                                    class="pagination-page active"
-                                >
+                                <span class="pagination-page active">
                                     {{ number }}
                                 </span>
 
                             {% elif number >= page_obj.number|add:"-2" and number <= page_obj.number|add:"2" %}
 
                                 <a
-                                    href="?page={{ number }}"
+                                    href="?page={{ number }}{% if filter_query_string %}&{{ filter_query_string }}{% endif %}"
                                     class="pagination-page"
                                 >
                                     {{ number }}
@@ -832,7 +848,7 @@
                     {% if page_obj.has_next %}
 
                         <a
-                            href="?page={{ page_obj.next_page_number }}"
+                            href="?page={{ page_obj.next_page_number }}{% if filter_query_string %}&{{ filter_query_string }}{% endif %}"
                             class="pagination-arrow"
                             aria-label="Next page"
                         >
@@ -854,9 +870,7 @@
 
                     {% else %}
 
-                        <span
-                            class="pagination-arrow disabled"
-                        >
+                        <span class="pagination-arrow disabled">
 
                             <svg
                                 viewBox="0 0 24 24"
@@ -929,7 +943,7 @@
             </div>
 
 
-            <!-- EMPTY DETAILS -->
+            <!-- EMPTY -->
 
             <div
                 id="detailsEmpty"
@@ -959,26 +973,26 @@
 
                 </div>
 
+
                 <strong>
                     Select an activity
                 </strong>
 
                 <p>
-                    Click a row from the audit log table to view
-                    its complete information.
+                    Click a row from the audit log table to
+                    view its complete information.
                 </p>
 
             </div>
 
 
-            <!-- SELECTED DETAILS -->
+            <!-- CONTENT -->
 
             <div
                 id="detailsContent"
                 class="details-content"
                 hidden
             >
-
 
                 <!-- USER -->
 
@@ -1092,6 +1106,7 @@
                         TIMESTAMP
                     </label>
 
+
                     <div class="timestamp-card">
 
                         <svg
@@ -1131,7 +1146,7 @@
                 </div>
 
 
-                <!-- RECORD NOTICE -->
+                <!-- NOTICE -->
 
                 <div class="audit-record-notice">
 
@@ -1178,7 +1193,7 @@
 
 
     <!-- =====================================================
-         AUTO AUDIT STATUS
+         STATUS
     ====================================================== -->
 
     <section class="auto-audit-status">
