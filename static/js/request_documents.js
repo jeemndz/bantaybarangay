@@ -24,16 +24,78 @@ document.addEventListener(
 
 
 /* =========================================================
-   DOCUMENT SELECTION
+   DOCUMENT DROPDOWN
 ========================================================= */
 
 function initializeDocumentSelection() {
+
+    const dropdown =
+        document.getElementById(
+            "documentDropdown"
+        );
+
+    const button =
+        document.getElementById(
+            "documentDropdownButton"
+        );
+
+    const search =
+        document.getElementById(
+            "documentSearchInput"
+        );
 
     const documentRadios =
         document.querySelectorAll(
             'input[name="document_type"]'
         );
 
+
+    if (!dropdown || !button) {
+        return;
+    }
+
+
+    /* -----------------------------------------------------
+       OPEN / CLOSE
+    ----------------------------------------------------- */
+
+    button.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+            const isOpen =
+                dropdown.classList.toggle(
+                    "open"
+                );
+
+            button.setAttribute(
+                "aria-expanded",
+                isOpen ? "true" : "false"
+            );
+
+
+            if (isOpen && search) {
+
+                window.setTimeout(
+                    function () {
+
+                        search.focus();
+
+                    },
+                    50
+                );
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       RADIO CHANGE
+    ----------------------------------------------------- */
 
     documentRadios.forEach(
         function (radio) {
@@ -42,7 +104,7 @@ function initializeDocumentSelection() {
                 "change",
                 function () {
 
-                    updateDocumentCards();
+                    updateDocumentDropdown();
 
                     updateCatalogCards();
 
@@ -50,8 +112,121 @@ function initializeDocumentSelection() {
 
                     updateFees();
 
+
+                    dropdown.classList.remove(
+                        "open"
+                    );
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    if (search) {
+
+                        search.value = "";
+
+                        filterDocumentOptions("");
+
+                    }
+
                 }
             );
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       SEARCH
+    ----------------------------------------------------- */
+
+    if (search) {
+
+        search.addEventListener(
+            "input",
+            function () {
+
+                filterDocumentOptions(
+                    search.value
+                );
+
+            }
+        );
+
+
+        search.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       PREVENT PANEL CLICK FROM CLOSING
+    ----------------------------------------------------- */
+
+    const panel =
+        document.getElementById(
+            "documentDropdownPanel"
+        );
+
+
+    if (panel) {
+
+        panel.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       OUTSIDE CLICK
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                !dropdown.contains(
+                    event.target
+                )
+            ) {
+
+                closeDocumentDropdown();
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       ESCAPE
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                closeDocumentDropdown();
+
+            }
 
         }
     );
@@ -60,38 +235,234 @@ function initializeDocumentSelection() {
 
 
 /* =========================================================
-   DOCUMENT CARDS
+   UPDATE DOCUMENT DROPDOWN
 ========================================================= */
 
-function updateDocumentCards() {
+function updateDocumentDropdown() {
+
+    const dropdown =
+        document.getElementById(
+            "documentDropdown"
+        );
+
+    const nameElement =
+        document.getElementById(
+            "selectedDocumentName"
+        );
+
+    const descriptionElement =
+        document.getElementById(
+            "selectedDocumentDescription"
+        );
+
+    const selected =
+        document.querySelector(
+            'input[name="document_type"]:checked'
+        );
+
+
+    document
+        .querySelectorAll(
+            ".document-dropdown-option"
+        )
+        .forEach(
+            function (option) {
+
+                const radio =
+                    option.querySelector(
+                        'input[name="document_type"]'
+                    );
+
+
+                option.classList.toggle(
+                    "selected",
+                    Boolean(
+                        radio &&
+                        radio.checked
+                    )
+                );
+
+            }
+        );
+
+
+    if (!dropdown) {
+        return;
+    }
+
+
+    if (!selected) {
+
+        dropdown.classList.remove(
+            "has-selection"
+        );
+
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                "Select a document";
+
+        }
+
+
+        if (descriptionElement) {
+
+            descriptionElement.textContent =
+                "Choose from the available barangay documents";
+
+        }
+
+
+        return;
+
+    }
+
+
+    dropdown.classList.add(
+        "has-selection"
+    );
+
+
+    if (nameElement) {
+
+        nameElement.textContent =
+            selected.dataset.name ||
+            "Selected Document";
+
+    }
+
+
+    if (descriptionElement) {
+
+        const description =
+            selected.dataset.description;
+
+
+        descriptionElement.textContent =
+            description ||
+            "Document selected for this request.";
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH DOCUMENTS
+========================================================= */
+
+function filterDocumentOptions(value) {
+
+    const searchValue =
+        String(value || "")
+            .trim()
+            .toLowerCase();
+
 
     const options =
         document.querySelectorAll(
-            ".document-option"
+            ".document-dropdown-option"
         );
+
+
+    let visibleCount = 0;
 
 
     options.forEach(
         function (option) {
 
-            const radio =
-                option.querySelector(
-                    'input[name="document_type"]'
+            const searchText =
+                String(
+                    option.dataset.search || ""
+                ).toLowerCase();
+
+
+            const visible =
+                searchText.includes(
+                    searchValue
                 );
 
 
-            if (!radio) {
-                return;
-            }
-
-
             option.classList.toggle(
-                "selected",
-                radio.checked
+                "hidden",
+                !visible
             );
+
+
+            if (visible) {
+
+                visibleCount += 1;
+
+            }
 
         }
     );
+
+
+    const empty =
+        document.getElementById(
+            "documentSearchEmpty"
+        );
+
+
+    if (empty) {
+
+        empty.classList.toggle(
+            "show",
+            visibleCount === 0
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE DOCUMENT DROPDOWN
+========================================================= */
+
+function closeDocumentDropdown() {
+
+    const dropdown =
+        document.getElementById(
+            "documentDropdown"
+        );
+
+    const button =
+        document.getElementById(
+            "documentDropdownButton"
+        );
+
+
+    if (dropdown) {
+
+        dropdown.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    if (button) {
+
+        button.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DOCUMENT CARDS COMPATIBILITY
+========================================================= */
+
+function updateDocumentCards() {
+
+    updateDocumentDropdown();
 
 }
 
@@ -267,28 +638,43 @@ function updateCatalogCards() {
 
 function initializeDeliverySelection() {
 
-    const radios =
-        document.querySelectorAll(
+    const options = document.querySelectorAll(
+        ".delivery-option"
+    );
+
+    options.forEach(function (option) {
+
+        const radio = option.querySelector(
             'input[name="delivery_method"]'
         );
 
-
-    radios.forEach(
-        function (radio) {
-
-            radio.addEventListener(
-                "change",
-                function () {
-
-                    updateDeliveryCards();
-
-                    updateFees();
-
-                }
-            );
-
+        if (!radio) {
+            return;
         }
-    );
+
+        option.addEventListener(
+            "click",
+            function () {
+
+                radio.checked = true;
+
+                updateDeliveryCards();
+                updateFees();
+
+            }
+        );
+
+        radio.addEventListener(
+            "change",
+            function () {
+
+                updateDeliveryCards();
+                updateFees();
+
+            }
+        );
+
+    });
 
 }
 
@@ -296,32 +682,35 @@ function initializeDeliverySelection() {
 function updateDeliveryCards() {
 
     document
-        .querySelectorAll(
-            ".delivery-option"
-        )
-        .forEach(
-            function (option) {
+        .querySelectorAll(".delivery-option")
+        .forEach(function (option) {
 
-                const radio =
-                    option.querySelector(
-                        'input[name="delivery_method"]'
-                    );
+            const radio = option.querySelector(
+                'input[name="delivery_method"]'
+            );
 
+            if (!radio) {
+                return;
+            }
 
-                if (!radio) {
-                    return;
-                }
+            if (radio.checked) {
 
+                option.classList.add(
+                    "selected"
+                );
 
-                option.classList.toggle(
-                    "selected",
-                    radio.checked
+            } else {
+
+                option.classList.remove(
+                    "selected"
                 );
 
             }
-        );
+
+        });
 
 }
+
 
 
 /* =========================================================
@@ -330,57 +719,75 @@ function updateDeliveryCards() {
 
 function initializePaymentSelection() {
 
-    const radios =
-        document.querySelectorAll(
+    const options = document.querySelectorAll(
+        ".payment-option"
+    );
+
+    options.forEach(function (option) {
+
+        const radio = option.querySelector(
             'input[name="payment_method"]'
         );
 
-
-    radios.forEach(
-        function (radio) {
-
-            radio.addEventListener(
-                "change",
-                function () {
-
-                    updatePaymentCards();
-
-                }
-            );
-
+        if (!radio) {
+            return;
         }
-    );
+
+        option.addEventListener(
+            "click",
+            function () {
+
+                radio.checked = true;
+
+                updatePaymentCards();
+
+            }
+        );
+
+        radio.addEventListener(
+            "change",
+            function () {
+
+                updatePaymentCards();
+
+            }
+        );
+
+    });
 
 }
+
 
 
 function updatePaymentCards() {
 
     document
-        .querySelectorAll(
-            ".payment-option"
-        )
-        .forEach(
-            function (option) {
+        .querySelectorAll(".payment-option")
+        .forEach(function (option) {
 
-                const radio =
-                    option.querySelector(
-                        'input[name="payment_method"]'
-                    );
+            const radio = option.querySelector(
+                'input[name="payment_method"]'
+            );
 
+            if (!radio) {
+                return;
+            }
 
-                if (!radio) {
-                    return;
-                }
+            if (radio.checked) {
 
+                option.classList.add(
+                    "selected"
+                );
 
-                option.classList.toggle(
-                    "selected",
-                    radio.checked
+            } else {
+
+                option.classList.remove(
+                    "selected"
                 );
 
             }
-        );
+
+        });
 
 }
 
@@ -947,7 +1354,7 @@ function initializeFormValidation() {
 
 
                 scrollToSection(
-                    ".document-select-grid"
+                      ".document-picker-section"
                 );
 
 
