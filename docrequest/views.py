@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib import messages
 from django.db import connection, transaction
 from django.shortcuts import render, redirect
@@ -10,41 +8,14 @@ from django.shortcuts import render, redirect
 # =========================================================
 
 DOCUMENT_REQUEST_STATUSES = [
-
     "Submitted",
-
     "Under Verification",
-
     "Ready for Signature",
-
     "Ready for Pickup",
-
     "Released",
-
     "Rejected",
-
     "Cancelled",
 ]
-
-
-# =========================================================
-# BUILD REFERENCE NUMBER
-# =========================================================
-
-def build_document_reference(
-    request_id,
-    submitted_at=None
-):
-
-    if submitted_at:
-        year = submitted_at.year
-    else:
-        year = datetime.now().year
-
-    return (
-        f"DOC-{year}-"
-        f"{request_id:04d}"
-    )
 
 
 # =========================================================
@@ -60,26 +31,17 @@ def document_request_list(request):
     # =====================================================
 
     search = (
-        request.GET.get(
-            "search",
-            ""
-        )
+        request.GET.get("search", "")
         .strip()
     )
 
     status_filter = (
-        request.GET.get(
-            "status",
-            ""
-        )
+        request.GET.get("status", "")
         .strip()
     )
 
     document_filter = (
-        request.GET.get(
-            "document_type",
-            ""
-        )
+        request.GET.get("document_type", "")
         .strip()
     )
 
@@ -101,11 +63,9 @@ def document_request_list(request):
 
                 FROM document_types
 
-                WHERE
-                    status = 'Active'
+                WHERE status = 'Active'
 
-                ORDER BY
-                    type_name ASC
+                ORDER BY type_name ASC
                 """
             )
 
@@ -115,10 +75,10 @@ def document_request_list(request):
 
             document_types.append({
 
-                "id":
+                "document_type_id":
                     row[0],
 
-                "name":
+                "type_name":
                     row[1],
             })
 
@@ -136,6 +96,7 @@ def document_request_list(request):
     query = """
         SELECT
             dr.request_id,
+            dr.reference_number,
             dr.resident_id,
 
             r.first_name,
@@ -158,20 +119,18 @@ def document_request_list(request):
             dr.payment_method,
 
             dr.status,
-            dr.submitted_at,
+            dr.created_at,
             dr.updated_at
 
         FROM document_requests dr
 
         INNER JOIN document_types dt
-            ON
-            dt.document_type_id =
-            dr.document_type_id
+            ON dt.document_type_id =
+               dr.document_type_id
 
         INNER JOIN residents r
-            ON
-            r.resident_id =
-            dr.resident_id
+            ON r.resident_id =
+               dr.resident_id
 
         WHERE 1 = 1
     """
@@ -213,8 +172,7 @@ def document_request_list(request):
     if search:
 
         query += """
-            AND
-            (
+            AND (
                 r.first_name LIKE %s
                 OR r.middle_name LIKE %s
                 OR r.last_name LIKE %s
@@ -224,9 +182,7 @@ def document_request_list(request):
             )
         """
 
-        search_value = (
-            f"%{search}%"
-        )
+        search_value = f"%{search}%"
 
         parameters.extend([
             search_value,
@@ -237,9 +193,13 @@ def document_request_list(request):
             search_value,
         ])
 
+    # =====================================================
+    # ORDER
+    # =====================================================
+
     query += """
         ORDER BY
-            dr.submitted_at DESC
+            dr.created_at DESC
     """
 
     # =====================================================
@@ -263,25 +223,20 @@ def document_request_list(request):
 
         for row in rows:
 
-            request_id = row[0]
-            submitted_at = row[17]
-
             # =============================================
             # RESIDENT NAME
             # =============================================
 
             name_parts = [
-                row[2],
-                row[3],
-                row[4],
-                row[5],
+                row[3],  # first_name
+                row[4],  # middle_name
+                row[5],  # last_name
+                row[6],  # suffix
             ]
 
             resident_name = " ".join(
                 str(part).strip()
-
                 for part in name_parts
-
                 if part and str(part).strip()
             )
 
@@ -292,70 +247,67 @@ def document_request_list(request):
             document_requests.append({
 
                 "request_id":
-                    request_id,
+                    row[0],
 
                 "reference_number":
-                    build_document_reference(
-                        request_id,
-                        submitted_at
-                    ),
+                    row[1],
 
                 "resident_id":
-                    row[1],
+                    row[2],
 
                 "resident_name":
                     resident_name,
 
                 "first_name":
-                    row[2],
-
-                "middle_name":
                     row[3],
 
-                "last_name":
+                "middle_name":
                     row[4],
 
-                "suffix":
+                "last_name":
                     row[5],
 
-                "address":
+                "suffix":
                     row[6],
 
-                "email":
+                "address":
                     row[7],
 
-                "contact_number":
+                "email":
                     row[8],
 
-                "document_type_id":
+                "contact_number":
                     row[9],
 
-                "document_name":
+                "document_type_id":
                     row[10],
 
-                "purpose":
+                "document_name":
                     row[11],
 
-                "institution":
+                "purpose":
                     row[12],
 
-                "request_notes":
+                "institution":
                     row[13],
 
-                "delivery_method":
+                "request_notes":
                     row[14],
 
-                "payment_method":
+                "delivery_method":
                     row[15],
 
-                "status":
+                "payment_method":
                     row[16],
 
-                "submitted_at":
-                    submitted_at,
+                "status":
+                    row[17],
+
+                "created_at":
+                    row[18],
 
                 "updated_at":
-                    row[18],
+                    row[19],
             })
 
     except Exception as e:
@@ -391,41 +343,31 @@ def document_request_list(request):
 
                     SUM(
                         CASE
-
-                            WHEN status IN
-                            (
+                            WHEN status IN (
                                 'Submitted',
                                 'Under Verification',
                                 'Ready for Signature'
                             )
-
                             THEN 1
                             ELSE 0
-
                         END
                     ),
 
                     SUM(
                         CASE
-
                             WHEN status =
                                 'Ready for Pickup'
-
                             THEN 1
                             ELSE 0
-
                         END
                     ),
 
                     SUM(
                         CASE
-
                             WHEN status =
                                 'Released'
-
                             THEN 1
                             ELSE 0
-
                         END
                     )
 
@@ -437,21 +379,10 @@ def document_request_list(request):
 
         if stats:
 
-            total_requests = (
-                stats[0] or 0
-            )
-
-            pending_requests = (
-                stats[1] or 0
-            )
-
-            ready_requests = (
-                stats[2] or 0
-            )
-
-            released_requests = (
-                stats[3] or 0
-            )
+            total_requests = stats[0] or 0
+            pending_requests = stats[1] or 0
+            ready_requests = stats[2] or 0
+            released_requests = stats[3] or 0
 
     except Exception as e:
 
@@ -544,10 +475,7 @@ def update_request_status(
     # VALIDATE STATUS
     # =====================================================
 
-    if (
-        new_status not in
-        DOCUMENT_REQUEST_STATUSES
-    ):
+    if new_status not in DOCUMENT_REQUEST_STATUSES:
 
         messages.error(
             request,
@@ -589,13 +517,11 @@ def update_request_status(
 
                     messages.error(
                         request,
-                        "Document request was "
-                        "not found."
+                        "Document request was not found."
                     )
 
                     return redirect(
-                        "docrequestmodule:"
-                        "request_documents"
+                        "docrequestmodule:request_documents"
                     )
 
         messages.success(

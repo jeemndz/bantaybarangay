@@ -9,6 +9,12 @@ import secrets
 
 from .models import User
 
+# =========================================================
+# AUDIT LOGGING
+# =========================================================
+
+from auditlogs.utils import create_audit_log
+
 
 # =====================================================
 # LOGIN
@@ -295,6 +301,22 @@ def login_view(request):
             request.session.set_expiry(0)
 
 
+        # =================================================
+        # AUDIT LOG - LOGIN
+        # =================================================
+
+        create_audit_log(
+            request=request,
+            user_id=user.user_id,
+            action="LOGIN",
+            module="Authentication",
+            description=(
+                f"User '{user.username}' "
+                f"logged into BantayBarangay."
+            )
+        )
+
+
         # -------------------------------------------------
         # ROLE REDIRECTION
         # -------------------------------------------------
@@ -319,6 +341,22 @@ def login_view(request):
             )
 
         else:
+
+            # -------------------------------------------------
+            # INVALID ROLE AUDIT
+            # -------------------------------------------------
+
+            create_audit_log(
+                request=request,
+                user_id=user.user_id,
+                action="LOGIN_ERROR",
+                module="Authentication",
+                description=(
+                    f"User '{user.username}' "
+                    f"authenticated but has an invalid "
+                    f"account role."
+                )
+            )
 
             messages.error(
                 request,
@@ -423,8 +461,6 @@ def forgot_password_view(request):
 
         if not user.is_active:
 
-            # Keep response generic.
-
             messages.success(
                 request,
                 "If an account is registered with that email "
@@ -467,8 +503,6 @@ def forgot_password_view(request):
         # RESET SESSION EXPIRATION
         # -------------------------------------------------
 
-        # The reset information will expire after 15 minutes.
-
         request.session.set_expiry(
             60 * 15
         )
@@ -477,9 +511,6 @@ def forgot_password_view(request):
         # =================================================
         # CREATE RESET URL
         # =================================================
-
-        # This expects a URL named "reset_password"
-        # accepting a token parameter.
 
         reset_path = reverse(
             "reset_password",
@@ -562,9 +593,6 @@ Secure Digital Governance
 
         except Exception as error:
 
-            # Development logging.
-            # The email address/password are not printed.
-
             print(
                 "Password reset email error:",
                 error
@@ -582,13 +610,29 @@ Secure Digital Governance
 
 
         # =================================================
+        # AUDIT LOG - PASSWORD RESET REQUEST
+        # =================================================
+
+        create_audit_log(
+            request=request,
+            user_id=user.user_id,
+            action="PASSWORD_RESET_REQUEST",
+            module="Authentication",
+            description=(
+                f"Password reset instructions were "
+                f"requested for user '{user.username}'."
+            )
+        )
+
+
+        # =================================================
         # SUCCESS MESSAGE
         # =================================================
 
         messages.success(
             request,
             "Password reset instructions have been "
-            "generated. Check the Django terminal."
+            "generated. Check your email."
         )
 
         return redirect(
@@ -611,6 +655,43 @@ Secure Digital Governance
 # =====================================================
 
 def logout_view(request):
+
+    # =================================================
+    # GET SESSION INFORMATION BEFORE CLEARING IT
+    # =================================================
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    username = request.session.get(
+        "username",
+        ""
+    )
+
+    is_logged_in = request.session.get(
+        "is_logged_in",
+        False
+    )
+
+
+    # =================================================
+    # AUDIT LOG - LOGOUT
+    # =================================================
+
+    if is_logged_in:
+
+        create_audit_log(
+            request=request,
+            user_id=user_id,
+            action="LOGOUT",
+            module="Authentication",
+            description=(
+                f"User '{username or 'Unknown'}' "
+                f"logged out of BantayBarangay."
+            )
+        )
+
 
     # -------------------------------------------------
     # CLEAR ENTIRE SESSION

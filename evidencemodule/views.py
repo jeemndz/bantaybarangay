@@ -9,12 +9,10 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.views.decorators.http import require_GET
-
-from .models import Evidence
-
-
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+
+from .models import Evidence
 
 from .services.fabric_service import (
     FabricServiceError,
@@ -24,6 +22,9 @@ from .services.fabric_service import (
 )
 
 from .services.hashing import calculate_file_hash
+
+from blockchain_logs.services.blockchain_logger import create_blockchain_log
+
 
 # =========================================================
 # EVIDENCE MANAGEMENT / LIST
@@ -148,43 +149,43 @@ def complaint_evidence(request, complaint_id):
                     item.file_size,
 
                 "file_hash":
-    item.file_hash,
+                    item.file_hash,
 
-"blockchain_status":
-    item.blockchain_status,
+                "blockchain_status":
+                    item.blockchain_status,
 
-"blockchain_tx_id":
-    item.blockchain_tx_id or "",
+                "blockchain_tx_id":
+                    item.blockchain_tx_id or "",
 
-"blockchain_registered_at":
-    (
-        item.blockchain_registered_at.strftime(
-            "%b %d, %Y %I:%M %p"
-        )
-        if item.blockchain_registered_at
-        else ""
-    ),
+                "blockchain_registered_at":
+                    (
+                        item.blockchain_registered_at.strftime(
+                            "%b %d, %Y %I:%M %p"
+                        )
+                        if item.blockchain_registered_at
+                        else ""
+                    ),
 
-"integrity_status":
-    item.integrity_status,
+                "integrity_status":
+                    item.integrity_status,
 
-"last_verified_at":
-    (
-        item.last_verified_at.strftime(
-            "%b %d, %Y %I:%M %p"
-        )
-        if item.last_verified_at
-        else ""
-    ),
+                "last_verified_at":
+                    (
+                        item.last_verified_at.strftime(
+                            "%b %d, %Y %I:%M %p"
+                        )
+                        if item.last_verified_at
+                        else ""
+                    ),
 
-"uploaded_at":
-    (
-        item.uploaded_at.strftime(
-            "%b %d, %Y %I:%M %p"
-        )
-        if item.uploaded_at
-        else ""
-    ),
+                "uploaded_at":
+                    (
+                        item.uploaded_at.strftime(
+                            "%b %d, %Y %I:%M %p"
+                        )
+                        if item.uploaded_at
+                        else ""
+                    ),
             }
         )
 
@@ -326,7 +327,6 @@ def save_evidence_file(
         exist_ok=True
     )
 
-
     # =====================================================
     # SAFE FILE NAME
     # =====================================================
@@ -357,7 +357,6 @@ def save_evidence_file(
         + extension.lower()
     )
 
-
     # =====================================================
     # PREVENT OVERWRITE
     # =====================================================
@@ -380,12 +379,10 @@ def save_evidence_file(
 
         counter += 1
 
-
     absolute_path = os.path.join(
         absolute_directory,
         final_name
     )
-
 
     # =====================================================
     # SAVE + SHA-256 HASH
@@ -408,7 +405,6 @@ def save_evidence_file(
                 chunk
             )
 
-
     # =====================================================
     # DATABASE PATH
     # =====================================================
@@ -417,7 +413,6 @@ def save_evidence_file(
         relative_directory,
         final_name,
     ).replace("\\", "/")
-
 
     # =====================================================
     # CREATE EVIDENCE RECORD
@@ -473,6 +468,7 @@ def evidence_delete(request, evidence_id):
                 if os.path.isfile(
                     physical_path
                 ):
+
                     os.remove(
                         physical_path
                     )
@@ -513,14 +509,30 @@ def register_evidence_blockchain(request, evidence_id):
 
     document_id = f"EVD-{evidence.evidence_id}"
 
+    recorded_by = str(
+        request.session.get("username")
+        or request.session.get("user_id")
+        or "system"
+    )
+
     try:
-        # Check if it already exists on Fabric.
+
+        # =================================================
+        # CHECK IF DOCUMENT ALREADY EXISTS ON FABRIC
+        # =================================================
+
         try:
-            blockchain_document = get_document(document_id)
+            blockchain_document = get_document(
+                document_id
+            )
+
         except FabricServiceError:
             blockchain_document = None
 
-        # Already registered on Fabric.
+        # =================================================
+        # ALREADY REGISTERED ON FABRIC
+        # =================================================
+
         if blockchain_document:
 
             blockchain_hash = blockchain_document.get(
@@ -528,6 +540,7 @@ def register_evidence_blockchain(request, evidence_id):
                 ""
             )
 
+            # Existing Fabric ID has a different hash.
             if blockchain_hash != evidence.file_hash:
 
                 evidence.blockchain_status = "Failed"
@@ -536,6 +549,22 @@ def register_evidence_blockchain(request, evidence_id):
                     update_fields=[
                         "blockchain_status"
                     ]
+                )
+
+                create_blockchain_log(
+                    blockchain_document_id=document_id,
+                    document_id=evidence.evidence_id,
+                    document_type="EVIDENCE",
+                    document_hash=evidence.file_hash,
+                    transaction_hash=None,
+                    action="REGISTER",
+                    status="FAILED",
+                    verification_status="Failed",
+                    error_message=(
+                        "Evidence ID already exists on "
+                        "Fabric with a different hash."
+                    ),
+                    recorded_by=recorded_by,
                 )
 
                 return JsonResponse(
@@ -549,14 +578,32 @@ def register_evidence_blockchain(request, evidence_id):
                     status=409,
                 )
 
+            # Existing document has the same hash.
             evidence.blockchain_status = "Registered"
-            evidence.blockchain_registered_at = timezone.now()
+
+            if not evidence.blockchain_registered_at:
+                evidence.blockchain_registered_at = timezone.now()
 
             evidence.save(
                 update_fields=[
                     "blockchain_status",
                     "blockchain_registered_at",
                 ]
+            )
+
+            # This is an application audit entry.
+            # There is no new Fabric transaction because the
+            # document already existed.
+            create_blockchain_log(
+                blockchain_document_id=document_id,
+                document_id=evidence.evidence_id,
+                document_type="EVIDENCE",
+                document_hash=evidence.file_hash,
+                transaction_hash=evidence.blockchain_tx_id,
+                action="REGISTER",
+                status="SUCCESS",
+                verification_status="Pending",
+                recorded_by=recorded_by,
             )
 
             return JsonResponse(
@@ -571,12 +618,11 @@ def register_evidence_blockchain(request, evidence_id):
                 }
             )
 
-        # New Fabric registration.
-        registered_by = (
-            request.session.get("username")
-            or request.session.get("user_id")
-            or "system"
-        )
+        # =================================================
+        # NEW FABRIC REGISTRATION
+        # =================================================
+
+        registered_by = recorded_by
 
         result = register_document(
             document_id=document_id,
@@ -603,12 +649,29 @@ def register_evidence_blockchain(request, evidence_id):
             ]
         )
 
+        # =================================================
+        # BLOCKCHAIN AUDIT LOG - SUCCESSFUL REGISTRATION
+        # =================================================
+
+        create_blockchain_log(
+            blockchain_document_id=document_id,
+            document_id=evidence.evidence_id,
+            document_type="EVIDENCE",
+            document_hash=evidence.file_hash,
+            transaction_hash=evidence.blockchain_tx_id,
+            action="REGISTER",
+            status="SUCCESS",
+            verification_status="Pending",
+            recorded_by=recorded_by,
+        )
+
         return JsonResponse(
             {
                 "success": True,
                 "already_registered": False,
                 "document_id": document_id,
-                "transaction_id": evidence.blockchain_tx_id,
+                "transaction_id":
+                    evidence.blockchain_tx_id,
                 "message": (
                     "Evidence successfully registered "
                     "on Hyperledger Fabric."
@@ -626,6 +689,23 @@ def register_evidence_blockchain(request, evidence_id):
             ]
         )
 
+        # =================================================
+        # BLOCKCHAIN AUDIT LOG - FAILED REGISTRATION
+        # =================================================
+
+        create_blockchain_log(
+            blockchain_document_id=document_id,
+            document_id=evidence.evidence_id,
+            document_type="EVIDENCE",
+            document_hash=evidence.file_hash,
+            transaction_hash=None,
+            action="REGISTER",
+            status="FAILED",
+            verification_status="Failed",
+            error_message=str(error),
+            recorded_by=recorded_by,
+        )
+
         return JsonResponse(
             {
                 "success": False,
@@ -634,7 +714,8 @@ def register_evidence_blockchain(request, evidence_id):
             status=502,
         )
 
-    # =========================================================
+
+# =========================================================
 # VERIFY EVIDENCE INTEGRITY
 # =========================================================
 
@@ -648,7 +729,14 @@ def verify_evidence_integrity(request, evidence_id):
 
     document_id = f"EVD-{evidence.evidence_id}"
 
+    recorded_by = str(
+        request.session.get("username")
+        or request.session.get("user_id")
+        or "system"
+    )
+
     if evidence.blockchain_status != "Registered":
+
         return JsonResponse(
             {
                 "success": False,
@@ -661,6 +749,7 @@ def verify_evidence_integrity(request, evidence_id):
         )
 
     if not evidence.file_path:
+
         return JsonResponse(
             {
                 "success": False,
@@ -670,9 +759,11 @@ def verify_evidence_integrity(request, evidence_id):
         )
 
     # Convert:
+    #
     # /media/evidence/complaint_19/file.jpg
     #
     # into:
+    #
     # evidence/complaint_19/file.jpg
 
     relative_path = (
@@ -686,20 +777,32 @@ def verify_evidence_integrity(request, evidence_id):
         relative_path
     )
 
-    if not os.path.isfile(physical_path):
+    if not os.path.isfile(
+        physical_path
+    ):
+
         return JsonResponse(
             {
                 "success": False,
-                "error": "Evidence file could not be found.",
+                "error":
+                    "Evidence file could not be found.",
             },
             status=404,
         )
 
     try:
-        # Hash the ACTUAL current file.
+
+        # =================================================
+        # HASH ACTUAL CURRENT FILE
+        # =================================================
+
         current_hash = calculate_file_hash(
             physical_path
         )
+
+        # =================================================
+        # VERIFY AGAINST FABRIC
+        # =================================================
 
         verified = verify_document(
             document_id,
@@ -720,12 +823,33 @@ def verify_evidence_integrity(request, evidence_id):
             ]
         )
 
+        # =================================================
+        # BLOCKCHAIN AUDIT LOG - VERIFICATION RESULT
+        # =================================================
+
+        create_blockchain_log(
+            blockchain_document_id=document_id,
+            document_id=evidence.evidence_id,
+            document_type="EVIDENCE",
+            document_hash=current_hash,
+            transaction_hash=None,
+            action="VERIFY",
+            status="SUCCESS",
+            verification_status=(
+                "Confirmed"
+                if verified
+                else "Failed"
+            ),
+            recorded_by=recorded_by,
+        )
+
         return JsonResponse(
             {
                 "success": True,
                 "document_id": document_id,
                 "verified": verified,
-                "integrity_status": evidence.integrity_status,
+                "integrity_status":
+                    evidence.integrity_status,
                 "current_hash": current_hash,
                 "last_verified_at":
                     evidence.last_verified_at.isoformat(),
@@ -733,6 +857,27 @@ def verify_evidence_integrity(request, evidence_id):
         )
 
     except FabricServiceError as error:
+
+        # =================================================
+        # BLOCKCHAIN AUDIT LOG - VERIFICATION ERROR
+        # =================================================
+
+        create_blockchain_log(
+            blockchain_document_id=document_id,
+            document_id=evidence.evidence_id,
+            document_type="EVIDENCE",
+            document_hash=(
+                current_hash
+                if "current_hash" in locals()
+                else evidence.file_hash
+            ),
+            transaction_hash=None,
+            action="VERIFY",
+            status="FAILED",
+            verification_status="Failed",
+            error_message=str(error),
+            recorded_by=recorded_by,
+        )
 
         return JsonResponse(
             {
