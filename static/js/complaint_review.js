@@ -693,6 +693,10 @@ function openComplaintReview(row) {
         complaintId
     );
 
+    loadComplaintDocument(
+    complaintId
+);
+
 }
 
 
@@ -1520,18 +1524,23 @@ async function loadComplaintEvidence(
 
 function createEvidenceCard(item) {
 
-    const button =
-        document.createElement(
-            "button"
-        );
+   const button =
+    document.createElement(
+        "div"
+    );
 
+button.className =
+    "review-evidence-item";
 
-    button.type =
-        "button";
+button.setAttribute(
+    "role",
+    "button"
+);
 
-
-    button.className =
-        "review-evidence-item";
+button.setAttribute(
+    "tabindex",
+    "0"
+);
 
 
     const kind =
@@ -1650,31 +1659,64 @@ function createEvidenceCard(item) {
        VERIFIED
     ===================================================== */
 
-    if (
-        cleanReviewValue(
-            item.file_hash
-        )
-    ) {
+    /* =====================================================
+   BLOCKCHAIN / INTEGRITY STATUS
+===================================================== */
 
-        const verified =
-            document.createElement(
-                "span"
-            );
+const blockchainStatus =
+    cleanReviewValue(
+        item.blockchain_status
+    );
+
+const integrityStatus =
+    cleanReviewValue(
+        item.integrity_status
+    );
+
+const statusBadge =
+    document.createElement(
+        "span"
+    );
+
+statusBadge.className =
+    "review-evidence-verified";
 
 
-        verified.className =
-            "review-evidence-verified";
+if (integrityStatus === "Verified") {
+
+    statusBadge.textContent =
+        "Verified";
+
+}
+else if (integrityStatus === "Failed") {
+
+    statusBadge.textContent =
+        "Integrity Failed";
+
+}
+else if (blockchainStatus === "Registered") {
+
+    statusBadge.textContent =
+        "Registered";
+
+}
+else if (blockchainStatus === "Failed") {
+
+    statusBadge.textContent =
+        "Registration Failed";
+
+}
+else {
+
+    statusBadge.textContent =
+        "Pending Registration";
+
+}
 
 
-        verified.textContent =
-            "Verified";
-
-
-        preview.appendChild(
-            verified
-        );
-
-    }
+preview.appendChild(
+    statusBadge
+);
 
 
     /* =====================================================
@@ -1773,6 +1815,81 @@ function createEvidenceCard(item) {
         info
     );
 
+    /* =====================================================
+   BLOCKCHAIN ACTION
+===================================================== */
+
+const blockchainAction =
+    document.createElement(
+        "button"
+    );
+
+blockchainAction.type =
+    "button";
+
+blockchainAction.className =
+    "review-evidence-blockchain-action";
+
+
+if (integrityStatus === "Verified") {
+
+    blockchainAction.textContent =
+        "Verified";
+
+    blockchainAction.disabled =
+        true;
+
+}
+else if (blockchainStatus === "Registered") {
+
+    blockchainAction.textContent =
+        "Verify Integrity";
+
+    blockchainAction.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            verifyEvidenceOnBlockchain(
+                item.evidence_id
+            );
+
+        }
+    );
+
+}
+else {
+
+    blockchainAction.textContent =
+        blockchainStatus === "Failed"
+            ? "Retry Registration"
+            : "Register on Blockchain";
+
+    blockchainAction.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            registerEvidenceOnBlockchain(
+                item.evidence_id
+            );
+
+        }
+    );
+
+}
+
+
+info.appendChild(
+    blockchainAction
+);
+
+
+
 
     button.addEventListener(
         "click",
@@ -1794,6 +1911,192 @@ function createEvidenceCard(item) {
 
     return button;
 
+}
+
+
+/* =========================================================
+   REGISTER EVIDENCE ON BLOCKCHAIN
+========================================================= */
+
+async function registerEvidenceOnBlockchain(evidenceId) {
+
+    if (!evidenceId) {
+        return;
+    }
+
+    const url =
+        "/evidence/"
+        + encodeURIComponent(evidenceId)
+        + "/blockchain/register/";
+
+    try {
+
+        const response = await fetch(
+            url,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getReviewCsrfToken()
+                },
+
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message
+                || data.error
+                || "Blockchain registration failed."
+            );
+
+        }
+
+        window.alert(
+            data.message
+            || "Evidence successfully registered on Hyperledger Fabric."
+        );
+
+        if (activeComplaintRow) {
+
+            loadComplaintEvidence(
+                activeComplaintRow.dataset.complaintId
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Blockchain registration error:",
+            error
+        );
+
+        window.alert(
+            error.message
+            || "Unable to register evidence on the blockchain."
+        );
+
+    }
+}
+
+
+/* =========================================================
+   VERIFY EVIDENCE INTEGRITY
+========================================================= */
+
+async function verifyEvidenceOnBlockchain(evidenceId) {
+
+    if (!evidenceId) {
+        return;
+    }
+
+    const url =
+        "/evidence/"
+        + encodeURIComponent(evidenceId)
+        + "/blockchain/verify/";
+
+    try {
+
+        const response = await fetch(
+            url,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": getReviewCsrfToken()
+                },
+
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message
+                || data.error
+                || "Evidence verification failed."
+            );
+
+        }
+
+        if (data.verified) {
+
+            window.alert(
+                "Evidence integrity verified successfully."
+            );
+
+        }
+        else {
+
+            window.alert(
+                "Integrity verification failed. The current file does not match the hash registered on Hyperledger Fabric."
+            );
+
+        }
+
+        if (activeComplaintRow) {
+
+            loadComplaintEvidence(
+                activeComplaintRow.dataset.complaintId
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Evidence verification error:",
+            error
+        );
+
+        window.alert(
+            error.message
+            || "Unable to verify evidence integrity."
+        );
+
+    }
+}
+
+
+/* =========================================================
+   GET CSRF TOKEN
+========================================================= */
+
+function getReviewCsrfToken() {
+
+    const cookies =
+        document.cookie
+            .split(";")
+            .map(function (cookie) {
+                return cookie.trim();
+            });
+
+    const csrfCookie =
+        cookies.find(function (cookie) {
+            return cookie.startsWith("csrftoken=");
+        });
+
+    if (!csrfCookie) {
+        return "";
+    }
+
+    return decodeURIComponent(
+        csrfCookie.substring(
+            "csrftoken=".length
+        )
+    );
 }
 
 
@@ -2398,6 +2701,721 @@ function closeEvidencePreview() {
 
 
 /* =========================================================
+   LOAD OFFICIAL COMPLAINT DOCUMENT
+========================================================= */
+
+async function loadComplaintDocument(complaintId) {
+
+    const loading =
+        document.getElementById(
+            "reviewComplaintDocumentLoading"
+        );
+
+    const empty =
+        document.getElementById(
+            "reviewComplaintDocumentEmpty"
+        );
+
+    const container =
+        document.getElementById(
+            "reviewComplaintDocument"
+        );
+
+
+    if (
+        !loading
+        ||
+        !empty
+        ||
+        !container
+    ) {
+        return;
+    }
+
+
+    loading.hidden = false;
+    empty.hidden = true;
+    container.hidden = true;
+
+
+    if (!complaintId) {
+
+        loading.hidden = true;
+        empty.hidden = false;
+
+        return;
+    }
+
+
+    const url =
+        "/documents/complaint/"
+        +
+        encodeURIComponent(complaintId)
+        +
+        "/document/";
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+                    },
+
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok
+            ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error
+                ||
+                "Unable to load complaint document."
+            );
+        }
+
+
+        loading.hidden = true;
+
+
+        if (
+            !data.exists
+            ||
+            !data.document
+        ) {
+
+            empty.hidden = false;
+            container.hidden = true;
+
+            return;
+        }
+
+
+        renderComplaintDocument(
+            data.document
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Complaint document loading error:",
+            error
+        );
+
+
+        loading.hidden = true;
+        container.hidden = true;
+        empty.hidden = false;
+
+
+        const message =
+            empty.querySelector(
+                "span"
+            );
+
+
+        if (message) {
+
+            message.textContent =
+                error.message
+                ||
+                "Unable to load the official complaint document.";
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================================================
+   RENDER OFFICIAL COMPLAINT DOCUMENT
+========================================================= */
+
+function renderComplaintDocument(documentData) {
+
+    const container =
+        document.getElementById(
+            "reviewComplaintDocument"
+        );
+
+    const empty =
+        document.getElementById(
+            "reviewComplaintDocumentEmpty"
+        );
+
+    const fileName =
+        document.getElementById(
+            "reviewComplaintDocumentName"
+        );
+
+    const documentId =
+        document.getElementById(
+            "reviewComplaintDocumentId"
+        );
+
+    const blockchainBadge =
+        document.getElementById(
+            "reviewComplaintBlockchainStatus"
+        );
+
+    const integrityBadge =
+        document.getElementById(
+            "reviewComplaintIntegrityStatus"
+        );
+
+    const viewButton =
+        document.getElementById(
+            "reviewComplaintDocumentView"
+        );
+
+    const blockchainAction =
+        document.getElementById(
+            "reviewComplaintDocumentBlockchainAction"
+        );
+
+
+    if (
+        !container
+        ||
+        !fileName
+        ||
+        !documentId
+        ||
+        !blockchainBadge
+        ||
+        !integrityBadge
+        ||
+        !viewButton
+        ||
+        !blockchainAction
+    ) {
+        return;
+    }
+
+
+    if (empty) {
+        empty.hidden = true;
+    }
+
+
+    container.hidden = false;
+
+
+    /* =====================================================
+       BASIC DOCUMENT INFORMATION
+    ===================================================== */
+
+    fileName.textContent =
+        documentData.file_name
+        ||
+        "Official Complaint.pdf";
+
+
+    documentId.textContent =
+        "Document ID: "
+        +
+        (
+            documentData.document_id
+            ||
+            "—"
+        );
+
+
+    /* =====================================================
+       BLOCKCHAIN STATUS
+    ===================================================== */
+
+    const blockchainStatus =
+        documentData.blockchain_status
+        ||
+        "Pending";
+
+
+    blockchainBadge.textContent =
+        blockchainStatus === "Registered"
+            ? "REGISTERED"
+            : blockchainStatus === "Failed"
+                ? "REGISTRATION FAILED"
+                : "PENDING REGISTRATION";
+
+
+    blockchainBadge.dataset.status =
+        blockchainStatus.toLowerCase();
+
+
+    /* =====================================================
+       INTEGRITY STATUS
+    ===================================================== */
+
+    const integrityStatus =
+        documentData.integrity_status
+        ||
+        "Not Verified";
+
+
+    integrityBadge.textContent =
+        integrityStatus === "Verified"
+            ? "VERIFIED"
+            : integrityStatus === "Failed"
+                ? "INTEGRITY FAILED"
+                : "NOT VERIFIED";
+
+
+    integrityBadge.dataset.status =
+        integrityStatus
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+
+
+    /* =====================================================
+       VIEW PDF
+    ===================================================== */
+
+    if (documentData.file_url) {
+
+        viewButton.href =
+            documentData.file_url;
+
+        viewButton.hidden =
+            false;
+
+    }
+    else {
+
+        viewButton.href =
+            "#";
+
+        viewButton.hidden =
+            true;
+
+    }
+
+
+    /* =====================================================
+       RESET BLOCKCHAIN BUTTON
+    ===================================================== */
+
+    const freshButton =
+        blockchainAction.cloneNode(
+            true
+        );
+
+
+    blockchainAction.parentNode.replaceChild(
+        freshButton,
+        blockchainAction
+    );
+
+
+    /* =====================================================
+       VERIFIED
+    ===================================================== */
+
+    if (integrityStatus === "Verified") {
+
+        freshButton.textContent =
+            "Verified";
+
+        freshButton.disabled =
+            true;
+
+        freshButton.dataset.state =
+            "verified";
+
+        return;
+    }
+
+
+    /* =====================================================
+       REGISTERED -> VERIFY
+    ===================================================== */
+
+    if (blockchainStatus === "Registered") {
+
+        freshButton.textContent =
+            integrityStatus === "Failed"
+                ? "Verify Again"
+                : "Verify Integrity";
+
+
+        freshButton.disabled =
+            false;
+
+
+        freshButton.dataset.state =
+            "verify";
+
+
+        freshButton.addEventListener(
+            "click",
+            function () {
+
+                verifyComplaintDocument(
+                    documentData.document_id,
+                    freshButton
+                );
+
+            }
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================================
+       PENDING / FAILED -> REGISTER
+    ===================================================== */
+
+    freshButton.textContent =
+        blockchainStatus === "Failed"
+            ? "Retry Registration"
+            : "Register on Blockchain";
+
+
+    freshButton.disabled =
+        false;
+
+
+    freshButton.dataset.state =
+        "register";
+
+
+    freshButton.addEventListener(
+        "click",
+        function () {
+
+            registerComplaintDocument(
+                documentData.document_id,
+                freshButton
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   REGISTER COMPLAINT DOCUMENT ON BLOCKCHAIN
+========================================================= */
+
+async function registerComplaintDocument(
+    documentId,
+    button
+) {
+
+    if (!documentId) {
+        return;
+    }
+
+
+    const originalText =
+        button
+            ? button.textContent
+            : "";
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Registering...";
+
+    }
+
+
+    const url =
+        "/documents/complaint/"
+        +
+        encodeURIComponent(documentId)
+        +
+        "/blockchain/register/";
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "X-Requested-With":
+                            "XMLHttpRequest",
+
+                        "X-CSRFToken":
+                            getReviewCsrfToken()
+
+                    },
+
+                    credentials:
+                        "same-origin"
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok
+            ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error
+                ||
+                data.message
+                ||
+                "Complaint document registration failed."
+            );
+        }
+
+
+        window.alert(
+            data.message
+            ||
+            "Complaint PDF successfully registered on Hyperledger Fabric."
+        );
+
+
+        reloadActiveComplaintDocument();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Complaint document blockchain registration error:",
+            error
+        );
+
+
+        window.alert(
+            error.message
+            ||
+            "Unable to register the complaint document."
+        );
+
+
+        reloadActiveComplaintDocument();
+
+    }
+
+    finally {
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                originalText;
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================================================
+   VERIFY COMPLAINT DOCUMENT INTEGRITY
+========================================================= */
+
+async function verifyComplaintDocument(
+    documentId,
+    button
+) {
+
+    if (!documentId) {
+        return;
+    }
+
+
+    const originalText =
+        button
+            ? button.textContent
+            : "";
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Verifying...";
+
+    }
+
+
+    const url =
+        "/documents/complaint/"
+        +
+        encodeURIComponent(documentId)
+        +
+        "/blockchain/verify/";
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "X-Requested-With":
+                            "XMLHttpRequest",
+
+                        "X-CSRFToken":
+                            getReviewCsrfToken()
+
+                    },
+
+                    credentials:
+                        "same-origin"
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok
+            ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error
+                ||
+                data.message
+                ||
+                "Complaint document verification failed."
+            );
+        }
+
+
+        if (data.verified) {
+
+            window.alert(
+                "Complaint PDF integrity verified successfully."
+            );
+
+        }
+        else {
+
+            window.alert(
+                "Integrity verification failed. "
+                +
+                "The current PDF does not match the hash registered on Fabric."
+            );
+
+        }
+
+
+        reloadActiveComplaintDocument();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Complaint document verification error:",
+            error
+        );
+
+
+        window.alert(
+            error.message
+            ||
+            "Unable to verify the complaint document."
+        );
+
+
+        reloadActiveComplaintDocument();
+
+    }
+
+    finally {
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                originalText;
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================================================
+   RELOAD ACTIVE COMPLAINT DOCUMENT
+========================================================= */
+
+function reloadActiveComplaintDocument() {
+
+    if (
+        !activeComplaintRow
+        ||
+        !activeComplaintRow.dataset.complaintId
+    ) {
+        return;
+    }
+
+
+    loadComplaintDocument(
+        activeComplaintRow.dataset.complaintId
+    );
+
+}
+
+
+/* =========================================================
    CLOSE COMPLAINT REVIEW
 ========================================================= */
 
@@ -2441,6 +3459,52 @@ function closeComplaintReview() {
 
     activeComplaintRow =
         null;
+
+
+
+
+      /* =====================================================
+   RESET OFFICIAL COMPLAINT DOCUMENT
+===================================================== */
+
+const complaintDocument =
+    document.getElementById(
+        "reviewComplaintDocument"
+    );
+
+const complaintDocumentLoading =
+    document.getElementById(
+        "reviewComplaintDocumentLoading"
+    );
+
+const complaintDocumentEmpty =
+    document.getElementById(
+        "reviewComplaintDocumentEmpty"
+    );
+
+
+if (complaintDocument) {
+
+    complaintDocument.hidden =
+        true;
+
+}
+
+
+if (complaintDocumentLoading) {
+
+    complaintDocumentLoading.hidden =
+        true;
+
+}
+
+
+if (complaintDocumentEmpty) {
+
+    complaintDocumentEmpty.hidden =
+        true;
+
+}  
 
 
     /* =====================================================

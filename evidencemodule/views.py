@@ -13,6 +13,18 @@ from django.views.decorators.http import require_GET
 from .models import Evidence
 
 
+from django.utils import timezone
+from django.views.decorators.http import require_POST
+
+from .services.fabric_service import (
+    FabricServiceError,
+    register_document,
+    get_document,
+    verify_document,
+)
+
+from .services.hashing import calculate_file_hash
+
 # =========================================================
 # EVIDENCE MANAGEMENT / LIST
 # =========================================================
@@ -485,3 +497,247 @@ def evidence_delete(request, evidence_id):
             "evidence": evidence
         }
     )
+
+
+# =========================================================
+# REGISTER EVIDENCE ON BLOCKCHAIN
+# =========================================================
+
+@require_POST
+def register_evidence_blockchain(request, evidence_id):
+
+    evidence = get_object_or_404(
+        Evidence,
+        evidence_id=evidence_id
+    )
+
+    document_id = f"EVD-{evidence.evidence_id}"
+
+    try:
+        # Check if it already exists on Fabric.
+        try:
+            blockchain_document = get_document(document_id)
+        except FabricServiceError:
+            blockchain_document = None
+
+        # Already registered on Fabric.
+        if blockchain_document:
+
+            blockchain_hash = blockchain_document.get(
+                "fileHash",
+                ""
+            )
+
+            if blockchain_hash != evidence.file_hash:
+
+                evidence.blockchain_status = "Failed"
+
+                evidence.save(
+                    update_fields=[
+                        "blockchain_status"
+                    ]
+                )
+
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "error": (
+                            "This evidence ID already exists "
+                            "on Fabric with a different hash."
+                        ),
+                    },
+                    status=409,
+                )
+
+            evidence.blockchain_status = "Registered"
+            evidence.blockchain_registered_at = timezone.now()
+
+            evidence.save(
+                update_fields=[
+                    "blockchain_status",
+                    "blockchain_registered_at",
+                ]
+            )
+
+            return JsonResponse(
+                {
+                    "success": True,
+                    "already_registered": True,
+                    "document_id": document_id,
+                    "message": (
+                        "Evidence already exists on Fabric "
+                        "and the stored hash matches."
+                    ),
+                }
+            )
+
+        # New Fabric registration.
+        registered_by = (
+            request.session.get("username")
+            or request.session.get("user_id")
+            or "system"
+        )
+
+        result = register_document(
+            document_id=document_id,
+            complaint_id=evidence.complaint_id,
+            document_type="EVIDENCE",
+            file_name=evidence.file_name,
+            file_hash=evidence.file_hash,
+            registered_by=registered_by,
+        )
+
+        evidence.blockchain_status = "Registered"
+
+        evidence.blockchain_tx_id = result.get(
+            "transactionId"
+        )
+
+        evidence.blockchain_registered_at = timezone.now()
+
+        evidence.save(
+            update_fields=[
+                "blockchain_status",
+                "blockchain_tx_id",
+                "blockchain_registered_at",
+            ]
+        )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "already_registered": False,
+                "document_id": document_id,
+                "transaction_id": evidence.blockchain_tx_id,
+                "message": (
+                    "Evidence successfully registered "
+                    "on Hyperledger Fabric."
+                ),
+            }
+        )
+
+    except FabricServiceError as error:
+
+        evidence.blockchain_status = "Failed"
+
+        evidence.save(
+            update_fields=[
+                "blockchain_status"
+            ]
+        )
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": str(error),
+            },
+            status=502,
+        )
+
+    # =========================================================
+# VERIFY EVIDENCE INTEGRITY
+# =========================================================
+
+@require_POST
+def verify_evidence_integrity(request, evidence_id):
+
+    evidence = get_object_or_404(
+        Evidence,
+        evidence_id=evidence_id
+    )
+
+    document_id = f"EVD-{evidence.evidence_id}"
+
+    if evidence.blockchain_status != "Registered":
+        return JsonResponse(
+            {
+                "success": False,
+                "error": (
+                    "Evidence must be registered on "
+                    "Fabric before verification."
+                ),
+            },
+            status=400,
+        )
+
+    if not evidence.file_path:
+        return JsonResponse(
+            {
+                "success": False,
+                "error": "Evidence file path is missing.",
+            },
+            status=400,
+        )
+
+    # Convert:
+    # /media/evidence/complaint_19/file.jpg
+    #
+    # into:
+    # evidence/complaint_19/file.jpg
+
+    relative_path = (
+        str(evidence.file_path)
+        .replace("/media/", "", 1)
+        .lstrip("/\\")
+    )
+
+    physical_path = os.path.join(
+        settings.MEDIA_ROOT,
+        relative_path
+    )
+
+    if not os.path.isfile(physical_path):
+        return JsonResponse(
+            {
+                "success": False,
+                "error": "Evidence file could not be found.",
+            },
+            status=404,
+        )
+
+    try:
+        # Hash the ACTUAL current file.
+        current_hash = calculate_file_hash(
+            physical_path
+        )
+
+        verified = verify_document(
+            document_id,
+            current_hash,
+        )
+
+        evidence.last_verified_at = timezone.now()
+
+        if verified:
+            evidence.integrity_status = "Verified"
+        else:
+            evidence.integrity_status = "Failed"
+
+        evidence.save(
+            update_fields=[
+                "integrity_status",
+                "last_verified_at",
+            ]
+        )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "document_id": document_id,
+                "verified": verified,
+                "integrity_status": evidence.integrity_status,
+                "current_hash": current_hash,
+                "last_verified_at":
+                    evidence.last_verified_at.isoformat(),
+            }
+        )
+
+    except FabricServiceError as error:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": str(error),
+            },
+            status=502,
+        )

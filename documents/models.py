@@ -2,6 +2,10 @@ from django.db import models
 from registration.models import Resident
 
 
+# =====================================================
+# DOCUMENT TYPE
+# =====================================================
+
 class DocumentType(models.Model):
 
     document_type_id = models.AutoField(
@@ -41,6 +45,10 @@ class DocumentType(models.Model):
         return self.type_name
 
 
+# =====================================================
+# DOCUMENT
+# =====================================================
+
 class Document(models.Model):
 
     document_id = models.AutoField(
@@ -64,6 +72,7 @@ class Document(models.Model):
     document_number = models.CharField(
         max_length=100
     )
+
     notes = models.TextField(
         null=True,
         blank=True
@@ -112,3 +121,85 @@ class Document(models.Model):
 
     def __str__(self):
         return self.document_number
+
+
+# =====================================================
+# COMPLAINT DOCUMENT
+# =====================================================
+
+class ComplaintDocument(models.Model):
+
+    BLOCKCHAIN_STATUS_CHOICES = [
+        ("Pending", "Pending Registration"),
+        ("Registered", "Registered"),
+        ("Failed", "Registration Failed"),
+    ]
+
+    INTEGRITY_STATUS_CHOICES = [
+        ("Not Verified", "Not Verified"),
+        ("Verified", "Verified"),
+        ("Failed", "Integrity Check Failed"),
+    ]
+
+    document_id = models.AutoField(
+        primary_key=True
+    )
+
+    complaint_id = models.IntegerField(
+        db_index=True
+    )
+
+    document_type = models.CharField(
+        max_length=50,
+        default="COMPLAINT"
+    )
+
+    file_name = models.CharField(
+        max_length=255
+    )
+
+    file_path = models.CharField(
+        max_length=500
+    )
+
+    file_hash = models.CharField(
+        max_length=64
+    )
+
+    blockchain_status = models.CharField(
+        max_length=20,
+        choices=BLOCKCHAIN_STATUS_CHOICES,
+        default="Pending"
+    )
+
+    blockchain_tx_id = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
+
+    blockchain_registered_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    integrity_status = models.CharField(
+        max_length=20,
+        choices=INTEGRITY_STATUS_CHOICES,
+        default="Not Verified"
+    )
+
+    last_verified_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    generated_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        db_table = "complaint_documents"
+
+    def __str__(self):
+        return self.file_name
