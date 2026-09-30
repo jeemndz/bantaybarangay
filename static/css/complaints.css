@@ -1550,6 +1550,280 @@ body.complaint-review-open {
 
 
 /* =========================================================
+   OFFICIAL COMPLAINT DOCUMENT
+========================================================= */
+
+.complaint-document {
+    width: 100%;
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #e1e9e5;
+    border-radius: 9px;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   DOCUMENT MAIN
+========================================================= */
+
+.complaint-document-main {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.complaint-document-icon {
+    width: 40px;
+    height: 44px;
+
+    flex: 0 0 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #e4f3e9;
+    color: #34735c;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+}
+
+.complaint-document-info {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.complaint-document-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: #33483f;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.complaint-document-info span {
+    color: #87928d;
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   DOCUMENT STATUS
+========================================================= */
+
+.complaint-document-status-grid {
+    margin-top: 11px;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.complaint-document-status {
+    min-width: 0;
+    padding: 9px 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    border: 1px solid #e1e9e5;
+    border-radius: 8px;
+
+    background: #f7faf8;
+}
+
+.complaint-document-status > span {
+    color: #85928d;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.complaint-document-badge {
+    width: fit-content;
+
+    padding: 4px 7px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+
+/* Registered / Verified */
+
+.complaint-document-badge[data-status="registered"],
+.complaint-document-badge[data-status="verified"] {
+    background: #dff3ed;
+    color: #31745c;
+}
+
+
+/* Pending / Not Verified */
+
+.complaint-document-badge[data-status="pending"],
+.complaint-document-badge[data-status="not-verified"] {
+    background: #fff4da;
+    color: #9b7b3c;
+}
+
+
+/* Failed */
+
+.complaint-document-badge[data-status="failed"],
+.complaint-document-badge[data-status="registration-failed"],
+.complaint-document-badge[data-status="integrity-failed"] {
+    background: #fdeaea;
+    color: #c45a5a;
+}
+
+
+/* =========================================================
+   DOCUMENT ACTIONS
+========================================================= */
+
+.complaint-document-actions {
+    margin-top: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.complaint-document-button {
+    min-height: 31px;
+    padding: 0 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    box-sizing: border-box;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 600;
+
+    line-height: 1;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+
+/* View PDF */
+
+.complaint-document-button.secondary {
+    border: 1px solid #d7e1dc;
+
+    background: #ffffff;
+    color: #315e50;
+}
+
+.complaint-document-button.secondary:hover {
+    border-color: #a8c9b8;
+
+    background: #eef7f2;
+    color: #284e40;
+
+    text-decoration: none;
+}
+
+
+/* Blockchain action */
+
+.complaint-document-button.primary {
+    border: 1px solid #427866;
+
+    background: #427866;
+    color: #ffffff;
+}
+
+.complaint-document-button.primary:hover {
+    border-color: #315e50;
+
+    background: #315e50;
+}
+
+
+/* Disabled / Already Verified */
+
+.complaint-document-button:disabled {
+    border: 1px solid #dce6e1;
+
+    background: #f4f8f5;
+    color: #87928d;
+
+    cursor: default;
+}
+
+
+/* =========================================================
+   OFFICIAL COMPLAINT DOCUMENT - MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .complaint-document-status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .complaint-document-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .complaint-document-button {
+        width: 100%;
+    }
+}
+
+/* =========================================================
    EVIDENCE LOADING
 ========================================================= */
 
@@ -3014,4 +3288,150 @@ body.complaint-review-open {
 
         font-size: 14px;
     }
+}
+
+
+/* =========================================================
+   OFFICIAL COMPLAINT DOCUMENT
+========================================================= */
+
+.complaint-document {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px;
+    background: #ffffff;
+}
+
+.complaint-document-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.complaint-document-icon {
+    width: 48px;
+    height: 52px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #f3f4f6;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.complaint-document-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.complaint-document-info strong {
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.complaint-document-info span {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.complaint-document-status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.complaint-document-status {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.complaint-document-status > span {
+    color: #6b7280;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.complaint-document-badge {
+    font-size: 12px;
+}
+
+.complaint-document-badge[data-status="registered"],
+.complaint-document-badge[data-status="verified"] {
+    color: #15803d;
+}
+
+.complaint-document-badge[data-status="failed"],
+.complaint-document-badge[data-status="registration-failed"],
+.complaint-document-badge[data-status="integrity-failed"] {
+    color: #b91c1c;
+}
+
+.complaint-document-badge[data-status="pending"],
+.complaint-document-badge[data-status="not-verified"] {
+    color: #92400e;
+}
+
+.complaint-document-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.complaint-document-button {
+    border: 0;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.complaint-document-button.secondary {
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+}
+
+.complaint-document-button.primary {
+    background: #111827;
+    color: #ffffff;
+}
+
+.complaint-document-button:disabled {
+    cursor: default;
+    opacity: .65;
+}
+
+@media (max-width: 640px) {
+
+    .complaint-document-status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .complaint-document-actions {
+        justify-content: stretch;
+    }
+
+    .complaint-document-button {
+        flex: 1;
+        text-align: center;
+    }
+
+
+
 }

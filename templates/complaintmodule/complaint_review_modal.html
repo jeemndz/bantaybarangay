@@ -413,12 +413,192 @@
 
 
                 <div
-                    id="reviewEvidenceGrid"
-                    class="review-evidence-grid"
-                    hidden
-                ></div>
+    id="reviewEvidenceGrid"
+    class="review-evidence-grid"
+    hidden
+></div>
 
-            </section>
+</section>
+
+
+<!-- =================================================
+     OFFICIAL COMPLAINT DOCUMENT
+================================================== -->
+
+<section class="review-card complaint-document-card">
+
+    <div class="review-card-heading">
+
+        <div class="review-heading-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+            >
+                <path
+                    d="M7 3.5h7l4 4v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"
+                />
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14 3.5v4h4M8.5 12h7M8.5 15.5h5"
+                />
+            </svg>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                Official Complaint Document
+            </h3>
+
+            <p>
+                Generated official complaint record and blockchain integrity status.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div
+        id="reviewComplaintDocumentLoading"
+        class="review-evidence-loading"
+        hidden
+    >
+
+        <span class="evidence-loading-spinner"></span>
+
+        <span>
+            Loading official document...
+        </span>
+
+    </div>
+
+
+    <!-- NO DOCUMENT -->
+
+    <div
+        id="reviewComplaintDocumentEmpty"
+        class="review-evidence-empty"
+        hidden
+    >
+
+        <strong>
+            No official document generated
+        </strong>
+
+        <span>
+            An official complaint PDF has not been generated for this complaint.
+        </span>
+
+    </div>
+
+
+    <!-- DOCUMENT -->
+
+    <div
+        id="reviewComplaintDocument"
+        class="complaint-document"
+        hidden
+    >
+
+        <div class="complaint-document-main">
+
+            <div class="complaint-document-icon">
+                PDF
+            </div>
+
+
+            <div class="complaint-document-info">
+
+                <strong id="reviewComplaintDocumentName">
+                    —
+                </strong>
+
+                <span id="reviewComplaintDocumentId">
+                    —
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="complaint-document-status-grid">
+
+            <div class="complaint-document-status">
+
+                <span>
+                    Blockchain
+                </span>
+
+                <strong
+                    id="reviewComplaintBlockchainStatus"
+                    class="complaint-document-badge"
+                >
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="complaint-document-status">
+
+                <span>
+                    Integrity
+                </span>
+
+                <strong
+                    id="reviewComplaintIntegrityStatus"
+                    class="complaint-document-badge"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="complaint-document-actions">
+
+            <a
+                id="reviewComplaintDocumentView"
+                class="complaint-document-button secondary"
+                href="#"
+                target="_blank"
+                rel="noopener"
+            >
+                View PDF
+            </a>
+
+
+            <button
+                type="button"
+                id="reviewComplaintDocumentBlockchainAction"
+                class="complaint-document-button primary"
+            >
+                Register on Blockchain
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     PROCESSING
+================================================== -->
 
 
             <!-- =================================================

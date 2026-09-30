@@ -21,13 +21,19 @@ class Complaint(models.Model):
     ]
 
     STATUS_CHOICES = [
-        ("Submitted", "Submitted"),
-        ("Under Review", "Under Review"),
-        ("Under Investigation", "Under Investigation"),
-        ("Resolved", "Resolved"),
-        ("Rejected", "Rejected"),
-        ("Closed", "Closed"),
-    ]
+    ("Submitted", "Submitted"),
+    ("Under Review", "Under Review"),
+    ("Summons Issued", "Summons Issued"),
+    ("Hearing Scheduled", "Hearing Scheduled"),
+    ("Under Mediation", "Under Mediation"),
+    ("For Verification", "For Verification"),
+    ("Settled", "Settled"),
+    ("For Document Released", "For Document Released"),
+    ("Referred", "Referred"),
+    ("Resolved", "Resolved"),
+    ("Rejected", "Rejected"),
+    ("Closed", "Closed"),
+]
 
 
     # =====================================================
@@ -212,18 +218,26 @@ class Complaint(models.Model):
     def workflow_group(self):
 
         if self.status in [
-            "Submitted",
-            "Under Review",
+        "Submitted",
+        "Under Review",
         ]:
             return "new"
 
-        if self.status == "Under Investigation":
+        if self.status in [
+        "Summons Issued",
+        "Hearing Scheduled",
+        "Under Mediation",
+        "For Verification",
+        "Settled",
+        "For Document Released",
+        "Referred",
+        ]:
             return "ongoing"
 
         if self.status in [
-            "Resolved",
-            "Rejected",
-            "Closed",
+        "Resolved",
+        "Rejected",
+        "Closed",
         ]:
             return "completed"
 
