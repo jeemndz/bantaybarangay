@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 
 <head>
 
@@ -12,9 +12,57 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="color-scheme"
+        content="light"
+    >
+
+    <meta
+        name="theme-color"
+        content="#064e3b"
+    >
+
     <title>
         Review & Submit | BantayBarangay
     </title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'images/logo.png' %}"
+    >
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        barangay: {
+                            50: "#f0fdf4",
+                            100: "#dcfce7",
+                            200: "#bbf7d0",
+                            300: "#86efac",
+                            400: "#4ade80",
+                            500: "#22c55e",
+                            600: "#16a34a",
+                            700: "#15803d",
+                            800: "#166534",
+                            900: "#14532d",
+                            950: "#052e16"
+                        }
+                    },
+
+                    boxShadow: {
+                        soft:
+                            "0 20px 60px rgba(15, 23, 42, 0.08)"
+                    }
+                }
+            }
+        };
+    </script>
 
     <link
         rel="stylesheet"
@@ -24,190 +72,796 @@
 </head>
 
 
-<body>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
 
 
-<div class="review-page">
+<div
+    class="
+        registration-page
+        min-h-screen
+        lg:grid
+        lg:grid-cols-[0.9fr_1.1fr]
+    "
+>
 
 
-    <!-- ===================================================== -->
-    <!-- LEFT SIDE -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         LEFT PANEL
+    ====================================================== -->
 
-    <section class="review-left">
+    <aside
+        class="
+            registration-hero
+            relative
+            hidden
+            min-h-screen
+            overflow-hidden
+            lg:flex
+            lg:flex-col
+            lg:justify-between
+            lg:p-10
+            xl:p-14
+        "
+        data-background="{% static 'images/registration-background.jpg' %}"
+    >
+
+        <div class="network-pattern"></div>
+
+        <div class="hero-glow hero-glow-one"></div>
+        <div class="hero-glow hero-glow-two"></div>
 
 
-        <div class="left-content">
+        <!-- BRAND -->
 
+        <div class="relative z-10">
 
-            <!-- BRAND -->
+            <div class="inline-flex items-center gap-4">
 
-            <div class="brand">
+                <div
+                    class="
+                        flex
+                        h-[72px]
+                        w-[72px]
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        border
+                        border-white/10
+                        bg-white/10
+                        p-2
+                        shadow-xl
+                        backdrop-blur-sm
+                    "
+                >
 
-                <div class="brand-logo">
-
-                    <div class="shield-icon">
-                        ♙
-                    </div>
+                    <img
+                        src="{% static 'images/logo.png' %}"
+                        alt="BantayBarangay Logo"
+                        class="h-full w-full object-contain"
+                    >
 
                 </div>
 
-                <div class="brand-text">
-
-                    <h1>BantayBarangay</h1>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- COMMUNITY -->
-
-            <div class="community-content">
-
-                <h2>
-                    Join the<br>
-                    Community
-                </h2>
-
-
-                <p>
-
-                    Your registration ensures a secure,
-                    transparent, and verified community
-                    ecosystem. Powered by advanced blockchain
-                    verification to protect your identity.
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- LEFT FOOTER -->
-
-        <div class="left-security">
-
-
-            <div class="security-line"></div>
-
-
-            <div class="security-content">
-
-                <span class="security-icon">
-                    ✦
-                </span>
 
                 <div>
 
-                    <strong>
-                        Secure Decentralized Identity
-                    </strong>
-
-                    <small>
-                        End-to-end encrypted data transmission.
-                    </small>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- ===================================================== -->
-    <!-- RIGHT SIDE -->
-    <!-- ===================================================== -->
-
-    <section class="review-right">
-
-
-        <div class="review-container">
-
-
-            <!-- ================================================= -->
-            <!-- HEADER -->
-            <!-- ================================================= -->
-
-            <div class="review-header">
-
-                <div>
-
-                    <div class="step-label">
-                        STEP 4 OF 4
-                    </div>
-
-                    <h1>
-                        Review & Submit
+                    <h1
+                        class="
+                            text-2xl
+                            font-extrabold
+                            tracking-[0.16em]
+                            text-white
+                        "
+                    >
+                        BANTAY
                     </h1>
 
-                </div>
+                    <p
+                        class="
+                            mt-0.5
+                            text-sm
+                            font-medium
+                            tracking-[0.14em]
+                            text-emerald-200/80
+                        "
+                    >
+                        BARANGAY
+                    </p>
 
-
-                <div class="percentage">
-                    100%
                 </div>
 
             </div>
 
+        </div>
 
 
-            <!-- PROGRESS BAR -->
+        <!-- HERO CONTENT -->
 
-            <div class="progress-bar">
+        <div
+            class="
+                relative
+                z-10
+                my-auto
+                max-w-xl
+                py-16
+            "
+        >
 
-                <div class="progress-fill"></div>
+            <div
+                class="
+                    mb-7
+                    inline-flex
+                    items-center
+                    gap-2.5
+                    rounded-full
+                    border
+                    border-emerald-300/20
+                    bg-emerald-300/10
+                    px-4
+                    py-2
+                    text-xs
+                    font-semibold
+                    uppercase
+                    tracking-[0.12em]
+                    text-emerald-100
+                    backdrop-blur-md
+                "
+            >
+
+                <span class="relative flex h-2 w-2">
+
+                    <span
+                        class="
+                            absolute
+                            inline-flex
+                            h-full
+                            w-full
+                            animate-ping
+                            rounded-full
+                            bg-emerald-300
+                            opacity-75
+                        "
+                    ></span>
+
+                    <span
+                        class="
+                            relative
+                            inline-flex
+                            h-2
+                            w-2
+                            rounded-full
+                            bg-emerald-300
+                        "
+                    ></span>
+
+                </span>
+
+                Final Registration Step
 
             </div>
 
 
-            <p class="review-description">
+            <h2
+                class="
+                    max-w-lg
+                    text-4xl
+                    font-bold
+                    leading-[1.15]
+                    tracking-tight
+                    text-white
+                    xl:text-5xl
+                "
+            >
 
-                Review your information carefully before
-                submitting your registration.
+                Review before you
 
+                <span class="block text-emerald-300">
+                    submit.
+                </span>
+
+            </h2>
+
+
+            <p
+                class="
+                    mt-6
+                    max-w-lg
+                    text-base
+                    leading-8
+                    text-emerald-50/70
+                    xl:text-lg
+                "
+            >
+                Check your personal information, contact details,
+                address, and verification documents before completing
+                your BantayBarangay registration.
             </p>
 
 
+            <!-- BENEFITS -->
 
-            <!-- ================================================= -->
-            <!-- PERSONAL INFORMATION -->
-            <!-- ================================================= -->
-
-            <div class="review-card">
+            <div class="mt-10 space-y-5">
 
 
-                <div class="card-header">
+                <div class="flex items-start gap-4">
 
-                    <h2>
-                        Personal Information
-                    </h2>
+                    <div class="benefit-icon">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m4.5 12.75 6 6 9-13.5"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-sm font-semibold text-white xl:text-base">
+                            Verify your information
+                        </p>
+
+                        <p
+                            class="
+                                mt-1
+                                text-sm
+                                leading-6
+                                text-emerald-50/50
+                            "
+                        >
+                            Review all information before sending
+                            your registration for verification.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex items-start gap-4">
+
+                    <div class="benefit-icon">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M16.5 10.5V6.75a4.5 4.5 0 0 0-9 0v3.75m-.75 0h10.5A2.25 2.25 0 0 1 19.5 12.75v6A2.25 2.25 0 0 1 17.25 21H6.75A2.25 2.25 0 0 1 4.5 18.75v-6A2.25 2.25 0 0 1 6.75 10.5Z"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-sm font-semibold text-white xl:text-base">
+                            Secure submission
+                        </p>
+
+                        <p
+                            class="
+                                mt-1
+                                text-sm
+                                leading-6
+                                text-emerald-50/50
+                            "
+                        >
+                            Your registration information is submitted
+                            for resident verification.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex items-start gap-4">
+
+                    <div class="benefit-icon">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-sm font-semibold text-white xl:text-base">
+                            Barangay verification
+                        </p>
+
+                        <p
+                            class="
+                                mt-1
+                                text-sm
+                                leading-6
+                                text-emerald-50/50
+                            "
+                        >
+                            Your registration can be reviewed by the
+                            barangay administrator after submission.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div
+            class="
+                relative
+                z-10
+                flex
+                items-center
+                gap-2
+                text-xs
+                text-emerald-50/40
+            "
+        >
+
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.7"
+                stroke="currentColor"
+                class="h-4 w-4"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 0 0-9 0v3.75m-.75 0h10.5A2.25 2.25 0 0 1 19.5 12.75v6A2.25 2.25 0 0 1 17.25 21H6.75A2.25 2.25 0 0 1 4.5 18.75v-6A2.25 2.25 0 0 1 6.75 10.5Z"
+                />
+            </svg>
+
+            <span>
+                © 2026 BantayBarangay. Secure Registration
+            </span>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         RIGHT PANEL
+    ====================================================== -->
+
+    <main
+        class="
+            min-h-screen
+            bg-slate-50
+            px-5
+            py-8
+            sm:px-8
+            lg:px-12
+            lg:py-12
+            xl:px-16
+        "
+    >
+
+        <div class="mx-auto w-full max-w-2xl">
+
+
+            <!-- MOBILE BRAND -->
+
+            <div
+                class="
+                    mb-9
+                    flex
+                    items-center
+                    gap-3
+                    lg:hidden
+                "
+            >
+
+                <div
+                    class="
+                        flex
+                        h-14
+                        w-14
+                        items-center
+                        justify-center
+                        rounded-xl
+                        bg-emerald-950
+                        p-1.5
+                        shadow-md
+                    "
+                >
+
+                    <img
+                        src="{% static 'images/logo.png' %}"
+                        alt="BantayBarangay Logo"
+                        class="h-full w-full object-contain"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <p
+                        class="
+                            font-extrabold
+                            tracking-[0.13em]
+                            text-emerald-950
+                        "
+                    >
+                        BANTAY
+                    </p>
+
+                    <p
+                        class="
+                            text-xs
+                            font-medium
+                            tracking-wider
+                            text-slate-500
+                        "
+                    >
+                        BARANGAY
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <header>
+
+                <div
+                    class="
+                        mb-3
+                        inline-flex
+                        items-center
+                        gap-2
+                        text-sm
+                        font-semibold
+                        text-emerald-700
+                    "
+                >
+
+                    <span
+                        class="
+                            flex
+                            h-6
+                            w-6
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-emerald-100
+                            text-xs
+                        "
+                    >
+                        4
+                    </span>
+
+                    Account Registration
+
+                </div>
+
+
+                <h1
+                    class="
+                        text-3xl
+                        font-bold
+                        tracking-tight
+                        text-slate-900
+                        sm:text-4xl
+                    "
+                >
+                    Review &amp; Submit
+                </h1>
+
+
+                <p
+                    class="
+                        mt-3
+                        max-w-xl
+                        text-sm
+                        leading-6
+                        text-slate-500
+                        sm:text-base
+                    "
+                >
+                    Review your information carefully before
+                    submitting your registration.
+                </p>
+
+            </header>
+
+
+            <!-- =================================================
+                 PROGRESS
+            ================================================== -->
+
+            <section
+                class="
+                    mt-8
+                    rounded-2xl
+                    border
+                    border-slate-200
+                    bg-white
+                    p-5
+                    shadow-sm
+                "
+            >
+
+                <div
+                    class="
+                        mb-4
+                        flex
+                        items-center
+                        justify-between
+                        gap-4
+                    "
+                >
+
+                    <div>
+
+                        <p
+                            class="
+                                text-xs
+                                font-semibold
+                                uppercase
+                                tracking-wider
+                                text-slate-400
+                            "
+                        >
+                            Registration Progress
+                        </p>
+
+                        <p
+                            class="
+                                mt-1
+                                text-sm
+                                font-semibold
+                                text-slate-800
+                            "
+                        >
+                            Final Review
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="
+                            shrink-0
+                            rounded-full
+                            bg-emerald-50
+                            px-3
+                            py-1.5
+                            text-xs
+                            font-bold
+                            text-emerald-700
+                        "
+                    >
+                        Step 4 of 4
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="
+                        h-2
+                        overflow-hidden
+                        rounded-full
+                        bg-slate-100
+                    "
+                >
+
+                    <div
+                        class="
+                            h-full
+                            w-full
+                            rounded-full
+                            bg-emerald-700
+                        "
+                    ></div>
+
+                </div>
+
+
+                <div
+                    class="
+                        mt-3
+                        grid
+                        grid-cols-4
+                        gap-1
+                        text-[10px]
+                        font-medium
+                        text-emerald-700
+                        sm:text-[11px]
+                    "
+                >
+
+                    <span class="text-left">
+                        Personal
+                    </span>
+
+                    <span class="text-center">
+                        Contact
+                    </span>
+
+                    <span class="text-center">
+                        Verification
+                    </span>
+
+                    <span class="text-right">
+                        Complete
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ERROR
+            ================================================== -->
+
+            {% if error %}
+
+                <div
+                    class="
+                        mt-6
+                        flex
+                        items-start
+                        gap-3
+                        rounded-xl
+                        border
+                        border-red-200
+                        bg-red-50
+                        p-4
+                        text-sm
+                        text-red-700
+                    "
+                    role="alert"
+                >
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="mt-0.5 h-5 w-5 shrink-0"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                        />
+                    </svg>
+
+
+                    <div>
+
+                        <p class="font-semibold">
+                            Registration Error
+                        </p>
+
+                        <p class="mt-1">
+                            {{ error }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 PERSONAL INFORMATION
+            ================================================== -->
+
+            <section class="review-card">
+
+                <div class="review-card-header">
+
+                    <div class="review-card-title">
+
+                        <div class="review-card-icon">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Personal Information
+                            </h2>
+
+                            <p>
+                                Your basic resident information
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
                     <a
                         href="{% url 'registration' %}"
                         class="edit-link"
                     >
-                        ✎ Edit
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                            />
+                        </svg>
+
+                        Edit
+
                     </a>
 
                 </div>
 
 
-
                 <div class="information-grid">
-
-
-                    <!-- FULL NAME -->
 
                     <div class="information-item">
 
@@ -222,9 +876,6 @@
                     </div>
 
 
-
-                    <!-- DATE OF BIRTH -->
-
                     <div class="information-item">
 
                         <span class="information-label">
@@ -237,9 +888,6 @@
 
                     </div>
 
-
-
-                    <!-- GENDER -->
 
                     <div class="information-item">
 
@@ -254,9 +902,6 @@
                     </div>
 
 
-
-                    <!-- CIVIL STATUS -->
-
                     <div class="information-item">
 
                         <span class="information-label">
@@ -270,42 +915,94 @@
                     </div>
 
 
+                    <div class="information-item information-full">
+
+                        <span class="information-label">
+                            Username
+                        </span>
+
+                        <strong>
+                            {{ registration_data.username|default:"Not provided" }}
+                        </strong>
+
+                    </div>
+
                 </div>
 
-
-            </div>
-
+            </section>
 
 
-            <!-- ================================================= -->
-            <!-- CONTACT & ADDRESS -->
-            <!-- ================================================= -->
+            <!-- =================================================
+                 CONTACT & ADDRESS
+            ================================================== -->
 
-            <div class="review-card">
+            <section class="review-card">
+
+                <div class="review-card-header">
+
+                    <div class="review-card-title">
+
+                        <div class="review-card-icon">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M21.75 6.75v10.5A2.25 2.25 0 0 1 19.5 19.5h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                                />
+                            </svg>
+
+                        </div>
 
 
-                <div class="card-header">
+                        <div>
 
-                    <h2>
-                        Contact & Address
-                    </h2>
+                            <h2>
+                                Contact &amp; Address
+                            </h2>
+
+                            <p>
+                                Your contact and residency details
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
                     <a
                         href="{% url 'step2_contact' %}"
                         class="edit-link"
                     >
-                        ✎ Edit
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                            />
+                        </svg>
+
+                        Edit
+
                     </a>
 
                 </div>
 
 
-
                 <div class="information-grid">
-
-
-                    <!-- MOBILE -->
 
                     <div class="information-item">
 
@@ -320,26 +1017,20 @@
                     </div>
 
 
-
-                    <!-- EMAIL -->
-
                     <div class="information-item">
 
                         <span class="information-label">
                             Email Address
                         </span>
 
-                        <strong>
+                        <strong class="break-value">
                             {{ registration_data.email|default:"Not provided" }}
                         </strong>
 
                     </div>
 
 
-
-                    <!-- COMPLETE ADDRESS -->
-
-                    <div class="information-item full">
+                    <div class="information-item information-full">
 
                         <span class="information-label">
                             Complete Address
@@ -347,63 +1038,113 @@
 
                         <strong>
 
-                            {{ registration_data.house_block_lot|default:"" }}
-
                             {% if registration_data.house_block_lot %}
-                                ,
+                                {{ registration_data.house_block_lot }}
                             {% endif %}
-
-                            {{ registration_data.street|default:"" }}
 
                             {% if registration_data.street %}
-                                ,
+                                {% if registration_data.house_block_lot %}, {% endif %}
+                                {{ registration_data.street }}
                             {% endif %}
 
-                            {{ registration_data.barangay|default:"" }},
+                            {% if registration_data.barangay %}
+                                {% if registration_data.house_block_lot or registration_data.street %}, {% endif %}
+                                {{ registration_data.barangay }}
+                            {% endif %}
 
-                            {{ registration_data.municipality|default:"" }},
+                            {% if registration_data.municipality %}
+                                , {{ registration_data.municipality }}
+                            {% endif %}
 
-                            {{ registration_data.province|default:"" }}
+                            {% if registration_data.province %}
+                                , {{ registration_data.province }}
+                            {% endif %}
 
                             {% if registration_data.zip_code %}
-                                - {{ registration_data.zip_code }}
+                                {{ registration_data.zip_code }}
+                            {% endif %}
+
+                            {% if not registration_data.house_block_lot and not registration_data.street and not registration_data.barangay and not registration_data.municipality and not registration_data.province %}
+                                Not provided
                             {% endif %}
 
                         </strong>
 
                     </div>
 
-
                 </div>
 
-
-            </div>
-
+            </section>
 
 
-            <!-- ================================================= -->
-            <!-- VERIFICATION DOCUMENTS -->
-            <!-- ================================================= -->
+            <!-- =================================================
+                 VERIFICATION DOCUMENTS
+            ================================================== -->
 
-            <div class="review-card">
+            <section class="review-card">
+
+                <div class="review-card-header">
+
+                    <div class="review-card-title">
+
+                        <div class="review-card-icon">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5A3.375 3.375 0 0 0 10.125 2.25H8.25m0 12.75h7.5m-7.5 3h4.5m-1.5-15.75H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                />
+                            </svg>
+
+                        </div>
 
 
-                <div class="card-header">
+                        <div>
 
-                    <h2>
-                        Verification Documents
-                    </h2>
+                            <h2>
+                                Verification Documents
+                            </h2>
+
+                            <p>
+                                Documents submitted for verification
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
                     <a
                         href="{% url 'step3_identity' %}"
                         class="edit-link"
                     >
-                        ✎ Edit
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"
+                            />
+                        </svg>
+
+                        Edit
+
                     </a>
 
                 </div>
-
 
 
                 <div class="document-list">
@@ -413,95 +1154,329 @@
 
                     <div class="document-item">
 
-                        <span class="document-check">
-                            ✓
-                        </span>
+                        <div
+                            class="
+                                document-status-icon
+                                {% if registration_data.valid_id %}document-complete{% else %}document-missing{% endif %}
+                            "
+                        >
 
-                        <span class="document-name">
+                            {% if registration_data.valid_id %}
 
-                            Government ID
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="m4.5 12.75 6 6 9-13.5"
+                                    />
+                                </svg>
 
-                            {% if registration_data.government_id %}
-                                <small>(Uploaded)</small>
                             {% else %}
-                                <small>(Not uploaded)</small>
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                    />
+                                </svg>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="document-information">
+
+                            <strong>
+                                Government-Issued ID
+                            </strong>
+
+                            <span>
+
+                                {% if registration_data.id_type %}
+                                    {{ registration_data.id_type }}
+                                {% else %}
+                                    ID type not provided
+                                {% endif %}
+
+                                {% if registration_data.id_number %}
+                                    • {{ registration_data.id_number }}
+                                {% endif %}
+
+                            </span>
+
+
+                            {% if registration_data.valid_id_name %}
+
+                                <small>
+                                    {{ registration_data.valid_id_name }}
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <span
+                            class="
+                                document-badge
+                                {% if registration_data.valid_id %}uploaded{% else %}missing{% endif %}
+                            "
+                        >
+
+                            {% if registration_data.valid_id %}
+                                Uploaded
+                            {% else %}
+                                Missing
                             {% endif %}
 
                         </span>
 
                     </div>
-
 
 
                     <!-- PROOF OF RESIDENCY -->
 
                     <div class="document-item">
 
-                        <span class="document-check">
-                            ✓
-                        </span>
+                        <div
+                            class="
+                                document-status-icon
+                                {% if registration_data.residency_proof %}document-complete{% else %}document-missing{% endif %}
+                            "
+                        >
 
-                        <span class="document-name">
+                            {% if registration_data.residency_proof %}
 
-                            Proof of Residency
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="m4.5 12.75 6 6 9-13.5"
+                                    />
+                                </svg>
 
-                            {% if registration_data.proof_of_residency %}
-                                <small>(Uploaded)</small>
                             {% else %}
-                                <small>(Not uploaded)</small>
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                    />
+                                </svg>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="document-information">
+
+                            <strong>
+                                Proof of Residency
+                            </strong>
+
+                            <span>
+                                {{ registration_data.document_type|default:"Document type not provided" }}
+                            </span>
+
+
+                            {% if registration_data.residency_proof_name %}
+
+                                <small>
+                                    {{ registration_data.residency_proof_name }}
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <span
+                            class="
+                                document-badge
+                                {% if registration_data.residency_proof %}uploaded{% else %}missing{% endif %}
+                            "
+                        >
+
+                            {% if registration_data.residency_proof %}
+                                Uploaded
+                            {% else %}
+                                Missing
                             {% endif %}
 
                         </span>
 
                     </div>
 
-
                 </div>
 
 
+                <!-- STATUS -->
 
-                <div class="status-badge">
+                {% if registration_data.valid_id and registration_data.residency_proof %}
 
-                    <span></span>
+                    <div class="verification-status verification-ready">
 
-                    STATUS:
-                    {% if registration_data.government_id and registration_data.proof_of_residency %}
-                        READY FOR REVIEW
-                    {% else %}
-                        DOCUMENTS INCOMPLETE
-                    {% endif %}
+                        <div class="verification-status-icon">
 
-                </div>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m4.5 12.75 6 6 9-13.5"
+                                />
+                            </svg>
+
+                        </div>
 
 
-            </div>
+                        <div>
+
+                            <strong>
+                                Documents complete
+                            </strong>
+
+                            <p>
+                                Your verification documents are ready
+                                to be submitted for review.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="verification-status verification-incomplete">
+
+                        <div class="verification-status-icon">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                />
+                            </svg>
+
+                        </div>
 
 
+                        <div>
 
-            <!-- ================================================= -->
-            <!-- DECLARATION -->
-            <!-- ================================================= -->
+                            <strong>
+                                Documents incomplete
+                            </strong>
+
+                            <p>
+                                Return to Step 3 and upload all required
+                                verification documents.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- =================================================
+                 SUBMISSION FORM
+            ================================================== -->
 
             <form
                 method="POST"
                 action="{% url 'step4_review' %}"
+                id="reviewForm"
+                class="mt-6"
             >
 
                 {% csrf_token %}
 
 
-                <div class="declaration-box">
+                <!-- DECLARATION -->
+
+                <section class="declaration-box">
+
+                    <div class="declaration-header">
+
+                        <div class="declaration-icon">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.8"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75m5.25-3.375c0 7.142-8.25 12.375-8.25 12.375S3.75 13.517 3.75 6.375c0-.621.504-1.125 1.125-1.125 2.098 0 4.079-.962 5.374-2.608a1.406 1.406 0 0 1 2.502 0c1.295 1.646 3.276 2.608 5.374 2.608.621 0 1.125.504 1.125 1.125Z"
+                                />
+                            </svg>
+
+                        </div>
 
 
-                    <div class="declaration-title">
+                        <div>
 
-                        Declaration & Consent
+                            <h2>
+                                Declaration &amp; Consent
+                            </h2>
+
+                            <p>
+                                Please confirm both declarations before
+                                submitting your registration.
+                            </p>
+
+                        </div>
 
                     </div>
 
 
-
-                    <!-- DECLARATION 1 -->
+                    <!-- CHECK 1 -->
 
                     <label class="checkbox-row">
 
@@ -512,23 +1487,36 @@
                             required
                         >
 
-                        <span class="custom-checkbox"></span>
+                        <span class="custom-checkbox">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="3"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m4.5 12.75 6 6 9-13.5"
+                                />
+                            </svg>
+
+                        </span>
+
 
                         <span class="checkbox-text">
-
-                            I certify that the information and
-                            documents I provided are true, complete,
-                            and accurate. I understand that submitting
-                            false information may result in the
-                            rejection of my registration.
-
+                            I certify that the information and documents
+                            I provided are true, complete, and accurate.
+                            I understand that submitting false information
+                            may result in the rejection of my registration.
                         </span>
 
                     </label>
 
 
-
-                    <!-- DECLARATION 2 -->
+                    <!-- CHECK 2 -->
 
                     <label class="checkbox-row">
 
@@ -539,106 +1527,313 @@
                             required
                         >
 
-                        <span class="custom-checkbox"></span>
+                        <span class="custom-checkbox">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="3"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m4.5 12.75 6 6 9-13.5"
+                                />
+                            </svg>
+
+                        </span>
+
 
                         <span class="checkbox-text">
-
                             I agree to the collection and processing
-                            of my information for resident
-                            verification and barangay services.
-
+                            of my information for resident verification
+                            and barangay services.
                         </span>
 
                     </label>
 
-
-                </div>
-
+                </section>
 
 
-                <!-- ================================================= -->
-                <!-- NAVIGATION -->
-                <!-- ================================================= -->
+                <!-- =================================================
+                     NAVIGATION
+                ================================================== -->
 
-                <div class="navigation">
+                <div class="form-navigation">
 
-
-                    <a
-                        href="{% url 'step3_identity' %}"
+                    <button
+                        type="submit"
+                        name="action"
+                        value="back"
+                        formnovalidate
                         class="back-button"
                     >
 
-                        <span>
-                            ←
-                        </span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                            />
+                        </svg>
 
                         <span>
-                            Back to Identity & Residency
+                            Back to Identity &amp; Residency
                         </span>
 
-                    </a>
-
+                    </button>
 
 
                     <button
                         type="submit"
+                        name="action"
+                        value="submit"
                         class="submit-button"
+                        {% if not registration_data.valid_id or not registration_data.residency_proof %}
+                            disabled
+                        {% endif %}
                     >
 
                         <span>
                             Submit Registration
                         </span>
 
-                        <span>
-                            →
-                        </span>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                            />
+                        </svg>
 
                     </button>
 
-
                 </div>
-
 
             </form>
 
 
-
-            <!-- ================================================= -->
             <!-- NOTICE -->
-            <!-- ================================================= -->
 
-            <p class="submission-notice">
+            <div class="submission-notice">
 
-                Your registration will be reviewed by the barangay
-                administrator. You will be notified once your
-                resident account has been verified.
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M11.25 11.25 11.25 16.5m0-8.25h.008v.008h-.008V8.25Zm9.75 3.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                </svg>
 
-            </p>
 
+                <p>
+                    Your registration will be reviewed by the barangay
+                    administrator. You will be notified once your
+                    resident account has been verified.
+                </p>
+
+            </div>
 
 
             <!-- LOGIN -->
 
-            <div class="login-link">
+            <div
+                class="
+                    mt-7
+                    text-center
+                    text-sm
+                    text-slate-500
+                "
+            >
 
                 Already registered?
 
-                <a href="{% url 'login' %}">
+                <a
+                    href="{% url 'login' %}"
+                    class="
+                        ml-1
+                        font-bold
+                        text-emerald-700
+                        transition
+                        hover:text-emerald-900
+                        hover:underline
+                        hover:underline-offset-4
+                    "
+                >
                     Log in here
                 </a>
 
             </div>
 
 
+            <p
+                class="
+                    mt-8
+                    text-center
+                    text-xs
+                    text-slate-400
+                    lg:hidden
+                "
+            >
+                © 2026 BantayBarangay. All rights reserved.
+            </p>
+
         </div>
 
-
-    </section>
-
+    </main>
 
 </div>
 
 
-</body>
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
 
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            initializeHeroBackground();
+
+            initializeSubmissionForm();
+
+        }
+    );
+
+
+    /* =========================================================
+       HERO BACKGROUND
+    ========================================================== */
+
+    function initializeHeroBackground() {
+
+        const hero =
+            document.querySelector(
+                ".registration-hero"
+            );
+
+        if (!hero) {
+            return;
+        }
+
+
+        const background =
+            hero.getAttribute(
+                "data-background"
+            );
+
+
+        if (!background) {
+            return;
+        }
+
+
+        hero.style.backgroundImage =
+            "linear-gradient(" +
+            "rgba(2, 44, 34, 0.88)," +
+            "rgba(2, 44, 34, 0.94)" +
+            "), url('" +
+            background +
+            "')";
+
+    }
+
+
+    /* =========================================================
+       PREVENT MULTIPLE SUBMISSIONS
+    ========================================================== */
+
+    function initializeSubmissionForm() {
+
+        const form =
+            document.getElementById(
+                "reviewForm"
+            );
+
+
+        if (!form) {
+            return;
+        }
+
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                const submitter =
+                    event.submitter;
+
+
+                /*
+                 * Do not disable anything when the
+                 * user clicks the Back button.
+                 */
+
+                if (
+                    !submitter ||
+                    submitter.value !== "submit"
+                ) {
+                    return;
+                }
+
+
+                /*
+                 * Let HTML required validation happen first.
+                 */
+
+                if (!form.checkValidity()) {
+                    return;
+                }
+
+
+                submitter.disabled = true;
+
+                submitter.classList.add(
+                    "is-submitting"
+                );
+
+
+                const text =
+                    submitter.querySelector(
+                        "span"
+                    );
+
+
+                if (text) {
+                    text.textContent =
+                        "Submitting...";
+                }
+
+            }
+        );
+
+    }
+
+</script>
+
+
+</body>
 </html>

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
@@ -10,66 +9,340 @@ from .models import User, Resident
 
 import os
 import random
+
+
+# =====================================================
+# HELPER - GET REGISTRATION SESSION DATA
+# =====================================================
+
+def get_registration_data(request):
+    """
+    Get the current registration information stored
+    inside the Django session.
+    """
+
+    return request.session.get(
+        "registration_data",
+        {}
+    )
+
+
+# =====================================================
+# HELPER - SAVE REGISTRATION SESSION DATA
+# =====================================================
+
+def save_registration_data(request, registration_data):
+    """
+    Save registration information into the session.
+    """
+
+    request.session["registration_data"] = registration_data
+
+    request.session.modified = True
+
+
 # =====================================================
 # STEP 1 — PERSONAL INFORMATION
 # =====================================================
 
 def registration(request):
 
+    registration_data = get_registration_data(request)
+
+    # -------------------------------------------------
+    # POST STEP 1
+    # -------------------------------------------------
+
     if request.method == "POST":
 
-        password = request.POST.get("password")
-        confirm_password = request.POST.get("confirm_password")
+        full_name = request.POST.get(
+            "full_name",
+            ""
+        ).strip()
 
-        # ---------------------------------------------
-        # CHECK PASSWORD
-        # ---------------------------------------------
+        birth_date = request.POST.get(
+            "birth_date",
+            ""
+        ).strip()
 
-        if password != confirm_password:
+        gender = request.POST.get(
+            "gender",
+            ""
+        ).strip()
+
+        civil_status = request.POST.get(
+            "civil_status",
+            ""
+        ).strip()
+
+        username = request.POST.get(
+            "username",
+            ""
+        ).strip()
+
+        password = request.POST.get(
+            "password",
+            ""
+        )
+
+        confirm_password = request.POST.get(
+            "confirm_password",
+            ""
+        )
+
+        # -------------------------------------------------
+        # REQUIRED FIELD VALIDATION
+        # -------------------------------------------------
+
+        if not full_name:
 
             return render(
                 request,
                 "registration/registration.html",
                 {
-                    "error": "Passwords do not match.",
-                    "full_name": request.POST.get("full_name"),
-                    "birth_date": request.POST.get("birth_date"),
-                    "gender": request.POST.get("gender"),
-                    "civil_status": request.POST.get("civil_status"),
-                    "username": request.POST.get("username"),
+                    "error": "Please enter your full name.",
+                    "registration_data": registration_data,
+
+                    "full_name": full_name,
+                    "birth_date": birth_date,
+                    "gender": gender,
+                    "civil_status": civil_status,
+                    "username": username,
                 }
             )
 
-        # ---------------------------------------------
-        # SAVE STEP 1 TO SESSION
-        # ---------------------------------------------
+        if not birth_date:
 
-        request.session["registration_data"] = {
+            return render(
+                request,
+                "registration/registration.html",
+                {
+                    "error": "Please enter your birth date.",
+                    "registration_data": registration_data,
 
-            "full_name": request.POST.get("full_name"),
+                    "full_name": full_name,
+                    "birth_date": birth_date,
+                    "gender": gender,
+                    "civil_status": civil_status,
+                    "username": username,
+                }
+            )
 
-            "birth_date": request.POST.get("birth_date"),
+        if not gender:
 
-            "gender": request.POST.get("gender"),
+            return render(
+                request,
+                "registration/registration.html",
+                {
+                    "error": "Please select your gender.",
+                    "registration_data": registration_data,
 
-            "civil_status": request.POST.get("civil_status"),
+                    "full_name": full_name,
+                    "birth_date": birth_date,
+                    "gender": gender,
+                    "civil_status": civil_status,
+                    "username": username,
+                }
+            )
 
-            "username": request.POST.get("username"),
+        if not civil_status:
 
-            "password": password,
-        }
+            return render(
+                request,
+                "registration/registration.html",
+                {
+                    "error": "Please select your civil status.",
+                    "registration_data": registration_data,
 
-        request.session.modified = True
+                    "full_name": full_name,
+                    "birth_date": birth_date,
+                    "gender": gender,
+                    "civil_status": civil_status,
+                    "username": username,
+                }
+            )
 
-        # ---------------------------------------------
+        if not username:
+
+            return render(
+                request,
+                "registration/registration.html",
+                {
+                    "error": "Please enter a username.",
+                    "registration_data": registration_data,
+
+                    "full_name": full_name,
+                    "birth_date": birth_date,
+                    "gender": gender,
+                    "civil_status": civil_status,
+                    "username": username,
+                }
+            )
+
+        # -------------------------------------------------
+        # PASSWORD VALIDATION
+        #
+        # If the user returned from Step 2, the password
+        # fields may be left blank. In that case, keep
+        # the previously saved password.
+        # -------------------------------------------------
+
+        existing_password = registration_data.get(
+            "password",
+            ""
+        )
+
+        if not password and existing_password:
+
+            password = existing_password
+
+            confirm_password = existing_password
+
+        else:
+
+            if not password:
+
+                return render(
+                    request,
+                    "registration/registration.html",
+                    {
+                        "error": "Please enter a password.",
+                        "registration_data": registration_data,
+
+                        "full_name": full_name,
+                        "birth_date": birth_date,
+                        "gender": gender,
+                        "civil_status": civil_status,
+                        "username": username,
+                    }
+                )
+
+            if len(password) < 8:
+
+                return render(
+                    request,
+                    "registration/registration.html",
+                    {
+                        "error": "Password must be at least 8 characters.",
+                        "registration_data": registration_data,
+
+                        "full_name": full_name,
+                        "birth_date": birth_date,
+                        "gender": gender,
+                        "civil_status": civil_status,
+                        "username": username,
+                    }
+                )
+
+            if password != confirm_password:
+
+                return render(
+                    request,
+                    "registration/registration.html",
+                    {
+                        "error": "Passwords do not match.",
+                        "registration_data": registration_data,
+
+                        "full_name": full_name,
+                        "birth_date": birth_date,
+                        "gender": gender,
+                        "civil_status": civil_status,
+                        "username": username,
+                    }
+                )
+
+        # -------------------------------------------------
+        # SAVE STEP 1
+        #
+        # IMPORTANT:
+        # update() is used instead of replacing the entire
+        # dictionary. This keeps Step 2 / Step 3 information
+        # if the user goes backward.
+        # -------------------------------------------------
+
+        registration_data.update({
+
+            "full_name":
+                full_name,
+
+            "birth_date":
+                birth_date,
+
+            "gender":
+                gender,
+
+            "civil_status":
+                civil_status,
+
+            "username":
+                username,
+
+            "password":
+                password,
+
+        })
+
+        save_registration_data(
+            request,
+            registration_data
+        )
+
+        # -------------------------------------------------
         # STEP 1 → STEP 2
-        # ---------------------------------------------
+        # -------------------------------------------------
 
-        return redirect("step2_contact")
+        return redirect(
+            "step2_contact"
+        )
+
+    # -------------------------------------------------
+    # GET STEP 1
+    #
+    # Restore information if user clicked Back
+    # from Step 2.
+    # -------------------------------------------------
+
+    context = {
+
+        "registration_data":
+            registration_data,
+
+        "full_name":
+            registration_data.get(
+                "full_name",
+                ""
+            ),
+
+        "birth_date":
+            registration_data.get(
+                "birth_date",
+                ""
+            ),
+
+        "gender":
+            registration_data.get(
+                "gender",
+                ""
+            ),
+
+        "civil_status":
+            registration_data.get(
+                "civil_status",
+                ""
+            ),
+
+        "username":
+            registration_data.get(
+                "username",
+                ""
+            ),
+
+    }
 
     return render(
         request,
-        "registration/registration.html"
+        "registration/registration.html",
+        context
     )
 
 
@@ -79,65 +352,230 @@ def registration(request):
 
 def step2_contact(request):
 
-    registration_data = request.session.get(
-        "registration_data",
-        {}
+    registration_data = get_registration_data(
+        request
     )
 
-    # Prevent accessing Step 2 without Step 1
+    # -------------------------------------------------
+    # PREVENT DIRECT ACCESS
+    # -------------------------------------------------
+
     if not registration_data:
 
-        return redirect("registration")
+        return redirect(
+            "registration"
+        )
 
-    # ---------------------------------------------
+    # -------------------------------------------------
     # POST STEP 2
-    # ---------------------------------------------
+    # -------------------------------------------------
 
     if request.method == "POST":
+
+        # -------------------------------------------------
+        # GET BUTTON ACTION
+        #
+        # back = save and return to Step 1
+        # next = save and continue to Step 3
+        # -------------------------------------------------
+
+        action = request.POST.get(
+            "action",
+            "next"
+        )
+
+        # -------------------------------------------------
+        # GET STEP 2 VALUES
+        # -------------------------------------------------
+
+        mobile_number = request.POST.get(
+            "mobile_number",
+            ""
+        ).strip()
+
+        email = request.POST.get(
+            "email",
+            ""
+        ).strip()
+
+        house_block_lot = request.POST.get(
+            "house_block_lot",
+            ""
+        ).strip()
+
+        street = request.POST.get(
+            "street",
+            ""
+        ).strip()
+
+        province = request.POST.get(
+            "province",
+            ""
+        ).strip()
+
+        municipality = request.POST.get(
+            "municipality",
+            ""
+        ).strip()
+
+        barangay = request.POST.get(
+            "barangay",
+            ""
+        ).strip()
+
+        zip_code = request.POST.get(
+            "zip_code",
+            ""
+        ).strip()
+
+        # -------------------------------------------------
+        # SAVE STEP 2 BEFORE ANY REDIRECT
+        #
+        # This is what prevents information from
+        # disappearing when clicking Back.
+        # -------------------------------------------------
 
         registration_data.update({
 
             "mobile_number":
-                request.POST.get("mobile_number"),
+                mobile_number,
 
             "email":
-                request.POST.get("email"),
+                email,
 
             "house_block_lot":
-                request.POST.get("house_block_lot"),
+                house_block_lot,
 
             "street":
-                request.POST.get("street"),
+                street,
 
             "province":
-                request.POST.get("province"),
+                province,
 
             "municipality":
-                request.POST.get("municipality"),
+                municipality,
 
             "barangay":
-                request.POST.get("barangay"),
+                barangay,
 
             "zip_code":
-                request.POST.get("zip_code"),
+                zip_code,
 
         })
 
-        request.session["registration_data"] = registration_data
+        save_registration_data(
+            request,
+            registration_data
+        )
 
-        request.session.modified = True
+        # -------------------------------------------------
+        # BACK → STEP 1
+        #
+        # No validation is required when going backward.
+        # The entered Step 2 data has already been saved.
+        # -------------------------------------------------
 
-        # ---------------------------------------------
+        if action == "back":
+
+            return redirect(
+                "registration"
+            )
+
+        # -------------------------------------------------
+        # VALIDATE STEP 2 WHEN GOING FORWARD
+        # -------------------------------------------------
+
+        if not mobile_number:
+
+            return render(
+                request,
+                "registration/step2_contact.html",
+                {
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please enter your mobile number."
+                }
+            )
+
+        if not email:
+
+            return render(
+                request,
+                "registration/step2_contact.html",
+                {
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please enter your email address."
+                }
+            )
+
+        if not province:
+
+            return render(
+                request,
+                "registration/step2_contact.html",
+                {
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please select your province."
+                }
+            )
+
+        if not municipality:
+
+            return render(
+                request,
+                "registration/step2_contact.html",
+                {
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please select your municipality or city."
+                }
+            )
+
+        if not barangay:
+
+            return render(
+                request,
+                "registration/step2_contact.html",
+                {
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please select your barangay."
+                }
+            )
+
+        # -------------------------------------------------
         # STEP 2 → STEP 3
-        # ---------------------------------------------
+        # -------------------------------------------------
 
-        return redirect("step3_identity")
+        return redirect(
+            "step3_identity"
+        )
+
+    # -------------------------------------------------
+    # DISPLAY STEP 2
+    #
+    # Values come from registration_data, so they
+    # reappear after returning from another page.
+    # -------------------------------------------------
 
     return render(
         request,
         "registration/step2_contact.html",
         {
-            "registration_data": registration_data
+            "registration_data":
+                registration_data
         }
     )
 
@@ -148,35 +586,67 @@ def step2_contact(request):
 
 def step3_identity(request):
 
-    registration_data = request.session.get(
-        "registration_data",
-        {}
+    registration_data = get_registration_data(
+        request
     )
 
-    # ---------------------------------------------
+    # -------------------------------------------------
     # PREVENT DIRECT ACCESS
-    # ---------------------------------------------
+    # -------------------------------------------------
 
     if not registration_data:
 
-        return redirect("registration")
+        return redirect(
+            "registration"
+        )
 
-    # ---------------------------------------------
+    # -------------------------------------------------
     # POST STEP 3
-    # ---------------------------------------------
+    # -------------------------------------------------
 
     if request.method == "POST":
 
-        id_type = request.POST.get("id_type")
-        id_number = request.POST.get("id_number")
-        document_type = request.POST.get("document_type")
+        action = request.POST.get(
+            "action",
+            "next"
+        )
 
-        valid_id = request.FILES.get("valid_id")
-        residency_proof = request.FILES.get("residency_proof")
+        # -------------------------------------------------
+        # BACK TO STEP 2
+        # -------------------------------------------------
 
-        # ---------------------------------------------
+        if action == "back":
+
+            return redirect(
+                "step2_contact"
+            )
+
+        id_type = request.POST.get(
+            "id_type",
+            ""
+        ).strip()
+
+        id_number = request.POST.get(
+            "id_number",
+            ""
+        ).strip()
+
+        document_type = request.POST.get(
+            "document_type",
+            ""
+        ).strip()
+
+        valid_id = request.FILES.get(
+            "valid_id"
+        )
+
+        residency_proof = request.FILES.get(
+            "residency_proof"
+        )
+
+        # -------------------------------------------------
         # VALIDATE REQUIRED FIELDS
-        # ---------------------------------------------
+        # -------------------------------------------------
 
         if not id_type:
 
@@ -184,8 +654,11 @@ def step3_identity(request):
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please select an ID type."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please select an ID type."
                 }
             )
 
@@ -195,8 +668,11 @@ def step3_identity(request):
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please enter your ID number."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please enter your ID number."
                 }
             )
 
@@ -206,120 +682,212 @@ def step3_identity(request):
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please select a residency document type."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please select a residency document type."
                 }
             )
 
-        if not valid_id:
+        # -------------------------------------------------
+        # EXISTING FILES
+        #
+        # If Step 3 was previously completed and the user
+        # came back, existing saved files can be reused.
+        # -------------------------------------------------
+
+        existing_valid_id = registration_data.get(
+            "valid_id"
+        )
+
+        existing_residency_proof = registration_data.get(
+            "residency_proof"
+        )
+
+        if not valid_id and not existing_valid_id:
 
             return render(
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please upload your valid government ID."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please upload your valid government ID."
                 }
             )
 
-        if not residency_proof:
+        if (
+            not residency_proof
+            and not existing_residency_proof
+        ):
 
             return render(
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please upload your proof of residency."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please upload your proof of residency."
                 }
             )
 
-        # ---------------------------------------------
-        # CHECK FILE SIZE
-        # MAXIMUM = 5MB
-        # ---------------------------------------------
+        # -------------------------------------------------
+        # MAXIMUM FILE SIZE = 5 MB
+        # -------------------------------------------------
 
-        max_file_size = 5 * 1024 * 1024
+        max_file_size = (
+            5 * 1024 * 1024
+        )
 
-        if valid_id.size > max_file_size:
+        if (
+            valid_id
+            and valid_id.size > max_file_size
+        ):
 
             return render(
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Government ID must not exceed 5MB."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Government ID must not exceed 5MB."
                 }
             )
 
-        if residency_proof.size > max_file_size:
+        if (
+            residency_proof
+            and residency_proof.size > max_file_size
+        ):
 
             return render(
                 request,
                 "registration/step3_identity.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Proof of residency must not exceed 5MB."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Proof of residency must not exceed 5MB."
                 }
             )
 
-        # ---------------------------------------------
+        # -------------------------------------------------
         # ALLOWED FILE TYPES
-        # ---------------------------------------------
+        # -------------------------------------------------
 
         allowed_extensions = [
             ".jpg",
             ".jpeg",
             ".png",
-            ".pdf"
+            ".pdf",
         ]
 
-        valid_id_extension = os.path.splitext(
-            valid_id.name
-        )[1].lower()
+        if valid_id:
 
-        residency_extension = os.path.splitext(
-            residency_proof.name
-        )[1].lower()
+            valid_id_extension = os.path.splitext(
+                valid_id.name
+            )[1].lower()
 
-        if valid_id_extension not in allowed_extensions:
+            if (
+                valid_id_extension
+                not in allowed_extensions
+            ):
 
-            return render(
-                request,
-                "registration/step3_identity.html",
-                {
-                    "registration_data": registration_data,
-                    "error": "Invalid Government ID file type."
-                }
+                return render(
+                    request,
+                    "registration/step3_identity.html",
+                    {
+                        "registration_data":
+                            registration_data,
+
+                        "error":
+                            "Invalid Government ID file type. "
+                            "Only JPG, JPEG, PNG, and PDF are allowed."
+                    }
+                )
+
+        if residency_proof:
+
+            residency_extension = os.path.splitext(
+                residency_proof.name
+            )[1].lower()
+
+            if (
+                residency_extension
+                not in allowed_extensions
+            ):
+
+                return render(
+                    request,
+                    "registration/step3_identity.html",
+                    {
+                        "registration_data":
+                            registration_data,
+
+                        "error":
+                            "Invalid residency document file type. "
+                            "Only JPG, JPEG, PNG, and PDF are allowed."
+                    }
+                )
+
+        # -------------------------------------------------
+        # SAVE NEW GOVERNMENT ID
+        # -------------------------------------------------
+
+        if valid_id:
+
+            valid_id_path = default_storage.save(
+                os.path.join(
+                    "registration_documents",
+                    valid_id.name
+                ),
+                ContentFile(
+                    valid_id.read()
+                )
             )
 
-        if residency_extension not in allowed_extensions:
+            registration_data[
+                "valid_id"
+            ] = valid_id_path
 
-            return render(
-                request,
-                "registration/step3_identity.html",
-                {
-                    "registration_data": registration_data,
-                    "error": "Invalid residency document file type."
-                }
+            registration_data[
+                "valid_id_name"
+            ] = valid_id.name
+
+        # -------------------------------------------------
+        # SAVE NEW RESIDENCY PROOF
+        # -------------------------------------------------
+
+        if residency_proof:
+
+            residency_path = default_storage.save(
+                os.path.join(
+                    "registration_documents",
+                    residency_proof.name
+                ),
+                ContentFile(
+                    residency_proof.read()
+                )
             )
 
-        # ---------------------------------------------
-        # SAVE UPLOADED FILES
-        # ---------------------------------------------
+            registration_data[
+                "residency_proof"
+            ] = residency_path
 
-        valid_id_path = default_storage.save(
-            "registration_documents/" + valid_id.name,
-            ContentFile(valid_id.read())
-        )
+            registration_data[
+                "residency_proof_name"
+            ] = residency_proof.name
 
-        residency_path = default_storage.save(
-            "registration_documents/" + residency_proof.name,
-            ContentFile(residency_proof.read())
-        )
-
-        # ---------------------------------------------
-        # SAVE STEP 3 DATA TO SESSION
-        # ---------------------------------------------
+        # -------------------------------------------------
+        # SAVE STEP 3 TEXT DATA
+        # -------------------------------------------------
 
         registration_data.update({
 
@@ -329,112 +897,158 @@ def step3_identity(request):
             "id_number":
                 id_number,
 
-            "valid_id":
-                valid_id_path,
-
-            "valid_id_name":
-                valid_id.name,
-
             "document_type":
                 document_type,
 
-            "residency_proof":
-                residency_path,
-
-            "residency_proof_name":
-                residency_proof.name,
-
         })
 
-        request.session["registration_data"] = registration_data
+        save_registration_data(
+            request,
+            registration_data
+        )
 
-        request.session.modified = True
-
-        # ---------------------------------------------
+        # -------------------------------------------------
         # STEP 3 → STEP 4
-        # ---------------------------------------------
+        # -------------------------------------------------
 
-        return redirect("step4_review")
+        return redirect(
+            "step4_review"
+        )
 
-    # ---------------------------------------------
+    # -------------------------------------------------
     # DISPLAY STEP 3
-    # ---------------------------------------------
+    # -------------------------------------------------
 
     return render(
         request,
         "registration/step3_identity.html",
         {
-            "registration_data": registration_data
+            "registration_data":
+                registration_data
         }
     )
 
 
 # =====================================================
-# STEP 4 — FINAL SUBMISSION
+# STEP 4 — REVIEW & FINAL SUBMISSION
 # =====================================================
 
 def step4_review(request):
 
-    registration_data = request.session.get(
-        "registration_data",
-        {}
+    registration_data = get_registration_data(
+        request
     )
 
+    # -------------------------------------------------
+    # PREVENT DIRECT ACCESS
+    # -------------------------------------------------
+
     if not registration_data:
-        return redirect("registration")
+
+        return redirect(
+            "registration"
+        )
+
+    # -------------------------------------------------
+    # POST STEP 4
+    # -------------------------------------------------
 
     if request.method == "POST":
 
-        # ---------------------------------------------
-        # CHECK CONSENTS
-        # ---------------------------------------------
+        action = request.POST.get(
+            "action",
+            "submit"
+        )
 
-        if not request.POST.get("truth_declaration"):
+        # -------------------------------------------------
+        # BACK → STEP 3
+        # -------------------------------------------------
+
+        if action == "back":
+
+            return redirect(
+                "step3_identity"
+            )
+
+        # -------------------------------------------------
+        # CHECK DECLARATION
+        # -------------------------------------------------
+
+        if not request.POST.get(
+            "truth_declaration"
+        ):
+
             return render(
                 request,
                 "registration/step4_review.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please confirm that the information you provided is true and complete."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please confirm that the information "
+                        "you provided is true and complete."
                 }
             )
 
-        if not request.POST.get("data_consent"):
+        # -------------------------------------------------
+        # CHECK DATA CONSENT
+        # -------------------------------------------------
+
+        if not request.POST.get(
+            "data_consent"
+        ):
+
             return render(
                 request,
                 "registration/step4_review.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Please agree to the collection and processing of your information."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Please agree to the collection and "
+                        "processing of your information."
                 }
             )
 
-        # ---------------------------------------------
+        # -------------------------------------------------
         # CHECK USERNAME
-        # ---------------------------------------------
+        # -------------------------------------------------
+
+        username = registration_data.get(
+            "username",
+            ""
+        )
 
         if User.objects.filter(
-            username=registration_data["username"]
+            username=username
         ).exists():
 
             return render(
                 request,
                 "registration/step4_review.html",
                 {
-                    "registration_data": registration_data,
-                    "error": "Username already exists."
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        "Username already exists."
                 }
             )
 
-        # ---------------------------------------------
-        # CHECK EMAIL
-        # ---------------------------------------------
+        # -------------------------------------------------
+        # EMAIL
+        # -------------------------------------------------
 
-        email = registration_data.get("email")
+        email = registration_data.get(
+            "email",
+            ""
+        )
 
-        # ---------------------------------------------
+        # -------------------------------------------------
         # SPLIT FULL NAME
-        # ---------------------------------------------
+        # -------------------------------------------------
 
         full_name = registration_data.get(
             "full_name",
@@ -443,19 +1057,29 @@ def step4_review(request):
 
         name_parts = full_name.split()
 
-        first_name = name_parts[0] if len(name_parts) >= 1 else ""
+        first_name = (
+            name_parts[0]
+            if len(name_parts) >= 1
+            else ""
+        )
 
-        last_name = name_parts[-1] if len(name_parts) >= 2 else ""
+        last_name = (
+            name_parts[-1]
+            if len(name_parts) >= 2
+            else ""
+        )
 
         middle_name = (
-            " ".join(name_parts[1:-1])
+            " ".join(
+                name_parts[1:-1]
+            )
             if len(name_parts) >= 3
             else None
         )
 
-        # ---------------------------------------------
-        # GENERATE APPLICATION REFERENCE
-        # ---------------------------------------------
+        # -------------------------------------------------
+        # GENERATE UNIQUE APPLICATION REFERENCE
+        # -------------------------------------------------
 
         year = timezone.now().year
 
@@ -468,91 +1092,162 @@ def step4_review(request):
             f"BB-{year}-{random_number}"
         )
 
-        # ---------------------------------------------
-        # SAVE TO DATABASE
-        # ---------------------------------------------
+        # -------------------------------------------------
+        # BUILD CLEAN ADDRESS
+        # -------------------------------------------------
+
+        address_parts = [
+
+            registration_data.get(
+                "house_block_lot",
+                ""
+            ),
+
+            registration_data.get(
+                "street",
+                ""
+            ),
+
+            registration_data.get(
+                "barangay",
+                ""
+            ),
+
+            registration_data.get(
+                "municipality",
+                ""
+            ),
+
+            registration_data.get(
+                "province",
+                ""
+            ),
+
+            registration_data.get(
+                "zip_code",
+                ""
+            ),
+
+        ]
+
+        address = ", ".join(
+            part
+            for part in address_parts
+            if part
+        )
+
+        # -------------------------------------------------
+        # SAVE USER + RESIDENT
+        # -------------------------------------------------
 
         try:
 
             with transaction.atomic():
 
+                # -----------------------------------------
                 # CREATE USER
+                # -----------------------------------------
+
                 user = User.objects.create(
-                    username=registration_data["username"],
 
-                    password_hash=make_password(
-                        registration_data["password"]
-                    ),
+                    username=
+                        username,
 
-                    email=email,
+                    password_hash=
+                        make_password(
+                            registration_data[
+                                "password"
+                            ]
+                        ),
 
-                    role="Resident",
+                    email=
+                        email,
 
-                    is_active=True
+                    role=
+                        "Resident",
+
+                    is_active=
+                        True,
+
                 )
 
+                # -----------------------------------------
                 # CREATE RESIDENT
+                # -----------------------------------------
+
                 Resident.objects.create(
 
-                    user_id=user.user_id,
+                    user_id=
+                        user.user_id,
 
-                    first_name=first_name,
+                    first_name=
+                        first_name,
 
-                    middle_name=middle_name,
+                    middle_name=
+                        middle_name,
 
-                    last_name=last_name,
+                    last_name=
+                        last_name,
 
-                    birth_date=registration_data[
-                        "birth_date"
-                    ],
+                    birth_date=
+                        registration_data.get(
+                            "birth_date"
+                        ),
 
-                    gender=registration_data[
-                        "gender"
-                    ],
+                    gender=
+                        registration_data.get(
+                            "gender"
+                        ),
 
-                    civil_status=registration_data[
-                        "civil_status"
-                    ],
+                    civil_status=
+                        registration_data.get(
+                            "civil_status"
+                        ),
 
-                    address=(
-                        f'{registration_data.get("house_block_lot", "")}, '
-                        f'{registration_data.get("street", "")}, '
-                        f'{registration_data.get("barangay", "")}, '
-                        f'{registration_data.get("municipality", "")}, '
-                        f'{registration_data.get("province", "")}'
-                    ),
+                    address=
+                        address,
 
-                    contact_number=registration_data[
-                        "mobile_number"
-                    ],
+                    contact_number=
+                        registration_data.get(
+                            "mobile_number"
+                        ),
 
-                    house_block_lot=registration_data.get(
-                        "house_block_lot"
-                    ),
+                    house_block_lot=
+                        registration_data.get(
+                            "house_block_lot"
+                        ),
 
-                    street_purok_sitio=registration_data.get(
-                        "street"
-                    ),
+                    street_purok_sitio=
+                        registration_data.get(
+                            "street"
+                        ),
 
-                    province=registration_data[
-                        "province"
-                    ],
+                    province=
+                        registration_data.get(
+                            "province"
+                        ),
 
-                    municipality_city=registration_data[
-                        "municipality"
-                    ],
+                    municipality_city=
+                        registration_data.get(
+                            "municipality"
+                        ),
 
-                    barangay=registration_data[
-                        "barangay"
-                    ],
+                    barangay=
+                        registration_data.get(
+                            "barangay"
+                        ),
 
-                    zip_code=registration_data.get(
-                        "zip_code"
-                    ),
+                    zip_code=
+                        registration_data.get(
+                            "zip_code"
+                        ),
 
-                    verification_status="Pending",
+                    verification_status=
+                        "Pending",
 
-                    email=email
+                    email=
+                        email,
+
                 )
 
         except Exception as e:
@@ -561,44 +1256,55 @@ def step4_review(request):
                 request,
                 "registration/step4_review.html",
                 {
-                    "registration_data": registration_data,
-                    "error": f"Registration failed: {str(e)}"
+                    "registration_data":
+                        registration_data,
+
+                    "error":
+                        f"Registration failed: {str(e)}"
                 }
             )
 
-        # ---------------------------------------------
+        # -------------------------------------------------
         # SAVE APPLICATION INFORMATION
-        # ---------------------------------------------
+        # -------------------------------------------------
 
-        registration_data["application_reference"] = (
-            application_reference
+        registration_data[
+            "application_reference"
+        ] = application_reference
+
+        registration_data[
+            "submitted_date"
+        ] = timezone.now().strftime(
+            "%B %d, %Y"
         )
 
-        registration_data["submitted_date"] = (
-            timezone.now().strftime("%B %d, %Y")
-        )
+        registration_data[
+            "status"
+        ] = "Pending Verification"
 
-        registration_data["status"] = (
-            "Pending Verification"
-        )
-
-        request.session["registration_data"] = (
+        save_registration_data(
+            request,
             registration_data
         )
 
-        request.session.modified = True
-
-        # ---------------------------------------------
+        # -------------------------------------------------
         # GO TO SUCCESS PAGE
-        # ---------------------------------------------
+        # -------------------------------------------------
 
-        return redirect("registration_success")
+        return redirect(
+            "registration_success"
+        )
+
+    # -------------------------------------------------
+    # DISPLAY STEP 4
+    # -------------------------------------------------
 
     return render(
         request,
         "registration/step4_review.html",
         {
-            "registration_data": registration_data
+            "registration_data":
+                registration_data
         }
     )
 
@@ -609,31 +1315,43 @@ def step4_review(request):
 
 def registration_success(request):
 
-    registration_data = request.session.get(
-        "registration_data",
-        {}
+    registration_data = get_registration_data(
+        request
     )
-
 
     if not registration_data:
 
-        return redirect("registration")
-
+        return redirect(
+            "registration"
+        )
 
     return render(
         request,
         "registration/registration_success.html",
         {
+
+            "registration_data":
+                registration_data,
+
             "application_reference":
                 registration_data.get(
                     "application_reference",
-                    "BB-2026-000123"
+                    ""
                 ),
 
             "submitted_date":
                 registration_data.get(
                     "submitted_date",
-                    timezone.now().strftime("%B %d, %Y")
+                    timezone.now().strftime(
+                        "%B %d, %Y"
+                    )
                 ),
+
+            "status":
+                registration_data.get(
+                    "status",
+                    "Pending Verification"
+                ),
+
         }
     )
