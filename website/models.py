@@ -268,6 +268,13 @@ class DocumentRequest(models.Model):
         primary_key=True
     )
 
+    reference_number = models.CharField(
+        max_length=50,
+        unique=True,
+        blank=True,
+        null=True
+    )
+
     resident = models.ForeignKey(
         Resident,
         models.DO_NOTHING,
@@ -315,29 +322,19 @@ class DocumentRequest(models.Model):
         default="Submitted"
     )
 
-    submitted_at = models.DateTimeField()
+    created_at = models.DateTimeField()
 
     updated_at = models.DateTimeField()
 
     class Meta:
         db_table = "document_requests"
         managed = False
-        ordering = ["-submitted_at"]
+        ordering = ["-created_at"]
 
     def __str__(self):
-        return self.reference_number
-
-    @property
-    def reference_number(self):
-
-        if self.submitted_at:
-            year = self.submitted_at.year
-        else:
-            year = "0000"
-
         return (
-            f"DOC-{year}-"
-            f"{self.request_id:04d}"
+            self.reference_number
+            or f"Document Request #{self.request_id}"
         )
 
     @property
@@ -345,5 +342,61 @@ class DocumentRequest(models.Model):
         return self.document_type.type_name
 
     @property
-    def created_at(self):
-        return self.submitted_at
+    def status_group(self):
+
+        if self.status in [
+            "Submitted",
+            "Under Verification",
+            "Ready for Signature",
+        ]:
+            return "progress"
+
+        if self.status == "Ready for Pickup":
+            return "ready"
+
+        if self.status == "Released":
+            return "completed"
+
+        if self.status == "Rejected":
+            return "rejected"
+
+        if self.status == "Cancelled":
+            return "cancelled"
+
+        return "progress"
+
+    @property
+    def latest_update(self):
+
+        messages = {
+
+            "Submitted":
+                "Your document request has been submitted "
+                "and is awaiting verification.",
+
+            "Under Verification":
+                "Your document request is currently being "
+                "verified by the barangay.",
+
+            "Ready for Signature":
+                "Your document has been prepared and is "
+                "waiting for an authorized signature.",
+
+            "Ready for Pickup":
+                "Your document is ready for pickup at the "
+                "barangay office.",
+
+            "Released":
+                "Your document has been released.",
+
+            "Rejected":
+                "Your document request has been rejected.",
+
+            "Cancelled":
+                "This document request has been cancelled.",
+        }
+
+        return messages.get(
+            self.status,
+            "Your document request is currently being processed."
+        )

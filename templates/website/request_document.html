@@ -578,156 +578,323 @@
 
 
                             <!-- =====================================
-                                 AVAILABLE DOCUMENTS
-                            ====================================== -->
+     AVAILABLE DOCUMENTS
+====================================== -->
 
-                            <div class="form-section">
+<div class="form-section document-picker-section">
 
-                                <div class="section-heading">
+    <div class="section-heading">
 
-                                    <div>
+        <div>
 
-                                        <h3>
-                                            Available Documents
-                                        </h3>
+            <h3>
+                Select Document
+            </h3>
 
-                                        <p>
-                                            Documents shown below are loaded
-                                            from the system.
-                                        </p>
+            <p>
+                Choose the barangay document you would like to request.
+            </p>
 
-                                    </div>
+        </div>
 
-                                </div>
-
-
-                                {% if document_types %}
-
-                                    <div class="document-select-grid">
-
-                                        {% for document in document_types %}
-
-                                            <label class="document-option">
-
-                                                <input
-                                                    type="radio"
-                                                    name="document_type"
-                                                    value="{{ document.id }}"
-                                                    data-name="{{ document.name }}"
-                                                    {% if document.fee != None %}
-                                                        data-price="{{ document.fee }}"
-                                                    {% else %}
-                                                        data-price="0"
-                                                    {% endif %}
-                                                    required
-                                                >
+    </div>
 
 
-                                                <span class="document-option-icon">
+    {% if document_types %}
 
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.8"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="M6 3h12v18H6z"
-                                                        />
+        <div
+            id="documentDropdown"
+            class="document-dropdown"
+        >
 
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="M9 8h6M9 12h6M9 16h4"
-                                                        />
-                                                    </svg>
+            <!-- SELECTED / TRIGGER -->
 
-                                                </span>
+            <button
+                type="button"
+                id="documentDropdownButton"
+                class="document-dropdown-button"
+                aria-expanded="false"
+            >
+
+                <span class="document-dropdown-main">
+
+                    <span class="document-dropdown-icon">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 3h12v18H6z"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 8h6M9 12h6M9 16h4"
+                            />
+                        </svg>
+
+                    </span>
 
 
-                                                <strong>
-                                                    {{ document.name }}
-                                                </strong>
+                    <span class="document-dropdown-text">
+
+                        <strong id="selectedDocumentName">
+                            Select a document
+                        </strong>
+
+                        <small id="selectedDocumentDescription">
+                            Choose from the available barangay documents
+                        </small>
+
+                    </span>
+
+                </span>
 
 
-                                                {% if document.description %}
+                <span class="document-dropdown-arrow">
 
-                                                    <span class="document-description">
-                                                        {{ document.description }}
-                                                    </span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 9l6 6 6-6"
+                        />
+                    </svg>
 
-                                                {% endif %}
+                </span>
+
+            </button>
 
 
-                                                {% if document.fee != None %}
+            <!-- DROPDOWN PANEL -->
 
-                                                    <small>
+            <div
+                id="documentDropdownPanel"
+                class="document-dropdown-panel"
+            >
 
-                                                        {% if document.fee == 0 %}
+                <!-- SEARCH -->
 
-                                                            Free
+                <div class="document-search">
 
-                                                        {% else %}
+                    <span class="document-search-icon">
 
-                                                            ₱{{ document.fee|floatformat:2 }}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                        >
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="7"
+                            />
 
-                                                        {% endif %}
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M20 20l-4-4"
+                            />
+                        </svg>
 
-                                                    </small>
+                    </span>
 
-                                                {% endif %}
 
-                                            </label>
+                    <input
+                        id="documentSearchInput"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Search documents..."
+                    >
 
-                                        {% endfor %}
+                </div>
 
-                                    </div>
 
-                                {% else %}
+                <!-- OPTIONS -->
 
-                                    <div class="empty-state">
+                <div
+                    id="documentDropdownOptions"
+                    class="document-dropdown-options"
+                >
 
-                                        <div class="empty-state-icon">
+                    {% for document in document_types %}
 
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke-width="1.8"
-                                                stroke="currentColor"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M6 3h9l4 4v14H6V3z"
-                                                />
+                        <label
+                            class="document-dropdown-option"
+                            data-search="{{ document.name|lower }} {{ document.description|default:''|lower }}"
+                        >
 
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M15 3v5h4"
-                                                />
-                                            </svg>
+                            <input
+                                type="radio"
+                                name="document_type"
+                                value="{{ document.id }}"
+                                data-name="{{ document.name }}"
+                                data-description="{{ document.description|default:'' }}"
+                                data-price="{{ document.fee|default:0 }}"
+                                {% if form_data.document_type == document.id|stringformat:"s" %}
+                                    checked
+                                {% endif %}
+                                required
+                            >
 
-                                        </div>
 
-                                        <strong>
-                                            No documents available
-                                        </strong>
+                            <span class="document-option-list-icon">
 
-                                        <p>
-                                            There are currently no document
-                                            types available for online request.
-                                        </p>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M6 3h12v18H6z"
+                                    />
 
-                                    </div>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9 8h6M9 12h6M9 16h4"
+                                    />
+                                </svg>
+
+                            </span>
+
+
+                            <span class="document-option-list-content">
+
+                                <strong>
+                                    {{ document.name }}
+                                </strong>
+
+
+                                {% if document.description %}
+
+                                    <small>
+                                        {{ document.description }}
+                                    </small>
 
                                 {% endif %}
 
-                            </div>
+                            </span>
+
+
+                            <span class="document-option-list-fee">
+
+                                {% if document.fee == 0 %}
+
+                                    No fee
+
+                                {% elif document.fee != None %}
+
+                                    ₱{{ document.fee|floatformat:2 }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </span>
+
+
+                            <span class="document-option-check">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2.5"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M5 12l4 4L19 6"
+                                    />
+                                </svg>
+
+                            </span>
+
+                        </label>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- NO SEARCH RESULT -->
+
+                <div
+                    id="documentSearchEmpty"
+                    class="document-search-empty"
+                >
+                    No matching documents found.
+                </div>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 3h9l4 4v14H6V3z"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 3v5h4"
+                    />
+                </svg>
+
+            </div>
+
+            <strong>
+                No documents available
+            </strong>
+
+            <p>
+                There are currently no document types
+                available for online request.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
 
 
                             <!-- =====================================
@@ -772,6 +939,8 @@
                                             id="purpose"
                                             name="purpose"
                                             type="text"
+                                            maxlength="255"
+                                            value="{{ form_data.purpose|default:'' }}"
                                             required
                                             placeholder="Enter purpose of request"
                                         >
@@ -790,6 +959,8 @@
                                             id="institution"
                                             name="institution"
                                             type="text"
+                                            maxlength="255"
+                                            value="{{ form_data.institution|default:'' }}"
                                             placeholder="Enter employer or institution if applicable"
                                         >
 
@@ -808,7 +979,7 @@
                                         id="request_notes"
                                         name="request_notes"
                                         placeholder="Enter additional information about your request"
-                                    ></textarea>
+                                    >{{ form_data.request_notes|default:'' }}</textarea>
 
                                 </div>
 
@@ -953,6 +1124,9 @@
                                                     value="{{ method.id }}"
                                                     data-name="{{ method.name }}"
                                                     data-delivery-fee="{{ method.fee|default:0 }}"
+                                                    {% if form_data.delivery_method == method.id|stringformat:"s" %}
+                                                        checked
+                                                    {% endif %}
                                                     required
                                                 >
 
@@ -1214,6 +1388,9 @@
                                                         type="radio"
                                                         name="payment_method"
                                                         value="{{ payment.id }}"
+                                                        {% if form_data.payment_method == payment.id|stringformat:"s" %}
+                                                            checked
+                                                        {% endif %}
                                                         required
                                                     >
 
@@ -1885,8 +2062,8 @@
          JAVASCRIPT
     ====================================================== -->
 
-    <script src="{% static 'js/request_document.js' %}"></script>
-    <script src="{% static 'js/topnav.js' %}"> </script>
+    <script src="{% static 'js/request_documents.js' %}"></script>
+    <script src="{% static 'js/topnav.js' %}"></script>
 
 </body>
 

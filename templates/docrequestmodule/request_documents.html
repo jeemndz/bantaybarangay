@@ -211,12 +211,12 @@ Document Requests | BantayBarangay
                 {% for document in document_types %}
 
                     <option
-                        value="{{ document.id }}"
-                        {% if selected_document_type == document.id|stringformat:"s" %}
+                        value="{{ document.document_type_id }}"
+                        {% if selected_document_type == document.document_type_id|stringformat:"s" %}
                             selected
                         {% endif %}
                     >
-                        {{ document.name }}
+                        {{ document.type_name }}
                     </option>
 
                 {% endfor %}
@@ -374,7 +374,7 @@ Document Requests | BantayBarangay
 
                             data-status="{{ item.status|escape }}"
 
-                            data-submitted="{{ item.submitted_at|date:'M d, Y h:i A' }}"
+                            data-submitted="{{ item.created_at|date:'M d, Y h:i A' }}"
                         >
 
                             <!-- REFERENCE -->
@@ -460,11 +460,11 @@ Document Requests | BantayBarangay
                             <td>
 
                                 <span>
-                                    {{ item.submitted_at|date:"M d, Y" }}
+                                    {{ item.created_at|date:"M d, Y" }}
                                 </span>
 
                                 <small class="dr-cell-subtext">
-                                    {{ item.submitted_at|date:"h:i A" }}
+                                    {{ item.created_at|date:"h:i A" }}
                                 </small>
 
                             </td>

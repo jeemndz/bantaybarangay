@@ -51,46 +51,24 @@ class DocumentType(models.Model):
 class DocumentRequest(models.Model):
 
     STATUS_CHOICES = [
-
-        (
-            "Submitted",
-            "Submitted"
-        ),
-
-        (
-            "Under Verification",
-            "Under Verification"
-        ),
-
-        (
-            "Ready for Signature",
-            "Ready for Signature"
-        ),
-
-        (
-            "Ready for Pickup",
-            "Ready for Pickup"
-        ),
-
-        (
-            "Released",
-            "Released"
-        ),
-
-        (
-            "Rejected",
-            "Rejected"
-        ),
-
-        (
-            "Cancelled",
-            "Cancelled"
-        ),
-
+        ("Submitted", "Submitted"),
+        ("Under Verification", "Under Verification"),
+        ("Ready for Signature", "Ready for Signature"),
+        ("Ready for Pickup", "Ready for Pickup"),
+        ("Released", "Released"),
+        ("Rejected", "Rejected"),
+        ("Cancelled", "Cancelled"),
     ]
 
     request_id = models.AutoField(
         primary_key=True
+    )
+
+    reference_number = models.CharField(
+        max_length=50,
+        unique=True,
+        blank=True,
+        null=True
     )
 
     resident_id = models.IntegerField()
@@ -135,7 +113,7 @@ class DocumentRequest(models.Model):
         default="Submitted"
     )
 
-    submitted_at = models.DateTimeField()
+    created_at = models.DateTimeField()
 
     updated_at = models.DateTimeField()
 
@@ -143,21 +121,8 @@ class DocumentRequest(models.Model):
         managed = False
         db_table = "document_requests"
         ordering = [
-            "-submitted_at"
+            "-created_at"
         ]
 
     def __str__(self):
-        return self.reference_number
-
-    @property
-    def reference_number(self):
-
-        if self.submitted_at:
-            year = self.submitted_at.year
-        else:
-            year = "0000"
-
-        return (
-            f"DOC-{year}-"
-            f"{self.request_id:04d}"
-        )
+        return self.reference_number or f"Request #{self.request_id}"
