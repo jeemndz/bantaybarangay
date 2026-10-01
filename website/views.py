@@ -8,14 +8,14 @@ from datetime import datetime
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password, make_password
 from django.core.files.storage import default_storage
 from django.db import connection, transaction
 from django.shortcuts import render, redirect
-from django.db import connection
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.http import FileResponse, Http404
-
+from auditlogs.utils import create_audit_log
 # =====================================================
 # EVIDENCE CONFIGURATION
 # =====================================================
@@ -116,9 +116,35 @@ def get_resident_by_user_id(user_id):
                 email,
                 contact_number,
                 address,
-                verification_status
+                verification_status,
+
+                birth_date,
+                gender,
+                civil_status,
+
+                house_block_lot,
+                street_purok_sitio,
+                province,
+                municipality_city,
+                barangay,
+                zip_code,
+
+                verified_by,
+                verified_at,
+
+                id_type,
+                id_number,
+                id_file_path,
+                residency_document_type,
+                residency_file_path,
+
+                created_at,
+                updated_at
+
             FROM residents
+
             WHERE user_id = %s
+
             LIMIT 1
             """,
             [
@@ -132,6 +158,7 @@ def get_resident_by_user_id(user_id):
         return None
 
     return {
+
         "resident_id":
             row[0],
 
@@ -158,6 +185,64 @@ def get_resident_by_user_id(user_id):
 
         "verification_status":
             row[8],
+
+        "birth_date":
+            row[9],
+
+        "gender":
+            row[10],
+
+        "civil_status":
+            row[11],
+
+        "house_block_lot":
+            row[12],
+
+        "street_purok_sitio":
+            row[13],
+
+        "province":
+            row[14],
+
+        "municipality_city":
+            row[15],
+
+        "barangay":
+            row[16],
+
+        "zip_code":
+            row[17],
+
+        "verified_by":
+            row[18],
+
+        "verified_at":
+            row[19],
+
+        # =============================================
+        # REGISTRATION VERIFICATION DOCUMENTS
+        # =============================================
+
+        "id_type":
+            row[20],
+
+        "id_number":
+            row[21],
+
+        "id_file_path":
+            row[22],
+
+        "residency_document_type":
+            row[23],
+
+        "residency_file_path":
+            row[24],
+
+        "created_at":
+            row[25],
+
+        "updated_at":
+            row[26],
     }
 
 
@@ -299,6 +384,45 @@ def prepare_resident_profile(resident):
     )
 
     # =================================================
+    # VERIFIED CREDENTIALS
+    # =================================================
+
+    resident["registration_verified"] = (
+        resident["is_verified"]
+    )
+
+    resident["residency_verified"] = (
+        resident["is_verified"]
+        and
+        bool(
+            resident.get(
+                "residency_document_type"
+            )
+        )
+        and
+        bool(
+            resident.get(
+                "residency_file_path"
+            )
+        )
+    )
+
+    resident["identity_document_verified"] = (
+        resident["is_verified"]
+        and
+        bool(
+            resident.get(
+                "id_type"
+            )
+        )
+        and
+        bool(
+            resident.get(
+                "id_file_path"
+            )
+        )
+    )
+    # =================================================
     # OPTIONAL PROFILE FIELDS
     # =================================================
 
@@ -327,9 +451,8 @@ def prepare_resident_profile(resident):
         ""
     )
 
-    resident.setdefault(
-        "registration_date",
-        None
+    resident["registration_date"] = (
+        resident.get("created_at")
     )
 
     resident.setdefault(
@@ -3504,9 +3627,297 @@ def request_document(request):
 # =====================================================
 # MY PROFILE
 # =====================================================
+# =====================================================
+# CHANGE PASSWORD
+# =====================================================
 
+@require_POST
+def change_password(request):
+
+    # =================================================
+    # CHECK LOGIN
+    # =================================================
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    if not user_id:
+
+        messages.error(
+            request,
+            "Please log in first."
+        )
+
+        return redirect(
+            "login"
+        )
+
+    # =================================================
+    # CHECK ROLE
+    # =================================================
+
+    role = (
+        request.session.get(
+            "role",
+            ""
+        )
+        or ""
+    ).strip().lower()
+
+    if role != "resident":
+
+        messages.error(
+            request,
+            "Only resident accounts can "
+            "change their password here."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    # =================================================
+    # FORM VALUES
+    # =================================================
+
+    current_password = request.POST.get(
+        "current_password",
+        ""
+    )
+
+    new_password = request.POST.get(
+        "new_password",
+        ""
+    )
+
+    confirm_password = request.POST.get(
+        "confirm_password",
+        ""
+    )
+
+    # =================================================
+    # REQUIRED FIELDS
+    # =================================================
+
+    if (
+        not current_password
+        or not new_password
+        or not confirm_password
+    ):
+
+        messages.error(
+            request,
+            "Please complete all password fields."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # PASSWORD MATCH
+    # =================================================
+
+    if new_password != confirm_password:
+
+        messages.error(
+            request,
+            "New password and confirmation "
+            "do not match."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # PASSWORD LENGTH
+    # =================================================
+
+    if len(new_password) < 8:
+
+        messages.error(
+            request,
+            "Your new password must contain "
+            "at least 8 characters."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # GET USER
+    # =================================================
+
+    try:
+
+        from login.models import User
+
+        user = User.objects.get(
+            user_id=user_id
+        )
+
+    except User.DoesNotExist:
+
+        messages.error(
+            request,
+            "Your account could not be found."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # CHECK ACCOUNT STATUS
+    # =================================================
+
+    if not user.is_active:
+
+        request.session.flush()
+
+        messages.error(
+            request,
+            "Your account is currently inactive."
+        )
+
+        return redirect(
+            "login"
+        )
+
+    # =================================================
+    # VERIFY CURRENT PASSWORD
+    # =================================================
+
+    password_valid = False
+
+    try:
+
+        password_valid = check_password(
+            current_password,
+            user.password_hash
+        )
+
+    except Exception:
+
+        password_valid = False
+
+    # =================================================
+    # LEGACY PLAIN-TEXT SUPPORT
+    # =================================================
+
+    if not password_valid:
+
+        password_valid = (
+            current_password
+            ==
+            user.password_hash
+        )
+
+    if not password_valid:
+
+        messages.error(
+            request,
+            "Your current password is incorrect."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # PREVENT SAME PASSWORD
+    # =================================================
+
+    same_password = False
+
+    try:
+
+        same_password = check_password(
+            new_password,
+            user.password_hash
+        )
+
+    except Exception:
+
+        same_password = (
+            new_password
+            ==
+            user.password_hash
+        )
+
+    if same_password:
+
+        messages.error(
+            request,
+            "Your new password must be different "
+            "from your current password."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # SAVE HASHED PASSWORD
+    # =================================================
+
+    try:
+
+        user.password_hash = make_password(
+            new_password
+        )
+
+        user.save(
+            update_fields=[
+                "password_hash",
+                "updated_at",
+            ]
+        )
+
+    except Exception as error:
+
+        print(
+            "CHANGE PASSWORD ERROR:",
+            error
+        )
+
+        messages.error(
+            request,
+            "Unable to change your password. "
+            "Please try again."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # AUDIT LOG
+    # =================================================
+
+    create_audit_log(
+    request=request,
+    action="PASSWORD_CHANGE",
+    description="Resident changed account password."
+)
+
+    # =================================================
+    # SUCCESS
+    # =================================================
+
+    messages.success(
+        request,
+        "Your password has been changed successfully."
+    )
+
+    return redirect(
+        "my_profile"
+    )
 def my_profile(request):
-
+    
     # =================================================
     # CHECK LOGIN
     # =================================================
@@ -3535,6 +3946,31 @@ def my_profile(request):
     )
 
     # =================================================
+    # CHECK ROLE
+    # =================================================
+
+    role = (
+        context.get(
+            "role",
+            ""
+        )
+        .strip()
+        .lower()
+    )
+
+    if role != "resident":
+
+        messages.error(
+            request,
+            "Only resident accounts can access "
+            "the resident profile."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    # =================================================
     # GET RESIDENT
     # =================================================
 
@@ -3551,6 +3987,183 @@ def my_profile(request):
 
         return redirect(
             "home"
+        )
+
+    # =================================================
+    # UPDATE CONTACT INFORMATION
+    # =================================================
+
+    if request.method == "POST":
+
+        mobile_number = (
+            request.POST.get(
+                "mobile_number",
+                ""
+            )
+            .strip()
+        )
+
+        email = (
+            request.POST.get(
+                "email",
+                ""
+            )
+            .strip()
+            .lower()
+        )
+
+        # =============================================
+        # VALIDATION
+        # =============================================
+
+        if not mobile_number:
+
+            messages.error(
+                request,
+                "Please enter your mobile number."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        if len(mobile_number) > 20:
+
+            messages.error(
+                request,
+                "Mobile number must not exceed "
+                "20 characters."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        if not email:
+
+            messages.error(
+                request,
+                "Please enter your email address."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        if len(email) > 100:
+
+            messages.error(
+                request,
+                "Email address must not exceed "
+                "100 characters."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        # =============================================
+        # UPDATE DATABASE
+        # =============================================
+
+        try:
+
+            with transaction.atomic():
+
+                # =====================================
+                # UPDATE RESIDENT
+                # =====================================
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE residents
+
+                        SET
+                            contact_number = %s,
+                            email = %s,
+                            updated_at = NOW()
+
+                        WHERE
+                            resident_id = %s
+                            AND user_id = %s
+                        """,
+                        [
+                            mobile_number,
+                            email,
+                            resident[
+                                "resident_id"
+                            ],
+                            user_id,
+                        ]
+                    )
+
+                    if cursor.rowcount == 0:
+
+                        raise Exception(
+                            "Resident profile could "
+                            "not be updated."
+                        )
+
+                # =====================================
+                # UPDATE USER EMAIL
+                # =====================================
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE users
+
+                        SET
+                            email = %s,
+                            updated_at = NOW()
+
+                        WHERE
+                            user_id = %s
+                        """,
+                        [
+                            email,
+                            user_id,
+                        ]
+                    )
+
+            # =========================================
+            # UPDATE SESSION EMAIL
+            # =========================================
+
+            request.session[
+                "email"
+            ] = email
+
+            request.session.modified = True
+
+            # =========================================
+            # SUCCESS
+            # =========================================
+
+            messages.success(
+                request,
+                "Your contact information has "
+                "been updated successfully."
+            )
+
+        except Exception as error:
+
+            print(
+                "PROFILE UPDATE ERROR:",
+                error
+            )
+
+            messages.error(
+                request,
+                "Unable to update your contact "
+                "information. Please try again."
+            )
+
+        return redirect(
+            "my_profile"
         )
 
     # =================================================

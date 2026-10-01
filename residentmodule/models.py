@@ -1,6 +1,10 @@
 from django.db import models
 
 
+# =====================================================
+# RESIDENT
+# =====================================================
+
 class Resident(models.Model):
 
     resident_id = models.AutoField(
@@ -8,10 +12,14 @@ class Resident(models.Model):
     )
 
     user_id = models.IntegerField(
-        null=True,
+        unique=True,
         blank=True,
-        unique=True
+        null=True
     )
+
+    # =================================================
+    # PERSONAL INFORMATION
+    # =================================================
 
     first_name = models.CharField(
         max_length=100
@@ -19,8 +27,8 @@ class Resident(models.Model):
 
     middle_name = models.CharField(
         max_length=100,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     last_name = models.CharField(
@@ -29,110 +37,148 @@ class Resident(models.Model):
 
     suffix = models.CharField(
         max_length=20,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     birth_date = models.DateField(
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     gender = models.CharField(
         max_length=20,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     civil_status = models.CharField(
         max_length=30,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
-    # =============================================
+    # =================================================
+    # CONTACT INFORMATION
+    # =================================================
+
+    email = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    contact_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    # =================================================
     # ADDRESS
-    # =============================================
+    # =================================================
 
     address = models.TextField(
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     house_block_lot = models.CharField(
         max_length=100,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     street_purok_sitio = models.CharField(
         max_length=150,
-        null=True,
-        blank=True
-    )
-
-    barangay = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True
-    )
-
-    municipality_city = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     province = models.CharField(
         max_length=100,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
+    )
+
+    municipality_city = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    barangay = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
     )
 
     zip_code = models.CharField(
         max_length=10,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
-    # =============================================
-    # CONTACT
-    # =============================================
+    # =================================================
+    # GOVERNMENT-ISSUED ID
+    # =================================================
 
-    contact_number = models.CharField(
-        max_length=20,
-        null=True,
-        blank=True
-    )
-
-    email = models.CharField(
+    id_type = models.CharField(
         max_length=100,
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
-    # =============================================
+    id_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    id_file_path = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    # =================================================
+    # PROOF OF RESIDENCY
+    # =================================================
+
+    residency_document_type = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    residency_file_path = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    # =================================================
     # VERIFICATION
-    # =============================================
+    # =================================================
 
     verification_status = models.CharField(
         max_length=30,
-        default='Pending'
+        default="Pending"
     )
 
     verified_by = models.IntegerField(
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
     verified_at = models.DateTimeField(
-        null=True,
-        blank=True
+        blank=True,
+        null=True
     )
 
-    # =============================================
+    # =================================================
     # TIMESTAMPS
-    # =============================================
+    # =================================================
 
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -142,9 +188,16 @@ class Resident(models.Model):
         auto_now=True
     )
 
+    # =================================================
+    # MODEL CONFIGURATION
+    # =================================================
+
     class Meta:
-        db_table = 'residents'
+        db_table = "residents"
         managed = False
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return (
+            f"{self.first_name} "
+            f"{self.last_name}"
+        )

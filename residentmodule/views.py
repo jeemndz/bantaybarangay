@@ -5,7 +5,7 @@ from bantaybarangay.security import role_required
 
 from .models import Resident
 from .forms import ResidentForm
-
+from django.conf import settings
 
 # ============================================================
 # RESIDENT LIST
@@ -74,13 +74,109 @@ def resident_verify(
         resident_id=resident_id
     )
 
+    # --------------------------------------------------------
+    # GOVERNMENT ID URL
+    # --------------------------------------------------------
+
+    id_file_url = None
+    id_file_is_image = False
+    id_file_is_pdf = False
+
+    if resident.id_file_path:
+
+        clean_id_path = (
+            str(resident.id_file_path)
+            .replace("\\", "/")
+            .lstrip("/")
+        )
+
+        id_file_url = (
+            f"{settings.MEDIA_URL}"
+            f"{clean_id_path}"
+        )
+
+        lower_id_path = clean_id_path.lower()
+
+        id_file_is_image = lower_id_path.endswith(
+            (
+                ".jpg",
+                ".jpeg",
+                ".png",
+            )
+        )
+
+        id_file_is_pdf = lower_id_path.endswith(
+            ".pdf"
+        )
+
+    # --------------------------------------------------------
+    # RESIDENCY DOCUMENT URL
+    # --------------------------------------------------------
+
+    residency_file_url = None
+    residency_file_is_image = False
+    residency_file_is_pdf = False
+
+    if resident.residency_file_path:
+
+        clean_residency_path = (
+            str(resident.residency_file_path)
+            .replace("\\", "/")
+            .lstrip("/")
+        )
+
+        residency_file_url = (
+            f"{settings.MEDIA_URL}"
+            f"{clean_residency_path}"
+        )
+
+        lower_residency_path = (
+            clean_residency_path.lower()
+        )
+
+        residency_file_is_image = (
+            lower_residency_path.endswith(
+                (
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                )
+            )
+        )
+
+        residency_file_is_pdf = (
+            lower_residency_path.endswith(
+                ".pdf"
+            )
+        )
+
+    context = {
+        "resident":
+            resident,
+
+        "id_file_url":
+            id_file_url,
+
+        "id_file_is_image":
+            id_file_is_image,
+
+        "id_file_is_pdf":
+            id_file_is_pdf,
+
+        "residency_file_url":
+            residency_file_url,
+
+        "residency_file_is_image":
+            residency_file_is_image,
+
+        "residency_file_is_pdf":
+            residency_file_is_pdf,
+    }
+
     return render(
         request,
         "residentmodule/resident_verify.html",
-        {
-            "resident":
-                resident
-        }
+        context
     )
 
 

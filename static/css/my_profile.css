@@ -1174,7 +1174,228 @@
     color: white;
 }
 
+/* =========================================================
+   PASSWORD MODAL
+========================================================= */
 
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+/* =========================================================
+   PASSWORD INPUT
+========================================================= */
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 48px;
+}
+
+
+/* =========================================================
+   SHOW / HIDE PASSWORD BUTTON
+========================================================= */
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    transform: translateY(-50%);
+
+    border: 0;
+    border-radius: 6px;
+
+    background: transparent;
+    color: var(--text-muted);
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.password-toggle:hover {
+    background: var(--green-lighter);
+    color: var(--green-dark);
+}
+
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--green-medium);
+    outline-offset: 1px;
+}
+
+
+/* =========================================================
+   PASSWORD HELP TEXT
+========================================================= */
+
+.password-help {
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   PASSWORD MATCH MESSAGE
+========================================================= */
+
+.password-match-message {
+    display: block;
+
+    min-height: 15px;
+    margin-top: 6px;
+
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+
+.password-match-message:empty {
+    min-height: 0;
+    margin-top: 0;
+}
+
+
+/* MATCH */
+
+.password-match-message.success {
+    color: var(--green);
+}
+
+
+.password-match-message.success::before {
+    content: "\f058";
+
+    margin-right: 5px;
+
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+
+/* DOES NOT MATCH */
+
+.password-match-message.error {
+    color: var(--danger);
+}
+
+
+.password-match-message.error::before {
+    content: "\f06a";
+
+    margin-right: 5px;
+
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   INVALID PASSWORD FIELD
+========================================================= */
+
+.password-input-wrapper input:invalid:not(:placeholder-shown) {
+    border-color: #dfaaaa;
+}
+
+
+/* =========================================================
+   PASSWORD SUBMIT BUTTON
+========================================================= */
+
+#savePasswordButton {
+    min-width: 150px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+
+#savePasswordButton:hover {
+    background: var(--green-deep);
+}
+
+
+#savePasswordButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   CHANGE PASSWORD SECURITY ROW
+========================================================= */
+
+#changePasswordButton {
+    white-space: nowrap;
+}
+
+
+.security-status i {
+    margin-right: 4px;
+}
+
+
+/* =========================================================
+   PASSWORD MODAL RESPONSIVE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    #changePasswordModal {
+        padding: 12px;
+    }
+
+
+    #changePasswordModal .profile-modal-dialog {
+        padding: 20px;
+    }
+
+
+    #changePasswordModal .profile-modal-header {
+        gap: 12px;
+    }
+
+
+    #changePasswordModal .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+
+    #changePasswordModal .modal-cancel,
+    #changePasswordModal .modal-save {
+        width: 100%;
+    }
+
+
+    #savePasswordButton {
+        min-width: 0;
+    }
+
+}
 /* =========================================================
    TOAST
 ========================================================= */

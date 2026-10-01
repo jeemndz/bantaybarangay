@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
-
+from django.contrib.auth.hashers import check_password, make_password
 import secrets
 
 from .models import User

@@ -1,6 +1,10 @@
 from django.db import models
 
 
+# =====================================================
+# USER
+# =====================================================
+
 class User(models.Model):
 
     user_id = models.AutoField(
@@ -13,7 +17,7 @@ class User(models.Model):
     )
 
     password_hash = models.CharField(
-        max_length=255      
+        max_length=255
     )
 
     email = models.CharField(
@@ -22,7 +26,7 @@ class User(models.Model):
 
     role = models.CharField(
         max_length=30,
-        default='Resident'
+        default="Resident"
     )
 
     is_active = models.BooleanField(
@@ -38,9 +42,13 @@ class User(models.Model):
     )
 
     class Meta:
-        db_table = 'users'
+        db_table = "users"
         managed = False
 
+
+# =====================================================
+# RESIDENT
+# =====================================================
 
 class Resident(models.Model):
 
@@ -51,6 +59,10 @@ class Resident(models.Model):
     user_id = models.IntegerField(
         unique=True
     )
+
+    # =================================================
+    # PERSONAL INFORMATION
+    # =================================================
 
     first_name = models.CharField(
         max_length=100
@@ -82,11 +94,23 @@ class Resident(models.Model):
         max_length=30
     )
 
-    address = models.TextField()
+    # =================================================
+    # CONTACT INFORMATION
+    # =================================================
+
+    email = models.CharField(
+        max_length=100
+    )
 
     contact_number = models.CharField(
         max_length=20
     )
+
+    # =================================================
+    # ADDRESS
+    # =================================================
+
+    address = models.TextField()
 
     house_block_lot = models.CharField(
         max_length=100,
@@ -118,9 +142,51 @@ class Resident(models.Model):
         null=True
     )
 
+    # =================================================
+    # GOVERNMENT-ISSUED ID
+    # =================================================
+
+    id_type = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    id_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    id_file_path = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    # =================================================
+    # PROOF OF RESIDENCY
+    # =================================================
+
+    residency_document_type = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    residency_file_path = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    # =================================================
+    # VERIFICATION
+    # =================================================
+
     verification_status = models.CharField(
         max_length=30,
-        default='Pending'
+        default="Pending"
     )
 
     verified_by = models.IntegerField(
@@ -133,9 +199,9 @@ class Resident(models.Model):
         null=True
     )
 
-    email = models.CharField(
-        max_length=100
-    )
+    # =================================================
+    # TIMESTAMPS
+    # =================================================
 
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -146,5 +212,5 @@ class Resident(models.Model):
     )
 
     class Meta:
-        db_table = 'residents'
+        db_table = "residents"
         managed = False
