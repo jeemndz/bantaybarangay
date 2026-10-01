@@ -17,8 +17,16 @@ from .models import Complaint
 from residentmodule.models import Resident
 from evidencemodule.views import save_evidence_file
 from usermanagement.models import User
+<<<<<<< HEAD
 
 from bantaybarangay.security import role_required
+=======
+from django.http import JsonResponse
+from evidencemodule.models import Evidence
+from documents.models import ComplaintDocument
+from django.db import connection
+
+>>>>>>> 4452af4c8cfa426a98b3196a96513e85cd208968
 # =========================================================
 # CONSTANTS
 # =========================================================
@@ -1859,3 +1867,238 @@ def new_complaint(request):
                 residents,
         }
     )
+
+# =========================================================
+# VERIFIED COMPLAINT FILES
+# =========================================================
+
+def verified_complaint_files(
+    request,
+    complaint_id
+):
+
+    # =====================================================
+    # MAKE SURE COMPLAINT EXISTS
+    # =====================================================
+
+    complaint = get_object_or_404(
+        Complaint,
+        complaint_id=complaint_id
+    )
+
+
+    # =====================================================
+    # RESULT
+    # =====================================================
+
+    files = []
+
+
+    # =====================================================
+    # VERIFIED OFFICIAL COMPLAINT DOCUMENTS
+    # =====================================================
+
+    complaint_documents = (
+        ComplaintDocument.objects
+        .filter(
+            complaint_id=complaint.complaint_id,
+            blockchain_status="Registered",
+            integrity_status="Verified"
+        )
+        .order_by(
+            "-generated_at"
+        )
+    )
+
+
+    for document in complaint_documents:
+
+        files.append({
+            "id": document.document_id,
+            "blockchain_id": (
+                f"CMP-{complaint.complaint_id}"
+            ),
+            "source": "complaint_document",
+            "type": "Official Complaint Document",
+            "file_name": document.file_name,
+            "blockchain_status": (
+                document.blockchain_status
+            ),
+            "integrity_status": (
+                document.integrity_status
+            ),
+        })
+
+
+    # =====================================================
+    # VERIFIED EVIDENCE
+    # =====================================================
+
+    evidence_files = (
+        Evidence.objects
+        .filter(
+            complaint_id=complaint.complaint_id,
+            blockchain_status="Registered",
+            integrity_status="Verified"
+        )
+        .order_by(
+            "-uploaded_at"
+        )
+    )
+
+
+    for evidence in evidence_files:
+
+        files.append({
+            "id": evidence.evidence_id,
+            "blockchain_id": (
+                f"EVD-{evidence.evidence_id}"
+            ),
+            "source": "evidence",
+            "type": "Evidence",
+            "file_name": evidence.file_name,
+            "file_type": evidence.file_type,
+            "blockchain_status": (
+                evidence.blockchain_status
+            ),
+            "integrity_status": (
+                evidence.integrity_status
+            ),
+        })
+
+
+    # =====================================================
+    # RESPONSE
+    # =====================================================
+
+    return JsonResponse({
+        "success": True,
+        "complaint_id": complaint.complaint_id,
+        "count": len(files),
+        "files": files,
+    })
+
+
+@require_POST
+def release_complaint_documents(request, complaint_id):
+    try:
+        # Check logged-in user
+        released_by = request.session.get("user_id")
+
+        if not released_by:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "You must be logged in."
+                },
+                status=401
+            )
+
+        # Find complaint and its resident
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT complaint_id, resident_id
+                FROM complaints
+                WHERE complaint_id = %s
+                LIMIT 1
+                """,
+                [complaint_id]
+            )
+
+            complaint = cursor.fetchone()
+
+        if not complaint:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "Complaint not found."
+                },
+                status=404
+            )
+
+        resident_id = complaint[1]
+
+        # Import here to avoid import conflicts
+        from documents.models import ComplaintDocument
+        from evidencemodule.models import Evidence
+
+        # Get only Registered + Verified official documents
+        complaint_documents = ComplaintDocument.objects.filter(
+            complaint_id=complaint_id,
+            blockchain_status="Registered",
+            integrity_status="Verified"
+        )
+
+        # Get only Registered + Verified evidence
+        evidence_files = Evidence.objects.filter(
+            complaint_id=complaint_id,
+            blockchain_status="Registered",
+            integrity_status="Verified"
+        )
+
+        total_files = (
+            complaint_documents.count()
+            + evidence_files.count()
+        )
+
+        if total_files == 0:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": (
+                        "There are no registered and verified "
+                        "documents available for release."
+                    )
+                },
+                status=400
+            )
+
+        # Record release
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO complaint_document_releases
+                    (
+                        complaint_id,
+                        released_by,
+                        released_at
+                    )
+                VALUES (%s, %s, NOW())
+
+                ON DUPLICATE KEY UPDATE
+                    released_by = VALUES(released_by),
+                    released_at = NOW()
+                """,
+                [
+                    complaint_id,
+                    released_by
+                ]
+            )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "complaint_id": complaint_id,
+                "resident_id": resident_id,
+                "file_count": total_files,
+                "message": (
+                    f"{total_files} verified document(s) "
+                    "were successfully returned to the resident."
+                )
+            }
+        )
+
+    except Exception as error:
+        print(
+            "RELEASE COMPLAINT DOCUMENTS ERROR:",
+            error
+        )
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": str(error)
+            },
+            status=500
+        )

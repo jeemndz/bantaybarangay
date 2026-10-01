@@ -83,4 +83,15 @@ urlpatterns = [
         name="contact"
     ),
 
+    path(
+    "complaint/<int:complaint_id>/release-documents/",
+    views.release_complaint_documents,
+    name="release_complaint_documents",
+    ),
+
+    path(
+    "my-complaints/<int:complaint_id>/document/<str:source>/<int:file_id>/",
+    views.released_complaint_document,
+    name="released_complaint_document",
+),
 ]
