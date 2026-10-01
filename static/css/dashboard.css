@@ -760,13 +760,7 @@
 
 .donut-chart.has-data {
 
-    background:
-        conic-gradient(
-            #8eb89f 0deg 162deg,
-            #183f38 162deg 234deg,
-            #54776c 234deg 324deg,
-            #16bd88 324deg 360deg
-        );
+     background: #e8eeee;
 
 }
 
