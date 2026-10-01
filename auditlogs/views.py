@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from .models import AuditLog
+from bantaybarangay.security import role_required
 
 try:
     from login.models import User
@@ -16,7 +17,7 @@ except ImportError:
 # =========================================================
 # AUDIT LOGS
 # =========================================================
-
+@role_required("admin")
 def audit_logs(request):
     """
     Display the Audit Logs page with:

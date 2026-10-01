@@ -15,6 +15,7 @@ document.addEventListener(
         initializeDraft();
         initializeReset();
         initializeFormValidation();
+        initializeDjangoMessages();
 
         updateSelections();
         updateFees();
@@ -1552,7 +1553,76 @@ function cssEscape(value) {
 
 }
 
+/* =========================================================
+   DJANGO MESSAGES
+========================================================= */
 
+function initializeDjangoMessages() {
+
+    const messages =
+        document.querySelectorAll(
+            "#djangoMessages .django-message"
+        );
+
+    if (!messages.length) {
+        return;
+    }
+
+
+    const messageElement =
+        messages[0];
+
+
+    const message =
+        messageElement.dataset.message || "";
+
+
+    const level =
+        messageElement.dataset.level || "info";
+
+
+    if (!message) {
+        return;
+    }
+
+
+    let title =
+        "Notice";
+
+
+    if (
+        level.includes("success")
+    ) {
+
+        title =
+            "Request Submitted";
+
+    }
+
+    else if (
+        level.includes("error")
+    ) {
+
+        title =
+            "Request Error";
+
+    }
+
+    else if (
+        level.includes("warning")
+    ) {
+
+        title =
+            "Warning";
+
+    }
+
+
+    showToast(
+        title,
+        message
+    );
+}
 /* =========================================================
    TOAST
 ========================================================= */

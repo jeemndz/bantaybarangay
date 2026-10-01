@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Document, DocumentType, ComplaintDocument
 from registration.models import Resident
-
+from bantaybarangay.security import role_required
 from evidencemodule.services.fabric_service import (
     FabricServiceError,
     register_document,
@@ -22,7 +22,7 @@ from evidencemodule.services.hashing import calculate_file_hash
 # =========================================================
 # DOCUMENT LIST
 # =========================================================
-
+@role_required("admin", "official")
 def document_list(request):
 
     # ==========================
@@ -160,7 +160,7 @@ def document_list(request):
 # =========================================================
 # GET OFFICIAL COMPLAINT DOCUMENT
 # =========================================================
-
+@role_required("admin", "official")
 def complaint_document(request, complaint_id):
 
     try:
@@ -269,7 +269,7 @@ def complaint_document(request, complaint_id):
 # =========================================================
 # REGISTER COMPLAINT PDF ON BLOCKCHAIN
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 def register_complaint_blockchain(request, document_id):
 
@@ -491,7 +491,7 @@ def register_complaint_blockchain(request, document_id):
 # =========================================================
 # VERIFY COMPLAINT PDF INTEGRITY
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 def verify_complaint_integrity(
     request,

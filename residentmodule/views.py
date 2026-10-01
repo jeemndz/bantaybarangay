@@ -1,46 +1,73 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
+from bantaybarangay.security import role_required
+
 from .models import Resident
 from .forms import ResidentForm
 
 
 # ============================================================
 # RESIDENT LIST
+# ADMIN + OFFICIAL
 # ============================================================
 
+@role_required("admin", "official")
 def resident_list(request):
 
-    residents = Resident.objects.all().order_by('-resident_id')
+    residents = (
+        Resident.objects
+        .all()
+        .order_by("-resident_id")
+    )
 
-    verification_residents = Resident.objects.filter(
-        verification_status='Pending'
-    ).order_by('-resident_id')
+    verification_residents = (
+        Resident.objects
+        .filter(
+            verification_status="Pending"
+        )
+        .order_by("-resident_id")
+    )
 
     context = {
-        'residents': residents,
-        'verification_residents': verification_residents,
+        "residents":
+            residents,
 
-        'total_residents': residents.count(),
+        "verification_residents":
+            verification_residents,
 
-        # You can calculate these later from your actual data
-        'total_households': 0,
-        'senior_citizens': 0,
-        'pwd_residents': 0,
+        "total_residents":
+            residents.count(),
+
+        # You can calculate these later
+        # from your actual resident data.
+        "total_households":
+            0,
+
+        "senior_citizens":
+            0,
+
+        "pwd_residents":
+            0,
     }
 
     return render(
         request,
-        'residentmodule/resident_list.html',
+        "residentmodule/resident_list.html",
         context
     )
 
 
 # ============================================================
 # RESIDENT VERIFICATION / REVIEW
+# ADMIN + OFFICIAL
 # ============================================================
 
-def resident_verify(request, resident_id):
+@role_required("admin", "official")
+def resident_verify(
+    request,
+    resident_id
+):
 
     resident = get_object_or_404(
         Resident,
@@ -49,132 +76,182 @@ def resident_verify(request, resident_id):
 
     return render(
         request,
-        'residentmodule/resident_verify.html',
+        "residentmodule/resident_verify.html",
         {
-            'resident': resident
+            "resident":
+                resident
         }
     )
 
 
 # ============================================================
 # ACCEPT RESIDENT
+# ADMIN + OFFICIAL
 # ============================================================
 
-def accept_resident(request, resident_id):
+@role_required("admin", "official")
+def accept_resident(
+    request,
+    resident_id
+):
 
     resident = get_object_or_404(
         Resident,
         resident_id=resident_id
     )
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        resident.verification_status = 'Verified'
-        resident.verified_at = timezone.now()
+        resident.verification_status = (
+            "Verified"
+        )
 
-        # Keep this as None for now
-        # until you connect it to the logged-in official/admin
-        resident.verified_by = None
+        resident.verified_at = (
+            timezone.now()
+        )
+
+        # Save the logged-in admin/official
+        # who verified this resident.
+        resident.verified_by = (
+            request.session.get(
+                "user_id"
+            )
+        )
 
         resident.save(
             update_fields=[
-                'verification_status',
-                'verified_at',
-                'verified_by'
+                "verification_status",
+                "verified_at",
+                "verified_by",
             ]
         )
 
-        return redirect('resident_list')
+        return redirect(
+            "resident_list"
+        )
 
     return redirect(
-        'resident_verify',
+        "resident_verify",
         resident_id=resident_id
     )
 
 
 # ============================================================
 # REJECT RESIDENT
+# ADMIN + OFFICIAL
 # ============================================================
 
-def reject_resident(request, resident_id):
+@role_required("admin", "official")
+def reject_resident(
+    request,
+    resident_id
+):
 
     resident = get_object_or_404(
         Resident,
         resident_id=resident_id
     )
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        resident.verification_status = 'Rejected'
-        resident.verified_at = timezone.now()
+        resident.verification_status = (
+            "Rejected"
+        )
 
-        # Keep this as None for now
-        # until you connect it to the logged-in official/admin
-        resident.verified_by = None
+        resident.verified_at = (
+            timezone.now()
+        )
+
+        # Save the logged-in admin/official
+        # who rejected this resident.
+        resident.verified_by = (
+            request.session.get(
+                "user_id"
+            )
+        )
 
         resident.save(
             update_fields=[
-                'verification_status',
-                'verified_at',
-                'verified_by'
+                "verification_status",
+                "verified_at",
+                "verified_by",
             ]
         )
 
-        return redirect('resident_list')
+        return redirect(
+            "resident_list"
+        )
 
     return redirect(
-        'resident_verify',
+        "resident_verify",
         resident_id=resident_id
     )
 
 
 # ============================================================
 # CREATE RESIDENT
+# ADMIN + OFFICIAL
 # ============================================================
 
+@role_required("admin", "official")
 def resident_create(request):
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        form = ResidentForm(request.POST)
+        form = ResidentForm(
+            request.POST
+        )
 
         if form.is_valid():
 
             form.save()
 
-            return redirect('resident_list')
+            return redirect(
+                "resident_list"
+            )
 
     else:
 
         form = ResidentForm()
 
     context = {
-        'form': form,
-        'page_title': 'Add Resident',
-        'page_description': (
-            'Register a new resident in the barangay records.'
-        ),
+        "form":
+            form,
+
+        "page_title":
+            "Add Resident",
+
+        "page_description":
+            (
+                "Register a new resident "
+                "in the barangay records."
+            ),
     }
 
     return render(
         request,
-        'residentmodule/resident_form.html',
+        "residentmodule/resident_form.html",
         context
     )
 
 
 # ============================================================
 # UPDATE RESIDENT
+# ADMIN + OFFICIAL
 # ============================================================
 
-def resident_update(request, resident_id):
+@role_required("admin", "official")
+def resident_update(
+    request,
+    resident_id
+):
 
     resident = get_object_or_404(
         Resident,
         resident_id=resident_id
     )
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
         form = ResidentForm(
             request.POST,
@@ -185,7 +262,9 @@ def resident_update(request, resident_id):
 
             form.save()
 
-            return redirect('resident_list')
+            return redirect(
+                "resident_list"
+            )
 
     else:
 
@@ -194,42 +273,55 @@ def resident_update(request, resident_id):
         )
 
     context = {
-        'form': form,
-        'resident': resident,
-        'page_title': 'Edit Resident',
-        'page_description': (
-            'Update the resident information.'
-        ),
+        "form":
+            form,
+
+        "resident":
+            resident,
+
+        "page_title":
+            "Edit Resident",
+
+        "page_description":
+            "Update the resident information.",
     }
 
     return render(
         request,
-        'residentmodule/resident_form.html',
+        "residentmodule/resident_form.html",
         context
     )
 
 
 # ============================================================
 # DELETE RESIDENT
+# ADMIN + OFFICIAL
 # ============================================================
 
-def resident_delete(request, resident_id):
+@role_required("admin", "official")
+def resident_delete(
+    request,
+    resident_id
+):
 
     resident = get_object_or_404(
         Resident,
         resident_id=resident_id
     )
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
         resident.delete()
 
-        return redirect('resident_list')
+        return redirect(
+            "resident_list"
+        )
 
     return render(
         request,
-        'residentmodule/resident_confirm_delete.html',
+        "residentmodule/resident_confirm_delete.html",
         {
-            'resident': resident
+            "resident":
+                resident
         }
     )

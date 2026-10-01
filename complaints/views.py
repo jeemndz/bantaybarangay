@@ -18,7 +18,7 @@ from residentmodule.models import Resident
 from evidencemodule.views import save_evidence_file
 from usermanagement.models import User
 
-
+from bantaybarangay.security import role_required
 # =========================================================
 # CONSTANTS
 # =========================================================
@@ -632,7 +632,7 @@ def save_complaint_evidence(
 # =========================================================
 # COMPLAINT MANAGEMENT
 # =========================================================
-
+@role_required("admin", "official")
 def complaints(request):
 
     logged_in_user = (
@@ -1041,7 +1041,7 @@ def complaints(request):
 # =========================================================
 # UPDATE COMPLAINT
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 def update_complaint(
     request,
@@ -1424,7 +1424,7 @@ def update_complaint(
 # =========================================================
 # NEW COMPLAINT
 # =========================================================
-
+@role_required("admin", "official")
 def new_complaint(request):
 
     residents = (

@@ -2018,44 +2018,107 @@
 
 
     <!-- =====================================================
-         TOAST
-    ====================================================== -->
+     TOAST
+====================================================== -->
 
-    <div
-        id="requestToast"
-        class="request-toast"
-    >
+<div
+    id="requestToast"
+    class="request-toast"
+    role="alert"
+    aria-live="polite"
+    aria-hidden="true"
+>
 
-        <div class="toast-icon">
+    <div class="toast-icon">
 
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M5 12l4 4L19 6"
-                />
-            </svg>
-
-        </div>
-
-
-        <div>
-
-            <strong id="toastTitle">
-                Notice
-            </strong>
-
-            <p id="toastMessage"></p>
-
-        </div>
+        <svg
+            id="toastSuccessIcon"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 12l4 4L19 6"
+            />
+        </svg>
 
     </div>
+
+
+    <div class="toast-content">
+
+        <strong id="toastTitle">
+            Notice
+        </strong>
+
+        <p id="toastMessage"></p>
+
+    </div>
+
+
+    <button
+        type="button"
+        id="toastCloseButton"
+        class="toast-close"
+        aria-label="Close notification"
+    >
+        &times;
+    </button>
+
+</div>
+
+<!-- =====================================================
+     DJANGO MESSAGES FOR TOAST
+====================================================== -->
+
+{% if messages %}
+
+    <div
+        id="djangoMessages"
+        hidden
+    >
+
+        {% for message in messages %}
+
+            <div
+                class="django-message"
+                data-message="{{ message|escape }}"
+                data-level="{{ message.tags|default:'info' }}"
+            ></div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
+<!-- =====================================================
+     DJANGO MESSAGES
+====================================================== -->
+
+{% if messages %}
+
+    <div
+        id="djangoMessages"
+        hidden
+    >
+
+        {% for message in messages %}
+
+            <div
+                class="django-message"
+                data-message="{{ message|escape }}"
+                data-level="{{ message.tags|default:'info' }}"
+            ></div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
 
 
     <!-- =====================================================

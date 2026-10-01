@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 
 from complaints.models import Complaint
 from residentmodule.models import Resident
-
+from bantaybarangay.security import role_required
 from .models import (
     Hearing,
     HearingAttachment,
@@ -325,7 +325,7 @@ def get_resident_name(
 # =========================================================
 # HEARING SCHEDULE PAGE
 # =========================================================
-
+@role_required("admin", "official")
 def hearing_schedule(request):
 
     today = timezone.localdate()
@@ -642,7 +642,7 @@ def hearing_schedule(request):
 # =========================================================
 # CREATE HEARING
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def create_hearing(request):
@@ -1052,7 +1052,7 @@ def create_hearing(request):
 # =========================================================
 # START HEARING
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def start_hearing(
@@ -1166,7 +1166,7 @@ def start_hearing(
 # =========================================================
 # COMPLETE HEARING
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def complete_hearing(
@@ -1255,7 +1255,7 @@ def complete_hearing(
 # =========================================================
 # POSTPONE / RESCHEDULE HEARING
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def postpone_hearing(
@@ -1545,7 +1545,7 @@ def postpone_hearing(
 # =========================================================
 # CANCEL HEARING
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def cancel_hearing(
@@ -1656,7 +1656,7 @@ def cancel_hearing(
 # =========================================================
 # SAVE HEARING NOTES
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def save_hearing_notes(
@@ -1745,7 +1745,7 @@ def save_hearing_notes(
 # =========================================================
 # UPLOAD HEARING ATTACHMENT
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 def upload_hearing_attachment(
     request,
@@ -2021,7 +2021,7 @@ def upload_hearing_attachment(
 # =========================================================
 # DELETE HEARING ATTACHMENT
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 @transaction.atomic
 def delete_hearing_attachment(

@@ -43,8 +43,8 @@ Reports & Analytics | BantayBarangay
 
         <div class="reports-export-actions">
 
-            <button
-                type="button"
+            <a
+                href="{% url 'reportsmodule:export_pdf' %}"
                 class="report-export-button"
                 id="exportPdfBtn"
             >
@@ -76,11 +76,11 @@ Reports & Analytics | BantayBarangay
                     Export PDF
                 </span>
 
-            </button>
+            </a>
 
 
             <button
-                type="button"
+                href="{% url 'reportsmodule:export_excel' %}"
                 class="report-export-button"
                 id="exportExcelBtn"
             >
@@ -112,7 +112,7 @@ Reports & Analytics | BantayBarangay
                     Export Excel
                 </span>
 
-            </button>
+            </a>
 
 
             <button
@@ -222,7 +222,7 @@ Reports & Analytics | BantayBarangay
                 </p>
 
                 <h2>
-                    {{ monthly_complaints|default:"128" }}
+                    {{ monthly_complaints }}
                 </h2>
 
             </div>
@@ -284,7 +284,7 @@ Reports & Analytics | BantayBarangay
                 </p>
 
                 <h2>
-                    {{ incident_reports|default:"45" }}
+                    {{ incident_reports }}
                 </h2>
 
             </div>
@@ -351,7 +351,7 @@ Reports & Analytics | BantayBarangay
                 </p>
 
                 <h2>
-                    {{ resolution_rate|default:"94" }}%
+                    {{ resolution_rate }}%
                 </h2>
 
             </div>
@@ -398,7 +398,7 @@ Reports & Analytics | BantayBarangay
                 </p>
 
                 <h2>
-                    {{ verified_documents|default:"2431" }}
+                    {{ verified_documents}}
                 </h2>
 
             </div>
@@ -446,18 +446,15 @@ Reports & Analytics | BantayBarangay
             <div class="summary-content">
 
                 <p>
-                    Officer Perf.
+                    Resolved Cases
                 </p>
 
                 <div class="performance-value">
 
                     <h2>
-                        {{ officer_performance|default:"4.8" }}
+                        {{ resolved_complaints }}
                     </h2>
 
-                    <span>
-                        /5
-                    </span>
 
                 </div>
 
@@ -541,11 +538,11 @@ Reports & Analytics | BantayBarangay
                 <div class="category-chart-label">
 
                     <strong>
-                        74%
+                        {{ category_total }}
                     </strong>
 
                     <span>
-                        Civil Issues
+                        Total Cases
                     </span>
 
                 </div>
@@ -555,82 +552,41 @@ Reports & Analytics | BantayBarangay
 
             <div class="category-list">
 
-                <div class="category-row">
+    {% for category in complaint_categories %}
 
-                    <div class="category-name">
+        <div class="category-row">
 
-                        <span class="category-dot category-one"></span>
+            <div class="category-name">
 
-                        <span>
-                            Property Dispute
-                        </span>
+                <span
+                    class="category-dot category-{% cycle 'one' 'two' 'three' 'four' %}"
+                ></span>
 
-                    </div>
-
-                    <strong>
-                        42%
-                    </strong>
-
-                </div>
-
-
-                <div class="category-row">
-
-                    <div class="category-name">
-
-                        <span class="category-dot category-two"></span>
-
-                        <span>
-                            Noise Complaints
-                        </span>
-
-                    </div>
-
-                    <strong>
-                        28%
-                    </strong>
-
-                </div>
-
-
-                <div class="category-row">
-
-                    <div class="category-name">
-
-                        <span class="category-dot category-three"></span>
-
-                        <span>
-                            Illegal Parking
-                        </span>
-
-                    </div>
-
-                    <strong>
-                        15%
-                    </strong>
-
-                </div>
-
-
-                <div class="category-row">
-
-                    <div class="category-name">
-
-                        <span class="category-dot category-four"></span>
-
-                        <span>
-                            Others
-                        </span>
-
-                    </div>
-
-                    <strong>
-                        15%
-                    </strong>
-
-                </div>
+                <span>
+                    {{ category.name }}
+                </span>
 
             </div>
+
+            <strong>
+                {{ category.percentage }}%
+            </strong>
+
+        </div>
+
+    {% empty %}
+
+        <div class="category-row">
+
+            <div class="category-name">
+                <span>No complaint data available</span>
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>
 
         </div>
 
@@ -721,11 +677,11 @@ Reports & Analytics | BantayBarangay
                     <div class="blockchain-score">
 
                         <strong>
-                            98.2<span>%</span>
+                           {{ blockchain_rate }}<span>%</span>
                         </strong>
 
                         <small>
-                            Fully Secure
+                            Registered Evidence
                         </small>
 
                     </div>
@@ -740,11 +696,11 @@ Reports & Analytics | BantayBarangay
                 <div class="blockchain-info-card">
 
                     <span>
-                        Active Nodes
+                          Registered
                     </span>
 
                     <strong>
-                        124/124
+                        {{ registered_evidence }}/{{ total_evidence }}
                     </strong>
 
                 </div>
@@ -753,11 +709,11 @@ Reports & Analytics | BantayBarangay
                 <div class="blockchain-info-card">
 
                     <span>
-                        Avg. Sync Time
+                        Pending
                     </span>
 
                     <strong>
-                        1.2s
+                        {{ pending_evidence }}
                     </strong>
 
                 </div>
@@ -792,123 +748,50 @@ Reports & Analytics | BantayBarangay
 
             <div class="incident-category-list">
 
+    {% for incident in incident_categories %}
 
-                <!-- PUBLIC NUISANCE -->
+        <div class="incident-category">
 
-                <div class="incident-category">
+            <div class="incident-category-header">
 
-                    <div class="incident-category-header">
+                <span>
+                    {{ incident.name }}
+                </span>
 
-                        <span>
-                            Public Nuisance
-                        </span>
-
-                        <strong>
-                            82 cases
-                        </strong>
-
-                    </div>
-
-
-                    <div class="incident-progress">
-
-                        <div
-                            class="incident-progress-fill"
-                            style="width: 82%;"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- TRAFFIC VIOLATIONS -->
-
-                <div class="incident-category">
-
-                    <div class="incident-category-header">
-
-                        <span>
-                            Traffic Violations
-                        </span>
-
-                        <strong>
-                            64 cases
-                        </strong>
-
-                    </div>
-
-
-                    <div class="incident-progress">
-
-                        <div
-                            class="incident-progress-fill"
-                            style="width: 64%;"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- SANITATION -->
-
-                <div class="incident-category">
-
-                    <div class="incident-category-header">
-
-                        <span>
-                            Sanitation
-                        </span>
-
-                        <strong>
-                            45 cases
-                        </strong>
-
-                    </div>
-
-
-                    <div class="incident-progress">
-
-                        <div
-                            class="incident-progress-fill"
-                            style="width: 45%;"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- DOMESTIC DISPUTES -->
-
-                <div class="incident-category">
-
-                    <div class="incident-category-header">
-
-                        <span>
-                            Domestic Disputes
-                        </span>
-
-                        <strong>
-                            22 cases
-                        </strong>
-
-                    </div>
-
-
-                    <div class="incident-progress">
-
-                        <div
-                            class="incident-progress-fill light"
-                            style="width: 22%;"
-                        ></div>
-
-                    </div>
-
-                </div>
+                <strong>
+                    {{ incident.total }} case{{ incident.total|pluralize }}
+                </strong>
 
             </div>
+
+            <div class="incident-progress">
+
+                <div
+                    class="incident-progress-fill"
+                    data-progress="{{ incident.progress }}"
+                ></div>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="incident-category">
+
+            <div class="incident-category-header">
+
+                <span>
+                    No community issue data available.
+                </span>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>
 
         </div>
 
@@ -1137,7 +1020,23 @@ Reports & Analytics | BantayBarangay
 
 
 {% block extra_js %}
+{{ complaint_chart_labels|json_script:"complaint-chart-labels" }}
+{{ complaint_chart_values|json_script:"complaint-chart-values" }}
 
+{{ category_chart_labels|json_script:"category-chart-labels" }}
+{{ category_chart_values|json_script:"category-chart-values" }}
+
+{{ resolution_labels|json_script:"resolution-labels" }}
+{{ resolution_filed|json_script:"resolution-filed" }}
+{{ resolution_resolved|json_script:"resolution-resolved" }}
+
+{{ blockchain_rate|json_script:"blockchain-rate" }}
+
+{{ monthly_complaints|json_script:"report-monthly-complaints" }}
+{{ incident_reports|json_script:"report-incident-reports" }}
+{{ resolution_rate|json_script:"report-resolution-rate" }}
+{{ verified_documents|json_script:"report-verified-documents" }}
+{{ resolved_complaints|json_script:"report-resolved-complaints" }}
 <!-- =========================================================
      CHART.JS
 ========================================================== -->

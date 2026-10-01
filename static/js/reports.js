@@ -7,7 +7,7 @@
 
 
 /* =========================================================
-   GLOBAL VARIABLES
+   GLOBAL CHARTS
 ========================================================= */
 
 let complaintsChart = null;
@@ -17,78 +17,131 @@ let blockchainChart = null;
 
 
 /* =========================================================
-   CHART DATA
+   DJANGO DATA
 ========================================================= */
 
-const complaintData = {
+const complaintLabels =
+    getJsonData(
+        "complaint-chart-labels",
+        []
+    );
 
-    "12": {
-        labels: [
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV"
-        ],
+const complaintValues =
+    getJsonData(
+        "complaint-chart-values",
+        []
+    );
 
-        values: [
-            42,
-            50,
-            60,
-            69,
-            73,
-            74,
-            81,
-            92,
-            87,
-            71,
-            93
-        ]
-    },
+const categoryLabels =
+    getJsonData(
+        "category-chart-labels",
+        []
+    );
 
+const categoryValues =
+    getJsonData(
+        "category-chart-values",
+        []
+    );
 
-    "6": {
-        labels: [
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV"
-        ],
+const resolutionLabels =
+    getJsonData(
+        "resolution-labels",
+        []
+    );
 
-        values: [
-            74,
-            81,
-            92,
-            87,
-            71,
-            93
-        ]
-    },
+const resolutionFiled =
+    getJsonData(
+        "resolution-filed",
+        []
+    );
+
+const resolutionResolved =
+    getJsonData(
+        "resolution-resolved",
+        []
+    );
+
+const blockchainRate =
+    Number(
+        getJsonData(
+            "blockchain-rate",
+            0
+        )
+    ) || 0;
 
 
-    "3": {
-        labels: [
-            "SEP",
-            "OCT",
-            "NOV"
-        ],
+const reportMonthlyComplaints =
+    Number(
+        getJsonData(
+            "report-monthly-complaints",
+            0
+        )
+    ) || 0;
 
-        values: [
-            87,
-            71,
-            93
-        ]
+const reportIncidentReports =
+    Number(
+        getJsonData(
+            "report-incident-reports",
+            0
+        )
+    ) || 0;
+
+const reportResolutionRate =
+    Number(
+        getJsonData(
+            "report-resolution-rate",
+            0
+        )
+    ) || 0;
+
+const reportVerifiedDocuments =
+    Number(
+        getJsonData(
+            "report-verified-documents",
+            0
+        )
+    ) || 0;
+
+const reportResolvedComplaints =
+    Number(
+        getJsonData(
+            "report-resolved-complaints",
+            0
+        )
+    ) || 0;
+
+
+/* =========================================================
+   READ DJANGO JSON
+========================================================= */
+
+function getJsonData(id, fallback) {
+
+    const element =
+        document.getElementById(id);
+
+    if (!element) {
+        return fallback;
     }
 
-};
+    try {
+
+        return JSON.parse(
+            element.textContent
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Unable to read report data:",
+            id,
+            error
+        );
+
+        return fallback;
+    }
+}
 
 
 /* =========================================================
@@ -106,46 +159,67 @@ document.addEventListener(
 
 
 /* =========================================================
-   INITIALIZE REPORTS
+   INITIALIZE
 ========================================================= */
 
 function initializeReports() {
 
     initializeExportButtons();
-
     initializePeriodSelector();
-
     initializePersonnelButton();
 
-
-    /*
-     * Chart.js is loaded from the CDN in reports.html.
-     * Stop chart initialization if the library did not load.
-     */
+    // Apply database percentages to incident progress bars
+    initializeProgressBars();
 
     if (typeof Chart === "undefined") {
 
         console.error(
-            "Chart.js is not available. Reports charts cannot be created."
+            "Chart.js is not available."
         );
 
         return;
-
     }
-
 
     configureChartDefaults();
 
     initializeComplaintsChart();
-
     initializeCategoryChart();
-
     initializeResolutionChart();
-
     initializeBlockchainChart();
-
 }
+function initializeProgressBars() {
 
+    const progressBars =
+        document.querySelectorAll(
+            ".incident-progress-fill[data-progress]"
+        );
+
+    progressBars.forEach(
+        function (bar) {
+
+            let progress =
+                parseFloat(
+                    bar.dataset.progress
+                );
+
+            if (Number.isNaN(progress)) {
+                progress = 0;
+            }
+
+            progress =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        progress
+                    )
+                );
+
+            bar.style.width =
+                progress + "%";
+        }
+    );
+}
 
 /* =========================================================
    CHART DEFAULTS
@@ -158,12 +232,50 @@ function configureChartDefaults() {
 
     Chart.defaults.color =
         "#52605c";
-
 }
 
 
 /* =========================================================
-   MONTHLY COMPLAINTS
+   COMPLAINT PERIOD DATA
+========================================================= */
+
+function getComplaintPeriodData(period) {
+
+    const numberOfMonths =
+        parseInt(
+            period,
+            10
+        );
+
+    if (
+        Number.isNaN(numberOfMonths) ||
+        numberOfMonths <= 0
+    ) {
+
+        return {
+            labels: complaintLabels,
+            values: complaintValues
+        };
+    }
+
+    return {
+
+        labels:
+            complaintLabels.slice(
+                -numberOfMonths
+            ),
+
+        values:
+            complaintValues.slice(
+                -numberOfMonths
+            )
+
+    };
+}
+
+
+/* =========================================================
+   MONTHLY COMPLAINTS CHART
 ========================================================= */
 
 function initializeComplaintsChart() {
@@ -173,15 +285,12 @@ function initializeComplaintsChart() {
             "complaintsChart"
         );
 
-
     if (!canvas) {
         return;
     }
 
-
     const context =
         canvas.getContext("2d");
-
 
     const gradient =
         context.createLinearGradient(
@@ -191,30 +300,24 @@ function initializeComplaintsChart() {
             310
         );
 
-
     gradient.addColorStop(
         0,
         "rgba(35, 103, 87, 0.22)"
     );
-
 
     gradient.addColorStop(
         1,
         "rgba(35, 103, 87, 0.01)"
     );
 
-
     const data =
-        complaintData["12"];
-
+        getComplaintPeriodData("12");
 
     complaintsChart =
         new Chart(
             context,
             {
-
                 type: "line",
-
 
                 data: {
 
@@ -222,9 +325,7 @@ function initializeComplaintsChart() {
                         data.labels,
 
                     datasets: [
-
                         {
-
                             label:
                                 "Complaints",
 
@@ -260,13 +361,9 @@ function initializeComplaintsChart() {
 
                             pointHoverBackgroundColor:
                                 "#0c342b"
-
                         }
-
                     ]
-
                 },
-
 
                 options: {
 
@@ -276,24 +373,16 @@ function initializeComplaintsChart() {
                     maintainAspectRatio:
                         false,
 
-
                     interaction: {
-
-                        intersect:
-                            false,
-
-                        mode:
-                            "index"
-
+                        intersect: false,
+                        mode: "index"
                     },
-
 
                     plugins: {
 
                         legend: {
                             display: false
                         },
-
 
                         tooltip: {
 
@@ -315,7 +404,6 @@ function initializeComplaintsChart() {
                             displayColors:
                                 false,
 
-
                             callbacks: {
 
                                 label:
@@ -325,15 +413,10 @@ function initializeComplaintsChart() {
                                             context.parsed.y +
                                             " complaints"
                                         );
-
                                     }
-
                             }
-
                         }
-
                     },
-
 
                     scales: {
 
@@ -343,20 +426,11 @@ function initializeComplaintsChart() {
                                 display: false
                             },
 
-
                             grid: {
-
-                                display:
-                                    true,
-
+                                display: true,
                                 color:
-                                    "rgba(32, 109, 88, 0.055)",
-
-                                lineWidth:
-                                    1
-
+                                    "rgba(32, 109, 88, 0.055)"
                             },
-
 
                             ticks: {
 
@@ -364,63 +438,41 @@ function initializeComplaintsChart() {
                                     "#53635e",
 
                                 font: {
-
-                                    size:
-                                        9,
-
-                                    weight:
-                                        "600"
-
+                                    size: 9,
+                                    weight: "600"
                                 },
 
-                                maxRotation:
-                                    0,
-
-                                minRotation:
-                                    0
-
+                                maxRotation: 0,
+                                minRotation: 0
                             }
-
                         },
-
 
                         y: {
 
                             beginAtZero:
                                 true,
 
-                            suggestedMax:
-                                110,
-
-
                             border: {
                                 display: false
                             },
-
 
                             grid: {
                                 display: false
                             },
 
-
                             ticks: {
-                                display: false
+                                precision: 0
                             }
-
                         }
-
                     }
-
                 }
-
             }
         );
-
 }
 
 
 /* =========================================================
-   CATEGORY DOUGHNUT
+   CATEGORY CHART
 ========================================================= */
 
 function initializeCategoryChart() {
@@ -430,55 +482,69 @@ function initializeCategoryChart() {
             "categoryChart"
         );
 
-
     if (!canvas) {
         return;
     }
 
+    let labels =
+        categoryLabels;
+
+    let values =
+        categoryValues;
+
+    if (!values.length) {
+
+        labels = [
+            "No Data"
+        ];
+
+        values = [
+            1
+        ];
+    }
+
+    const colors = [
+        "#91b99d",
+        "#0c342b",
+        "#52786d",
+        "#16a77a",
+        "#b8d3c2",
+        "#dceee0",
+        "#789b8c",
+        "#aec7ba"
+    ];
 
     categoryChart =
         new Chart(
             canvas,
             {
-
                 type:
                     "doughnut",
 
-
                 data: {
 
-                    labels: [
-                        "Civil Issues",
-                        "Others"
-                    ],
-
+                    labels:
+                        labels,
 
                     datasets: [
-
                         {
+                            data:
+                                values,
 
-                            data: [
-                                74,
-                                26
-                            ],
-
-                            backgroundColor: [
-                                "#91b99d",
-                                "#dceee0"
-                            ],
+                            backgroundColor:
+                                values.length === 1 &&
+                                labels[0] === "No Data"
+                                    ? ["#e6eeeb"]
+                                    : colors,
 
                             borderWidth:
                                 0,
 
                             hoverOffset:
-                                0
-
+                                3
                         }
-
                     ]
-
                 },
-
 
                 options: {
 
@@ -491,13 +557,11 @@ function initializeCategoryChart() {
                     cutout:
                         "79%",
 
-
                     plugins: {
 
                         legend: {
                             display: false
                         },
-
 
                         tooltip: {
 
@@ -506,31 +570,55 @@ function initializeCategoryChart() {
                                 label:
                                     function (context) {
 
+                                        if (
+                                            context.label ===
+                                            "No Data"
+                                        ) {
+                                            return "No complaint data";
+                                        }
+
+                                        const total =
+                                            context.dataset.data.reduce(
+                                                function (sum, value) {
+                                                    return sum + Number(value);
+                                                },
+                                                0
+                                            );
+
+                                        const value =
+                                            Number(
+                                                context.raw
+                                            );
+
+                                        const percentage =
+                                            total
+                                                ? (
+                                                    value /
+                                                    total *
+                                                    100
+                                                ).toFixed(1)
+                                                : 0;
+
                                         return (
                                             context.label +
                                             ": " +
-                                            context.parsed +
-                                            "%"
+                                            value +
+                                            " (" +
+                                            percentage +
+                                            "%)"
                                         );
-
                                     }
-
                             }
-
                         }
-
                     }
-
                 }
-
             }
         );
-
 }
 
 
 /* =========================================================
-   RESOLUTION TREND
+   RESOLUTION CHART
 ========================================================= */
 
 function initializeResolutionChart() {
@@ -540,44 +628,30 @@ function initializeResolutionChart() {
             "resolutionChart"
         );
 
-
     if (!canvas) {
         return;
     }
-
 
     resolutionChart =
         new Chart(
             canvas,
             {
-
                 type:
                     "bar",
 
-
                 data: {
 
-                    labels: [
-                        "Week 1",
-                        "Week 2",
-                        "Week 3",
-                        "Week 4"
-                    ],
-
+                    labels:
+                        resolutionLabels,
 
                     datasets: [
 
                         {
-
                             label:
                                 "Filed",
 
-                            data: [
-                                75,
-                                90,
-                                66,
-                                80
-                            ],
+                            data:
+                                resolutionFiled,
 
                             backgroundColor:
                                 "#062e26",
@@ -586,28 +660,15 @@ function initializeResolutionChart() {
                                 3,
 
                             borderSkipped:
-                                false,
-
-                            barPercentage:
-                                0.72,
-
-                            categoryPercentage:
-                                0.72
-
+                                false
                         },
 
-
                         {
-
                             label:
                                 "Resolved",
 
-                            data: [
-                                70,
-                                80,
-                                66,
-                                77
-                            ],
+                            data:
+                                resolutionResolved,
 
                             backgroundColor:
                                 "#a5cfc3",
@@ -616,20 +677,10 @@ function initializeResolutionChart() {
                                 3,
 
                             borderSkipped:
-                                false,
-
-                            barPercentage:
-                                0.72,
-
-                            categoryPercentage:
-                                0.72
-
+                                false
                         }
-
                     ]
-
                 },
-
 
                 options: {
 
@@ -639,24 +690,16 @@ function initializeResolutionChart() {
                     maintainAspectRatio:
                         false,
 
-
                     interaction: {
-
-                        intersect:
-                            false,
-
-                        mode:
-                            "index"
-
+                        intersect: false,
+                        mode: "index"
                     },
-
 
                     plugins: {
 
                         legend: {
                             display: false
                         },
-
 
                         tooltip: {
 
@@ -668,11 +711,8 @@ function initializeResolutionChart() {
 
                             cornerRadius:
                                 8
-
                         }
-
                     },
-
 
                     scales: {
 
@@ -682,11 +722,9 @@ function initializeResolutionChart() {
                                 display: false
                             },
 
-
                             grid: {
                                 display: false
                             },
-
 
                             ticks: {
 
@@ -696,49 +734,35 @@ function initializeResolutionChart() {
                                 font: {
                                     size: 9
                                 }
-
                             }
-
                         },
-
 
                         y: {
 
                             beginAtZero:
                                 true,
 
-                            suggestedMax:
-                                100,
-
-
                             border: {
                                 display: false
                             },
-
 
                             grid: {
                                 display: false
                             },
 
-
                             ticks: {
-                                display: false
+                                precision: 0
                             }
-
                         }
-
                     }
-
                 }
-
             }
         );
-
 }
 
 
 /* =========================================================
-   BLOCKCHAIN VERIFICATION
+   BLOCKCHAIN CHART
 ========================================================= */
 
 function initializeBlockchainChart() {
@@ -748,30 +772,33 @@ function initializeBlockchainChart() {
             "blockchainChart"
         );
 
-
     if (!canvas) {
         return;
     }
 
+    const safeRate =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                blockchainRate
+            )
+        );
 
     blockchainChart =
         new Chart(
             canvas,
             {
-
                 type:
                     "doughnut",
-
 
                 data: {
 
                     datasets: [
-
                         {
-
                             data: [
-                                98.2,
-                                1.8
+                                safeRate,
+                                100 - safeRate
                             ],
 
                             backgroundColor: [
@@ -787,13 +814,9 @@ function initializeBlockchainChart() {
 
                             hoverOffset:
                                 0
-
                         }
-
                     ]
-
                 },
-
 
                 options: {
 
@@ -806,31 +829,19 @@ function initializeBlockchainChart() {
                     cutout:
                         "86%",
 
-                    rotation:
-                        0,
-
-                    circumference:
-                        360,
-
-
                     plugins: {
 
                         legend: {
                             display: false
                         },
 
-
                         tooltip: {
                             enabled: false
                         }
-
                     }
-
                 }
-
             }
         );
-
 }
 
 
@@ -845,11 +856,9 @@ function initializePeriodSelector() {
             "complaintPeriod"
         );
 
-
     if (!selector) {
         return;
     }
-
 
     selector.addEventListener(
         "change",
@@ -861,7 +870,6 @@ function initializePeriodSelector() {
 
         }
     );
-
 }
 
 
@@ -875,29 +883,21 @@ function updateComplaintPeriod(period) {
         return;
     }
 
-
     const selectedData =
-        complaintData[period];
-
-
-    if (!selectedData) {
-        return;
-    }
-
+        getComplaintPeriodData(
+            period
+        );
 
     complaintsChart.data.labels =
         selectedData.labels;
-
 
     complaintsChart
         .data
         .datasets[0]
         .data =
-        selectedData.values;
-
+            selectedData.values;
 
     complaintsChart.update();
-
 }
 
 
@@ -907,54 +907,10 @@ function updateComplaintPeriod(period) {
 
 function initializeExportButtons() {
 
-    const pdfButton =
-        document.getElementById(
-            "exportPdfBtn"
-        );
-
-
-    const excelButton =
-        document.getElementById(
-            "exportExcelBtn"
-        );
-
-
     const csvButton =
         document.getElementById(
             "exportCsvBtn"
         );
-
-
-    if (pdfButton) {
-
-        pdfButton.addEventListener(
-            "click",
-            function () {
-
-                showExportMessage(
-                    "PDF"
-                );
-
-            }
-        );
-
-    }
-
-
-    if (excelButton) {
-
-        excelButton.addEventListener(
-            "click",
-            function () {
-
-                showExportMessage(
-                    "Excel"
-                );
-
-            }
-        );
-
-    }
 
 
     if (csvButton) {
@@ -974,16 +930,47 @@ function initializeExportButtons() {
 
 
 /* =========================================================
-   EXPORT MESSAGE
+   REPORT EXPORT DATA
 ========================================================= */
 
-function showExportMessage(type) {
+function getReportExportData() {
 
-    alert(
-        type +
-        " export is not connected to the Django backend yet."
-    );
+    return [
+        [
+            "Metric",
+            "Value"
+        ],
 
+        [
+            "Monthly Complaints",
+            reportMonthlyComplaints
+        ],
+
+        [
+            "Incident Reports",
+            reportIncidentReports
+        ],
+
+        [
+            "Resolution Rate",
+            reportResolutionRate + "%"
+        ],
+
+        [
+            "Released Documents",
+            reportVerifiedDocuments
+        ],
+
+        [
+            "Resolved Cases",
+            reportResolvedComplaints
+        ],
+
+        [
+            "Blockchain Registration Rate",
+            blockchainRate + "%"
+        ]
+    ];
 }
 
 
@@ -993,40 +980,8 @@ function showExportMessage(type) {
 
 function exportReportCSV() {
 
-    const data = [
-
-        [
-            "Metric",
-            "Value"
-        ],
-
-        [
-            "Monthly Complaints",
-            "128"
-        ],
-
-        [
-            "Incident Reports",
-            "45"
-        ],
-
-        [
-            "Resolution Rate",
-            "94%"
-        ],
-
-        [
-            "Verified Documents",
-            "2431"
-        ],
-
-        [
-            "Officer Performance",
-            "4.8/5"
-        ]
-
-    ];
-
+    const data =
+        getReportExportData();
 
     const csvContent =
         data
@@ -1038,78 +993,135 @@ function exportReportCSV() {
                             escapeCSVValue
                         )
                         .join(",");
-
                 }
             )
             .join("\n");
 
+    downloadTextFile(
+        "\uFEFF" + csvContent,
+        "bantaybarangay_reports.csv",
+        "text/csv;charset=utf-8;"
+    );
+}
+
+
+/* =========================================================
+   EXCEL-COMPATIBLE EXPORT
+========================================================= */
+
+function exportReportExcel() {
+
+    const data =
+        getReportExportData();
+
+    const rows =
+        data
+            .map(
+                function (row) {
+
+                    return (
+                        "<tr>" +
+                        row
+                            .map(
+                                function (value) {
+
+                                    return (
+                                        "<td>" +
+                                        escapeHTML(value) +
+                                        "</td>"
+                                    );
+                                }
+                            )
+                            .join("") +
+                        "</tr>"
+                    );
+                }
+            )
+            .join("");
+
+    const content =
+        `
+        <html>
+        <head>
+            <meta charset="UTF-8">
+        </head>
+        <body>
+            <table>
+                ${rows}
+            </table>
+        </body>
+        </html>
+        `;
+
+    downloadTextFile(
+        "\uFEFF" + content,
+        "bantaybarangay_reports.xls",
+        "application/vnd.ms-excel;charset=utf-8;"
+    );
+}
+
+
+/* =========================================================
+   DOWNLOAD TEXT FILE
+========================================================= */
+
+function downloadTextFile(
+    content,
+    filename,
+    type
+) {
 
     const blob =
         new Blob(
-            [
-                "\uFEFF" +
-                csvContent
-            ],
+            [content],
             {
-                type:
-                    "text/csv;charset=utf-8;"
+                type: type
             }
         );
-
 
     const url =
         URL.createObjectURL(
             blob
         );
 
-
     const link =
         document.createElement(
             "a"
         );
 
-
     link.href =
         url;
 
-
     link.download =
-        "bantaybarangay_reports.csv";
-
+        filename;
 
     link.style.display =
         "none";
-
 
     document.body.appendChild(
         link
     );
 
-
     link.click();
-
 
     document.body.removeChild(
         link
     );
 
-
     URL.revokeObjectURL(
         url
     );
-
 }
 
 
 /* =========================================================
-   ESCAPE CSV VALUE
+   ESCAPE CSV
 ========================================================= */
 
 function escapeCSVValue(value) {
 
     const stringValue =
         String(value);
-
 
     if (
         stringValue.includes(",") ||
@@ -1125,17 +1137,44 @@ function escapeCSVValue(value) {
             ) +
             '"'
         );
-
     }
 
-
     return stringValue;
-
 }
 
 
 /* =========================================================
-   VIEW PERSONNEL
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+/* =========================================================
+   PERSONNEL BUTTON
 ========================================================= */
 
 function initializePersonnelButton() {
@@ -1145,26 +1184,18 @@ function initializePersonnelButton() {
             "viewPersonnelBtn"
         );
 
-
     if (!button) {
         return;
     }
-
 
     button.addEventListener(
         "click",
         function () {
 
-            /*
-             * Add the personnel URL here later if you
-             * create a dedicated officer/personnel page.
-             */
-
             console.log(
-                "View All Personnel clicked."
+                "Personnel page is not connected yet."
             );
 
         }
     );
-
 }
