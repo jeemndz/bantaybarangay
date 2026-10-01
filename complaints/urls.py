@@ -24,4 +24,16 @@ urlpatterns = [
         name="update_complaint"
     ),
 
+    path(
+    "complaint/<int:complaint_id>/verified-files/",
+    views.verified_complaint_files,
+    name="verified_complaint_files"
+),
+
+path(
+    "complaint/<int:complaint_id>/release-documents/",
+    views.release_complaint_documents,
+    name="release_complaint_documents",
+),
+
 ]

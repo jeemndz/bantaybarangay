@@ -28,6 +28,11 @@ urlpatterns = [
         name="complaint_document"
     ),
 
+    path(
+    "complaint/<int:complaint_id>/generate/",
+    views.generate_official_complaint_document,
+    name="generate_official_complaint_document"
+    ),
 
     # =====================================================
     # COMPLAINT PDF BLOCKCHAIN REGISTRATION

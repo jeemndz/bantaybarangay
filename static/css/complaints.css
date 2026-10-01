@@ -3432,6 +3432,11 @@ body.complaint-review-open {
         text-align: center;
     }
 
+     .released-document-actions {
+        width: 100%;
+    }
 
-
+    .released-document-button {
+        flex: 1;
+    }
 }

@@ -485,21 +485,29 @@
 
     <!-- NO DOCUMENT -->
 
-    <div
-        id="reviewComplaintDocumentEmpty"
-        class="review-evidence-empty"
-        hidden
+    <!-- NO DOCUMENT -->
+
+<div
+    id="reviewComplaintDocumentEmpty"
+    class="review-evidence-empty"
+    hidden
+>
+    <strong>
+        No official document generated
+    </strong>
+
+    <span>
+        An official complaint PDF has not been generated for this complaint.
+    </span>
+
+    <button
+        type="button"
+        id="generateComplaintDocumentButton"
+        class="complaint-document-button primary"
     >
-
-        <strong>
-            No official document generated
-        </strong>
-
-        <span>
-            An official complaint PDF has not been generated for this complaint.
-        </span>
-
-    </div>
+        Generate Official PDF
+    </button>
+</div>
 
 
     <!-- DOCUMENT -->
@@ -908,152 +916,103 @@
                         </div>
 
 
-                        <!-- =================================================
-                             UPLOAD
-                        ================================================== -->
+                       <!-- =================================================
+     VERIFIED COMPLAINT FILES
+================================================== -->
 
-                        <div
-                            id="reviewUploadSection"
-                            class="review-form-group review-form-full"
-                        >
+                        <!-- RESOLUTION -->
+<!-- =================================================
+     RETURN VERIFIED DOCUMENTS
+================================================== -->
 
-                            <div class="review-upload-header">
+<div
+    id="reviewDocumentReleaseSection"
+    class="review-form-group review-form-full"
+>
 
-                                <div>
+    <div class="review-upload-header">
 
-                                    <label for="reviewEvidenceFiles">
-                                        Upload Files / Documents
-                                    </label>
+        <div>
+            <label>
+                Return Complaint Documents
+            </label>
 
-                                    <p>
-                                        Add supporting evidence or official documents.
-                                    </p>
+            <p>
+                Return all blockchain-registered and verified
+                documents to the resident who submitted this complaint.
+            </p>
+        </div>
 
-                                </div>
+        <span
+            id="reviewReleaseFileCount"
+            class="review-upload-count"
+        >
+            Checking files...
+        </span>
 
-
-                                <span
-                                    id="reviewUploadCount"
-                                    class="review-upload-count"
-                                >
-                                    0 files selected
-                                </span>
-
-                            </div>
-
-
-                            <div
-                                id="reviewUploadArea"
-                                class="review-upload-area"
-                                tabindex="0"
-                                role="button"
-                            >
-
-                                <input
-                                    type="file"
-                                    id="reviewEvidenceFiles"
-                                    name="evidence"
-                                    class="review-upload-input"
-                                    accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
-                                    multiple
-                                >
+    </div>
 
 
-                                <div class="review-upload-icon">
+    <div class="review-document-release-card">
 
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="1.8"
-                                    >
+        <div class="review-document-release-content">
 
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M12 16V5m0 0-4 4m4-4 4 4"
-                                        />
+            <strong id="reviewReleaseTitle">
+                Checking verified documents...
+            </strong>
 
-                                        <path
-                                            stroke-linecap="round"
-                                            d="M5 15.5v2A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5v-2"
-                                        />
-
-                                    </svg>
-
-                                </div>
+            <p id="reviewReleaseDescription">
+                Please wait while BantayBarangay checks the
+                verified files for this complaint.
+            </p>
 
 
-                                <div class="review-upload-content">
-
-                                    <strong>
-                                        Upload files or documents
-                                    </strong>
-
-                                    <span>
-                                        Drag and drop files here or click to browse
-                                    </span>
-
-                                    <small>
-                                        Maximum 10MB per file
-                                    </small>
-
-                                </div>
+            <div
+                id="reviewReleaseFileList"
+                class="review-release-file-list"
+            ></div>
 
 
-                                <button
-                                    type="button"
-                                    id="reviewBrowseFilesButton"
-                                    class="review-upload-browse"
-                                >
-                                    Browse Files
-                                </button>
+            <button
+                type="button"
+                id="reviewReleaseDocumentsButton"
+                class="review-release-button"
+                disabled
+            >
+                Return Verified Documents to Resident
+            </button>
 
-                            </div>
+        </div>
 
-
-                            <div
-                                id="reviewUploadError"
-                                class="review-upload-error"
-                                hidden
-                            ></div>
+    </div>
 
 
-                            <div
-                                id="reviewSelectedFiles"
-                                class="review-selected-files"
-                                hidden
-                            >
+    <div
+        id="reviewReleaseMessage"
+        class="review-release-message"
+        hidden
+    ></div>
 
-                                <div class="review-selected-files-header">
-
-                                    <span>
-                                        Selected Files
-                                    </span>
+</div>
 
 
-                                    <button
-                                        type="button"
-                                        id="reviewClearFilesButton"
-                                        class="review-clear-files"
-                                    >
-                                        Clear All
-                                    </button>
+<!-- =================================================
+     RELEASE VERIFIED DOCUMENTS
+================================================== -->
 
-                                </div>
+<div
+    id="reviewDocumentReleaseSection"
+    class="review-form-group review-form-full"
+>
+    <!-- Return Documents code goes here -->
+</div>
 
 
-                                <div
-                                    id="reviewSelectedFilesList"
-                                    class="review-selected-files-list"
-                                ></div>
+<!-- =================================================
+     ACTIONS
+================================================== -->
 
-                            </div>
-
-                        </div>
-
-                    </div>
-
+<div class="review-form-actions">
 
                     <!-- =================================================
                          ACTIONS

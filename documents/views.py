@@ -17,6 +17,8 @@ from evidencemodule.services.fabric_service import (
 )
 
 from evidencemodule.services.hashing import calculate_file_hash
+from blockchain_logs.services.blockchain_logger import create_blockchain_log
+from documents.services.complaint_pdf import generate_complaint_pdf
 
 
 # =========================================================
@@ -25,34 +27,22 @@ from evidencemodule.services.hashing import calculate_file_hash
 
 def document_list(request):
 
-    # ==========================
-    # GET ISSUED DOCUMENTS
-    # ==========================
+    documents = (
+        Document.objects
+        .select_related("document_type")
+        .all()
+        .order_by("-document_id")
+    )
 
-    documents = Document.objects.select_related(
-        "document_type"
-    ).all().order_by("-document_id")
-
-
-    # ==========================
-    # SEARCH
-    # ==========================
-
-    search = request.GET.get(
-        "search",
-        ""
-    ).strip()
+    # Search
+    search = request.GET.get("search", "").strip()
 
     if search:
         documents = documents.filter(
             document_number__icontains=search
         )
 
-
-    # ==========================
-    # FILTER BY TYPE
-    # ==========================
-
+    # Filter by type
     selected_type = request.GET.get(
         "document_type",
         ""
@@ -63,11 +53,7 @@ def document_list(request):
             document_type__type_name=selected_type
         )
 
-
-    # ==========================
-    # FILTER BY STATUS
-    # ==========================
-
+    # Filter by status
     selected_status = request.GET.get(
         "status",
         ""
@@ -78,11 +64,7 @@ def document_list(request):
             status=selected_status
         )
 
-
-    # ==========================
-    # STATISTICS
-    # ==========================
-
+    # Statistics
     total_documents = Document.objects.count()
 
     verified_documents = Document.objects.filter(
@@ -93,20 +75,12 @@ def document_list(request):
         status="Pending"
     ).count()
 
-
-    # ==========================
-    # DOCUMENT TEMPLATES
-    # ==========================
-
+    # Document templates
     document_types = DocumentType.objects.filter(
         status="Active"
     ).order_by("type_name")
 
-
-    # ==========================
-    # GET RESIDENTS
-    # ==========================
-
+    # Residents
     residents = Resident.objects.all()
 
     resident_dict = {
@@ -114,47 +88,120 @@ def document_list(request):
         for resident in residents
     }
 
-
-    # ==========================
-    # ATTACH RESIDENT
-    # ==========================
-
+    # Attach resident
     for document in documents:
-
         document.resident = resident_dict.get(
             document.resident_id
         )
 
-
-    # ==========================
-    # CONTEXT
-    # ==========================
-
     context = {
-
         "documents": documents,
-
-        # Used by DOCUMENT TEMPLATES
         "document_types": document_types,
-
-        # Statistics
         "total_documents": total_documents,
         "verified_documents": verified_documents,
         "pending_documents": pending_documents,
-
-        # Filters
         "search": search,
         "selected_type": selected_type,
         "selected_status": selected_status,
-
     }
-
 
     return render(
         request,
         "documentmodule/document_list.html",
         context
     )
+
+
+# =========================================================
+# GENERATE OFFICIAL COMPLAINT PDF
+# =========================================================
+
+@require_POST
+def generate_official_complaint_document(
+    request,
+    complaint_id
+):
+    """
+    Generates the official complaint PDF.
+
+    If a ComplaintDocument already exists for this complaint,
+    the existing document is returned instead of generating
+    another copy.
+    """
+
+    try:
+
+        # -------------------------------------------------
+        # CHECK IF DOCUMENT ALREADY EXISTS
+        # -------------------------------------------------
+
+        existing_document = (
+            ComplaintDocument.objects
+            .filter(complaint_id=complaint_id)
+            .first()
+        )
+
+        if existing_document:
+
+            return JsonResponse(
+                {
+                    "success": True,
+                    "already_exists": True,
+                    "document_id":
+                        existing_document.document_id,
+                    "complaint_id":
+                        existing_document.complaint_id,
+                    "file_name":
+                        existing_document.file_name,
+                    "blockchain_status":
+                        existing_document.blockchain_status,
+                    "integrity_status":
+                        existing_document.integrity_status,
+                    "message": (
+                        "An official complaint document "
+                        "already exists for this complaint."
+                    ),
+                }
+            )
+
+        # -------------------------------------------------
+        # GENERATE PDF
+        # -------------------------------------------------
+
+        document = generate_complaint_pdf(
+            complaint_id
+        )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "already_exists": False,
+                "document_id":
+                    document.document_id,
+                "complaint_id":
+                    document.complaint_id,
+                "file_name":
+                    document.file_name,
+                "blockchain_status":
+                    document.blockchain_status,
+                "integrity_status":
+                    document.integrity_status,
+                "message": (
+                    "Official complaint PDF "
+                    "generated successfully."
+                ),
+            }
+        )
+
+    except Exception as error:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": str(error),
+            },
+            status=500,
+        )
 
 
 # =========================================================
@@ -179,11 +226,7 @@ def complaint_document(request, complaint_id):
             }
         )
 
-
-    # =====================================================
-    # BUILD FILE URL
-    # =====================================================
-
+    # Build file URL
     file_url = ""
 
     if document.file_path:
@@ -201,18 +244,12 @@ def complaint_document(request, complaint_id):
             + relative_path
         )
 
-
-    # =====================================================
-    # RETURN DOCUMENT INFORMATION
-    # =====================================================
-
     return JsonResponse(
         {
             "success": True,
             "exists": True,
 
             "document": {
-
                 "document_id":
                     document.document_id,
 
@@ -260,7 +297,6 @@ def complaint_document(request, complaint_id):
                     if document.generated_at
                     else ""
                 ),
-
             },
         }
     )
@@ -271,7 +307,10 @@ def complaint_document(request, complaint_id):
 # =========================================================
 
 @require_POST
-def register_complaint_blockchain(request, document_id):
+def register_complaint_blockchain(
+    request,
+    document_id
+):
 
     document = get_object_or_404(
         ComplaintDocument,
@@ -282,11 +321,17 @@ def register_complaint_blockchain(request, document_id):
         f"CMP-{document.complaint_id}"
     )
 
+    recorded_by = str(
+        request.session.get("username")
+        or request.session.get("user_id")
+        or "system"
+    )
+
     try:
 
-        # =================================================
+        # -------------------------------------------------
         # CHECK IF DOCUMENT ALREADY EXISTS ON FABRIC
-        # =================================================
+        # -------------------------------------------------
 
         try:
 
@@ -298,27 +343,21 @@ def register_complaint_blockchain(request, document_id):
 
             blockchain_document = None
 
-
-        # =================================================
-        # ALREADY REGISTERED
-        # =================================================
+        # -------------------------------------------------
+        # ALREADY EXISTS ON FABRIC
+        # -------------------------------------------------
 
         if blockchain_document:
 
-            blockchain_hash = (
-                blockchain_document.get(
-                    "fileHash",
-                    ""
-                )
+            blockchain_hash = blockchain_document.get(
+                "fileHash",
+                ""
             )
 
-            # Same ID but different PDF/hash
-
+            # Same Fabric ID but different hash
             if blockchain_hash != document.file_hash:
 
-                document.blockchain_status = (
-                    "Failed"
-                )
+                document.blockchain_status = "Failed"
 
                 document.save(
                     update_fields=[
@@ -326,10 +365,29 @@ def register_complaint_blockchain(request, document_id):
                     ]
                 )
 
+                create_blockchain_log(
+                    blockchain_document_id=
+                        fabric_document_id,
+                    document_id=
+                        document.document_id,
+                    document_type="COMPLAINT",
+                    document_hash=
+                        document.file_hash,
+                    transaction_hash=None,
+                    action="REGISTER",
+                    status="FAILED",
+                    verification_status="Failed",
+                    error_message=(
+                        "Complaint document already "
+                        "exists on Fabric with a "
+                        "different hash."
+                    ),
+                    recorded_by=recorded_by,
+                )
+
                 return JsonResponse(
                     {
                         "success": False,
-
                         "error": (
                             "This complaint document "
                             "already exists on Fabric "
@@ -339,15 +397,10 @@ def register_complaint_blockchain(request, document_id):
                     status=409,
                 )
 
-
-            # Same document already exists
-
-            document.blockchain_status = (
-                "Registered"
-            )
+            # Same Fabric ID + same hash
+            document.blockchain_status = "Registered"
 
             if not document.blockchain_registered_at:
-
                 document.blockchain_registered_at = (
                     timezone.now()
                 )
@@ -359,16 +412,30 @@ def register_complaint_blockchain(request, document_id):
                 ]
             )
 
+            # This is an application audit entry.
+            # No new Fabric transaction was created.
+            create_blockchain_log(
+                blockchain_document_id=
+                    fabric_document_id,
+                document_id=
+                    document.document_id,
+                document_type="COMPLAINT",
+                document_hash=
+                    document.file_hash,
+                transaction_hash=
+                    document.blockchain_tx_id,
+                action="REGISTER",
+                status="SUCCESS",
+                verification_status="Pending",
+                recorded_by=recorded_by,
+            )
+
             return JsonResponse(
                 {
                     "success": True,
-
-                    "already_registered":
-                        True,
-
+                    "already_registered": True,
                     "document_id":
                         fabric_document_id,
-
                     "message": (
                         "Complaint document already "
                         "exists on Fabric and the "
@@ -377,60 +444,27 @@ def register_complaint_blockchain(request, document_id):
                 }
             )
 
-
-        # =================================================
-        # NEW BLOCKCHAIN REGISTRATION
-        # =================================================
-
-        registered_by = (
-
-            request.session.get(
-                "username"
-            )
-
-            or request.session.get(
-                "user_id"
-            )
-
-            or "system"
-        )
-
+        # -------------------------------------------------
+        # NEW FABRIC REGISTRATION
+        # -------------------------------------------------
 
         result = register_document(
-
-            document_id=
-                fabric_document_id,
-
-            complaint_id=
-                document.complaint_id,
-
-            document_type=
-                "COMPLAINT",
-
-            file_name=
-                document.file_name,
-
-            file_hash=
-                document.file_hash,
-
-            registered_by=
-                registered_by,
-
+            document_id=fabric_document_id,
+            complaint_id=document.complaint_id,
+            document_type="COMPLAINT",
+            file_name=document.file_name,
+            file_hash=document.file_hash,
+            registered_by=recorded_by,
         )
 
-
-        # =================================================
+        # -------------------------------------------------
         # UPDATE MYSQL
-        # =================================================
+        # -------------------------------------------------
 
-        document.blockchain_status = (
-            "Registered"
-        )
+        document.blockchain_status = "Registered"
 
-        document.blockchain_tx_id = (
-            result.get(
-                "transactionId"
-            )
+        document.blockchain_tx_id = result.get(
+            "transactionId"
         )
 
         document.blockchain_registered_at = (
@@ -445,20 +479,34 @@ def register_complaint_blockchain(request, document_id):
             ]
         )
 
+        # -------------------------------------------------
+        # BLOCKCHAIN LOG - REGISTER SUCCESS
+        # -------------------------------------------------
+
+        create_blockchain_log(
+            blockchain_document_id=
+                fabric_document_id,
+            document_id=
+                document.document_id,
+            document_type="COMPLAINT",
+            document_hash=
+                document.file_hash,
+            transaction_hash=
+                document.blockchain_tx_id,
+            action="REGISTER",
+            status="SUCCESS",
+            verification_status="Pending",
+            recorded_by=recorded_by,
+        )
 
         return JsonResponse(
             {
                 "success": True,
-
-                "already_registered":
-                    False,
-
+                "already_registered": False,
                 "document_id":
                     fabric_document_id,
-
                 "transaction_id":
                     document.blockchain_tx_id,
-
                 "message": (
                     "Complaint PDF successfully "
                     "registered on Hyperledger Fabric."
@@ -466,17 +514,34 @@ def register_complaint_blockchain(request, document_id):
             }
         )
 
-
     except FabricServiceError as error:
 
-        document.blockchain_status = (
-            "Failed"
-        )
+        document.blockchain_status = "Failed"
 
         document.save(
             update_fields=[
                 "blockchain_status"
             ]
+        )
+
+        # -------------------------------------------------
+        # BLOCKCHAIN LOG - REGISTER FAILED
+        # -------------------------------------------------
+
+        create_blockchain_log(
+            blockchain_document_id=
+                fabric_document_id,
+            document_id=
+                document.document_id,
+            document_type="COMPLAINT",
+            document_hash=
+                document.file_hash,
+            transaction_hash=None,
+            action="REGISTER",
+            status="FAILED",
+            verification_status="Failed",
+            error_message=str(error),
+            recorded_by=recorded_by,
         )
 
         return JsonResponse(
@@ -507,21 +572,18 @@ def verify_complaint_integrity(
         f"CMP-{document.complaint_id}"
     )
 
+    recorded_by = str(
+        request.session.get("username")
+        or request.session.get("user_id")
+        or "system"
+    )
 
-    # =====================================================
-    # MUST BE REGISTERED FIRST
-    # =====================================================
-
-    if (
-        document.blockchain_status
-        !=
-        "Registered"
-    ):
+    # Must be registered first
+    if document.blockchain_status != "Registered":
 
         return JsonResponse(
             {
                 "success": False,
-
                 "error": (
                     "Complaint document must be "
                     "registered on Fabric before "
@@ -531,11 +593,7 @@ def verify_complaint_integrity(
             status=400,
         )
 
-
-    # =====================================================
-    # CHECK FILE PATH
-    # =====================================================
-
+    # File path required
     if not document.file_path:
 
         return JsonResponse(
@@ -547,95 +605,61 @@ def verify_complaint_integrity(
             status=400,
         )
 
-
-    # =====================================================
+    # -----------------------------------------------------
     # BUILD PHYSICAL FILE PATH
-    # =====================================================
+    # -----------------------------------------------------
 
     relative_path = (
-
         str(document.file_path)
-
-        .replace(
-            "/media/",
-            "",
-            1
-        )
-
-        .lstrip(
-            "/\\"
-        )
+        .replace("/media/", "", 1)
+        .lstrip("/\\")
     )
-
 
     physical_path = os.path.join(
         settings.MEDIA_ROOT,
         relative_path
     )
 
-
-    # =====================================================
-    # CHECK PHYSICAL FILE
-    # =====================================================
-
-    if not os.path.isfile(
-        physical_path
-    ):
+    if not os.path.isfile(physical_path):
 
         return JsonResponse(
             {
                 "success": False,
-
                 "error":
                     "Complaint PDF could not be found.",
             },
             status=404,
         )
 
-
     try:
 
-        # =================================================
-        # HASH CURRENT PDF
-        # =================================================
+        # -------------------------------------------------
+        # CALCULATE CURRENT PDF HASH
+        # -------------------------------------------------
 
-        current_hash = (
-            calculate_file_hash(
-                physical_path
-            )
+        current_hash = calculate_file_hash(
+            physical_path
         )
 
-
-        # =================================================
-        # COMPARE AGAINST FABRIC
-        # =================================================
+        # -------------------------------------------------
+        # VERIFY AGAINST FABRIC
+        # -------------------------------------------------
 
         verified = verify_document(
             fabric_document_id,
             current_hash,
         )
 
-
-        # =================================================
+        # -------------------------------------------------
         # UPDATE MYSQL
-        # =================================================
+        # -------------------------------------------------
 
-        document.last_verified_at = (
-            timezone.now()
-        )
+        document.last_verified_at = timezone.now()
 
         if verified:
-
-            document.integrity_status = (
-                "Verified"
-            )
-
+            document.integrity_status = "Verified"
         else:
-
-            document.integrity_status = (
-                "Failed"
-            )
-
+            document.integrity_status = "Failed"
 
         document.save(
             update_fields=[
@@ -644,34 +668,68 @@ def verify_complaint_integrity(
             ]
         )
 
+        # -------------------------------------------------
+        # BLOCKCHAIN LOG - VERIFY RESULT
+        # -------------------------------------------------
 
-        # =================================================
-        # RETURN RESULT
-        # =================================================
+        create_blockchain_log(
+            blockchain_document_id=
+                fabric_document_id,
+            document_id=
+                document.document_id,
+            document_type="COMPLAINT",
+            document_hash=current_hash,
+            transaction_hash=None,
+            action="VERIFY",
+            status="SUCCESS",
+            verification_status=(
+                "Confirmed"
+                if verified
+                else "Failed"
+            ),
+            recorded_by=recorded_by,
+        )
 
         return JsonResponse(
             {
                 "success": True,
-
                 "document_id":
                     fabric_document_id,
-
                 "verified":
                     verified,
-
                 "integrity_status":
                     document.integrity_status,
-
                 "current_hash":
                     current_hash,
-
                 "last_verified_at":
                     document.last_verified_at.isoformat(),
             }
         )
 
-
     except FabricServiceError as error:
+
+        # -------------------------------------------------
+        # BLOCKCHAIN LOG - VERIFY ERROR
+        # -------------------------------------------------
+
+        create_blockchain_log(
+            blockchain_document_id=
+                fabric_document_id,
+            document_id=
+                document.document_id,
+            document_type="COMPLAINT",
+            document_hash=(
+                current_hash
+                if "current_hash" in locals()
+                else document.file_hash
+            ),
+            transaction_hash=None,
+            action="VERIFY",
+            status="FAILED",
+            verification_status="Failed",
+            error_message=str(error),
+            recorded_by=recorded_by,
+        )
 
         return JsonResponse(
             {

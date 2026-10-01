@@ -743,6 +743,121 @@
 
                             <!-- ACTIONS -->
 
+                            {% if complaint.documents_released %}
+
+<div class="released-documents-section">
+
+    <div class="released-documents-header">
+
+        <div>
+            <strong>
+                Released Documents
+            </strong>
+
+            <p>
+                Verified documents returned by the barangay.
+            </p>
+        </div>
+
+        <span class="released-documents-count">
+            {{ complaint.released_document_count }}
+            file{{ complaint.released_document_count|pluralize }}
+        </span>
+
+    </div>
+
+
+    {% if complaint.released_documents %}
+
+    <div class="released-documents-list">
+
+        {% for document in complaint.released_documents %}
+
+        <div class="released-document-item">
+
+            <div class="released-document-icon">
+                ✓
+            </div>
+
+
+            <div class="released-document-info">
+
+                <strong>
+                    {{ document.file_name }}
+                </strong>
+
+                <span>
+                    {{ document.type }}
+                    •
+                    {{ document.blockchain_id }}
+                </span>
+
+                <small>
+                    Blockchain Registered & Verified
+                </small>
+
+                <div class="released-document-actions">
+
+    <a
+        href="{% url 'released_complaint_document' complaint.complaint_id document.source document.id %}"
+        class="released-document-button"
+        target="_blank"
+        rel="noopener"
+    >
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+
+        View
+    </a>
+
+
+    <a
+        href="{% url 'released_complaint_document' complaint.complaint_id document.source document.id %}?download=1"
+        class="released-document-button download"
+    >
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+            <path d="M12 3v12"/>
+            <path d="m7 10 5 5 5-5"/>
+            <path d="M5 21h14"/>
+        </svg>
+
+        Download
+    </a>
+
+</div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <p class="released-documents-empty">
+        No released documents are available.
+    </p>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
                             <div class="complaint-actions">
 
                                 <div class="action-left">

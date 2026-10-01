@@ -1244,4 +1244,186 @@
 
     }
 
+    
+
+}
+
+/* =========================================================
+   REAL BLOCKCHAIN LOG CONTROLS
+========================================================= */
+
+.blockchain-filter-form {
+    margin-bottom: 12px;
+}
+
+.blockchain-filter-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.blockchain-search-input,
+.blockchain-filter-select {
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #d6e1da;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #234d44;
+    font-family: inherit;
+    font-size: 9px;
+    outline: none;
+}
+
+.blockchain-search-input {
+    min-width: 190px;
+}
+
+.blockchain-search-input:focus,
+.blockchain-filter-select:focus {
+    border-color: #7ca99b;
+}
+
+.clear-filter-button {
+    height: 32px;
+    padding: 0 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d6e1da;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #536f67;
+    font-size: 9px;
+    text-decoration: none;
+}
+
+.clear-filter-button:hover {
+    background: #f5f8f6;
+}
+
+.action-badge {
+    display: inline-flex;
+    padding: 4px 7px;
+    border-radius: 20px;
+    background: #f1f4f2;
+    color: #587068;
+    font-size: 7px;
+    font-weight: 600;
+}
+
+.action-register {
+    background: #edf5ff;
+    color: #416b8d;
+}
+
+.action-verify {
+    background: #eef8f1;
+    color: #46765f;
+}
+
+.status-failed {
+    color: #a34e4e;
+    font-size: 7px;
+    font-weight: 600;
+}
+
+.empty-ledger {
+    padding: 35px !important;
+    text-align: center !important;
+    color: #83978f !important;
+}
+
+.detail-section {
+    padding: 8px 12px;
+    border-top: 1px solid #edf1ef;
+}
+
+.detail-section h3 {
+    margin: 3px 0 8px;
+    color: #45665e;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.detail-hash-box {
+    padding: 9px;
+    border: 1px solid #e5ebe7;
+    border-radius: 7px;
+    background: #fafcfb;
+}
+
+.detail-hash-box small {
+    display: block;
+    margin-bottom: 5px;
+    color: #7b918a;
+    font-size: 7px;
+}
+
+.detail-hash-box p {
+    margin: 0;
+    word-break: break-all;
+    color: #173f37;
+    font-size: 6px;
+    line-height: 1.6;
+}
+
+.error-message-box {
+    padding: 9px;
+    border: 1px solid #ecd1d1;
+    border-radius: 7px;
+    background: #fff7f7;
+}
+
+.error-message-box p {
+    margin: 0;
+    word-break: break-word;
+    color: #9b4545;
+    font-size: 7px;
+    line-height: 1.5;
+}
+
+.empty-detail-panel {
+    min-height: 250px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.empty-detail-panel strong {
+    color: #365950;
+    font-size: 11px;
+}
+
+.empty-detail-panel span {
+    max-width: 210px;
+    margin-top: 6px;
+    color: #8a9c96;
+    font-size: 8px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FILTER RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .blockchain-filter-group {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .blockchain-search-input,
+    .blockchain-filter-select,
+    .blockchain-filter-group .filter-button,
+    .clear-filter-button {
+        width: 100%;
+    }
+
 }
