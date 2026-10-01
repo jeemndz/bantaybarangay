@@ -1,21 +1,27 @@
 {% extends "base.html" %}
+
 {% load static %}
+
 
 {% block title %}
 Dashboard | BantayBarangay
 {% endblock %}
 
+
 {% block extra_css %}
+
 <link
     rel="stylesheet"
     href="{% static 'css/dashboard.css' %}"
 >
+
 {% endblock %}
 
 
 {% block content %}
 
 <div class="dashboard-page">
+
 
     <!-- =====================================================
          DASHBOARD HEADER
@@ -30,7 +36,7 @@ Dashboard | BantayBarangay
             </h1>
 
             <p>
-                Real-time transparency and incident monitoring
+                Current barangay records and administrative activity
             </p>
 
         </div>
@@ -42,6 +48,7 @@ Dashboard | BantayBarangay
                 type="button"
                 class="dashboard-btn"
             >
+
                 <svg
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -52,27 +59,9 @@ Dashboard | BantayBarangay
                 </svg>
 
                 <span>
-                    Last 30 Days
+                    {{ current_year }}
                 </span>
-            </button>
 
-
-            <button
-                type="button"
-                class="dashboard-btn dashboard-btn-primary"
-            >
-                <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                >
-                    <path
-                        d="M12 3v12M7 10l5 5 5-5M5 21h14"
-                    />
-                </svg>
-
-                <span>
-                    Export PDF
-                </span>
             </button>
 
         </div>
@@ -102,8 +91,8 @@ Dashboard | BantayBarangay
 
                 </div>
 
-                <span class="stat-change positive">
-                    +12%
+                <span class="stat-change neutral">
+                    All Records
                 </span>
 
             </div>
@@ -113,7 +102,7 @@ Dashboard | BantayBarangay
             </div>
 
             <div class="stat-value">
-                1,284
+                {{ total_complaints }}
             </div>
 
         </div>
@@ -135,8 +124,8 @@ Dashboard | BantayBarangay
 
                 </div>
 
-                <span class="stat-change negative">
-                    -4%
+                <span class="stat-change neutral">
+                    Open
                 </span>
 
             </div>
@@ -146,13 +135,13 @@ Dashboard | BantayBarangay
             </div>
 
             <div class="stat-value">
-                42
+                {{ active_cases }}
             </div>
 
         </div>
 
 
-        <!-- INCIDENT REPORTS -->
+        <!-- COMMUNITY ISSUES -->
 
         <div class="stat-card">
 
@@ -168,23 +157,23 @@ Dashboard | BantayBarangay
                 </div>
 
                 <span class="stat-change neutral">
-                    Steady
+                    Reports
                 </span>
 
             </div>
 
             <div class="stat-label">
-                Incident Reports
+                Community Issues
             </div>
 
             <div class="stat-value">
-                156
+                {{ incident_reports }}
             </div>
 
         </div>
 
 
-        <!-- VERIFIED DOCUMENTS -->
+        <!-- RELEASED DOCUMENTS -->
 
         <div class="stat-card">
 
@@ -199,17 +188,17 @@ Dashboard | BantayBarangay
                 </div>
 
                 <span class="stat-change positive">
-                    +100%
+                    Released
                 </span>
 
             </div>
 
             <div class="stat-label">
-                Verified Docs
+                Released Documents
             </div>
 
             <div class="stat-value">
-                3,012
+                {{ released_documents }}
             </div>
 
         </div>
@@ -233,7 +222,7 @@ Dashboard | BantayBarangay
                 </div>
 
                 <span class="stat-change neutral">
-                    +31
+                    Verified
                 </span>
 
             </div>
@@ -243,7 +232,7 @@ Dashboard | BantayBarangay
             </div>
 
             <div class="stat-value">
-                8,920
+                {{ total_residents }}
             </div>
 
         </div>
@@ -265,7 +254,7 @@ Dashboard | BantayBarangay
                 </div>
 
                 <span class="stat-change neutral">
-                    8 New
+                    Scheduled
                 </span>
 
             </div>
@@ -275,7 +264,7 @@ Dashboard | BantayBarangay
             </div>
 
             <div class="stat-value">
-                14
+                {{ pending_hearings }}
             </div>
 
         </div>
@@ -284,7 +273,7 @@ Dashboard | BantayBarangay
 
 
     <!-- =====================================================
-         ANALYTICS GRID
+         ANALYTICS
     ====================================================== -->
 
     <div class="dashboard-grid analytics-grid">
@@ -303,7 +292,7 @@ Dashboard | BantayBarangay
                     </h2>
 
                     <p>
-                        Complaint volume throughout the year
+                        Complaint submissions throughout the year
                     </p>
 
                 </div>
@@ -313,12 +302,12 @@ Dashboard | BantayBarangay
 
                     <span>
                         <i class="legend-dot current"></i>
-                        2024
+                        {{ current_year }}
                     </span>
 
                     <span>
                         <i class="legend-dot previous"></i>
-                        2023
+                        {{ previous_year }}
                     </span>
 
                 </div>
@@ -338,148 +327,25 @@ Dashboard | BantayBarangay
 
                 <div class="bar-chart">
 
-                    <div class="bar-column">
+                    {% for month in monthly_complaints %}
 
                         <div
-                            class="bar"
-                            style="height: 52%;"
-                        ></div>
+                            class="bar-column"
+                            title="{{ month.month }}: {{ month.current_total }} complaints"
+                        >
 
-                        <span>JAN</span>
+                            <div
+                                class="bar"
+                                data-height="{{ month.current_height }}"
+                            ></div>
 
-                    </div>
+                            <span>
+                                {{ month.month }}
+                            </span>
 
+                        </div>
 
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 68%;"
-                        ></div>
-
-                        <span>FEB</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 46%;"
-                        ></div>
-
-                        <span>MAR</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 75%;"
-                        ></div>
-
-                        <span>APR</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 92%;"
-                        ></div>
-
-                        <span>MAY</span>
-
-                    </div>
-
-
-                    <div class="bar-column active">
-
-                        <div
-                            class="bar"
-                            style="height: 60%;"
-                        ></div>
-
-                        <span>JUN</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 64%;"
-                        ></div>
-
-                        <span>JUL</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 80%;"
-                        ></div>
-
-                        <span>AUG</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 72%;"
-                        ></div>
-
-                        <span>SEP</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 42%;"
-                        ></div>
-
-                        <span>OCT</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 52%;"
-                        ></div>
-
-                        <span>NOV</span>
-
-                    </div>
-
-
-                    <div class="bar-column">
-
-                        <div
-                            class="bar"
-                            style="height: 68%;"
-                        ></div>
-
-                        <span>DEC</span>
-
-                    </div>
+                    {% endfor %}
 
                 </div>
 
@@ -488,7 +354,7 @@ Dashboard | BantayBarangay
         </section>
 
 
-        <!-- INCIDENT CATEGORIES -->
+        <!-- COMPLAINT CATEGORIES -->
 
         <section class="dashboard-card category-card">
 
@@ -497,11 +363,11 @@ Dashboard | BantayBarangay
                 <div>
 
                     <h2>
-                        Incident Categories
+                        Complaint Categories
                     </h2>
 
                     <p>
-                        Distribution of incident reports
+                        Distribution by complaint type
                     </p>
 
                 </div>
@@ -513,85 +379,82 @@ Dashboard | BantayBarangay
 
                 <div class="donut-wrapper">
 
-                    <div class="donut-chart has-data">
+{% if category_total %}
 
-                        <div class="donut-center">
+    <div
+        class="donut-chart has-data"
+        data-category-one="{% if incident_categories.0 %}{{ incident_categories.0.percentage }}{% else %}0{% endif %}"
+        data-category-two="{% if incident_categories.1 %}{{ incident_categories.1.percentage }}{% else %}0{% endif %}"
+        data-category-three="{% if incident_categories.2 %}{{ incident_categories.2.percentage }}{% else %}0{% endif %}"
+        data-category-four="{% if incident_categories.3 %}{{ incident_categories.3.percentage }}{% else %}0{% endif %}"
+    >
 
-                            <strong>
-                                156
-                            </strong>
+        <div class="donut-center">
 
-                            <span>
-                                TOTAL
-                            </span>
+            <strong>
+                {{ category_total }}
+            </strong>
 
-                        </div>
+            <span>
+                TOTAL
+            </span>
 
-                    </div>
+        </div>
+
+    </div>
+
+{% else %}
+
+    <div class="donut-chart no-data">
+
+        <div class="donut-center">
+
+            <strong>
+                0
+            </strong>
+
+            <span>
+                TOTAL
+            </span>
+
+        </div>
+
+    </div>
+
+{% endif %}
 
                 </div>
 
 
                 <div class="category-legend">
 
-                    <div>
+                    {% for category in incident_categories %}
 
-                        <span class="category-dot one"></span>
+                        <div>
 
-                        <span class="category-name">
-                            Public Nuisance
-                        </span>
+                            <span
+                                class="category-dot {{ category.dot_class }}"
+                            ></span>
 
-                        <strong>
-                            45%
-                        </strong>
+                            <span class="category-name">
+                                {{ category.name }}
+                            </span>
 
-                    </div>
+                            <strong>
+                                {{ category.percentage }}%
+                            </strong>
 
+                        </div>
 
-                    <div>
+                    {% empty %}
 
-                        <span class="category-dot two"></span>
+                        <div>
+                            <span class="category-name">
+                                No complaint data available.
+                            </span>
+                        </div>
 
-                        <span class="category-name">
-                            Theft
-                        </span>
-
-                        <strong>
-                            20%
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span class="category-dot three"></span>
-
-                        <span class="category-name">
-                            Dispute
-                        </span>
-
-                        <strong>
-                            25%
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span class="category-dot four"></span>
-
-                        <span class="category-name">
-                            Other
-                        </span>
-
-                        <strong>
-                            10%
-                        </strong>
-
-                    </div>
+                    {% endfor %}
 
                 </div>
 
@@ -603,7 +466,7 @@ Dashboard | BantayBarangay
 
 
     <!-- =====================================================
-         ACTIVITY GRID
+         ACTIVITY
     ====================================================== -->
 
     <div class="dashboard-grid activity-grid">
@@ -632,6 +495,7 @@ Dashboard | BantayBarangay
                     href="{% url 'complaints' %}"
                     class="view-all"
                 >
+
                     View All
 
                     <svg viewBox="0 0 24 24">
@@ -655,7 +519,6 @@ Dashboard | BantayBarangay
                             <th>Type</th>
                             <th>Status</th>
                             <th>Date</th>
-                            <th>Action</th>
                         </tr>
 
                     </thead>
@@ -663,180 +526,52 @@ Dashboard | BantayBarangay
 
                     <tbody>
 
-                        <tr>
+                        {% for complaint in recent_complaints %}
 
-                            <td class="complaint-id">
-                                #BB-2024-001
-                            </td>
+                            <tr>
 
-                            <td class="person-name">
-                                Maria Santos
-                            </td>
+                                <td class="complaint-id">
+                                    #{{ complaint.complaint_id }}
+                                </td>
 
-                            <td>
-                                Noise Complaint
-                            </td>
+                                <td class="person-name">
+                                    {{ complaint.complainant_name }}
+                                </td>
 
-                            <td>
+                                <td>
+                                    {{ complaint.complaint_type }}
+                                </td>
 
-                                <span class="status pending">
-                                    PENDING
-                                </span>
+                                <td>
 
-                            </td>
+                                    <span
+                                        class="status {{ complaint.status_class }}"
+                                    >
+                                        {{ complaint.status|upper }}
+                                    </span>
 
-                            <td>
-                                Oct 12, 2024
-                            </td>
+                                </td>
 
-                            <td>
+                                <td>
+                                    {{ complaint.submitted_at|date:"M d, Y" }}
+                                </td>
 
-                                <button
-                                    type="button"
-                                    class="table-action"
-                                    aria-label="View complaint"
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    style="text-align: center;"
                                 >
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
-                                        <circle cx="12" cy="12" r="2.5"/>
-                                    </svg>
-                                </button>
+                                    No complaints available.
+                                </td>
 
-                            </td>
+                            </tr>
 
-                        </tr>
-
-
-                        <tr>
-
-                            <td class="complaint-id">
-                                #BB-2024-002
-                            </td>
-
-                            <td class="person-name">
-                                Roberto Cruz
-                            </td>
-
-                            <td>
-                                Land Dispute
-                            </td>
-
-                            <td>
-
-                                <span class="status approved">
-                                    APPROVED
-                                </span>
-
-                            </td>
-
-                            <td>
-                                Oct 11, 2024
-                            </td>
-
-                            <td>
-
-                                <button
-                                    type="button"
-                                    class="table-action"
-                                    aria-label="View complaint"
-                                >
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
-                                        <circle cx="12" cy="12" r="2.5"/>
-                                    </svg>
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <td class="complaint-id">
-                                #BB-2024-003
-                            </td>
-
-                            <td class="person-name">
-                                Liza Gomez
-                            </td>
-
-                            <td>
-                                Illegal Parking
-                            </td>
-
-                            <td>
-
-                                <span class="status rejected">
-                                    REJECTED
-                                </span>
-
-                            </td>
-
-                            <td>
-                                Oct 10, 2024
-                            </td>
-
-                            <td>
-
-                                <button
-                                    type="button"
-                                    class="table-action"
-                                    aria-label="View complaint"
-                                >
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
-                                        <circle cx="12" cy="12" r="2.5"/>
-                                    </svg>
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <td class="complaint-id">
-                                #BB-2024-004
-                            </td>
-
-                            <td class="person-name">
-                                Antonio P.
-                            </td>
-
-                            <td>
-                                Waste Mgmt
-                            </td>
-
-                            <td>
-
-                                <span class="status resolved">
-                                    RESOLVED
-                                </span>
-
-                            </td>
-
-                            <td>
-                                Oct 09, 2024
-                            </td>
-
-                            <td>
-
-                                <button
-                                    type="button"
-                                    class="table-action"
-                                    aria-label="View complaint"
-                                >
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/>
-                                        <circle cx="12" cy="12" r="2.5"/>
-                                    </svg>
-                                </button>
-
-                            </td>
-
-                        </tr>
+                        {% endfor %}
 
                     </tbody>
 
@@ -847,7 +582,7 @@ Dashboard | BantayBarangay
         </section>
 
 
-        <!-- CHAIN LOGS -->
+        <!-- RECENT SYSTEM ACTIVITY -->
 
         <section class="dashboard-card chain-card">
 
@@ -856,117 +591,83 @@ Dashboard | BantayBarangay
                 <div>
 
                     <h2>
-                        Blockchain Activity
+                        Recent System Activity
                     </h2>
 
                     <p>
-                        Recent ledger verification events
+                        Latest recorded administrative actions
                     </p>
 
                 </div>
-
-
-                <span class="block-number">
-                    Block #82910
-                </span>
 
             </div>
 
 
             <div class="chain-list">
 
+                {% for activity in recent_activity %}
 
-                <div class="chain-item">
+                    <div class="chain-item">
 
-                    <div class="chain-icon">
+                        <div class="chain-icon">
 
-                        <svg viewBox="0 0 24 24">
-                            <path d="m5 12 4 4L19 6"/>
-                        </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path d="m5 12 4 4L19 6"/>
+                            </svg>
 
-                    </div>
-
-
-                    <div class="chain-info">
-
-                        <strong>
-                            New Doc Hashed
-                        </strong>
-
-                        <p>
-                            0x71C...a4f2 verified at 10:22
-                        </p>
-
-                    </div>
+                        </div>
 
 
-                    <span class="chain-status">
-                        VERIFIED
-                    </span>
+                        <div class="chain-info">
 
-                </div>
+                            <strong>
+                                {{ activity.action }}
+                                ·
+                                {{ activity.module }}
+                            </strong>
+
+                            <p>
+
+                                {% if activity.description %}
+
+                                    {{ activity.description }}
+
+                                {% else %}
+
+                                    System activity recorded.
+
+                                {% endif %}
+
+                            </p>
+
+                        </div>
 
 
-                <div class="chain-item">
-
-                    <div class="chain-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <path d="m5 12 4 4L19 6"/>
-                        </svg>
-
-                    </div>
-
-
-                    <div class="chain-info">
-
-                        <strong>
-                            Complaint Signed
-                        </strong>
-
-                        <p>
-                            #BB-2024-001 Admin_V4
-                        </p>
+                        <span class="chain-status">
+                            {{ activity.created_at|timesince }} ago
+                        </span>
 
                     </div>
 
+                {% empty %}
 
-                    <span class="chain-status">
-                        VERIFIED
-                    </span>
+                    <div class="chain-item">
 
-                </div>
+                        <div class="chain-info">
 
+                            <strong>
+                                No activity yet
+                            </strong>
 
-                <div class="chain-item">
+                            <p>
+                                System activity will appear here.
+                            </p>
 
-                    <div class="chain-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <path d="m5 12 4 4L19 6"/>
-                        </svg>
-
-                    </div>
-
-
-                    <div class="chain-info">
-
-                        <strong>
-                            Admin Re-Auth
-                        </strong>
-
-                        <p>
-                            Session valid for 2 hours.
-                        </p>
+                        </div>
 
                     </div>
 
-
-                    <span class="chain-status">
-                        VERIFIED
-                    </span>
-
-                </div>
+                {% endfor %}
 
             </div>
 
@@ -990,7 +691,7 @@ Dashboard | BantayBarangay
                 </h2>
 
                 <p>
-                    Recent administrative notifications
+                    Current administrative items requiring attention
                 </p>
 
             </div>
@@ -1000,6 +701,8 @@ Dashboard | BantayBarangay
 
         <div class="alert-list">
 
+
+            <!-- PENDING RESIDENTS -->
 
             <div class="alert-item">
 
@@ -1017,11 +720,23 @@ Dashboard | BantayBarangay
                 <div>
 
                     <strong>
-                        New Resident Registration
+                        Resident Registrations
                     </strong>
 
                     <span>
-                        3 pending approvals in District 04.
+
+                        {% if pending_residents %}
+
+                            {{ pending_residents }}
+                            resident{{ pending_residents|pluralize }}
+                            awaiting verification.
+
+                        {% else %}
+
+                            No resident registrations awaiting verification.
+
+                        {% endif %}
+
                     </span>
 
                 </div>
@@ -1029,13 +744,21 @@ Dashboard | BantayBarangay
             </div>
 
 
+            <!-- HEARINGS -->
+
             <div class="alert-item">
 
                 <div class="alert-icon">
 
                     <svg viewBox="0 0 24 24">
                         <path d="M8 2v3M16 2v3M3 9h18"/>
-                        <rect x="3" y="4" width="18" height="17" rx="2"/>
+                        <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="17"
+                            rx="2"
+                        />
                         <path d="M8 14h8"/>
                     </svg>
 
@@ -1045,11 +768,29 @@ Dashboard | BantayBarangay
                 <div>
 
                     <strong>
-                        Hearing Rescheduled
+                        Upcoming Hearings
                     </strong>
 
                     <span>
-                        Case #82 moved to Oct 20th.
+
+                        {% if next_hearing %}
+
+                            {{ upcoming_hearings_count }}
+                            scheduled hearing{{ upcoming_hearings_count|pluralize }}.
+
+                            Next:
+                            {{ next_hearing.case_number }}
+                            on
+                            {{ next_hearing.hearing_date|date:"M d, Y" }}
+                            at
+                            {{ next_hearing.start_time|time:"g:i A" }}.
+
+                        {% else %}
+
+                            No upcoming hearings scheduled.
+
+                        {% endif %}
+
                     </span>
 
                 </div>
@@ -1057,13 +798,15 @@ Dashboard | BantayBarangay
             </div>
 
 
+            <!-- DOCUMENT REQUESTS -->
+
             <div class="alert-item">
 
                 <div class="alert-icon">
 
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
-                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M6 3h12v18H6z"/>
+                        <path d="M9 7h6M9 11h6M9 15h4"/>
                     </svg>
 
                 </div>
@@ -1072,11 +815,23 @@ Dashboard | BantayBarangay
                 <div>
 
                     <strong>
-                        System Update
+                        Document Requests
                     </strong>
 
                     <span>
-                        Version 2.4.0 blockchain patch applied.
+
+                        {% if pending_documents %}
+
+                            {{ pending_documents }}
+                            request{{ pending_documents|pluralize }}
+                            currently under verification.
+
+                        {% else %}
+
+                            No document requests currently under verification.
+
+                        {% endif %}
+
                     </span>
 
                 </div>
@@ -1088,16 +843,15 @@ Dashboard | BantayBarangay
     </section>
 
 
-    <!-- =====================================================
+        <!-- =====================================================
          FOOTER
     ====================================================== -->
 
     <footer class="dashboard-footer">
 
         <span>
-            © 2026 BantayBarangay. Secure Blockchain Governance.
+            © 2026 BantayBarangay. Secure Digital Governance.
         </span>
-
 
         <div>
 
@@ -1115,4 +869,11 @@ Dashboard | BantayBarangay
 
 </div>
 
-{% endblock %}
+{% endblock content %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+{% endblock extra_js %}
