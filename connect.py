@@ -11,10 +11,10 @@ def get_connection():
     
     try:
         connection = mysql.connector.connect(
-           host="bantaybarangay.mysql.database.azure.com",
+        host="bantay.mysql.database.azure.com",
         port=3306,
-        user="bantayadmin",
-        password="Bantayadmin1",
+        user="Bantayadmin",
+        password="Bantayadmin123/",
         database="bantay",
         ssl_disabled=False
         )
