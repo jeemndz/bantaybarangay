@@ -17,16 +17,16 @@ from .models import Complaint
 from residentmodule.models import Resident
 from evidencemodule.views import save_evidence_file
 from usermanagement.models import User
-<<<<<<< HEAD
+
 
 from bantaybarangay.security import role_required
-=======
+
 from django.http import JsonResponse
 from evidencemodule.models import Evidence
 from documents.models import ComplaintDocument
 from django.db import connection
 
->>>>>>> 4452af4c8cfa426a98b3196a96513e85cd208968
+
 # =========================================================
 # CONSTANTS
 # =========================================================
