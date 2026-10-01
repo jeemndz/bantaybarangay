@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
-from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,17 +32,26 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
+AZURE_HOSTNAME = os.getenv("WEBSITE_HOSTNAME")
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net",
 ]
+
+if AZURE_HOSTNAME:
+    ALLOWED_HOSTS.append(AZURE_HOSTNAME)
+
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://bantaybarangay-h4fsaxcphfgpageg.eastasia-01.azurewebsites.net",
 ]
+
+if AZURE_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{AZURE_HOSTNAME}"
+    )
 
 # Application definition
 
