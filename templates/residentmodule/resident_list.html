@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 
@@ -29,24 +30,6 @@ Resident Management | BantayBarangay
     <div class="resident-header">
 
         <div class="resident-header-content">
-
-            <div class="resident-header-icon">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                    />
-                </svg>
-
-            </div>
-
 
             <div>
 
@@ -118,7 +101,6 @@ Resident Management | BantayBarangay
 
             </div>
 
-
             <div class="stat-content">
 
                 <span>
@@ -155,7 +137,6 @@ Resident Management | BantayBarangay
 
             </div>
 
-
             <div class="stat-content">
 
                 <span>
@@ -191,7 +172,6 @@ Resident Management | BantayBarangay
                 </svg>
 
             </div>
-
 
             <div class="stat-content">
 
@@ -230,7 +210,6 @@ Resident Management | BantayBarangay
                 </svg>
 
             </div>
-
 
             <div class="stat-content">
 
@@ -374,7 +353,11 @@ Resident Management | BantayBarangay
                         </th>
 
                         <th>
-                            Status
+                            Verification Status
+                        </th>
+
+                        <th>
+                            Account Status
                         </th>
 
                         <th class="actions-column">
@@ -393,8 +376,11 @@ Resident Management | BantayBarangay
 
                     <tr
                         class="resident-row"
+
                         tabindex="0"
+
                         role="button"
+
                         title="Click to view resident details"
 
                         aria-label="View details for {{ resident.first_name }} {{ resident.last_name }}"
@@ -418,6 +404,8 @@ Resident Management | BantayBarangay
                         data-email="{{ resident.email|default:'—'|escape }}"
 
                         data-status="{{ resident.verification_status|default:'—'|escape }}"
+
+                        data-account-status="{{ resident.account_status|default:'No Account'|escape }}"
 
                         data-created="{% if resident.created_at %}{{ resident.created_at|date:'M d, Y h:i A' }}{% else %}—{% endif %}"
 
@@ -537,7 +525,9 @@ Resident Management | BantayBarangay
                         </td>
 
 
-                        <!-- STATUS -->
+                        <!-- =================================================
+                             VERIFICATION STATUS
+                        ================================================== -->
 
                         <td>
 
@@ -571,16 +561,6 @@ Resident Management | BantayBarangay
 
                                 </span>
 
-                            {% elif resident.verification_status == "Inactive" %}
-
-                                <span class="status-badge status-inactive">
-
-                                    <span class="status-dot"></span>
-
-                                    Inactive
-
-                                </span>
-
                             {% else %}
 
                                 <span class="status-badge status-neutral">
@@ -596,7 +576,121 @@ Resident Management | BantayBarangay
                         </td>
 
 
-                        <!-- ACTIONS -->
+                        <!-- =================================================
+                             ACCOUNT STATUS
+                        ================================================== -->
+
+                        <td>
+
+                            {% if resident.account_status == "Active" %}
+
+                                <span class="account-status-badge account-active">
+
+                                    <span class="account-status-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2.2"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            ></circle>
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="m8 12 2.5 2.5L16 9"
+                                            ></path>
+                                        </svg>
+
+                                    </span>
+
+                                    Active
+
+                                </span>
+
+
+                            {% elif resident.account_status == "Inactive" %}
+
+                                <span class="account-status-badge account-inactive">
+
+                                    <span class="account-status-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            ></circle>
+
+                                            <path
+                                                stroke-linecap="round"
+                                                d="M8 12h8"
+                                            ></path>
+                                        </svg>
+
+                                    </span>
+
+                                    Inactive
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="account-status-badge account-no-account">
+
+                                    <span class="account-status-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            ></circle>
+
+                                            <path
+                                                stroke-linecap="round"
+                                                d="M12 8v4"
+                                            ></path>
+
+                                            <circle
+                                                cx="12"
+                                                cy="16"
+                                                r=".5"
+                                                fill="currentColor"
+                                                stroke="none"
+                                            ></circle>
+                                        </svg>
+
+                                    </span>
+
+                                    No Account
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ACTIONS
+                        ================================================== -->
 
                         <td>
 
@@ -610,6 +704,7 @@ Resident Management | BantayBarangay
                                     class="action-button action-edit"
                                     title="Edit resident"
                                     aria-label="Edit {{ resident.first_name }} {{ resident.last_name }}"
+                                    onclick="event.stopPropagation();"
                                 >
 
                                     <svg
@@ -632,17 +727,110 @@ Resident Management | BantayBarangay
                                 </a>
 
 
-                                <!-- INACTIVE -->
+                                <!-- ACCOUNT TOGGLE -->
 
-                                {% if resident.verification_status != "Inactive" %}
+                                {% if resident.account_exists %}
 
-                                    <button
-                                        type="button"
-                                        class="action-button action-inactive"
-                                        data-inactive-resident
-                                        data-resident-id="{{ resident.resident_id }}"
-                                        data-resident-name="{{ resident.first_name|escape }} {{ resident.last_name|escape }}"
-                                        title="Mark resident inactive"
+                                    <form
+                                        method="post"
+                                        action="{% url 'toggle_resident_account_status' resident.resident_id %}"
+                                        class="account-toggle-form"
+                                        onclick="event.stopPropagation();"
+                                    >
+
+                                        {% csrf_token %}
+
+
+                                        {% if resident.account_status == "Active" %}
+
+                                            <button
+                                                type="submit"
+                                                class="action-button action-deactivate"
+                                                title="Deactivate account"
+                                                aria-label="Deactivate {{ resident.first_name }} {{ resident.last_name }} account"
+                                                onclick="
+                                                    event.stopPropagation();
+                                                    return confirm(
+                                                        'Deactivate the account of {{ resident.first_name|escapejs }} {{ resident.last_name|escapejs }}?'
+                                                    );
+                                                "
+                                            >
+
+                                                <svg
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="1.8"
+                                                >
+                                                    <circle
+                                                        cx="12"
+                                                        cy="12"
+                                                        r="9"
+                                                    ></circle>
+
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        d="M8 12h8"
+                                                    ></path>
+                                                </svg>
+
+                                                <span>
+                                                    Deactivate
+                                                </span>
+
+                                            </button>
+
+
+                                        {% else %}
+
+                                            <button
+                                                type="submit"
+                                                class="action-button action-activate"
+                                                title="Activate account"
+                                                aria-label="Activate {{ resident.first_name }} {{ resident.last_name }} account"
+                                                onclick="
+                                                    event.stopPropagation();
+                                                    return confirm(
+                                                        'Activate the account of {{ resident.first_name|escapejs }} {{ resident.last_name|escapejs }}?'
+                                                    );
+                                                "
+                                            >
+
+                                                <svg
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="1.8"
+                                                >
+                                                    <circle
+                                                        cx="12"
+                                                        cy="12"
+                                                        r="9"
+                                                    ></circle>
+
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        d="m8 12 2.5 2.5L16 9"
+                                                    ></path>
+                                                </svg>
+
+                                                <span>
+                                                    Activate
+                                                </span>
+
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+
+                                {% else %}
+
+                                    <span
+                                        class="already-inactive"
+                                        title="This resident does not have a linked user account."
                                     >
 
                                         <svg
@@ -663,16 +851,8 @@ Resident Management | BantayBarangay
                                             ></path>
                                         </svg>
 
-                                        <span>
-                                            Inactive
-                                        </span>
+                                        No Account
 
-                                    </button>
-
-                                {% else %}
-
-                                    <span class="already-inactive">
-                                        Inactive
                                     </span>
 
                                 {% endif %}
@@ -689,7 +869,7 @@ Resident Management | BantayBarangay
                     <tr class="empty-table-row">
 
                         <td
-                            colspan="7"
+                            colspan="8"
                             class="no-residents"
                         >
 
@@ -828,6 +1008,10 @@ Resident Management | BantayBarangay
 
                         <th>
                             Verification Status
+                        </th>
+
+                        <th>
+                            Account Status
                         </th>
 
                         <th class="actions-column">
@@ -975,7 +1159,7 @@ Resident Management | BantayBarangay
                         </td>
 
 
-                        <!-- STATUS -->
+                        <!-- VERIFICATION STATUS -->
 
                         <td>
 
@@ -1030,18 +1214,90 @@ Resident Management | BantayBarangay
 
                                 </span>
 
-                            {% elif resident.verification_status == "Inactive" %}
-
-                                <span class="verification-badge inactive">
-                                    Inactive
-                                </span>
-
                             {% else %}
 
                                 <span class="verification-badge neutral">
 
                                     {{ resident.verification_status|default:"—" }}
 
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACCOUNT STATUS -->
+
+                        <td>
+
+                            {% if resident.account_status == "Active" %}
+
+                                <span class="account-status-badge account-active">
+
+                                    <span class="account-status-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2.2"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            ></circle>
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="m8 12 2.5 2.5L16 9"
+                                            ></path>
+                                        </svg>
+
+                                    </span>
+
+                                    Active
+
+                                </span>
+
+
+                            {% elif resident.account_status == "Inactive" %}
+
+                                <span class="account-status-badge account-inactive">
+
+                                    <span class="account-status-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            ></circle>
+
+                                            <path
+                                                stroke-linecap="round"
+                                                d="M8 12h8"
+                                            ></path>
+                                        </svg>
+
+                                    </span>
+
+                                    Inactive
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="account-status-badge account-no-account">
+                                    No Account
                                 </span>
 
                             {% endif %}
@@ -1125,7 +1381,7 @@ Resident Management | BantayBarangay
                     <tr>
 
                         <td
-                            colspan="7"
+                            colspan="8"
                             class="no-residents verification-empty"
                         >
 
@@ -1184,92 +1440,6 @@ Resident Management | BantayBarangay
 
 {% include 'residentmodule/components/resident_drawer.html' %}
 
-
-<!-- =========================================================
-     INACTIVE CONFIRMATION MODAL
-========================================================= -->
-
-<div
-    id="inactiveResidentModal"
-    class="inactive-modal"
-    aria-hidden="true"
->
-
-    <div
-        id="inactiveResidentModalCard"
-        class="inactive-modal-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="inactiveModalTitle"
-    >
-
-
-        <div class="inactive-modal-icon">
-
-            <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-            >
-                <circle
-                    cx="12"
-                    cy="12"
-                    r="9"
-                ></circle>
-
-                <path
-                    stroke-linecap="round"
-                    d="M8 12h8"
-                ></path>
-            </svg>
-
-        </div>
-
-
-        <h2 id="inactiveModalTitle">
-            Mark Resident Inactive?
-        </h2>
-
-
-        <p>
-
-            You are about to mark
-
-            <strong id="inactiveResidentName">
-                this resident
-            </strong>
-
-            as inactive. The resident record will remain
-            in the system and will not be deleted.
-
-        </p>
-
-
-        <div class="inactive-modal-actions">
-
-            <button
-                type="button"
-                id="cancelInactiveResident"
-                class="modal-cancel-btn"
-            >
-                Cancel
-            </button>
-
-
-            <button
-                type="button"
-                id="confirmInactiveResident"
-                class="modal-confirm-btn"
-            >
-                Mark Inactive
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
 
 {% endblock %}
 

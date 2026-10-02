@@ -10,11 +10,134 @@ from django.shortcuts import (
 )
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from bantaybarangay.security import role_required
 
+from login.models import User
 from .models import Resident
 from .forms import ResidentForm
+
+
+# ============================================================
+# HELPER: ATTACH ACCOUNT INFORMATION
+# ============================================================
+
+def attach_account_information(residents):
+    """
+    Attach information from the users table to Resident objects.
+
+    Resident.user_id stores the ID of the corresponding
+    record in the users table.
+
+    Added attributes:
+        resident.account_exists
+        resident.account
+        resident.account_user_id
+        resident.account_username
+        resident.account_email
+        resident.account_role
+        resident.account_is_active
+        resident.account_status
+    """
+
+    residents = list(residents)
+
+    # --------------------------------------------------------
+    # COLLECT USER IDS
+    # --------------------------------------------------------
+
+    user_ids = [
+        resident.user_id
+        for resident in residents
+        if resident.user_id is not None
+    ]
+
+    # --------------------------------------------------------
+    # GET USERS IN ONE QUERY
+    # --------------------------------------------------------
+
+    users = User.objects.filter(
+        user_id__in=user_ids
+    )
+
+    users_by_id = {
+        user.user_id: user
+        for user in users
+    }
+
+    # --------------------------------------------------------
+    # ATTACH USER INFORMATION
+    # --------------------------------------------------------
+
+    for resident in residents:
+
+        user = users_by_id.get(
+            resident.user_id
+        )
+
+        # ----------------------------------------------------
+        # LINKED ACCOUNT EXISTS
+        # ----------------------------------------------------
+
+        if user is not None:
+
+            resident.account_exists = True
+            resident.account = user
+
+            resident.account_user_id = (
+                user.user_id
+            )
+
+            resident.account_username = (
+                user.username or ""
+            )
+
+            resident.account_email = (
+                user.email or ""
+            )
+
+            resident.account_role = (
+                user.role or ""
+            )
+
+            resident.account_is_active = (
+                user.is_active is True
+            )
+
+            if user.is_active is True:
+
+                resident.account_status = (
+                    "Active"
+                )
+
+            else:
+
+                resident.account_status = (
+                    "Inactive"
+                )
+
+        # ----------------------------------------------------
+        # NO LINKED ACCOUNT
+        # ----------------------------------------------------
+
+        else:
+
+            resident.account_exists = False
+            resident.account = None
+
+            resident.account_user_id = None
+            resident.account_username = ""
+            resident.account_email = ""
+            resident.account_role = ""
+
+            resident.account_is_active = False
+
+            resident.account_status = (
+                "No Account"
+            )
+
+    return residents
 
 
 # ============================================================
@@ -32,10 +155,12 @@ def send_resident_verification_email(resident):
     # --------------------------------------------------------
 
     if not resident.email:
+
         print(
             "RESIDENT VERIFICATION EMAIL NOT SENT: "
             "Resident has no email address."
         )
+
         return False
 
     # --------------------------------------------------------
@@ -116,20 +241,13 @@ Secure Digital Governance
         reply_to=[settings.EMAIL_HOST_USER],
     )
 
-    # --------------------------------------------------------
-    # ATTACH HTML VERSION
-    #
-    # Django 6:
-    # Do NOT use email.mixed_subtype = "related".
-    # --------------------------------------------------------
-
     email.attach_alternative(
         html_content,
         "text/html"
     )
 
     # --------------------------------------------------------
-    # ATTACH BANTAYBARANGAY LOGO
+    # ATTACH LOGO
     # --------------------------------------------------------
 
     logo_path = (
@@ -170,8 +288,6 @@ Secure Digital Governance
 
         except Exception as error:
 
-            # A logo problem should not stop the email.
-
             print(
                 "RESIDENT EMAIL LOGO ERROR:",
                 repr(error)
@@ -183,67 +299,6 @@ Secure Digital Governance
             "RESIDENT EMAIL LOGO NOT FOUND:",
             logo_path
         )
-
-    # --------------------------------------------------------
-    # SAFE EMAIL DEBUG INFORMATION
-    # --------------------------------------------------------
-
-    print("=" * 70)
-    print("RESIDENT VERIFICATION EMAIL")
-
-    print(
-        "EMAIL HOST:",
-        getattr(
-            settings,
-            "EMAIL_HOST",
-            None
-        )
-    )
-
-    print(
-        "EMAIL PORT:",
-        getattr(
-            settings,
-            "EMAIL_PORT",
-            None
-        )
-    )
-
-    print(
-        "EMAIL TLS:",
-        getattr(
-            settings,
-            "EMAIL_USE_TLS",
-            None
-        )
-    )
-
-    print(
-        "EMAIL USER:",
-        getattr(
-            settings,
-            "EMAIL_HOST_USER",
-            None
-        )
-    )
-
-    print(
-        "EMAIL PASSWORD CONFIGURED:",
-        bool(
-            getattr(
-                settings,
-                "EMAIL_HOST_PASSWORD",
-                None
-            )
-        )
-    )
-
-    print(
-        "RESIDENT EMAIL RECIPIENT:",
-        resident.email
-    )
-
-    print("=" * 70)
 
     # --------------------------------------------------------
     # SEND EMAIL
@@ -274,27 +329,92 @@ Secure Digital Governance
 @role_required("admin", "official")
 def resident_list(request):
 
+    # --------------------------------------------------------
+    # GET RESIDENTS
+    # --------------------------------------------------------
+
     residents = (
         Resident.objects
         .all()
         .order_by("-resident_id")
     )
 
-    verification_residents = (
-        Resident.objects
-        .filter(
-            verification_status="Pending"
-        )
-        .order_by("-resident_id")
+    # --------------------------------------------------------
+    # ATTACH USER ACCOUNT INFORMATION
+    # --------------------------------------------------------
+
+    residents = attach_account_information(
+        residents
     )
 
+    # --------------------------------------------------------
+    # VERIFICATION RESIDENTS
+    # --------------------------------------------------------
+
+    verification_residents = [
+        resident
+        for resident in residents
+        if resident.verification_status == "Pending"
+    ]
+
+    # --------------------------------------------------------
+    # STATISTICS
+    # --------------------------------------------------------
+
+    total_residents = len(
+        residents
+    )
+
+    active_accounts = sum(
+        1
+        for resident in residents
+        if resident.account_status == "Active"
+    )
+
+    inactive_accounts = sum(
+        1
+        for resident in residents
+        if resident.account_status == "Inactive"
+    )
+
+    residents_without_accounts = sum(
+        1
+        for resident in residents
+        if resident.account_status == "No Account"
+    )
+
+    # --------------------------------------------------------
+    # CONTEXT
+    # --------------------------------------------------------
+
     context = {
-        "residents": residents,
-        "verification_residents": verification_residents,
-        "total_residents": residents.count(),
-        "total_households": 0,
-        "senior_citizens": 0,
-        "pwd_residents": 0,
+
+        "residents":
+            residents,
+
+        "verification_residents":
+            verification_residents,
+
+        "total_residents":
+            total_residents,
+
+        "total_households":
+            0,
+
+        "senior_citizens":
+            0,
+
+        "pwd_residents":
+            0,
+
+        "active_accounts":
+            active_accounts,
+
+        "inactive_accounts":
+            inactive_accounts,
+
+        "residents_without_accounts":
+            residents_without_accounts,
     }
 
     return render(
@@ -318,6 +438,18 @@ def resident_verify(
     resident = get_object_or_404(
         Resident,
         resident_id=resident_id
+    )
+
+    # --------------------------------------------------------
+    # ATTACH USER ACCOUNT INFORMATION
+    # --------------------------------------------------------
+
+    resident = attach_account_information(
+        [resident]
+    )[0]
+
+    linked_user = (
+        resident.account
     )
 
     # --------------------------------------------------------
@@ -374,6 +506,7 @@ def resident_verify(
                     ".jpg",
                     ".jpeg",
                     ".png",
+                    ".webp",
                 )
             )
         )
@@ -417,6 +550,7 @@ def resident_verify(
                     ".jpg",
                     ".jpeg",
                     ".png",
+                    ".webp",
                 )
             )
         )
@@ -432,13 +566,19 @@ def resident_verify(
     # --------------------------------------------------------
 
     context = {
-        "resident": resident,
 
-        # Profile picture
+        "resident":
+            resident,
+
+        "linked_user":
+            linked_user,
+
+        "account_status":
+            resident.account_status,
+
         "profile_picture_url":
             profile_picture_url,
 
-        # Government ID
         "id_file_url":
             id_file_url,
 
@@ -448,7 +588,6 @@ def resident_verify(
         "id_file_is_pdf":
             id_file_is_pdf,
 
-        # Proof of residency
         "residency_file_url":
             residency_file_url,
 
@@ -482,10 +621,6 @@ def accept_resident(
         resident_id=resident_id
     )
 
-    # --------------------------------------------------------
-    # ONLY ACCEPT POST REQUESTS
-    # --------------------------------------------------------
-
     if request.method != "POST":
 
         return redirect(
@@ -494,7 +629,7 @@ def accept_resident(
         )
 
     # --------------------------------------------------------
-    # PREVENT DUPLICATE VERIFICATION
+    # ALREADY VERIFIED
     # --------------------------------------------------------
 
     if resident.verification_status == "Verified":
@@ -510,7 +645,7 @@ def accept_resident(
         )
 
     # --------------------------------------------------------
-    # PREVENT REJECTED RESIDENT FROM BEING ACCEPTED
+    # ALREADY REJECTED
     # --------------------------------------------------------
 
     if resident.verification_status == "Rejected":
@@ -529,7 +664,7 @@ def accept_resident(
         )
 
     # --------------------------------------------------------
-    # VERIFY RESIDENT
+    # VERIFY
     # --------------------------------------------------------
 
     resident.verification_status = (
@@ -546,10 +681,6 @@ def accept_resident(
         )
     )
 
-    # --------------------------------------------------------
-    # SAVE VERIFICATION
-    # --------------------------------------------------------
-
     resident.save(
         update_fields=[
             "verification_status",
@@ -558,18 +689,8 @@ def accept_resident(
         ]
     )
 
-    print(
-        "RESIDENT VERIFIED:",
-        resident.resident_id
-    )
-
-    print(
-        "RESIDENT EMAIL:",
-        resident.email
-    )
-
     # --------------------------------------------------------
-    # SEND VERIFICATION EMAIL
+    # SEND EMAIL
     # --------------------------------------------------------
 
     if resident.email:
@@ -582,10 +703,6 @@ def accept_resident(
                 )
             )
 
-            # ------------------------------------------------
-            # EMAIL ACCEPTED BY EMAIL BACKEND
-            # ------------------------------------------------
-
             if send_result == 1:
 
                 messages.success(
@@ -597,16 +714,7 @@ def accept_resident(
                     )
                 )
 
-            # ------------------------------------------------
-            # EMAIL BACKEND DID NOT CONFIRM SEND
-            # ------------------------------------------------
-
             else:
-
-                print(
-                    "RESIDENT EMAIL SEND RESULT:",
-                    send_result
-                )
 
                 messages.warning(
                     request,
@@ -617,43 +725,12 @@ def accept_resident(
                     )
                 )
 
-        # ----------------------------------------------------
-        # EMAIL FAILED
-        # ----------------------------------------------------
-
         except Exception as error:
 
-            print("=" * 70)
             print(
-                "RESIDENT VERIFICATION EMAIL FAILED"
-            )
-
-            print(
-                "ERROR TYPE:",
-                type(error).__name__
-            )
-
-            print(
-                "ERROR MESSAGE:",
-                str(error)
-            )
-
-            print(
-                "ERROR REPR:",
+                "RESIDENT VERIFICATION EMAIL FAILED:",
                 repr(error)
             )
-
-            print(
-                "RESIDENT ID:",
-                resident.resident_id
-            )
-
-            print(
-                "RESIDENT EMAIL:",
-                resident.email
-            )
-
-            print("=" * 70)
 
             messages.warning(
                 request,
@@ -664,16 +741,7 @@ def accept_resident(
                 )
             )
 
-    # --------------------------------------------------------
-    # RESIDENT HAS NO EMAIL
-    # --------------------------------------------------------
-
     else:
-
-        print(
-            "RESIDENT VERIFICATION EMAIL NOT SENT: "
-            "No resident email address."
-        )
 
         messages.warning(
             request,
@@ -683,10 +751,6 @@ def accept_resident(
                 "registered email address."
             )
         )
-
-    # --------------------------------------------------------
-    # RETURN TO VERIFICATION PAGE
-    # --------------------------------------------------------
 
     return redirect(
         "resident_verify",
@@ -710,10 +774,6 @@ def reject_resident(
         resident_id=resident_id
     )
 
-    # --------------------------------------------------------
-    # ONLY ACCEPT POST REQUESTS
-    # --------------------------------------------------------
-
     if request.method != "POST":
 
         return redirect(
@@ -722,7 +782,7 @@ def reject_resident(
         )
 
     # --------------------------------------------------------
-    # PREVENT VERIFIED RESIDENT FROM BEING REJECTED
+    # VERIFIED
     # --------------------------------------------------------
 
     if resident.verification_status == "Verified":
@@ -741,7 +801,7 @@ def reject_resident(
         )
 
     # --------------------------------------------------------
-    # PREVENT DUPLICATE REJECTION
+    # ALREADY REJECTED
     # --------------------------------------------------------
 
     if resident.verification_status == "Rejected":
@@ -760,7 +820,7 @@ def reject_resident(
         )
 
     # --------------------------------------------------------
-    # REJECT RESIDENT
+    # REJECT
     # --------------------------------------------------------
 
     resident.verification_status = (
@@ -777,10 +837,6 @@ def reject_resident(
         )
     )
 
-    # --------------------------------------------------------
-    # SAVE
-    # --------------------------------------------------------
-
     resident.save(
         update_fields=[
             "verification_status",
@@ -788,10 +844,6 @@ def reject_resident(
             "verified_by",
         ]
     )
-
-    # --------------------------------------------------------
-    # SUCCESS MESSAGE
-    # --------------------------------------------------------
 
     messages.success(
         request,
@@ -835,11 +887,8 @@ def resident_create(request):
 
         form = ResidentForm()
 
-    # --------------------------------------------------------
-    # CONTEXT
-    # --------------------------------------------------------
-
     context = {
+
         "form":
             form,
 
@@ -905,11 +954,8 @@ def resident_update(
             instance=resident
         )
 
-    # --------------------------------------------------------
-    # CONTEXT
-    # --------------------------------------------------------
-
     context = {
+
         "form":
             form,
 
@@ -931,6 +977,123 @@ def resident_update(
 
 
 # ============================================================
+# TOGGLE RESIDENT ACCOUNT STATUS
+# ADMIN + OFFICIAL
+# ============================================================
+
+@role_required("admin", "official")
+@require_POST
+def toggle_resident_account_status(
+    request,
+    resident_id
+):
+
+    # --------------------------------------------------------
+    # GET RESIDENT
+    # --------------------------------------------------------
+
+    resident = get_object_or_404(
+        Resident,
+        resident_id=resident_id
+    )
+
+    # --------------------------------------------------------
+    # RESIDENT MUST HAVE USER ID
+    # --------------------------------------------------------
+
+    if resident.user_id is None:
+
+        messages.error(
+            request,
+            (
+                "This resident does not have "
+                "a linked user account."
+            )
+        )
+
+        return redirect(
+            "resident_list"
+        )
+
+    # --------------------------------------------------------
+    # GET USER ACCOUNT
+    # --------------------------------------------------------
+
+    user = (
+        User.objects
+        .filter(
+            user_id=resident.user_id
+        )
+        .first()
+    )
+
+    if user is None:
+
+        messages.error(
+            request,
+            (
+                "The user account linked to this "
+                "resident could not be found."
+            )
+        )
+
+        return redirect(
+            "resident_list"
+        )
+
+    # --------------------------------------------------------
+    # TOGGLE ACCOUNT
+    # --------------------------------------------------------
+
+    current_status = bool(
+        user.is_active
+    )
+
+    user.is_active = (
+        not current_status
+    )
+
+    user.save(
+        update_fields=[
+            "is_active"
+        ]
+    )
+
+    # --------------------------------------------------------
+    # MESSAGE
+    # --------------------------------------------------------
+
+    resident_name = (
+        f"{resident.first_name} "
+        f"{resident.last_name}"
+    ).strip()
+
+    if user.is_active:
+
+        messages.success(
+            request,
+            (
+                f"{resident_name}'s account "
+                "has been activated."
+            )
+        )
+
+    else:
+
+        messages.success(
+            request,
+            (
+                f"{resident_name}'s account "
+                "has been deactivated."
+            )
+        )
+
+    return redirect(
+        "resident_list"
+    )
+
+
+# ============================================================
 # DELETE RESIDENT
 # ADMIN + OFFICIAL
 # ============================================================
@@ -946,10 +1109,6 @@ def resident_delete(
         resident_id=resident_id
     )
 
-    # --------------------------------------------------------
-    # DELETE
-    # --------------------------------------------------------
-
     if request.method == "POST":
 
         resident.delete()
@@ -962,10 +1121,6 @@ def resident_delete(
         return redirect(
             "resident_list"
         )
-
-    # --------------------------------------------------------
-    # CONFIRMATION PAGE
-    # --------------------------------------------------------
 
     return render(
         request,

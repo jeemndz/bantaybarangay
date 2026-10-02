@@ -5,6 +5,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+
     /* =====================================================
        ELEMENTS
     ====================================================== */
@@ -12,17 +13,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const evidenceGrid =
         document.getElementById("evidenceGrid");
 
-    const evidenceCards =
-        Array.from(document.querySelectorAll(".evidence-card"));
-
     const categoryCards =
-        document.querySelectorAll(".category-card");
+        Array.from(
+            document.querySelectorAll(
+                ".evidence-category-card"
+            )
+        );
 
-    const seeAllButton =
-        document.querySelector(".see-all-button");
+    const showAllButton =
+        document.getElementById("showAllCategories");
 
     const searchInput =
         document.getElementById("evidenceSearch");
+
+    const clearSearchButton =
+        document.getElementById("clearEvidenceSearch");
 
     const sortSelect =
         document.getElementById("sortEvidence");
@@ -34,96 +39,244 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("listViewButton");
 
     const detailsPanel =
-        document.getElementById("detailsPanel");
+        document.getElementById("evidenceDetailsPanel");
 
     const closeDetailsButton =
-        document.getElementById("closeDetails");
+        document.getElementById("closeEvidenceDetails");
 
-    const uploadButton =
-        document.getElementById("uploadEvidenceButton");
+    const emptyState =
+        document.getElementById("evidenceEmptyState");
 
-    const fileInput =
-        document.getElementById("fileInput");
-
-    const browseButton =
-        document.getElementById("browseFiles");
+    const databaseEmptyState =
+        document.getElementById("databaseEmptyState");
 
     const dropZone =
         document.getElementById("dropZone");
 
-    const emptyState =
-        document.getElementById("emptyState");
+    const browseButton =
+        document.getElementById("browseFiles");
+
+    const fileInput =
+        document.getElementById("fileInput");
 
 
     /* =====================================================
-       CURRENT FILTER
+       CURRENT CATEGORY
     ====================================================== */
 
     let currentCategory = "all";
 
 
     /* =====================================================
-       FILE DATA
+       GET EVIDENCE CARDS
     ====================================================== */
 
-    const evidenceData = {
+    function getEvidenceCards() {
 
-        1: {
-            name: "IMG_20240101_INCIDENT.jpg",
-            modified: "Modified Jan 12, 2024 • 14:22 PM",
-            type: "JPEG Image",
-            resolution: "4032 × 3024",
-            uploader: "Officer K. San Jose",
-            image: null,
-            hash:
-                "f3a1e948c03d7b6fa829b05c41d7e82f3a1e948c03d7b6f8a29b05c41d7e82"
-        },
-
-        2: {
-            name: "CCTV_ENTRY_WAY_B4.mp4",
-            modified: "Modified Jan 11, 2024 • 09:40 AM",
-            type: "MP4 Video",
-            resolution: "1920 × 1080",
-            uploader: "Officer M. Reyes",
-            image: null,
-            hash:
-                "71c20e731ef427a99b8114cbbe58176db76fc97b45ae69121051e295e7d19e21"
-        },
-
-        3: {
-            name: "WITNESS_STATEMENT_REF_002.pdf",
-            modified: "Modified Jan 10, 2024 • 11:18 AM",
-            type: "PDF Document",
-            resolution: "Document",
-            uploader: "Officer K. San Jose",
-            image: null,
-            hash:
-                "8a42c876cd78346f12be92c0ac22418e5399d88f23ab6c4f128ff039110721aa"
+        if (!evidenceGrid) {
+            return [];
         }
 
-    };
+        return Array.from(
+            evidenceGrid.querySelectorAll(
+                ".evidence-file-card"
+            )
+        );
+    }
+
+
+    /* =====================================================
+       NORMALIZE CATEGORY
+    ====================================================== */
+
+    function normalizeCategory(value) {
+
+        const type =
+            String(value || "")
+                .toLowerCase()
+                .trim();
+
+
+        if (
+            type.includes("image") ||
+            type.includes("photo") ||
+            type.includes("jpg") ||
+            type.includes("jpeg") ||
+            type.includes("png") ||
+            type.includes("gif") ||
+            type.includes("webp")
+        ) {
+            return "photos";
+        }
+
+
+        if (
+            type.includes("video") ||
+            type.includes("mp4") ||
+            type.includes("webm") ||
+            type.includes("mov") ||
+            type.includes("avi")
+        ) {
+            return "videos";
+        }
+
+
+        if (
+            type.includes("audio") ||
+            type.includes("mp3") ||
+            type.includes("wav") ||
+            type.includes("m4a") ||
+            type.includes("ogg")
+        ) {
+            return "audio";
+        }
+
+
+        if (
+            type.includes("complaint")
+        ) {
+            return "complaints";
+        }
+
+
+        if (
+            type.includes("incident")
+        ) {
+            return "incidents";
+        }
+
+
+        return "documents";
+    }
+
+
+    /* =====================================================
+       UPDATE CATEGORY COUNTS
+    ====================================================== */
+
+    function updateCategoryCounts() {
+
+        const counts = {
+            photos: 0,
+            videos: 0,
+            audio: 0,
+            documents: 0
+        };
+
+
+        getEvidenceCards().forEach(function (card) {
+
+            const category =
+                normalizeCategory(
+                    card.dataset.category
+                );
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    counts,
+                    category
+                )
+            ) {
+                counts[category]++;
+            }
+
+        });
+
+
+        const photoCount =
+            document.getElementById("photoCount");
+
+        const videoCount =
+            document.getElementById("videoCount");
+
+        const audioCount =
+            document.getElementById("audioCount");
+
+        const documentCount =
+            document.getElementById("documentCount");
+
+
+        if (photoCount) {
+            photoCount.textContent =
+                counts.photos;
+        }
+
+        if (videoCount) {
+            videoCount.textContent =
+                counts.videos;
+        }
+
+        if (audioCount) {
+            audioCount.textContent =
+                counts.audio;
+        }
+
+        if (documentCount) {
+            documentCount.textContent =
+                counts.documents;
+        }
+    }
 
 
     /* =====================================================
        CATEGORY FILTER
     ====================================================== */
 
-    categoryCards.forEach(function (category) {
+    categoryCards.forEach(function (categoryCard) {
 
-        category.addEventListener("click", function () {
+        categoryCard.addEventListener(
+            "click",
+            function () {
 
-            categoryCards.forEach(function (card) {
-                card.classList.remove("active");
-            });
+                const clickedCategory =
+                    this.dataset.category || "all";
 
-            this.classList.add("active");
 
-            currentCategory =
-                this.dataset.category || "all";
+                /*
+                 * Clicking the active category again
+                 * resets the filter.
+                 */
 
-            filterEvidence();
+                if (
+                    this.classList.contains("active")
+                ) {
 
-        });
+                    currentCategory = "all";
+
+                    categoryCards.forEach(
+                        function (card) {
+
+                            card.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+                } else {
+
+                    categoryCards.forEach(
+                        function (card) {
+
+                            card.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    this.classList.add("active");
+
+                    currentCategory =
+                        clickedCategory;
+                }
+
+
+                filterEvidence();
+
+            }
+        );
 
     });
 
@@ -132,19 +285,30 @@ document.addEventListener("DOMContentLoaded", function () {
        SEE ALL
     ====================================================== */
 
-    if (seeAllButton) {
+    if (showAllButton) {
 
-        seeAllButton.addEventListener("click", function () {
+        showAllButton.addEventListener(
+            "click",
+            function () {
 
-            currentCategory = "all";
+                currentCategory = "all";
 
-            categoryCards.forEach(function (card) {
-                card.classList.remove("active");
-            });
 
-            filterEvidence();
+                categoryCards.forEach(
+                    function (card) {
 
-        });
+                        card.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                filterEvidence();
+
+            }
+        );
 
     }
 
@@ -155,9 +319,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (searchInput) {
 
-        searchInput.addEventListener("input", function () {
-            filterEvidence();
-        });
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                if (clearSearchButton) {
+
+                    clearSearchButton.hidden =
+                        this.value.trim() === "";
+
+                }
+
+                filterEvidence();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CLEAR SEARCH
+    ====================================================== */
+
+    if (clearSearchButton) {
+
+        clearSearchButton.addEventListener(
+            "click",
+            function () {
+
+                if (!searchInput) {
+                    return;
+                }
+
+
+                searchInput.value = "";
+
+                clearSearchButton.hidden = true;
+
+                filterEvidence();
+
+                searchInput.focus();
+
+            }
+        );
 
     }
 
@@ -166,64 +371,141 @@ document.addEventListener("DOMContentLoaded", function () {
        FILTER EVIDENCE
     ====================================================== */
 
- function filterEvidence() {
+    function filterEvidence() {
 
-    const query =
-        searchInput
-            ? searchInput.value.trim().toLowerCase()
-            : "";
+        const cards =
+            getEvidenceCards();
 
-    let visibleCount = 0;
 
-    evidenceGrid.querySelectorAll(".evidence-card")
-        .forEach(function (card) {
+        const query =
+            searchInput
+                ? searchInput.value
+                    .trim()
+                    .toLowerCase()
+                : "";
+
+
+        let visibleCount = 0;
+
+
+        cards.forEach(function (card) {
 
             const fileName =
-                (card.dataset.name || "").toLowerCase();
+                String(
+                    card.dataset.name || ""
+                ).toLowerCase();
 
-            const type =
-                card.dataset.type || "";
+
+            const category =
+                normalizeCategory(
+                    card.dataset.category
+                );
+
+
+            /*
+             * Search can also match the
+             * category/type.
+             */
+
+            const searchableText =
+                fileName + " " + category;
+
+
+            const searchMatches =
+                query === "" ||
+                searchableText.includes(query);
+
+
+            /*
+             * Complaints and incidents are
+             * special logical categories.
+             *
+             * If your backend later supplies
+             * those exact file_type values,
+             * they will automatically work.
+             */
 
             const categoryMatches =
                 currentCategory === "all" ||
-                type === currentCategory;
+                category === currentCategory;
 
-            const searchMatches =
-                fileName.includes(query);
 
-            if (categoryMatches && searchMatches) {
+            const visible =
+                searchMatches &&
+                categoryMatches;
 
-                card.style.display = "";
+
+            card.style.display =
+                visible ? "" : "none";
+
+
+            if (visible) {
                 visibleCount++;
-
-            } else {
-
-                card.style.display = "none";
-
             }
 
         });
 
-    if (emptyState) {
-        emptyState.hidden = visibleCount !== 0;
+
+        /*
+         * Show filter-empty state only when
+         * database actually contains cards.
+         */
+
+        if (emptyState) {
+
+            emptyState.hidden =
+                cards.length === 0 ||
+                visibleCount > 0;
+
+        }
+
+
+        /*
+         * Database empty state is only for
+         * truly empty repositories.
+         */
+
+        if (databaseEmptyState) {
+
+            databaseEmptyState.style.display =
+                cards.length === 0
+                    ? ""
+                    : "none";
+
+        }
+
     }
 
-}
 
     /* =====================================================
        GRID VIEW
     ====================================================== */
 
-    if (gridViewButton) {
+    if (gridViewButton && evidenceGrid) {
 
-        gridViewButton.addEventListener("click", function () {
+        gridViewButton.addEventListener(
+            "click",
+            function () {
 
-            evidenceGrid.classList.remove("list-view");
+                evidenceGrid.classList.remove(
+                    "list-view"
+                );
 
-            gridViewButton.classList.add("active");
-            listViewButton.classList.remove("active");
+                gridViewButton.classList.add(
+                    "active"
+                );
 
-        });
+
+                if (listViewButton) {
+
+                    listViewButton.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
 
     }
 
@@ -232,596 +514,294 @@ document.addEventListener("DOMContentLoaded", function () {
        LIST VIEW
     ====================================================== */
 
-    if (listViewButton) {
+    if (listViewButton && evidenceGrid) {
 
-        listViewButton.addEventListener("click", function () {
+        listViewButton.addEventListener(
+            "click",
+            function () {
 
-            evidenceGrid.classList.add("list-view");
+                evidenceGrid.classList.add(
+                    "list-view"
+                );
 
-            listViewButton.classList.add("active");
-            gridViewButton.classList.remove("active");
+                listViewButton.classList.add(
+                    "active"
+                );
 
-        });
+
+                if (gridViewButton) {
+
+                    gridViewButton.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
 
     }
 
 
     /* =====================================================
-       SELECT EVIDENCE
+       EVIDENCE CARD CLICK
     ====================================================== */
 
-    evidenceCards.forEach(function (card) {
+    function bindEvidenceCards() {
 
-        card.addEventListener("click", function () {
+        getEvidenceCards().forEach(
+            function (card) {
 
-            evidenceCards.forEach(function (item) {
-                item.classList.remove("selected");
-            });
+                /*
+                 * Avoid duplicate listeners.
+                 */
 
-            this.classList.add("selected");
+                if (
+                    card.dataset.clickBound === "true"
+                ) {
+                    return;
+                }
 
-            const id = this.dataset.id;
 
-            updateDetails(id);
+                card.dataset.clickBound = "true";
 
-            detailsPanel.classList.remove("closed");
 
-        });
+                card.addEventListener(
+                    "click",
+                    function () {
 
-    });
+                        getEvidenceCards().forEach(
+                            function (item) {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                        this.classList.add(
+                            "selected"
+                        );
+
+
+                        updateDetailsFromCard(
+                            this
+                        );
+
+
+                        if (detailsPanel) {
+
+                            detailsPanel.classList.remove(
+                                "closed"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
 
 
     /* =====================================================
-       UPDATE DETAILS PANEL
+       DETAILS FROM CARD
     ====================================================== */
 
-    function updateDetails(id) {
-
-        const data = evidenceData[id];
-
-        if (!data) {
-            return;
-        }
-
+    function updateDetailsFromCard(card) {
 
         const detailName =
-            document.getElementById("detailName");
+            document.getElementById(
+                "detailName"
+            );
 
         const detailModified =
-            document.getElementById("detailModified");
+            document.getElementById(
+                "detailModified"
+            );
 
         const detailType =
-            document.getElementById("detailType");
+            document.getElementById(
+                "detailType"
+            );
 
-        const detailResolution =
-            document.getElementById("detailResolution");
-
-        const detailUploader =
-            document.getElementById("detailUploader");
+        const detailSize =
+            document.getElementById(
+                "detailSize"
+            );
 
         const detailHash =
-            document.getElementById("detailHash");
+            document.getElementById(
+                "detailHash"
+            );
+
+        const detailImage =
+            document.getElementById(
+                "detailImage"
+            );
+
+        const detailPreviewFallback =
+            document.getElementById(
+                "detailPreviewFallback"
+            );
+
+
+        const name =
+            card.dataset.name ||
+            "Unnamed Evidence";
+
+        const date =
+            card.dataset.date || "—";
+
+        const size =
+            card.dataset.size || "—";
+
+        const category =
+            normalizeCategory(
+                card.dataset.category
+            );
 
 
         if (detailName) {
-            detailName.textContent = data.name;
+            detailName.textContent = name;
         }
+
 
         if (detailModified) {
-            detailModified.textContent = data.modified;
+
+            detailModified.textContent =
+                date !== "—"
+                    ? "Uploaded " + date
+                    : "Upload date unavailable";
+
         }
+
 
         if (detailType) {
-            detailType.textContent = data.type;
+
+            detailType.textContent =
+                capitalize(category);
+
         }
 
-        if (detailResolution) {
-            detailResolution.textContent = data.resolution;
+
+        if (detailSize) {
+
+            detailSize.textContent =
+                formatStoredSize(size);
+
         }
 
-        if (detailUploader) {
-            detailUploader.textContent = data.uploader;
+
+        /*
+         * If the card has an image preview,
+         * display it in the details panel.
+         */
+
+        const previewImage =
+            card.querySelector(
+                ".evidence-file-preview img"
+            );
+
+
+        if (
+            previewImage &&
+            detailImage &&
+            detailPreviewFallback
+        ) {
+
+            detailImage.src =
+                previewImage.src;
+
+            detailImage.hidden = false;
+
+            detailPreviewFallback.style.display =
+                "none";
+
+        } else {
+
+            if (detailImage) {
+
+                detailImage.hidden = true;
+
+                detailImage.removeAttribute(
+                    "src"
+                );
+
+            }
+
+
+            if (detailPreviewFallback) {
+
+                detailPreviewFallback.style.display =
+                    "flex";
+
+            }
+
         }
 
-        if (detailHash) {
-            detailHash.textContent = data.hash;
+
+        /*
+         * The current HTML doesn't expose
+         * file_hash as a data attribute.
+         * Preserve the existing message
+         * rather than inventing a hash.
+         */
+
+        if (
+            detailHash &&
+            !detailHash.dataset.loaded
+        ) {
+
+            detailHash.textContent =
+                "Hash information available after verification.";
+
         }
 
     }
 
 
     /* =====================================================
-       CLOSE DETAILS PANEL
+       CLOSE DETAILS
     ====================================================== */
 
     if (closeDetailsButton) {
 
-        closeDetailsButton.addEventListener("click", function () {
-
-            detailsPanel.classList.add("closed");
-
-            evidenceCards.forEach(function (card) {
-                card.classList.remove("selected");
-            });
-
-        });
-
-    }
-
-
-    /* =====================================================
-       OPEN FILE PICKER
-    ====================================================== */
-
-    if (uploadButton) {
-
-        uploadButton.addEventListener("click", function () {
-            fileInput.click();
-        });
-
-    }
-
-
-    if (browseButton) {
-
-        browseButton.addEventListener("click", function (event) {
-
-            event.stopPropagation();
-
-            fileInput.click();
-
-        });
-
-    }
-
-
-    if (dropZone) {
-
-        dropZone.addEventListener("click", function (event) {
-
-            if (event.target !== browseButton) {
-                fileInput.click();
-            }
-
-        });
-
-    }
-
-
-    /* =====================================================
-       FILE INPUT
-    ====================================================== */
-
-    if (fileInput) {
-
-        fileInput.addEventListener("change", function () {
-
-            if (!this.files.length) {
-                return;
-            }
-
-            handleFiles(this.files);
-
-            this.value = "";
-
-        });
-
-    }
-
-
-  /* =====================================================
-   DRAG AND DROP
-====================================================== */
-
-if (dropZone) {
-
-    dropZone.addEventListener("dragenter", function (event) {
-
-        event.preventDefault();
-
-        dropZone.classList.add("drag-active");
-
-    });
-
-
-    dropZone.addEventListener("dragover", function (event) {
-
-        event.preventDefault();
-
-        dropZone.classList.add("drag-active");
-
-    });
-
-
-    dropZone.addEventListener("dragleave", function (event) {
-
-        event.preventDefault();
-
-        dropZone.classList.remove("drag-active");
-
-    });
-
-
-    dropZone.addEventListener("drop", function (event) {
-
-        event.preventDefault();
-
-        dropZone.classList.remove("drag-active");
-
-        const files = event.dataTransfer.files;
-
-        if (files.length) {
-            handleFiles(files);
-        }
-
-    });
-
-}
-
-
-    /* =====================================================
-       DRAG LEAVE
-    ====================================================== */
-
-    dropZone.addEventListener("dragleave", function (event) {
-
-        event.preventDefault();
-
-        dropZone.classList.remove("drag-active");
-
-    });
-
-
-    /* =====================================================
-       DROP FILE
-    ====================================================== */
-
-    dropZone.addEventListener("drop", function (event) {
-
-        event.preventDefault();
-
-        dropZone.classList.remove("drag-active");
-
-        const files = event.dataTransfer.files;
-
-        if (files.length) {
-            handleFiles(files);
-        }
-
-    });
-
-
-    /* =====================================================
-       PROCESS UPLOAD
-    ====================================================== */
-
-    function handleFiles(files) {
-
-        const maxSize =
-            500 * 1024 * 1024;
-
-        Array.from(files).forEach(function (file) {
-
-            if (file.size > maxSize) {
-
-                alert(
-                    file.name +
-                    " exceeds the maximum 500MB file size."
-                );
-
-                return;
-
-            }
-
-            createEvidenceCard(file);
-
-        });
-
-    }
-
-
-    /* =====================================================
-       CREATE NEW EVIDENCE CARD
-    ====================================================== */
-
-    function createEvidenceCard(file) {
-
-        const id =
-            "upload_" + Date.now() + "_" +
-            Math.floor(Math.random() * 10000);
-
-        const category =
-            determineFileCategory(file);
-
-        const size =
-            formatFileSize(file.size);
-
-        const today =
-            new Date();
-
-        const card =
-            document.createElement("article");
-
-
-        card.className = "evidence-card";
-
-        card.dataset.id = id;
-        card.dataset.type = category;
-        card.dataset.name = file.name;
-        card.dataset.date = today
-            .toISOString()
-            .split("T")[0];
-
-        card.dataset.size =
-            file.size / (1024 * 1024);
-
-
-        /* =============================================
-           PREVIEW
-        ============================================== */
-
-        const preview =
-            document.createElement("div");
-
-        preview.className =
-            "evidence-preview";
-
-
-        if (
-            category === "photos" &&
-            file.type.startsWith("image/")
-        ) {
-
-            preview.classList.add("image-preview");
-
-            const image =
-                document.createElement("img");
-
-            image.src =
-                URL.createObjectURL(file);
-
-            image.alt = file.name;
-
-            preview.appendChild(image);
-
-        } else {
-
-            const icon =
-                document.createElement("i");
-
-            icon.className =
-                getFileIcon(category) +
-                " preview-icon";
-
-            preview.appendChild(icon);
-
-        }
-
-
-        const badge =
-            document.createElement("span");
-
-        badge.className =
-            "verification-badge pending";
-
-        badge.innerHTML =
-            '<i class="fa-solid fa-circle"></i> Pending Ledger';
-
-        preview.appendChild(badge);
-
-
-        /* =============================================
-           INFO
-        ============================================== */
-
-        const info =
-            document.createElement("div");
-
-        info.className =
-            "evidence-info";
-
-
-        const name =
-            document.createElement("strong");
-
-        name.className =
-            "evidence-name";
-
-        name.textContent =
-            file.name;
-
-
-        const meta =
-            document.createElement("div");
-
-        meta.className =
-            "evidence-meta";
-
-
-        const sizeElement =
-            document.createElement("span");
-
-        sizeElement.textContent =
-            size;
-
-
-        const dateElement =
-            document.createElement("span");
-
-        dateElement.textContent =
-            today.toLocaleDateString(
-                "en-US",
-                {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric"
-                }
-            );
-
-
-        meta.appendChild(sizeElement);
-        meta.appendChild(dateElement);
-
-        info.appendChild(name);
-        info.appendChild(meta);
-
-        card.appendChild(preview);
-        card.appendChild(info);
-
-
-        /* =============================================
-           DETAILS DATA
-        ============================================== */
-
-        evidenceData[id] = {
-
-            name: file.name,
-
-            modified:
-                "Uploaded " +
-                today.toLocaleString(),
-
-            type:
-                file.type || "Unknown File",
-
-            resolution:
-                category === "photos"
-                    ? "Processing..."
-                    : "N/A",
-
-            uploader:
-                "Admin Jane",
-
-            hash:
-                "Pending blockchain verification..."
-
-        };
-
-
-        /* =============================================
-           CARD CLICK
-        ============================================== */
-
-        card.addEventListener(
+        closeDetailsButton.addEventListener(
             "click",
             function () {
 
-                document
-                    .querySelectorAll(".evidence-card")
-                    .forEach(function (item) {
+                if (detailsPanel) {
 
-                        item.classList.remove("selected");
+                    detailsPanel.classList.add(
+                        "closed"
+                    );
 
-                    });
+                }
 
-                card.classList.add("selected");
 
-                updateDetails(id);
+                getEvidenceCards().forEach(
+                    function (card) {
 
-                detailsPanel.classList.remove("closed");
+                        card.classList.remove(
+                            "selected"
+                        );
+
+                    }
+                );
 
             }
         );
 
-
-        evidenceGrid.prepend(card);
-
-        emptyState.hidden = true;
-
     }
 
 
     /* =====================================================
-       DETERMINE FILE CATEGORY
-    ====================================================== */
-
-    function determineFileCategory(file) {
-
-        const type =
-            file.type.toLowerCase();
-
-        if (type.startsWith("image/")) {
-            return "photos";
-        }
-
-        if (type.startsWith("video/")) {
-            return "videos";
-        }
-
-        if (type.startsWith("audio/")) {
-            return "audio";
-        }
-
-        return "documents";
-
-    }
-
-
-    /* =====================================================
-       FILE ICON
-    ====================================================== */
-
-    function getFileIcon(category) {
-
-        switch (category) {
-
-            case "videos":
-                return "fa-solid fa-clapperboard";
-
-            case "audio":
-                return "fa-solid fa-file-audio";
-
-            case "documents":
-                return "fa-regular fa-file-lines";
-
-            default:
-                return "fa-regular fa-file";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       FORMAT FILE SIZE
-    ====================================================== */
-
-    function formatFileSize(bytes) {
-
-        if (bytes === 0) {
-            return "0 Bytes";
-        }
-
-        const units = [
-            "Bytes",
-            "KB",
-            "MB",
-            "GB"
-        ];
-
-        const index =
-            Math.floor(
-                Math.log(bytes) /
-                Math.log(1024)
-            );
-
-        const value =
-            bytes /
-            Math.pow(1024, index);
-
-        return (
-            value.toFixed(
-                index === 0 ? 0 : 1
-            ) +
-            " " +
-            units[index]
-        );
-
-    }
-
-
-    /* =====================================================
-       SORT EVIDENCE
+       SORT
     ====================================================== */
 
     if (sortSelect) {
@@ -830,7 +810,9 @@ if (dropZone) {
             "change",
             function () {
 
-                sortEvidence(this.value);
+                sortEvidence(
+                    this.value
+                );
 
             }
         );
@@ -840,60 +822,59 @@ if (dropZone) {
 
     function sortEvidence(sortType) {
 
+        if (!evidenceGrid) {
+            return;
+        }
+
+
         const cards =
-            Array.from(
-                evidenceGrid.querySelectorAll(
-                    ".evidence-card"
-                )
-            );
+            getEvidenceCards();
 
 
         cards.sort(function (a, b) {
 
-            /* NEWEST */
-
             if (sortType === "newest") {
 
                 return (
-                    new Date(b.dataset.date) -
-                    new Date(a.dataset.date)
+                    parseDate(b.dataset.date) -
+                    parseDate(a.dataset.date)
                 );
 
             }
 
-
-            /* OLDEST */
 
             if (sortType === "oldest") {
 
                 return (
-                    new Date(a.dataset.date) -
-                    new Date(b.dataset.date)
+                    parseDate(a.dataset.date) -
+                    parseDate(b.dataset.date)
                 );
 
             }
 
-
-            /* NAME */
 
             if (sortType === "name") {
 
-                return (
+                return String(
                     a.dataset.name || ""
                 ).localeCompare(
-                    b.dataset.name || ""
+                    String(
+                        b.dataset.name || ""
+                    )
                 );
 
             }
 
-
-            /* SIZE */
 
             if (sortType === "size") {
 
                 return (
-                    parseFloat(b.dataset.size || 0) -
-                    parseFloat(a.dataset.size || 0)
+                    parseFloat(
+                        b.dataset.size || 0
+                    ) -
+                    parseFloat(
+                        a.dataset.size || 0
+                    )
                 );
 
             }
@@ -905,49 +886,246 @@ if (dropZone) {
 
 
         cards.forEach(function (card) {
+
             evidenceGrid.appendChild(card);
+
         });
 
     }
-       /* =====================================================
-       RESIDENT SEARCH
+
+
+    /* =====================================================
+       DROP ZONE
     ====================================================== */
 
-    const residentSearchInput =
-        document.getElementById("residentSearchInput");
+    if (
+        browseButton &&
+        fileInput
+    ) {
 
-    const residentIdInput =
-        document.getElementById("residentIdInput");
+        browseButton.addEventListener(
+            "click",
+            function (event) {
 
-    const residentSearchResults =
-        document.getElementById("residentSearchResults");
+                event.preventDefault();
 
-    const complaintSelect =
-        document.getElementById("complaintSelect");
+                event.stopPropagation();
 
-    const evidenceUploadForm =
-        document.getElementById("evidenceUploadForm");
+                fileInput.click();
 
-    const residents = [];
-
-document.querySelectorAll(".resident-data").forEach(
-    function (element) {
-
-        residents.push({
-            id: element.dataset.id,
-            firstName: element.dataset.firstName || "",
-            middleName: element.dataset.middleName || "",
-            lastName: element.dataset.lastName || "",
-            suffix: element.dataset.suffix || ""
-        });
+            }
+        );
 
     }
-);
+
+
+    if (
+        dropZone &&
+        fileInput
+    ) {
+
+        dropZone.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    browseButton &&
+                    (
+                        event.target === browseButton ||
+                        browseButton.contains(
+                            event.target
+                        )
+                    )
+                ) {
+                    return;
+                }
+
+
+                fileInput.click();
+
+            }
+        );
+
+
+        dropZone.addEventListener(
+            "dragenter",
+            function (event) {
+
+                event.preventDefault();
+
+                this.classList.add(
+                    "drag-active"
+                );
+
+            }
+        );
+
+
+        dropZone.addEventListener(
+            "dragover",
+            function (event) {
+
+                event.preventDefault();
+
+                this.classList.add(
+                    "drag-active"
+                );
+
+            }
+        );
+
+
+        dropZone.addEventListener(
+            "dragleave",
+            function (event) {
+
+                event.preventDefault();
+
+                this.classList.remove(
+                    "drag-active"
+                );
+
+            }
+        );
+
+
+        dropZone.addEventListener(
+            "drop",
+            function (event) {
+
+                event.preventDefault();
+
+                this.classList.remove(
+                    "drag-active"
+                );
+
+
+                const files =
+                    event.dataTransfer.files;
+
+
+                if (!files.length) {
+                    return;
+                }
+
+
+                /*
+                 * Your Django upload form only
+                 * accepts one file at a time.
+                 */
+
+                const file =
+                    files[0];
+
+
+                const maxSize =
+                    500 * 1024 * 1024;
+
+
+                if (file.size > maxSize) {
+
+                    alert(
+                        file.name +
+                        " exceeds the maximum 500MB file size."
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * Put the dropped file into
+                 * the real file input so the
+                 * Django form can upload it.
+                 */
+
+                try {
+
+                    const transfer =
+                        new DataTransfer();
+
+                    transfer.items.add(file);
+
+                    fileInput.files =
+                        transfer.files;
+
+                } catch (error) {
+
+                    console.warn(
+                        "Unable to assign dropped file:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    }
 
 
     /* =====================================================
        RESIDENT SEARCH
-    ===================================================== */
+    ====================================================== */
+
+    const residentSearchInput =
+        document.getElementById(
+            "residentSearchInput"
+        );
+
+    const residentIdInput =
+        document.getElementById(
+            "residentIdInput"
+        );
+
+    const residentSearchResults =
+        document.getElementById(
+            "residentSearchResults"
+        );
+
+    const complaintSelect =
+        document.getElementById(
+            "complaintSelect"
+        );
+
+    const evidenceUploadForm =
+        document.getElementById(
+            "evidenceUploadForm"
+        );
+
+
+    const residents = [];
+
+
+    document
+        .querySelectorAll(".resident-data")
+        .forEach(function (element) {
+
+            residents.push({
+
+                id:
+                    element.dataset.id,
+
+                firstName:
+                    element.dataset.firstName || "",
+
+                middleName:
+                    element.dataset.middleName || "",
+
+                lastName:
+                    element.dataset.lastName || "",
+
+                suffix:
+                    element.dataset.suffix || ""
+
+            });
+
+        });
+
+
+    /* =====================================================
+       RESIDENT INPUT
+    ====================================================== */
 
     if (
         residentSearchInput &&
@@ -965,17 +1143,28 @@ document.querySelectorAll(".resident-data").forEach(
                         .trim()
                         .toLowerCase();
 
+
+                /*
+                 * Editing the text invalidates
+                 * the previously selected ID.
+                 */
+
                 residentIdInput.value = "";
 
+
                 complaintSelect.innerHTML =
-                    '<option value="">Select Complaint</option>';
+                    '<option value="">' +
+                    'Select Complaint' +
+                    '</option>';
+
 
                 complaintSelect.disabled = true;
 
 
                 if (!search) {
 
-                    residentSearchResults.innerHTML = "";
+                    residentSearchResults.innerHTML =
+                        "";
 
                     residentSearchResults.classList.add(
                         "hidden"
@@ -985,39 +1174,51 @@ document.querySelectorAll(".resident-data").forEach(
                 }
 
 
-                /* =========================================
-                   FILTER RESIDENTS
-                ========================================== */
-
                 const filteredResidents =
-                    residents.filter(function (resident) {
+                    residents.filter(
+                        function (resident) {
 
-                        const fullName =
-                            [
-                                resident.firstName,
-                                resident.middleName,
-                                resident.lastName,
-                                resident.suffix
-                            ]
-                            .filter(Boolean)
-                            .join(" ")
-                            .toLowerCase();
-
-                        return fullName.includes(search);
-
-                    });
+                            const fullName =
+                                getResidentFullName(
+                                    resident
+                                )
+                                .toLowerCase();
 
 
-                /* =========================================
-                   NO RESULTS
-                ========================================== */
+                            return fullName.includes(
+                                search
+                            );
 
-                if (filteredResidents.length === 0) {
+                        }
+                    );
 
-                    residentSearchResults.innerHTML =
-                        '<div class="px-3 py-2 text-sm text-slate-500">' +
-                        'No residents found' +
-                        '</div>';
+
+                residentSearchResults.innerHTML =
+                    "";
+
+
+                if (
+                    filteredResidents.length === 0
+                ) {
+
+                    const noResult =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    noResult.className =
+                        "resident-search-empty";
+
+
+                    noResult.textContent =
+                        "No residents found";
+
+
+                    residentSearchResults.appendChild(
+                        noResult
+                    );
+
 
                     residentSearchResults.classList.remove(
                         "hidden"
@@ -1027,59 +1228,55 @@ document.querySelectorAll(".resident-data").forEach(
                 }
 
 
-                /* =========================================
-                   DISPLAY RESULTS
-                ========================================== */
+                filteredResidents
+                    .slice(0, 10)
+                    .forEach(
+                        function (resident) {
 
-                residentSearchResults.innerHTML = "";
-
-
-                filteredResidents.forEach(
-                    function (resident) {
-
-                        const fullName =
-                            [
-                                resident.firstName,
-                                resident.middleName,
-                                resident.lastName,
-                                resident.suffix
-                            ]
-                            .filter(Boolean)
-                            .join(" ");
-
-
-                        const result =
-                            document.createElement("button");
-
-                        result.type = "button";
-
-                        result.className =
-                            "block w-full px-3 py-2 text-left text-sm hover:bg-slate-100";
-
-
-                        result.textContent =
-                            fullName;
-
-
-                        result.addEventListener(
-                            "click",
-                            function () {
-
-                                selectResident(
-                                    resident,
-                                    fullName
+                            const fullName =
+                                getResidentFullName(
+                                    resident
                                 );
 
-                            }
-                        );
+
+                            const result =
+                                document.createElement(
+                                    "button"
+                                );
 
 
-                        residentSearchResults.appendChild(
-                            result
-                        );
+                            result.type =
+                                "button";
 
-                    }
-                );
+
+                            result.className =
+                                "resident-search-item";
+
+
+                            result.textContent =
+                                fullName;
+
+
+                            result.addEventListener(
+                                "click",
+                                function () {
+
+                                    selectResident(
+                                        resident,
+                                        fullName
+                                    );
+
+                                }
+                            );
+
+
+                            residentSearchResults
+                                .appendChild(
+                                    result
+                                );
+
+                        }
+                    );
 
 
                 residentSearchResults.classList.remove(
@@ -1105,7 +1302,9 @@ document.querySelectorAll(".resident-data").forEach(
             residentIdInput.value =
                 resident.id;
 
-            residentSearchResults.innerHTML = "";
+
+            residentSearchResults.innerHTML =
+                "";
 
             residentSearchResults.classList.add(
                 "hidden"
@@ -1120,7 +1319,7 @@ document.querySelectorAll(".resident-data").forEach(
 
 
         /* =================================================
-           LOAD RESIDENT COMPLAINTS
+           LOAD COMPLAINTS
         ================================================= */
 
         function loadResidentComplaints(
@@ -1128,44 +1327,67 @@ document.querySelectorAll(".resident-data").forEach(
         ) {
 
             complaintSelect.innerHTML =
-                '<option value="">Loading complaints...</option>';
+                '<option value="">' +
+                'Loading complaints...' +
+                '</option>';
+
 
             complaintSelect.disabled = true;
 
 
             const url =
                 "/evidence/resident/" +
-                residentId +
+                encodeURIComponent(
+                    residentId
+                ) +
                 "/complaints/";
 
 
-            fetch(url)
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "X-Requested-With":
+                        "XMLHttpRequest"
+                }
+            })
+
                 .then(function (response) {
 
                     if (!response.ok) {
+
                         throw new Error(
                             "Failed to load complaints."
                         );
+
                     }
 
                     return response.json();
 
                 })
+
                 .then(function (data) {
 
                     complaintSelect.innerHTML =
-                        '<option value="">Select Complaint</option>';
+                        '<option value="">' +
+                        'Select Complaint' +
+                        '</option>';
 
 
                     if (
-                        !data.complaints ||
+                        !Array.isArray(
+                            data.complaints
+                        ) ||
                         data.complaints.length === 0
                     ) {
 
                         complaintSelect.innerHTML =
-                            '<option value="">No complaints found</option>';
+                            '<option value="">' +
+                            'No complaints found' +
+                            '</option>';
 
-                        complaintSelect.disabled = true;
+
+                        complaintSelect.disabled =
+                            true;
 
                         return;
                     }
@@ -1175,19 +1397,30 @@ document.querySelectorAll(".resident-data").forEach(
                         function (complaint) {
 
                             const option =
-                                document.createElement("option");
+                                document.createElement(
+                                    "option"
+                                );
+
 
                             option.value =
                                 complaint.complaint_id;
+
 
                             option.textContent =
                                 "#" +
                                 complaint.complaint_id +
                                 " - " +
-                                complaint.subject +
-                                " (" +
-                                complaint.status +
-                                ")";
+                                (
+                                    complaint.subject ||
+                                    "Complaint"
+                                ) +
+                                (
+                                    complaint.status
+                                        ? " (" +
+                                          complaint.status +
+                                          ")"
+                                        : ""
+                                );
 
 
                             complaintSelect.appendChild(
@@ -1198,9 +1431,11 @@ document.querySelectorAll(".resident-data").forEach(
                     );
 
 
-                    complaintSelect.disabled = false;
+                    complaintSelect.disabled =
+                        false;
 
                 })
+
                 .catch(function (error) {
 
                     console.error(
@@ -1208,10 +1443,15 @@ document.querySelectorAll(".resident-data").forEach(
                         error
                     );
 
-                    complaintSelect.innerHTML =
-                        '<option value="">Unable to load complaints</option>';
 
-                    complaintSelect.disabled = true;
+                    complaintSelect.innerHTML =
+                        '<option value="">' +
+                        'Unable to load complaints' +
+                        '</option>';
+
+
+                    complaintSelect.disabled =
+                        true;
 
                 });
 
@@ -1219,7 +1459,7 @@ document.querySelectorAll(".resident-data").forEach(
 
 
         /* =================================================
-           HIDE RESULTS WHEN CLICKING OUTSIDE
+           CLOSE RESIDENT RESULTS
         ================================================= */
 
         document.addEventListener(
@@ -1244,48 +1484,234 @@ document.querySelectorAll(".resident-data").forEach(
             }
         );
 
-
-        /* =================================================
-           FORM VALIDATION
-        ================================================= */
-
-        if (evidenceUploadForm) {
-
-            evidenceUploadForm.addEventListener(
-                "submit",
-                function (event) {
-
-                    if (!residentIdInput.value) {
-
-                        event.preventDefault();
-
-                        alert(
-                            "Please select a resident."
-                        );
-
-                        residentSearchInput.focus();
-
-                        return;
-                    }
+    }
 
 
-                    if (!complaintSelect.value) {
+    /* =====================================================
+       UPLOAD FORM VALIDATION
+    ====================================================== */
 
-                        event.preventDefault();
+    if (evidenceUploadForm) {
 
-                        alert(
-                            "Please select a complaint."
-                        );
+        evidenceUploadForm.addEventListener(
+            "submit",
+            function (event) {
 
-                        complaintSelect.focus();
+                if (
+                    residentIdInput &&
+                    !residentIdInput.value
+                ) {
 
-                        return;
-                    }
+                    event.preventDefault();
 
+                    alert(
+                        "Please select a resident from the search results."
+                    );
+
+                    residentSearchInput.focus();
+
+                    return;
                 }
+
+
+                if (
+                    complaintSelect &&
+                    !complaintSelect.value
+                ) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Please select a complaint."
+                    );
+
+                    complaintSelect.focus();
+
+                    return;
+                }
+
+
+                if (
+                    fileInput &&
+                    !fileInput.files.length
+                ) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Please select an evidence file."
+                    );
+
+                    return;
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       HELPERS
+    ====================================================== */
+
+    function getResidentFullName(
+        resident
+    ) {
+
+        return [
+            resident.firstName,
+            resident.middleName,
+            resident.lastName,
+            resident.suffix
+        ]
+            .filter(Boolean)
+            .join(" ");
+
+    }
+
+
+    function capitalize(value) {
+
+        if (!value) {
+            return "—";
+        }
+
+
+        return (
+            value.charAt(0).toUpperCase() +
+            value.slice(1)
+        );
+
+    }
+
+
+    function parseDate(value) {
+
+        const date =
+            new Date(value || 0);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            return 0;
+        }
+
+
+        return date.getTime();
+
+    }
+
+
+    function formatStoredSize(value) {
+
+        const numeric =
+            Number(value);
+
+
+        if (
+            !Number.isFinite(numeric) ||
+            numeric <= 0
+        ) {
+
+            return value || "—";
+
+        }
+
+
+        /*
+         * If Django stores raw bytes,
+         * convert to readable size.
+         */
+
+        if (numeric >= 1024) {
+
+            return formatFileSize(
+                numeric
             );
 
         }
+
+
+        return value;
+
+    }
+
+
+    function formatFileSize(bytes) {
+
+        const numericBytes =
+            Number(bytes);
+
+
+        if (
+            !Number.isFinite(
+                numericBytes
+            ) ||
+            numericBytes <= 0
+        ) {
+
+            return "0 Bytes";
+
+        }
+
+
+        const units = [
+            "Bytes",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+
+        const index =
+            Math.min(
+                Math.floor(
+                    Math.log(numericBytes) /
+                    Math.log(1024)
+                ),
+                units.length - 1
+            );
+
+
+        const value =
+            numericBytes /
+            Math.pow(
+                1024,
+                index
+            );
+
+
+        return (
+            value.toFixed(
+                index === 0 ? 0 : 1
+            ) +
+            " " +
+            units[index]
+        );
+
+    }
+
+
+    /* =====================================================
+       INITIALIZE
+    ====================================================== */
+
+    updateCategoryCounts();
+
+    bindEvidenceCards();
+
+    filterEvidence();
+
+
+    if (sortSelect) {
+
+        sortEvidence(
+            sortSelect.value
+        );
 
     }
 
