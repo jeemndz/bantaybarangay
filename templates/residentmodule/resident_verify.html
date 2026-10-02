@@ -8,12 +8,10 @@ Resident Verification | BantayBarangay
 
 
 {% block extra_css %}
-
 <link
     rel="stylesheet"
     href="{% static 'css/resident_verify.css' %}"
 >
-
 {% endblock %}
 
 
@@ -102,6 +100,157 @@ Resident Verification | BantayBarangay
 
 
     <!-- =====================================================
+         DJANGO / MAILER MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="verification-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="
+                        verification-message
+                        {% if 'success' in message.tags %}
+                            verification-message-success
+                        {% elif 'warning' in message.tags %}
+                            verification-message-warning
+                        {% elif 'error' in message.tags %}
+                            verification-message-error
+                        {% else %}
+                            verification-message-info
+                        {% endif %}
+                    "
+                >
+
+                    <div class="verification-message-icon">
+
+                        {% if 'success' in message.tags %}
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m8 12 2.5 2.5L16 9"
+                                />
+                            </svg>
+
+                        {% elif 'error' in message.tags %}
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="m9 9 6 6M15 9l-6 6"
+                                />
+                            </svg>
+
+                        {% else %}
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="M12 7.5v5.25"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    d="M12 16h.01"
+                                />
+                            </svg>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="verification-message-content">
+
+                        {% if 'success' in message.tags %}
+
+                            <strong>
+                                Verification Successful
+                            </strong>
+
+                        {% elif 'warning' in message.tags %}
+
+                            <strong>
+                                Email Notification
+                            </strong>
+
+                        {% elif 'error' in message.tags %}
+
+                            <strong>
+                                Verification Error
+                            </strong>
+
+                        {% else %}
+
+                            <strong>
+                                Notification
+                            </strong>
+
+                        {% endif %}
+
+                        <p>
+                            {{ message }}
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="verification-message-close"
+                        onclick="closeVerificationMessage(this)"
+                        aria-label="Close notification"
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
          STATUS BANNER
     ====================================================== -->
 
@@ -129,11 +278,7 @@ Resident Verification | BantayBarangay
                     stroke="currentColor"
                     stroke-width="2"
                 >
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                    />
+                    <circle cx="12" cy="12" r="9" />
 
                     <path
                         stroke-linecap="round"
@@ -154,11 +299,7 @@ Resident Verification | BantayBarangay
                     stroke="currentColor"
                     stroke-width="2"
                 >
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                    />
+                    <circle cx="12" cy="12" r="9" />
 
                     <path
                         stroke-linecap="round"
@@ -175,11 +316,7 @@ Resident Verification | BantayBarangay
                     stroke="currentColor"
                     stroke-width="2"
                 >
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                    />
+                    <circle cx="12" cy="12" r="9" />
 
                     <path
                         stroke-linecap="round"
@@ -226,9 +363,7 @@ Resident Verification | BantayBarangay
 
 
         <span class="status-badge">
-
             {{ resident.verification_status }}
-
         </span>
 
     </div>
@@ -289,6 +424,9 @@ Resident Verification | BantayBarangay
 
 
                 <div class="resident-avatar">
+<<<<<<< HEAD
+                    {{ resident.first_name|first|upper }}
+=======
 
                     {% if profile_picture_url %}
 
@@ -308,13 +446,13 @@ Resident Verification | BantayBarangay
 
                     {% endif %}
 
+>>>>>>> b1dd7002e4f42abe0ac0e0c5373fc40da7e74362
                 </div>
 
             </div>
 
 
             <div class="information-grid">
-
 
                 <div class="info-item">
 
@@ -488,7 +626,6 @@ Resident Verification | BantayBarangay
 
             <div class="information-grid">
 
-
                 <div class="info-item">
 
                     <span class="info-label">
@@ -575,7 +712,6 @@ Resident Verification | BantayBarangay
 
 
             <div class="information-grid">
-
 
                 <div class="info-item">
 
@@ -670,482 +806,494 @@ Resident Verification | BantayBarangay
             </div>
 
         </section>
+
+
         <!-- =================================================
-     SUBMITTED VERIFICATION DOCUMENTS
-================================================== -->
+             SUBMITTED VERIFICATION DOCUMENTS
+        ================================================== -->
 
-<section class="information-card documents-card">
+        <section class="information-card documents-card">
 
-    <div class="card-header">
+            <div class="card-header">
 
-        <div class="card-heading">
+                <div class="card-heading">
 
-            <div class="card-heading-icon">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.75 9V5.625A2.625 2.625 0 0 0 13.125 3h-6.75A2.625 2.625 0 0 0 3.75 5.625v12.75A2.625 2.625 0 0 0 6.375 21h11.25a2.625 2.625 0 0 0 2.625-2.625V12.75M15 3v4.5h4.5"
-                    />
-
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M8.25 13.5h7.5M8.25 16.5h5.25"
-                    />
-                </svg>
-
-            </div>
-
-            <div>
-
-                <span class="card-eyebrow">
-                    VERIFICATION DOCUMENTS
-                </span>
-
-                <h2>
-                    Submitted Documents
-                </h2>
-
-                <p>
-                    Review the government-issued ID and proof
-                    of residency submitted during registration.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="document-grid">
-
-
-        <!-- =============================================
-             GOVERNMENT ID
-        ============================================== -->
-
-        <article class="document-panel">
-
-            <div class="document-panel-header">
-
-                <div class="document-type-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <rect
-                            x="3"
-                            y="5"
-                            width="18"
-                            height="14"
-                            rx="2"
-                        />
-
-                        <circle
-                            cx="8.5"
-                            cy="11"
-                            r="2"
-                        />
-
-                        <path
-                            stroke-linecap="round"
-                            d="M13 10h4M13 13h4M6.5 16h10.5"
-                        />
-                    </svg>
-
-                </div>
-
-                <div>
-
-                    <span class="document-eyebrow">
-                        IDENTITY DOCUMENT
-                    </span>
-
-                    <h3>
-                        Government-Issued ID
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            <div class="document-information">
-
-                <div class="document-info-item">
-
-                    <span class="info-label">
-                        ID Type
-                    </span>
-
-                    <strong>
-                        {{ resident.id_type|default:"Not provided" }}
-                    </strong>
-
-                </div>
-
-
-                <div class="document-info-item">
-
-                    <span class="info-label">
-                        ID Number
-                    </span>
-
-                    <strong>
-                        {{ resident.id_number|default:"Not provided" }}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            {% if id_file_url %}
-
-                <div class="document-preview">
-
-                    {% if id_file_is_image %}
-
-                        <a
-                            href="{{ id_file_url }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="document-image-link"
-                        >
-
-                            <img
-                                src="{{ id_file_url }}"
-                                alt="Government-issued ID submitted by resident"
-                                class="document-image"
-                            >
-
-                        </a>
-
-                    {% elif id_file_is_pdf %}
-
-                        <div class="pdf-preview">
-
-                            <div class="pdf-icon">
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.8"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M14.25 2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25h10.5A2.25 2.25 0 0 0 19.5 19.5V7.5L14.25 2.25Z"
-                                    />
-
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M14.25 2.25V7.5h5.25"
-                                    />
-                                </svg>
-
-                            </div>
-
-                            <div>
-
-                                <strong>
-                                    PDF Document
-                                </strong>
-
-                                <span>
-                                    Government-issued ID
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    {% else %}
-
-                        <div class="pdf-preview">
-
-                            <div>
-                                <strong>
-                                    Uploaded Document
-                                </strong>
-
-                                <span>
-                                    Government-issued ID
-                                </span>
-                            </div>
-
-                        </div>
-
-                    {% endif %}
-
-
-                    <a
-                        href="{{ id_file_url }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="view-document-button"
-                    >
+                    <div class="card-heading-icon">
 
                         <svg
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="2"
+                            stroke-width="1.8"
                         >
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"
+                                d="M15.75 9V5.625A2.625 2.625 0 0 0 13.125 3h-6.75A2.625 2.625 0 0 0 3.75 5.625v12.75A2.625 2.625 0 0 0 6.375 21h11.25a2.625 2.625 0 0 0 2.625-2.625V12.75M15 3v4.5h4.5"
                             />
 
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="2.25"
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8.25 13.5h7.5M8.25 16.5h5.25"
                             />
                         </svg>
 
-                        <span>
-                            View Uploaded ID
+                    </div>
+
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            VERIFICATION DOCUMENTS
                         </span>
 
-                    </a>
+                        <h2>
+                            Submitted Documents
+                        </h2>
 
-                </div>
+                        <p>
+                            Review the government-issued ID and proof
+                            of residency submitted during registration.
+                        </p>
 
-            {% else %}
-
-                <div class="document-empty">
-
-                    <strong>
-                        No ID file available
-                    </strong>
-
-                    <span>
-                        This resident does not have a stored
-                        government ID file.
-                    </span>
-
-                </div>
-
-            {% endif %}
-
-        </article>
-
-
-        <!-- =============================================
-             PROOF OF RESIDENCY
-        ============================================== -->
-
-        <article class="document-panel">
-
-            <div class="document-panel-header">
-
-                <div class="document-type-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3 10.5 12 3l9 7.5"
-                        />
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M5.25 9.75v10.5h13.5V9.75M9 20.25v-6h6v6"
-                        />
-                    </svg>
-
-                </div>
-
-                <div>
-
-                    <span class="document-eyebrow">
-                        RESIDENCY DOCUMENT
-                    </span>
-
-                    <h3>
-                        Proof of Residency
-                    </h3>
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <div class="document-information">
-
-                <div class="document-info-item document-info-full">
-
-                    <span class="info-label">
-                        Document Type
-                    </span>
-
-                    <strong>
-                        {{ resident.residency_document_type|default:"Not provided" }}
-                    </strong>
-
-                </div>
-
-            </div>
+            <div class="document-grid">
 
 
-            {% if residency_file_url %}
+                <!-- =============================================
+                     GOVERNMENT ID
+                ============================================== -->
 
-                <div class="document-preview">
+                <article class="document-panel">
 
-                    {% if residency_file_is_image %}
+                    <div class="document-panel-header">
 
-                        <a
-                            href="{{ residency_file_url }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="document-image-link"
-                        >
+                        <div class="document-type-icon">
 
-                            <img
-                                src="{{ residency_file_url }}"
-                                alt="Proof of residency submitted by resident"
-                                class="document-image"
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
                             >
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="2"
+                                />
 
-                        </a>
+                                <circle
+                                    cx="8.5"
+                                    cy="11"
+                                    r="2"
+                                />
 
-                    {% elif residency_file_is_pdf %}
+                                <path
+                                    stroke-linecap="round"
+                                    d="M13 10h4M13 13h4M6.5 16h10.5"
+                                />
+                            </svg>
 
-                        <div class="pdf-preview">
+                        </div>
 
-                            <div class="pdf-icon">
+
+                        <div>
+
+                            <span class="document-eyebrow">
+                                IDENTITY DOCUMENT
+                            </span>
+
+                            <h3>
+                                Government-Issued ID
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="document-information">
+
+                        <div class="document-info-item">
+
+                            <span class="info-label">
+                                ID Type
+                            </span>
+
+                            <strong>
+                                {{ resident.id_type|default:"Not provided" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="document-info-item">
+
+                            <span class="info-label">
+                                ID Number
+                            </span>
+
+                            <strong>
+                                {{ resident.id_number|default:"Not provided" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if id_file_url %}
+
+                        <div class="document-preview">
+
+                            {% if id_file_is_image %}
+
+                                <a
+                                    href="{{ id_file_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="document-image-link"
+                                >
+
+                                    <img
+                                        src="{{ id_file_url }}"
+                                        alt="Government-issued ID submitted by resident"
+                                        class="document-image"
+                                    >
+
+                                </a>
+
+                            {% elif id_file_is_pdf %}
+
+                                <div class="pdf-preview">
+
+                                    <div class="pdf-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M14.25 2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25h10.5A2.25 2.25 0 0 0 19.5 19.5V7.5L14.25 2.25Z"
+                                            />
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M14.25 2.25V7.5h5.25"
+                                            />
+                                        </svg>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            PDF Document
+                                        </strong>
+
+                                        <span>
+                                            Government-issued ID
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="pdf-preview">
+
+                                    <div>
+
+                                        <strong>
+                                            Uploaded Document
+                                        </strong>
+
+                                        <span>
+                                            Government-issued ID
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{{ id_file_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="view-document-button"
+                            >
 
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
-                                    stroke-width="1.8"
+                                    stroke-width="2"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
-                                        d="M14.25 2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25h10.5A2.25 2.25 0 0 0 19.5 19.5V7.5L14.25 2.25Z"
+                                        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"
                                     />
 
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M14.25 2.25V7.5h5.25"
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="2.25"
                                     />
                                 </svg>
 
-                            </div>
-
-                            <div>
-
-                                <strong>
-                                    PDF Document
-                                </strong>
-
                                 <span>
-                                    Proof of residency
+                                    View Uploaded ID
                                 </span>
 
-                            </div>
+                            </a>
 
                         </div>
 
                     {% else %}
 
-                        <div class="pdf-preview">
+                        <div class="document-empty">
 
-                            <div>
-                                <strong>
-                                    Uploaded Document
-                                </strong>
+                            <strong>
+                                No ID file available
+                            </strong>
 
-                                <span>
-                                    Proof of residency
-                                </span>
-                            </div>
+                            <span>
+                                This resident does not have a stored
+                                government ID file.
+                            </span>
 
                         </div>
 
                     {% endif %}
 
+                </article>
 
-                    <a
-                        href="{{ residency_file_url }}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="view-document-button"
-                    >
 
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"
-                            />
+                <!-- =============================================
+                     PROOF OF RESIDENCY
+                ============================================== -->
 
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="2.25"
-                            />
-                        </svg>
+                <article class="document-panel">
 
-                        <span>
-                            View Proof of Residency
-                        </span>
+                    <div class="document-panel-header">
 
-                    </a>
+                        <div class="document-type-icon">
 
-                </div>
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3 10.5 12 3l9 7.5"
+                                />
 
-            {% else %}
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M5.25 9.75v10.5h13.5V9.75M9 20.25v-6h6v6"
+                                />
+                            </svg>
 
-                <div class="document-empty">
+                        </div>
 
-                    <strong>
-                        No residency file available
-                    </strong>
 
-                    <span>
-                        This resident does not have a stored
-                        proof of residency file.
-                    </span>
+                        <div>
 
-                </div>
+                            <span class="document-eyebrow">
+                                RESIDENCY DOCUMENT
+                            </span>
 
-            {% endif %}
+                            <h3>
+                                Proof of Residency
+                            </h3>
 
-        </article>
+                        </div>
 
-    </div>
+                    </div>
 
-</section>
+
+                    <div class="document-information">
+
+                        <div class="document-info-item document-info-full">
+
+                            <span class="info-label">
+                                Document Type
+                            </span>
+
+                            <strong>
+                                {{ resident.residency_document_type|default:"Not provided" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if residency_file_url %}
+
+                        <div class="document-preview">
+
+                            {% if residency_file_is_image %}
+
+                                <a
+                                    href="{{ residency_file_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="document-image-link"
+                                >
+
+                                    <img
+                                        src="{{ residency_file_url }}"
+                                        alt="Proof of residency submitted by resident"
+                                        class="document-image"
+                                    >
+
+                                </a>
+
+                            {% elif residency_file_is_pdf %}
+
+                                <div class="pdf-preview">
+
+                                    <div class="pdf-icon">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M14.25 2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25h10.5A2.25 2.25 0 0 0 19.5 19.5V7.5L14.25 2.25Z"
+                                            />
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M14.25 2.25V7.5h5.25"
+                                            />
+                                        </svg>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            PDF Document
+                                        </strong>
+
+                                        <span>
+                                            Proof of residency
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="pdf-preview">
+
+                                    <div>
+
+                                        <strong>
+                                            Uploaded Document
+                                        </strong>
+
+                                        <span>
+                                            Proof of residency
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{{ residency_file_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="view-document-button"
+                            >
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"
+                                    />
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="2.25"
+                                    />
+                                </svg>
+
+                                <span>
+                                    View Proof of Residency
+                                </span>
+
+                            </a>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="document-empty">
+
+                            <strong>
+                                No residency file available
+                            </strong>
+
+                            <span>
+                                This resident does not have a stored
+                                proof of residency file.
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                </article>
+
+            </div>
+
+        </section>
+
 
         <!-- =================================================
              VERIFICATION RECORD
@@ -1204,7 +1352,6 @@ Resident Verification | BantayBarangay
 
             <div class="verification-details">
 
-
                 <div class="verification-item">
 
                     <div class="verification-item-icon">
@@ -1241,7 +1388,6 @@ Resident Verification | BantayBarangay
                             Verification Status
                         </span>
 
-
                         <span
                             class="
                                 verification-status
@@ -1255,9 +1401,7 @@ Resident Verification | BantayBarangay
                                 {% endif %}
                             "
                         >
-
                             {{ resident.verification_status }}
-
                         </span>
 
                     </div>
@@ -1390,10 +1534,20 @@ Resident Verification | BantayBarangay
                         </h2>
 
                         <p>
-                            Verify that the submitted information is
-                            accurate before approving or rejecting this
-                            resident registration.
+                            Verify the submitted information, government
+                            ID, and proof of residency before approving
+                            or rejecting this registration.
                         </p>
+
+                        {% if resident.email %}
+
+                            <p>
+                                If approved, a verification notification
+                                will be sent to
+                                <strong>{{ resident.email }}</strong>.
+                            </p>
+
+                        {% endif %}
 
                     </div>
 
@@ -1403,12 +1557,14 @@ Resident Verification | BantayBarangay
                 <div class="action-buttons">
 
 
-                    <!-- REJECT -->
+                    <!-- =====================================
+                         REJECT RESIDENT
+                    ====================================== -->
 
                     <form
                         method="POST"
                         action="{% url 'reject_resident' resident.resident_id %}"
-                        onsubmit="return confirmRejectResident();"
+                        onsubmit="return confirmRejectResident(this);"
                     >
 
                         {% csrf_token %}
@@ -1440,12 +1596,14 @@ Resident Verification | BantayBarangay
                     </form>
 
 
-                    <!-- ACCEPT -->
+                    <!-- =====================================
+                         ACCEPT RESIDENT
+                    ====================================== -->
 
                     <form
                         method="POST"
                         action="{% url 'accept_resident' resident.resident_id %}"
-                        onsubmit="return confirmAcceptResident();"
+                        onsubmit="return confirmAcceptResident(this);"
                     >
 
                         {% csrf_token %}
@@ -1553,17 +1711,53 @@ Resident Verification | BantayBarangay
 
                     <div class="action-text">
 
-                        <h2>
-                            Resident Already Reviewed
-                        </h2>
+                        {% if resident.verification_status == "Verified" %}
 
-                        <p>
-                            This resident's registration has already
-                            been reviewed. Current status:
-                            <strong>
-                                {{ resident.verification_status }}
-                            </strong>
-                        </p>
+                            <h2>
+                                Resident Verified
+                            </h2>
+
+                            <p>
+                                This resident's registration has been
+                                reviewed and successfully verified.
+                            </p>
+
+                            {% if resident.email %}
+
+                                <p>
+                                    Registered email:
+                                    <strong>
+                                        {{ resident.email }}
+                                    </strong>
+                                </p>
+
+                            {% endif %}
+
+                        {% elif resident.verification_status == "Rejected" %}
+
+                            <h2>
+                                Resident Registration Rejected
+                            </h2>
+
+                            <p>
+                                This resident's registration has already
+                                been reviewed and rejected.
+                            </p>
+
+                        {% else %}
+
+                            <h2>
+                                Resident Already Reviewed
+                            </h2>
+
+                            <p>
+                                Current status:
+                                <strong>
+                                    {{ resident.verification_status }}
+                                </strong>
+                            </p>
+
+                        {% endif %}
 
                     </div>
 
@@ -1598,30 +1792,205 @@ Resident Verification | BantayBarangay
 
         {% endif %}
 
+
     </div>
 
 </div>
 
 
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
 <script>
 
-    function confirmAcceptResident() {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-        return window.confirm(
-            "Are you sure you want to accept this resident?"
+        const messages =
+            document.querySelectorAll(
+                ".verification-message"
+            );
+
+        messages.forEach(
+            function (message) {
+
+                window.setTimeout(
+                    function () {
+
+                        hideVerificationMessage(
+                            message
+                        );
+
+                    },
+                    7000
+                );
+
+            }
         );
+
+    }
+);
+
+
+/* =========================================================
+   ACCEPT RESIDENT
+========================================================= */
+
+function confirmAcceptResident(form) {
+
+    const confirmed =
+        window.confirm(
+            "Are you sure you want to accept this resident? " +
+            "The resident will be marked as Verified and a " +
+            "verification email will be sent to their " +
+            "registered email address."
+        );
+
+    if (!confirmed) {
+
+        return false;
 
     }
 
 
-    function confirmRejectResident() {
+    const button =
+        form.querySelector(
+            ".accept-button"
+        );
 
-        return window.confirm(
+
+    if (button) {
+
+        button.disabled = true;
+
+
+        const text =
+            button.querySelector(
+                "span"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                "Verifying Resident...";
+
+        }
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   REJECT RESIDENT
+========================================================= */
+
+function confirmRejectResident(form) {
+
+    const confirmed =
+        window.confirm(
             "Are you sure you want to reject this resident?"
         );
 
+
+    if (!confirmed) {
+
+        return false;
+
     }
 
+
+    const button =
+        form.querySelector(
+            ".reject-button"
+        );
+
+
+    if (button) {
+
+        button.disabled = true;
+
+
+        const text =
+            button.querySelector(
+                "span"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                "Rejecting Resident...";
+
+        }
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   CLOSE MESSAGE
+========================================================= */
+
+function closeVerificationMessage(button) {
+
+    const message =
+        button.closest(
+            ".verification-message"
+        );
+
+
+    hideVerificationMessage(
+        message
+    );
+
+}
+
+
+/* =========================================================
+   HIDE MESSAGE
+========================================================= */
+
+function hideVerificationMessage(message) {
+
+    if (!message) {
+
+        return;
+
+    }
+
+
+    message.style.transition =
+        "opacity 0.25s ease, transform 0.25s ease";
+
+    message.style.opacity = "0";
+
+    message.style.transform =
+        "translateY(-8px)";
+
+
+    window.setTimeout(
+        function () {
+
+            message.remove();
+
+        },
+        250
+    );
+
+}
+
 </script>
+
 
 {% endblock %}

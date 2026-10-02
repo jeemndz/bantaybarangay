@@ -1,0 +1,937 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="color-scheme"
+        content="light"
+    >
+
+    <meta
+        name="theme-color"
+        content="#063d34"
+    >
+
+    <title>
+        Verify Code | BantayBarangay
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/verify_reset_code.css' %}"
+    >
+
+</head>
+
+<body>
+
+
+<div class="verify-container">
+
+
+    <!-- =====================================================
+         LEFT SIDE
+    ====================================================== -->
+
+    <section class="verify-left">
+
+
+        <img
+            src="{% static 'images/Background.png' %}"
+            alt=""
+            class="verify-background"
+        >
+
+        <div class="verify-overlay"></div>
+
+        <div class="background-glow"></div>
+
+
+        <div class="left-brand">
+
+            <img
+                src="{% static 'images/SYSTEMS_LOGO.png' %}"
+                alt="BantayBarangay Logo"
+                class="left-logo"
+            >
+
+            <div>
+
+                <strong>
+                    BantayBarangay
+                </strong>
+
+                <span>
+                    Secure Digital Governance
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="secure-content">
+
+
+            <div class="secure-label">
+
+                <span class="secure-dot"></span>
+
+                <span>
+                    IDENTITY VERIFICATION
+                </span>
+
+            </div>
+
+
+            <h1>
+
+                Verify Your
+
+                <span>
+                    Identity.
+                </span>
+
+            </h1>
+
+
+            <p>
+                A six-digit verification code has been sent
+                to your registered email address. Enter the
+                code to continue resetting your password.
+            </p>
+
+
+            <div class="security-items">
+
+
+                <div class="security-item">
+
+                    <span class="security-icon">
+
+                        <svg viewBox="0 0 24 24">
+
+                            <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="14"
+                                rx="2"
+                            />
+
+                            <path
+                                d="m3 7 9 6 9-6"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Email Verification
+                        </strong>
+
+                        <span>
+                            The verification code is sent only
+                            to your registered email.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="security-item">
+
+                    <span class="security-icon">
+
+                        <svg viewBox="0 0 24 24">
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                            />
+
+                            <path
+                                d="M12 7v5l3 2"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Limited Time
+                        </strong>
+
+                        <span>
+                            Your verification code will expire
+                            after 10 minutes.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="security-item">
+
+                    <span class="security-icon">
+
+                        <svg viewBox="0 0 24 24">
+
+                            <path
+                                d="M12 3 5 6v5c0 4.5 2.8 8.4 7 10 4.2-1.6 7-5.5 7-10V6l-7-3Z"
+                            />
+
+                            <path
+                                d="m9 12 2 2 4-4"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Secure Recovery
+                        </strong>
+
+                        <span>
+                            Never share your verification code
+                            with another person.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="left-footer">
+
+            <span class="footer-dot"></span>
+
+            <span>
+                Secure Barangay Information System
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         RIGHT SIDE
+    ====================================================== -->
+
+    <section class="verify-right">
+
+
+        <a
+            href="{% url 'forgot_password' %}"
+            class="back-button"
+        >
+
+            <svg viewBox="0 0 24 24">
+
+                <path
+                    d="m15 18-6-6 6-6"
+                />
+
+            </svg>
+
+            <span>
+                Back
+            </span>
+
+        </a>
+
+
+        <div class="verify-wrapper">
+
+
+            <div class="verify-card">
+
+
+                <div class="verify-icon">
+
+                    <svg viewBox="0 0 24 24">
+
+                        <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="14"
+                            rx="2"
+                        />
+
+                        <path
+                            d="m3 7 9 6 9-6"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <div class="verify-header">
+
+                    <span class="verify-label">
+                        ACCOUNT RECOVERY
+                    </span>
+
+                    <h1>
+                        Check your email
+                    </h1>
+
+                    <p>
+                        We sent a 6-digit verification code
+                        to your registered email address.
+                    </p>
+
+                </div>
+
+
+                {% if email %}
+
+                    <div class="email-info">
+
+                        <span class="email-info-icon">
+
+                            <svg viewBox="0 0 24 24">
+
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="2"
+                                />
+
+                                <path
+                                    d="m3 7 9 6 9-6"
+                                />
+
+                            </svg>
+
+                        </span>
+
+                        <div>
+
+                            <span>
+                                Verification code sent to
+                            </span>
+
+                            <strong>
+                                {{ email }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- DJANGO MESSAGES -->
+
+                {% if messages %}
+
+                    <div class="messages-container">
+
+                        {% for message in messages %}
+
+                            <div
+                                class="
+                                    message-box
+                                    {% if message.tags %}
+                                        {{ message.tags }}
+                                    {% endif %}
+                                "
+                            >
+
+                                <span class="message-icon">
+
+                                    {% if message.tags == "success" %}
+
+                                        <svg viewBox="0 0 24 24">
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            />
+
+                                            <path
+                                                d="m8 12 3 3 5-6"
+                                            />
+
+                                        </svg>
+
+                                    {% else %}
+
+                                        <svg viewBox="0 0 24 24">
+
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                            />
+
+                                            <path
+                                                d="M12 8v5"
+                                            />
+
+                                            <path
+                                                d="M12 16h.01"
+                                            />
+
+                                        </svg>
+
+                                    {% endif %}
+
+                                </span>
+
+                                <span>
+                                    {{ message }}
+                                </span>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- VERIFICATION FORM -->
+
+                <form
+                    method="POST"
+                    action="{% url 'verify_reset_code' %}"
+                    class="verify-form"
+                    id="verifyCodeForm"
+                >
+
+                    {% csrf_token %}
+
+
+                    <input
+                        type="hidden"
+                        name="code"
+                        id="completeCode"
+                    >
+
+
+                    <div class="code-section">
+
+                        <label class="code-label">
+                            Enter Verification Code
+                        </label>
+
+
+                        <div
+                            class="code-inputs"
+                            id="codeInputs"
+                        >
+
+                            <input
+                                type="text"
+                                class="code-input"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="1"
+                                autocomplete="one-time-code"
+                                aria-label="Verification digit 1"
+                                required
+                                autofocus
+                            >
+
+                            <input
+                                type="text"
+                                class="code-input"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="1"
+                                aria-label="Verification digit 2"
+                                required
+                            >
+
+                            <input
+                                type="text"
+                                class="code-input"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="1"
+                                aria-label="Verification digit 3"
+                                required
+                            >
+
+                            <input
+                                type="text"
+                                class="code-input"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="1"
+                                aria-label="Verification digit 4"
+                                required
+                            >
+
+                            <input
+                                type="text"
+                                class="code-input"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="1"
+                                aria-label="Verification digit 5"
+                                required
+                            >
+
+                            <input
+                                type="text"
+                                class="code-input"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="1"
+                                aria-label="Verification digit 6"
+                                required
+                            >
+
+                        </div>
+
+
+                        <span
+                            class="code-error"
+                            id="codeError"
+                        ></span>
+
+
+                        <div class="code-expiration">
+
+                            <svg viewBox="0 0 24 24">
+
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
+                                <path
+                                    d="M12 7v5l3 2"
+                                />
+
+                            </svg>
+
+                            <span>
+
+                                This code expires in
+
+                                <strong>
+                                    10 minutes
+                                </strong>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="verify-button"
+                        id="verifyButton"
+                    >
+
+                        <span>
+                            Verify Code
+                        </span>
+
+                        <svg viewBox="0 0 24 24">
+
+                            <path
+                                d="M5 12h14"
+                            />
+
+                            <path
+                                d="m14 7 5 5-5 5"
+                            />
+
+                        </svg>
+
+                    </button>
+
+                </form>
+
+
+                <!-- RESEND -->
+
+                <div class="resend-section">
+
+                    <span>
+                        Didn't receive the code?
+                    </span>
+
+                    <form
+                        method="POST"
+                        action="{% url 'resend_reset_code' %}"
+                        class="resend-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="resend-button"
+                        >
+                            Resend Code
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="security-note">
+
+                    <span class="security-note-icon">
+
+                        <svg viewBox="0 0 24 24">
+
+                            <path
+                                d="M12 3 5 6v5c0 4.5 2.8 8.4 7 10 4.2-1.6 7-5.5 7-10V6l-7-3Z"
+                            />
+
+                            <path
+                                d="m9 12 2 2 4-4"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <p>
+                        For your security, BantayBarangay
+                        will never ask you to share this
+                        verification code with another person.
+                    </p>
+
+                </div>
+
+
+                <div class="login-section">
+
+                    <span>
+                        Remember your password?
+                    </span>
+
+                    <a href="{% url 'login' %}">
+                        Return to Login
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <footer class="verify-footer">
+
+                <span>
+                    © 2026 BantayBarangay.
+                    Secure Blockchain Governance.
+                </span>
+
+                <div>
+
+                    <a href="#">
+                        Privacy
+                    </a>
+
+                    <a href="#">
+                        Terms
+                    </a>
+
+                </div>
+
+            </footer>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const form =
+            document.getElementById(
+                "verifyCodeForm"
+            );
+
+        const inputs =
+            Array.from(
+                document.querySelectorAll(
+                    ".code-input"
+                )
+            );
+
+        const completeCode =
+            document.getElementById(
+                "completeCode"
+            );
+
+        const codeError =
+            document.getElementById(
+                "codeError"
+            );
+
+
+        function updateCompleteCode() {
+
+            const code = inputs
+                .map(function (input) {
+
+                    return input.value;
+
+                })
+                .join("");
+
+            completeCode.value = code;
+
+            return code;
+
+        }
+
+
+        inputs.forEach(
+            function (input, index) {
+
+                input.addEventListener(
+                    "input",
+                    function () {
+
+                        input.value =
+                            input.value.replace(
+                                /[^0-9]/g,
+                                ""
+                            );
+
+                        if (
+                            input.value.length > 1
+                        ) {
+
+                            input.value =
+                                input.value.slice(
+                                    0,
+                                    1
+                                );
+
+                        }
+
+                        if (
+                            input.value &&
+                            index < inputs.length - 1
+                        ) {
+
+                            inputs[
+                                index + 1
+                            ].focus();
+
+                        }
+
+                        updateCompleteCode();
+
+                        codeError.textContent = "";
+
+                    }
+                );
+
+
+                input.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.key === "Backspace" &&
+                            !input.value &&
+                            index > 0
+                        ) {
+
+                            inputs[
+                                index - 1
+                            ].focus();
+
+                        }
+
+                        if (
+                            event.key === "ArrowLeft" &&
+                            index > 0
+                        ) {
+
+                            event.preventDefault();
+
+                            inputs[
+                                index - 1
+                            ].focus();
+
+                        }
+
+                        if (
+                            event.key === "ArrowRight" &&
+                            index < inputs.length - 1
+                        ) {
+
+                            event.preventDefault();
+
+                            inputs[
+                                index + 1
+                            ].focus();
+
+                        }
+
+                    }
+                );
+
+
+                input.addEventListener(
+                    "paste",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        const pastedText =
+                            (
+                                event.clipboardData ||
+                                window.clipboardData
+                            )
+                            .getData("text")
+                            .replace(
+                                /\D/g,
+                                ""
+                            )
+                            .slice(
+                                0,
+                                6
+                            );
+
+                        if (!pastedText) {
+                            return;
+                        }
+
+                        pastedText
+                            .split("")
+                            .forEach(
+                                function (
+                                    digit,
+                                    digitIndex
+                                ) {
+
+                                    if (
+                                        inputs[
+                                            digitIndex
+                                        ]
+                                    ) {
+
+                                        inputs[
+                                            digitIndex
+                                        ].value = digit;
+
+                                    }
+
+                                }
+                            );
+
+                        updateCompleteCode();
+
+                        const focusIndex =
+                            Math.min(
+                                pastedText.length,
+                                inputs.length
+                            ) - 1;
+
+                        if (focusIndex >= 0) {
+
+                            inputs[
+                                focusIndex
+                            ].focus();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                const code =
+                    updateCompleteCode();
+
+                if (
+                    !/^\d{6}$/.test(code)
+                ) {
+
+                    event.preventDefault();
+
+                    codeError.textContent =
+                        "Please enter the complete " +
+                        "6-digit verification code.";
+
+                    const emptyInput =
+                        inputs.find(
+                            function (input) {
+
+                                return !input.value;
+
+                            }
+                        );
+
+                    if (emptyInput) {
+                        emptyInput.focus();
+                    }
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

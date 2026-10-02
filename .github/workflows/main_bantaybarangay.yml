@@ -1,76 +1,200 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
-
 name: Build and deploy Python app to Azure Web App - BantayBarangay
 
 on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
+
 jobs:
+
+  # =========================================================
+  # BUILD
+  # =========================================================
+
   build:
+
     runs-on: ubuntu-latest
+
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up Python version
+      # -------------------------------------------------------
+      # CHECKOUT
+      # -------------------------------------------------------
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      # -------------------------------------------------------
+      # PYTHON
+      # -------------------------------------------------------
+
+      - name: Set up Python 3.14
         uses: actions/setup-python@v5
         with:
           python-version: '3.14'
 
-      # 🛠️ Local Build Section (Optional)
-      # The following section in your workflow is designed to catch build issues early on the client side, before deployment. This can be helpful for debugging and validation. However, if this step significantly increases deployment time and early detection is not critical for your workflow, you may remove this section to streamline the deployment process.
-      - name: Create and Start virtual environment and Install dependencies
+
+      # -------------------------------------------------------
+      # SHOW PROJECT STRUCTURE
+      # -------------------------------------------------------
+
+      - name: Show project structure
         run: |
-          python -m venv antenv
-          source antenv/bin/activate
+          echo "Current directory:"
+          pwd
+
+          echo ""
+          echo "Repository root:"
+          ls -la
+
+          echo ""
+          echo "Looking for manage.py:"
+          find . -maxdepth 3 -name "manage.py" -print
+
+          echo ""
+          echo "Looking for wsgi.py:"
+          find . -maxdepth 4 -name "wsgi.py" -print
+
+
+      # -------------------------------------------------------
+      # INSTALL DEPENDENCIES
+      # -------------------------------------------------------
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-                
-      # By default, when you enable GitHub CI/CD integration through the Azure portal, the platform automatically sets the SCM_DO_BUILD_DURING_DEPLOYMENT application setting to true. This triggers the use of Oryx, a build engine that handles application compilation and dependency installation (e.g., pip install) directly on the platform during deployment. Hence, we exclude the antenv virtual environment directory from the deployment artifact to reduce the payload size. 
-      - name: Upload artifact for deployment jobs
+
+
+      # -------------------------------------------------------
+      # VERIFY DJANGO PROJECT PACKAGE
+      # -------------------------------------------------------
+
+      - name: Verify BantayBarangay package
+        run: |
+          python -c "import bantaybarangay; print('Project package:', bantaybarangay.__file__)"
+
+
+      # -------------------------------------------------------
+      # VERIFY WSGI
+      # -------------------------------------------------------
+
+      - name: Verify Django WSGI
+        run: |
+          python -c "import bantaybarangay.wsgi; print('WSGI import successful')"
+
+
+      # -------------------------------------------------------
+      # DJANGO SYSTEM CHECK
+      # -------------------------------------------------------
+
+      - name: Run Django system check
+        run: |
+          python manage.py check
+
+
+      # -------------------------------------------------------
+      # CREATE DEPLOYMENT ARTIFACT
+      # -------------------------------------------------------
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
+
         with:
           name: python-app
+
           path: |
             .
+            !.git/
+            !.github/
+            !.vscode/
             !antenv/
+            !__pycache__/
+            !**/__pycache__/
 
-      # 🚫 Opting Out of Oryx Build
-      # If you prefer to disable the Oryx build process during deployment, follow these steps:
-      # 1. Remove the SCM_DO_BUILD_DURING_DEPLOYMENT app setting from your Azure App Service Environment variables.
-      # 2. Refer to sample workflows for alternative deployment strategies: https://github.com/Azure/actions-workflow-samples/tree/master/AppService
-      
+
+  # =========================================================
+  # DEPLOY
+  # =========================================================
 
   deploy:
+
     runs-on: ubuntu-latest
+
     needs: build
+
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+
+      # -------------------------------------------------------
+      # DOWNLOAD ARTIFACT
+      # -------------------------------------------------------
+
+      - name: Download artifact
         uses: actions/download-artifact@v4
+
         with:
           name: python-app
-      
+          path: .
+
+
+      # -------------------------------------------------------
+      # VERIFY DOWNLOADED ARTIFACT
+      # -------------------------------------------------------
+
+      - name: Verify deployment artifact
+        run: |
+          echo "Deployment directory:"
+          pwd
+
+          echo ""
+          echo "Deployment files:"
+          ls -la
+
+          echo ""
+          echo "manage.py:"
+          find . -maxdepth 3 -name "manage.py" -print
+
+          echo ""
+          echo "wsgi.py:"
+          find . -maxdepth 4 -name "wsgi.py" -print
+
+
+      # -------------------------------------------------------
+      # AZURE LOGIN
+      # -------------------------------------------------------
+
       - name: Login to Azure
         uses: azure/login@v2
+
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5D8AAFDACE18451C9F5C1F2FAD6CBF02 }}
+
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_286B12C6315143A293223C3A2C36673E }}
+
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0F13D6B15FA54340877C50CFA025139F }}
 
-      - name: 'Deploy to Azure Web App'
+
+      # -------------------------------------------------------
+      # DEPLOY
+      # -------------------------------------------------------
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
+
         id: deploy-to-webapp
+
         with:
           app-name: 'BantayBarangay'
           slot-name: 'Production'
-          
+          package: .

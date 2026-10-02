@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        BantayBarangay Resident Verification
+    </title>
+</head>
+
+
+<body
+    style="
+        margin:0;
+        padding:0;
+        background-color:#f1f5f3;
+        font-family:Arial, Helvetica, sans-serif;
+    "
+>
+
+<table
+    role="presentation"
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        width:100%;
+        background-color:#f1f5f3;
+    "
+>
+
+    <tr>
+
+        <td
+            align="center"
+            style="padding:35px 15px;"
+        >
+
+            <!-- MAIN EMAIL -->
+
+            <table
+                role="presentation"
+                width="600"
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                style="
+                    width:100%;
+                    max-width:600px;
+                    background:#ffffff;
+                    border:1px solid #dce7e3;
+                    border-radius:14px;
+                    overflow:hidden;
+                "
+            >
+
+
+                <!-- HEADER -->
+
+                <tr>
+
+                    <td
+                        align="center"
+                        bgcolor="#064e3b"
+                        style="
+                            background-color:#064e3b;
+                            padding:35px 30px 30px;
+                        "
+                    >
+
+                        <img
+                            src="cid:bantaybarangay_logo"
+                            alt="BantayBarangay"
+                            width="82"
+                            style="
+                                display:block;
+                                width:82px;
+                                max-width:82px;
+                                height:auto;
+                                margin:0 auto 14px;
+                                border:0;
+                            "
+                        >
+
+                        <div
+                            style="
+                                color:#ffffff;
+                                font-size:24px;
+                                font-weight:bold;
+                            "
+                        >
+                            BantayBarangay
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:7px;
+                                color:#bce2d5;
+                                font-size:9px;
+                                font-weight:bold;
+                                letter-spacing:2px;
+                            "
+                        >
+                            SECURE DIGITAL GOVERNANCE
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                <!-- CONTENT -->
+
+                <tr>
+
+                    <td
+                        style="
+                            padding:38px 40px 35px;
+                        "
+                    >
+
+                        <div
+                            style="
+                                margin-bottom:9px;
+                                color:#16806b;
+                                font-size:9px;
+                                font-weight:bold;
+                                letter-spacing:1.8px;
+                            "
+                        >
+                            RESIDENT REGISTRATION
+                        </div>
+
+
+                        <div
+                            style="
+                                color:#064e3b;
+                                font-size:24px;
+                                line-height:1.3;
+                                font-weight:bold;
+                            "
+                        >
+                            Registration Verified
+                        </div>
+
+
+                        <p
+                            style="
+                                margin:22px 0 15px;
+                                color:#455f59;
+                                font-size:14px;
+                                line-height:1.7;
+                            "
+                        >
+                            Hello
+                            <strong>
+                                {{ full_name }}
+                            </strong>,
+                        </p>
+
+
+                        <p
+                            style="
+                                margin:0;
+                                color:#5d726d;
+                                font-size:14px;
+                                line-height:1.7;
+                            "
+                        >
+                            We are pleased to inform you that your
+                            BantayBarangay resident registration has
+                            been successfully reviewed and verified.
+                        </p>
+
+
+                        <!-- VERIFIED BOX -->
+
+                        <table
+                            role="presentation"
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                            style="
+                                margin:28px 0;
+                            "
+                        >
+
+                            <tr>
+
+                                <td
+                                    align="center"
+                                    bgcolor="#edf7f3"
+                                    style="
+                                        padding:25px;
+                                        background:#edf7f3;
+                                        border:1px solid #cfe5dc;
+                                        border-radius:10px;
+                                    "
+                                >
+
+                                    <div
+                                        style="
+                                            color:#16806b;
+                                            font-size:9px;
+                                            font-weight:bold;
+                                            letter-spacing:1.7px;
+                                        "
+                                    >
+                                        VERIFICATION STATUS
+                                    </div>
+
+                                    <div
+                                        style="
+                                            margin-top:10px;
+                                            color:#064e3b;
+                                            font-size:28px;
+                                            font-weight:bold;
+                                        "
+                                    >
+                                        ✓ Verified
+                                    </div>
+
+                                    <div
+                                        style="
+                                            margin-top:8px;
+                                            color:#637873;
+                                            font-size:12px;
+                                        "
+                                    >
+                                        Resident ID:
+                                        #{{ resident.resident_id }}
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <p
+                            style="
+                                margin:0;
+                                color:#5d726d;
+                                font-size:14px;
+                                line-height:1.7;
+                            "
+                        >
+                            Your submitted information and verification
+                            documents have been reviewed. Your resident
+                            account is now recognized as verified in the
+                            BantayBarangay system.
+                        </p>
+
+
+                        <table
+                            role="presentation"
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                            style="
+                                margin-top:25px;
+                            "
+                        >
+
+                            <tr>
+
+                                <td
+                                    bgcolor="#f5f8f7"
+                                    style="
+                                        padding:16px;
+                                        background:#f5f8f7;
+                                        border-left:3px solid #2b8b76;
+                                    "
+                                >
+
+                                    <div
+                                        style="
+                                            color:#536b65;
+                                            font-size:12px;
+                                            line-height:1.7;
+                                        "
+                                    >
+                                        You may now access services
+                                        available to verified residents
+                                        through your BantayBarangay
+                                        account.
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <p
+                            style="
+                                margin:25px 0 0;
+                                color:#7c8e89;
+                                font-size:11px;
+                                line-height:1.7;
+                            "
+                        >
+                            If you have questions regarding your
+                            registration or believe you received this
+                            email by mistake, please contact your
+                            barangay office.
+                        </p>
+
+                    </td>
+
+                </tr>
+
+
+                <!-- FOOTER -->
+
+                <tr>
+
+                    <td
+                        align="center"
+                        bgcolor="#f7f9f8"
+                        style="
+                            padding:25px 30px;
+                            background:#f7f9f8;
+                            border-top:1px solid #e4ece9;
+                        "
+                    >
+
+                        <img
+                            src="cid:bantaybarangay_logo"
+                            alt="BantayBarangay"
+                            width="42"
+                            style="
+                                display:block;
+                                width:42px;
+                                height:auto;
+                                margin:0 auto 9px;
+                                border:0;
+                            "
+                        >
+
+                        <div
+                            style="
+                                color:#315f55;
+                                font-size:12px;
+                                font-weight:bold;
+                            "
+                        >
+                            BantayBarangay
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:5px;
+                                color:#81938f;
+                                font-size:10px;
+                            "
+                        >
+                            Secure Barangay Information System
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:13px;
+                                color:#9aa9a5;
+                                font-size:9px;
+                            "
+                        >
+                            This is an automated notification.
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:5px;
+                                color:#a0adaa;
+                                font-size:9px;
+                            "
+                        >
+                            © 2026 BantayBarangay
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+
+</html>
