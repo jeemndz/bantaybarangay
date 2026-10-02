@@ -1,8 +1,11 @@
+import os
 import requests
 
 
-FABRIC_GATEWAY_URL = "http://localhost:3001"
-
+FABRIC_GATEWAY_URL = os.getenv(
+    "FABRIC_GATEWAY_URL",
+    "http://localhost:3001",
+).rstrip("/")
 
 class FabricServiceError(Exception):
     """Raised when communication with the Fabric Gateway fails."""
