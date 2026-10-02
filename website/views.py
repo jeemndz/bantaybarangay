@@ -2702,6 +2702,609 @@ def verify_document(request):
         request
     )
 
+    # =================================================
+    # DEFAULT CONTEXT
+    # =================================================
+
+    context.update({
+
+        "document":
+            None,
+
+        "document_code":
+            "",
+
+        "date_issued":
+            "",
+
+        "verification_error":
+            "",
+
+        "verification_success":
+            False,
+
+    })
+
+    # =================================================
+    # GET
+    # =================================================
+
+    if request.method == "GET":
+
+        return render(
+            request,
+            "website/verify_document.html",
+            context
+        )
+
+    # =================================================
+    # POST
+    # =================================================
+
+    document_code = (
+        request.POST.get(
+            "document_code",
+            ""
+        )
+        .strip()
+    )
+
+    date_issued = (
+        request.POST.get(
+            "date_issued",
+            ""
+        )
+        .strip()
+    )
+
+    # =================================================
+    # PRESERVE FORM VALUES
+    # =================================================
+
+    context["document_code"] = (
+        document_code
+    )
+
+    context["date_issued"] = (
+        date_issued
+    )
+
+    # =================================================
+    # VALIDATE CODE
+    # =================================================
+
+    if not document_code:
+
+        context["verification_error"] = (
+            "Please enter a document "
+            "verification code."
+        )
+
+        return render(
+            request,
+            "website/verify_document.html",
+            context
+        )
+
+    # =================================================
+    # VALIDATE DATE
+    # =================================================
+
+    if not date_issued:
+
+        context["verification_error"] = (
+            "Please enter the document "
+            "issue date."
+        )
+
+        return render(
+            request,
+            "website/verify_document.html",
+            context
+        )
+
+    # =================================================
+    # NORMALIZE VERIFICATION CODE
+    # =================================================
+
+    normalized_code = (
+        document_code
+        .strip()
+        .upper()
+    )
+
+    # =================================================
+    # PARSE DATE
+    # =================================================
+
+    try:
+
+        parsed_date = (
+            datetime.strptime(
+                date_issued,
+                "%Y-%m-%d"
+            )
+            .date()
+        )
+
+    except ValueError:
+
+        context["verification_error"] = (
+            "Invalid document issue date."
+        )
+
+        return render(
+            request,
+            "website/verify_document.html",
+            context
+        )
+
+    # =================================================
+    # FIND DOCUMENT
+    # =================================================
+
+    document = None
+
+    try:
+
+        with connection.cursor() as cursor:
+
+            # =============================================
+            # CHECK TABLE COLUMNS
+            # =============================================
+
+            cursor.execute(
+                """
+                SELECT
+                    COLUMN_NAME
+                FROM
+                    information_schema.COLUMNS
+                WHERE
+                    TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = 'complaint_documents'
+                """
+            )
+
+            available_columns = {
+                row[0]
+                for row in cursor.fetchall()
+            }
+
+            # =============================================
+            # TABLE CHECK
+            # =============================================
+
+            if not available_columns:
+
+                raise Exception(
+                    "The complaint_documents table "
+                    "does not exist."
+                )
+
+            # =============================================
+            # FIND VERIFICATION CODE COLUMN
+            # =============================================
+
+            verification_column = None
+
+            possible_code_columns = [
+
+                "verification_code",
+
+                "document_verification_code",
+
+                "verification_id",
+
+                "dvc",
+
+                "document_code",
+
+            ]
+
+            for column in possible_code_columns:
+
+                if column in available_columns:
+
+                    verification_column = (
+                        column
+                    )
+
+                    break
+
+            # =============================================
+            # VERIFICATION CODE COLUMN REQUIRED
+            # =============================================
+
+            if not verification_column:
+
+                raise Exception(
+                    "No verification code column "
+                    "was found in complaint_documents."
+                )
+
+            # =============================================
+            # SELECT FIELDS
+            # =============================================
+
+            select_fields = [
+
+                "document_id",
+
+            ]
+
+            optional_fields = [
+
+                "complaint_id",
+
+                "file_name",
+
+                "file_path",
+
+                "generated_at",
+
+                "blockchain_status",
+
+                "integrity_status",
+
+                "date_issued",
+
+                "issued_to",
+
+                "authorized_signatory",
+
+                "document_type",
+
+                "document_hash",
+
+                "block_id",
+
+                "digital_watermark",
+
+                "tamper_status",
+
+                "expiration_date",
+
+            ]
+
+            for field in optional_fields:
+
+                if field in available_columns:
+
+                    select_fields.append(
+                        field
+                    )
+
+            # =============================================
+            # ADD VERIFICATION CODE
+            # =============================================
+
+            select_fields.append(
+                verification_column
+            )
+
+            # =============================================
+            # BUILD QUERY
+            # =============================================
+
+            query = f"""
+                SELECT
+                    {", ".join(select_fields)}
+
+                FROM
+                    complaint_documents
+
+                WHERE
+                    UPPER(
+                        TRIM(
+                            {verification_column}
+                        )
+                    ) = %s
+            """
+
+            query_params = [
+
+                normalized_code
+
+            ]
+
+            # =============================================
+            # DATE FILTER
+            # =============================================
+
+            if "date_issued" in available_columns:
+
+                query += """
+                    AND DATE(date_issued) = %s
+                """
+
+                query_params.append(
+                    parsed_date
+                )
+
+            elif "generated_at" in available_columns:
+
+                query += """
+                    AND DATE(generated_at) = %s
+                """
+
+                query_params.append(
+                    parsed_date
+                )
+
+            # =============================================
+            # BLOCKCHAIN STATUS
+            # =============================================
+
+            if (
+                "blockchain_status"
+                in available_columns
+            ):
+
+                query += """
+                    AND blockchain_status = 'Registered'
+                """
+
+            # =============================================
+            # INTEGRITY STATUS
+            # =============================================
+
+            if (
+                "integrity_status"
+                in available_columns
+            ):
+
+                query += """
+                    AND integrity_status = 'Verified'
+                """
+
+            # =============================================
+            # LATEST RECORD
+            # =============================================
+
+            query += """
+                ORDER BY
+                    document_id DESC
+
+                LIMIT 1
+            """
+
+            # =============================================
+            # EXECUTE
+            # =============================================
+
+            cursor.execute(
+                query,
+                query_params
+            )
+
+            row = cursor.fetchone()
+
+            # =============================================
+            # BUILD DOCUMENT
+            # =============================================
+
+            if row:
+
+                column_names = [
+
+                    description[0]
+
+                    for description
+                    in cursor.description
+
+                ]
+
+                raw_document = dict(
+                    zip(
+                        column_names,
+                        row
+                    )
+                )
+
+                # =========================================
+                # DATE
+                # =========================================
+
+                document_date = (
+                    raw_document.get(
+                        "date_issued"
+                    )
+                    or
+                    raw_document.get(
+                        "generated_at"
+                    )
+                )
+
+                # =========================================
+                # BUILD DOCUMENT
+                # =========================================
+
+                document = {
+
+                    "document_id":
+                        raw_document.get(
+                            "document_id"
+                        ),
+
+                    "complaint_id":
+                        raw_document.get(
+                            "complaint_id"
+                        ),
+
+                    "verification_code":
+                        raw_document.get(
+                            verification_column
+                        ),
+
+                    "document_type":
+                        raw_document.get(
+                            "document_type"
+                        ),
+
+                    "issued_to":
+                        raw_document.get(
+                            "issued_to"
+                        ),
+
+                    "resident_id":
+                        raw_document.get(
+                            "complaint_id"
+                        ),
+
+                    "authorized_signatory":
+                        raw_document.get(
+                            "authorized_signatory"
+                        ),
+
+                    "date_issued":
+                        document_date,
+
+                    "expiration_date":
+                        raw_document.get(
+                            "expiration_date"
+                        ),
+
+                    "document_hash":
+                        raw_document.get(
+                            "document_hash"
+                        ),
+
+                    "block_id":
+                        raw_document.get(
+                            "block_id"
+                        ),
+
+                    "digital_watermark":
+                        raw_document.get(
+                            "digital_watermark"
+                        ),
+
+                    "tamper_status":
+                        raw_document.get(
+                            "tamper_status"
+                        ),
+
+                    "verified_at":
+                        raw_document.get(
+                            "generated_at"
+                        ),
+
+                    "file_name":
+                        raw_document.get(
+                            "file_name"
+                        ),
+
+                    "file_path":
+                        raw_document.get(
+                            "file_path"
+                        ),
+
+                    "authenticated_copy":
+                        raw_document.get(
+                            "file_path"
+                        ),
+
+                    "is_valid":
+                        True,
+
+                }
+
+                # =========================================
+                # EXPIRATION CHECK
+                # =========================================
+
+                expiration_date = (
+                    document.get(
+                        "expiration_date"
+                    )
+                )
+
+                if expiration_date:
+
+                    document["is_valid"] = (
+                        expiration_date
+                        >=
+                        datetime.now().date()
+                    )
+
+                # =========================================
+                # DEFAULT TAMPER STATUS
+                # =========================================
+
+                if not document.get(
+                    "tamper_status"
+                ):
+
+                    document[
+                        "tamper_status"
+                    ] = (
+                        "Integrity Verified"
+                    )
+
+                # =========================================
+                # VERIFIED TIME
+                # =========================================
+
+                if not document.get(
+                    "verified_at"
+                ):
+
+                    document[
+                        "verified_at"
+                    ] = datetime.now()
+
+    except Exception as error:
+
+        print(
+            "DOCUMENT VERIFICATION ERROR:",
+            error
+        )
+
+        context[
+            "verification_error"
+        ] = (
+            "The document verification "
+            "registry could not be checked."
+        )
+
+        return render(
+            request,
+            "website/verify_document.html",
+            context
+        )
+
+    # =================================================
+    # DOCUMENT NOT FOUND
+    # =================================================
+
+    if not document:
+
+        context[
+            "verification_error"
+        ] = (
+            "No registered document was found "
+            "matching the verification code "
+            "and date issued."
+        )
+
+        return render(
+            request,
+            "website/verify_document.html",
+            context
+        )
+
+    # =================================================
+    # SUCCESS
+    # =================================================
+
+    context[
+        "document"
+    ] = document
+
+    context[
+        "verification_success"
+    ] = True
+
     return render(
         request,
         "website/verify_document.html",

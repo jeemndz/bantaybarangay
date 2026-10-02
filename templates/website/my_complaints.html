@@ -4,6 +4,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,31 +12,103 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>My Complaints | BantayBarangay</title>
+    <meta
+        name="color-scheme"
+        content="light"
+    >
 
-    <!-- Tailwind -->
+    <title>
+        My Complaints | BantayBarangay
+    </title>
+
+
+    <!-- =====================================================
+         TAILWIND
+    ====================================================== -->
+
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Existing shared styles -->
+
+    <!-- =====================================================
+         SHARED CSS
+    ====================================================== -->
+
     <link
         rel="stylesheet"
-        href="{% static 'css/topnav.css' %}"
+        href="{% static 'css/topnav.css' %}?v=20261003"
     >
 
     <link
         rel="stylesheet"
-        href="{% static 'css/footer.css' %}"
+        href="{% static 'css/footer.css' %}?v=20261003"
     >
 
-    <!-- My Complaints -->
+
+    <!-- =====================================================
+         MY COMPLAINTS CSS
+    ====================================================== -->
+
     <link
         rel="stylesheet"
-        href="{% static 'css/my_complaints.css' %}"
+        href="{% static 'css/my_complaints.css' %}?v=20261003"
     >
+
+
+    <!-- =====================================================
+         PAGE VISIBILITY FIX
+    ====================================================== -->
+
+    <style>
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+
+        body {
+            overflow-x: hidden;
+        }
+
+
+        .complaints-page {
+            position: relative;
+            z-index: 1;
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+        /*
+         * Do not allow an accidental full-screen loader
+         * to cover this page.
+         */
+
+        body > .page-loader,
+        body > .loading-screen,
+        body > .loading-overlay,
+        body > .preloader,
+        body > .global-loader,
+        body > #pageLoader,
+        body > #page-loader,
+        body > #loadingScreen,
+        body > #loading-screen,
+        body > #loadingOverlay,
+        body > #loading-overlay,
+        body > #preloader {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+    </style>
+
 </head>
 
 
 <body class="bg-[#eaf8ee] text-slate-900">
+
 
     <!-- =====================================================
          TOP NAVIGATION
@@ -45,7 +118,7 @@
 
 
     <!-- =====================================================
-         PAGE
+         MAIN PAGE
     ====================================================== -->
 
     <main class="complaints-page">
@@ -62,13 +135,19 @@
                 <div class="page-header-content">
 
                     <div class="portal-label">
-                        <span>Barangay Citizen Portal</span>
 
-                        <span class="portal-dot">•</span>
+                        <span>
+                            Barangay Citizen Portal
+                        </span>
+
+                        <span class="portal-dot">
+                            •
+                        </span>
 
                         <span>
                             Verified Barangay Ulingao
                         </span>
+
                     </div>
 
 
@@ -78,8 +157,8 @@
 
 
                     <p>
-                        Monitor ongoing incident reports, mediation hearing
-                        dates, and blockchain-recorded resolutions.
+                        Monitor ongoing incident reports, mediation
+                        hearing dates, and blockchain-recorded resolutions.
                     </p>
 
                 </div>
@@ -95,11 +174,13 @@
                         fill="none"
                         stroke="currentColor"
                     >
+
                         <path
                             d="M12 5v14M5 12h14"
                             stroke-width="2"
                             stroke-linecap="round"
                         />
+
                     </svg>
 
                     File New Complaint
@@ -109,12 +190,12 @@
             </section>
 
 
-
             <!-- =================================================
                  STATISTICS
             ================================================== -->
 
             <section class="complaint-stats">
+
 
                 <!-- TOTAL -->
 
@@ -122,7 +203,9 @@
 
                     <div class="stat-top">
 
-                        <span>Total Filed</span>
+                        <span>
+                            Total Filed
+                        </span>
 
                         <div class="stat-icon green">
 
@@ -131,11 +214,13 @@
                                 fill="none"
                                 stroke="currentColor"
                             >
+
                                 <path
                                     d="M4 6h5l2 2h9v11H4V6Z"
                                     stroke-width="1.8"
                                     stroke-linejoin="round"
                                 />
+
                             </svg>
 
                         </div>
@@ -175,6 +260,7 @@
                                 fill="none"
                                 stroke="currentColor"
                             >
+
                                 <circle
                                     cx="11"
                                     cy="11"
@@ -187,6 +273,7 @@
                                     stroke-width="1.8"
                                     stroke-linecap="round"
                                 />
+
                             </svg>
 
                         </div>
@@ -226,11 +313,13 @@
                                 fill="none"
                                 stroke="currentColor"
                             >
+
                                 <path
                                     d="M5 5l14 14M8 4l3 3M4 8l3 3M13 13l7 7"
                                     stroke-width="1.8"
                                     stroke-linecap="round"
                                 />
+
                             </svg>
 
                         </div>
@@ -270,6 +359,7 @@
                                 fill="none"
                                 stroke="currentColor"
                             >
+
                                 <circle
                                     cx="12"
                                     cy="12"
@@ -283,6 +373,7 @@
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                 />
+
                             </svg>
 
                         </div>
@@ -307,7 +398,6 @@
             </section>
 
 
-
             <!-- =================================================
                  MAIN GRID
             ================================================== -->
@@ -316,15 +406,15 @@
 
 
                 <!-- =================================================
-                     LEFT SIDE
+                     MAIN CONTENT
                 ================================================== -->
 
                 <div class="complaints-main">
 
 
-                    <!-- =============================================
+                    <!-- =================================================
                          FILTER PANEL
-                    ============================================== -->
+                    ================================================== -->
 
                     <section class="filter-panel">
 
@@ -340,6 +430,7 @@
                                     fill="none"
                                     stroke="currentColor"
                                 >
+
                                     <circle
                                         cx="11"
                                         cy="11"
@@ -352,6 +443,7 @@
                                         stroke-width="1.8"
                                         stroke-linecap="round"
                                     />
+
                                 </svg>
 
 
@@ -362,6 +454,12 @@
                                     autocomplete="off"
                                 >
 
+
+                                <span
+                                    id="searchSpinner"
+                                    class="search-spinner"
+                                ></span>
+
                             </div>
 
 
@@ -371,19 +469,25 @@
                                 id="categoryFilter"
                                 class="category-filter"
                             >
+
                                 <option value="all">
                                     All Categories
                                 </option>
 
                                 {% for category in categories %}
-                                    <option value="{{ category|lower }}">
+
+                                    <option
+                                        value="{{ category|lower }}"
+                                    >
                                         {{ category }}
                                     </option>
+
                                 {% endfor %}
+
                             </select>
 
 
-                            <!-- DATE BUTTON -->
+                            <!-- DATE -->
 
                             <button
                                 type="button"
@@ -397,6 +501,7 @@
                                     fill="none"
                                     stroke="currentColor"
                                 >
+
                                     <rect
                                         x="3"
                                         y="5"
@@ -411,6 +516,7 @@
                                         stroke-width="1.8"
                                         stroke-linecap="round"
                                     />
+
                                 </svg>
 
                             </button>
@@ -427,10 +533,13 @@
                                 class="status-tab active"
                                 data-filter="all"
                             >
+
                                 All
+
                                 <span>
                                     ({{ total_complaints|default:0 }})
                                 </span>
+
                             </button>
 
 
@@ -439,10 +548,13 @@
                                 class="status-tab"
                                 data-filter="progress"
                             >
+
                                 Active / In Progress
+
                                 <span>
                                     ({{ investigation_count|default:0 }})
                                 </span>
+
                             </button>
 
 
@@ -451,10 +563,13 @@
                                 class="status-tab"
                                 data-filter="mediation"
                             >
+
                                 Under Mediation
+
                                 <span>
                                     ({{ mediation_count|default:0 }})
                                 </span>
+
                             </button>
 
 
@@ -463,10 +578,13 @@
                                 class="status-tab"
                                 data-filter="resolved"
                             >
+
                                 Resolved
+
                                 <span>
                                     ({{ resolved_count|default:0 }})
                                 </span>
+
                             </button>
 
                         </div>
@@ -474,10 +592,9 @@
                     </section>
 
 
-
-                    <!-- =============================================
+                    <!-- =================================================
                          COMPLAINT LIST
-                    ============================================== -->
+                    ================================================== -->
 
                     <section
                         class="complaint-list"
@@ -488,9 +605,24 @@
 
                         <article
                             class="complaint-card"
+
                             data-status="{{ complaint.status|lower }}"
+
                             data-category="{{ complaint.complaint_type|lower }}"
-                            data-search="{{ complaint.reference_number|lower }} {{ complaint.subject|lower }} {{ complaint.complaint_type|lower }}"
+
+                            data-search="
+                                {{ complaint.reference_number|lower }}
+                                {{ complaint.subject|lower }}
+                                {{ complaint.complaint_type|lower }}
+                            "
+
+                            data-start-date="{{ complaint.submitted_at|date:'Y-m-d' }}"
+
+                            data-reference="{{ complaint.reference_number }}"
+
+                            data-subject="{{ complaint.subject|escape }}"
+
+                            data-type="{{ complaint.complaint_type|escape }}"
                         >
 
 
@@ -501,7 +633,9 @@
                                 <div class="complaint-reference">
 
                                     <span class="reference-number">
+
                                         #{{ complaint.reference_number }}
+
                                     </span>
 
 
@@ -512,6 +646,7 @@
                                             fill="none"
                                             stroke="currentColor"
                                         >
+
                                             <rect
                                                 x="4"
                                                 y="5"
@@ -525,6 +660,7 @@
                                                 d="M8 3v4M16 3v4M4 10h16"
                                                 stroke-width="1.7"
                                             />
+
                                         </svg>
 
                                         Filed
@@ -536,101 +672,79 @@
 
 
                                 <span
-                                    class="complaint-status
-                                    {% if complaint.status == 'Resolved' or complaint.status == 'Closed' %}
-                                        resolved
-                                    {% elif 'Mediation' in complaint.status %}
-                                        mediation
-                                    {% else %}
-                                        progress
-                                    {% endif %}"
+                                    class="
+                                        complaint-status
+                                        {% if complaint.status == 'Resolved' or complaint.status == 'Closed' %}
+                                            resolved
+                                        {% elif 'Mediation' in complaint.status %}
+                                            mediation
+                                        {% else %}
+                                            progress
+                                        {% endif %}
+                                    "
                                 >
 
-                                    {% if complaint.status %}
-                                        {{ complaint.status }}
-                                    {% else %}
-                                        In Progress
-                                    {% endif %}
+                                    {{ complaint.status|default:"Submitted" }}
 
                                 </span>
 
                             </div>
 
 
-
                             <!-- CATEGORY -->
 
                             <div class="complaint-category">
-                                {{ complaint.complaint_type|default:"General Complaint" }}
-                            </div>
 
+                                {{ complaint.complaint_type|default:"General Complaint" }}
+
+                            </div>
 
 
                             <!-- TITLE -->
 
                             <h2 class="complaint-title">
+
                                 {{ complaint.subject }}
+
                             </h2>
 
 
-
-                            <!-- CURRENT UPDATE -->
+                            <!-- CURRENT STATUS -->
 
                             <div
-                                class="complaint-update
-                                {% if complaint.status == 'Resolved' or complaint.status == 'Closed' %}
-                                    resolved-update
-                                {% elif 'Mediation' in complaint.status %}
-                                    mediation-update
-                                {% endif %}"
+                                class="
+                                    complaint-update
+
+                                    {% if complaint.status == 'Resolved' or complaint.status == 'Closed' %}
+                                        resolved-update
+                                    {% elif 'Mediation' in complaint.status %}
+                                        mediation-update
+                                    {% endif %}
+                                "
                             >
 
                                 <div class="update-icon">
 
-                                    {% if complaint.status == 'Resolved' or complaint.status == 'Closed' %}
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                    >
 
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                        >
-                                            <circle
-                                                cx="12"
-                                                cy="12"
-                                                r="8"
-                                                stroke-width="1.8"
-                                            />
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="8"
+                                            stroke-width="1.8"
+                                        />
 
-                                            <path
-                                                d="m8.5 12 2.3 2.3 4.8-5"
-                                                stroke-width="1.8"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                        </svg>
+                                        <path
+                                            d="M12 8v4l3 2"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                        />
 
-                                    {% else %}
-
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                        >
-                                            <circle
-                                                cx="12"
-                                                cy="12"
-                                                r="8"
-                                                stroke-width="1.8"
-                                            />
-
-                                            <path
-                                                d="M12 8v4l3 2"
-                                                stroke-width="1.8"
-                                                stroke-linecap="round"
-                                            />
-                                        </svg>
-
-                                    {% endif %}
+                                    </svg>
 
                                 </div>
 
@@ -638,233 +752,42 @@
                                 <div class="update-content">
 
                                     <strong>
-                                        {% if complaint.status == 'Resolved' or complaint.status == 'Closed' %}
-                                            Official Resolution
-                                        {% elif 'Mediation' in complaint.status %}
-                                            Mediation / Conciliation
-                                        {% else %}
-                                            Stage {{ complaint.stage|default:"1" }} of 5:
-                                            {{ complaint.status|default:"Complaint Submitted" }}
-                                        {% endif %}
+                                        Current Status:
+                                        {{ complaint.status|default:"Submitted" }}
                                     </strong>
 
-
-                                    {% if complaint.latest_update %}
-
-                                        <p>
-                                            {{ complaint.latest_update }}
-                                        </p>
-
-                                    {% else %}
-
-                                        <p>
-                                            Your complaint is currently being processed
-                                            by the barangay.
-                                        </p>
-
-                                    {% endif %}
+                                    <p>
+                                        Your complaint is currently
+                                        being processed by the barangay.
+                                    </p>
 
                                 </div>
 
                             </div>
-
-
-
-                            <!-- META -->
-
-                            <div class="complaint-meta">
-
-                                <div>
-
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                    >
-                                        <circle
-                                            cx="12"
-                                            cy="8"
-                                            r="3"
-                                            stroke-width="1.7"
-                                        />
-
-                                        <path
-                                            d="M5 20c.7-4 3-6 7-6s6.3 2 7 6"
-                                            stroke-width="1.7"
-                                            stroke-linecap="round"
-                                        />
-                                    </svg>
-
-                                    <span>
-                                        Assigned:
-                                        <strong>
-                                            {{ complaint.officer|default:"Pending assignment" }}
-                                        </strong>
-                                    </span>
-
-                                </div>
-
-
-                                {% if complaint.blockchain_hash %}
-
-                                <div>
-
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"
-                                            stroke-width="1.7"
-                                        />
-
-                                        <path
-                                            d="m9 12 2 2 4-4"
-                                            stroke-width="1.7"
-                                            stroke-linecap="round"
-                                        />
-                                    </svg>
-
-                                    <span>
-                                        Ledger Proof:
-                                        <code>
-                                            {{ complaint.blockchain_hash|truncatechars:18 }}
-                                        </code>
-                                    </span>
-
-                                </div>
-
-                                {% endif %}
-
-                            </div>
-
 
 
                             <!-- ACTIONS -->
-
-                            {% if complaint.documents_released %}
-
-<div class="released-documents-section">
-
-    <div class="released-documents-header">
-
-        <div>
-            <strong>
-                Released Documents
-            </strong>
-
-            <p>
-                Verified documents returned by the barangay.
-            </p>
-        </div>
-
-        <span class="released-documents-count">
-            {{ complaint.released_document_count }}
-            file{{ complaint.released_document_count|pluralize }}
-        </span>
-
-    </div>
-
-
-    {% if complaint.released_documents %}
-
-    <div class="released-documents-list">
-
-        {% for document in complaint.released_documents %}
-
-        <div class="released-document-item">
-
-            <div class="released-document-icon">
-                ✓
-            </div>
-
-
-            <div class="released-document-info">
-
-                <strong>
-                    {{ document.file_name }}
-                </strong>
-
-                <span>
-                    {{ document.type }}
-                    •
-                    {{ document.blockchain_id }}
-                </span>
-
-                <small>
-                    Blockchain Registered & Verified
-                </small>
-
-                <div class="released-document-actions">
-
-    <a
-        href="{% url 'released_complaint_document' complaint.complaint_id document.source document.id %}"
-        class="released-document-button"
-        target="_blank"
-        rel="noopener"
-    >
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-        >
-            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-            <circle cx="12" cy="12" r="3"/>
-        </svg>
-
-        View
-    </a>
-
-
-    <a
-        href="{% url 'released_complaint_document' complaint.complaint_id document.source document.id %}?download=1"
-        class="released-document-button download"
-    >
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-        >
-            <path d="M12 3v12"/>
-            <path d="m7 10 5 5 5-5"/>
-            <path d="M5 21h14"/>
-        </svg>
-
-        Download
-    </a>
-
-</div>
-
-            </div>
-
-        </div>
-
-        {% endfor %}
-
-    </div>
-
-    {% else %}
-
-    <p class="released-documents-empty">
-        No released documents are available.
-    </p>
-
-    {% endif %}
-
-</div>
-
-{% endif %}
 
                             <div class="complaint-actions">
 
                                 <div class="action-left">
 
-                                    <a
-                                        href="{% url 'track_complaint' %}?crn={{ complaint.reference_number }}"
-                                        class="card-action primary"
+
+                                    <!-- VIEW TIMELINE -->
+
+                                    <button
+                                        type="button"
+                                        class="card-action primary view-timeline-button"
+
+                                        data-reference="{{ complaint.reference_number }}"
+
+                                        data-subject="{{ complaint.subject|escapejs }}"
+
+                                        data-category="{{ complaint.complaint_type|default:'General Complaint'|escapejs }}"
+
+                                        data-status="{{ complaint.status|default:'Submitted'|escapejs }}"
+
+                                        data-start-date="{{ complaint.submitted_at|date:'Y-m-d' }}"
                                     >
 
                                         <svg
@@ -872,8 +795,9 @@
                                             fill="none"
                                             stroke="currentColor"
                                         >
+
                                             <path
-                                                d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"
+                                                d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"
                                                 stroke-width="1.7"
                                             />
 
@@ -883,72 +807,29 @@
                                                 r="2.5"
                                                 stroke-width="1.7"
                                             />
+
                                         </svg>
 
                                         View Full Timeline
 
-                                    </a>
+                                    </button>
 
 
                                     {% if complaint.status != "Resolved" and complaint.status != "Closed" %}
 
-                                    <a
-                                        href="#"
-                                        class="card-action secondary"
-                                    >
-
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                d="M12 5v14M5 12h14"
-                                                stroke-width="1.8"
-                                                stroke-linecap="round"
-                                            />
-                                        </svg>
-
-                                        Submit More Evidence
-
-                                    </a>
-
+            
                                     {% endif %}
 
                                 </div>
-
-
-                                <a
-                                    href="{% url 'contact' %}"
-                                    class="card-action outline"
-                                >
-
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            d="M4 5h16v11H8l-4 4V5Z"
-                                            stroke-width="1.7"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-
-                                    Message Officer
-
-                                </a>
-
+                                
                             </div>
 
                         </article>
 
-
                         {% empty %}
 
-                        <!-- =========================================
-                             DATABASE EMPTY STATE
-                        ========================================== -->
+
+                        <!-- NO COMPLAINTS -->
 
                         <div class="empty-complaints">
 
@@ -959,29 +840,32 @@
                                     fill="none"
                                     stroke="currentColor"
                                 >
+
                                     <path
-                                        d="M6 3h8l4 4v14H6V3Z"
+                                        d="M6 3h8l5 5v13H6V3Z"
                                         stroke-width="1.7"
-                                        stroke-linejoin="round"
                                     />
 
                                     <path
-                                        d="M14 3v5h5M9 13h6M9 17h4"
+                                        d="M14 3v6h5"
                                         stroke-width="1.7"
-                                        stroke-linecap="round"
                                     />
+
                                 </svg>
 
                             </div>
+
 
                             <h2>
                                 No complaints submitted yet
                             </h2>
 
+
                             <p>
-                                Complaints you submit through BantayBarangay
-                                will appear here.
+                                Complaints you submit through
+                                BantayBarangay will appear here.
                             </p>
+
 
                             <a
                                 href="{% url 'submit_complaint' %}"
@@ -995,12 +879,10 @@
                         {% endfor %}
 
 
-                        <!-- =========================================
-                             FILTER EMPTY STATE
-                        ========================================== -->
+                        <!-- FILTER EMPTY -->
 
                         <div
-                            class="empty-complaints filter-empty"
+                            class="empty-complaints"
                             id="filterEmpty"
                             hidden
                         >
@@ -1012,6 +894,7 @@
                                     fill="none"
                                     stroke="currentColor"
                                 >
+
                                     <circle
                                         cx="11"
                                         cy="11"
@@ -1024,17 +907,20 @@
                                         stroke-width="1.8"
                                         stroke-linecap="round"
                                     />
+
                                 </svg>
 
                             </div>
+
 
                             <h2>
                                 No matching complaints
                             </h2>
 
+
                             <p>
-                                Try changing your search, category,
-                                or status filter.
+                                Try changing your search,
+                                category, or status filter.
                             </p>
 
                         </div>
@@ -1042,7 +928,6 @@
                     </section>
 
                 </div>
-
 
 
                 <!-- =================================================
@@ -1059,19 +944,7 @@
                         <div class="sidebar-heading">
 
                             <div class="sidebar-icon danger">
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        d="M6.6 3.8 9 3l2 5-2 1.4c1.3 2.7 3 4.4 5.7 5.7L16 13l5 2-.8 2.4c-.5 1.5-2 2.4-3.6 2.1C9.4 18.1 5.9 14.6 4.5 7.4 4.2 5.8 5.1 4.3 6.6 3.8Z"
-                                        stroke-width="1.7"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
-
+                                !
                             </div>
 
 
@@ -1091,15 +964,17 @@
 
 
                         <p>
-                            For urgent crimes in progress, health emergencies,
-                            or active domestic incidents, contact barangay
-                            dispatch immediately.
+                            For urgent crimes in progress,
+                            health emergencies, or active
+                            domestic incidents, contact
+                            barangay dispatch immediately.
                         </p>
 
 
                         <div class="hotline-list">
 
                             <div>
+
                                 <span>
                                     National Hotline
                                 </span>
@@ -1107,10 +982,12 @@
                                 <strong>
                                     8888
                                 </strong>
+
                             </div>
 
 
                             <div>
+
                                 <span>
                                     Barangay Desk
                                 </span>
@@ -1118,6 +995,7 @@
                                 <strong>
                                     {{ barangay_phone|default:"Contact Barangay" }}
                                 </strong>
+
                             </div>
 
                         </div>
@@ -1125,125 +1003,35 @@
                     </section>
 
 
-
                     <!-- CITIZEN CHARTER -->
 
-                    <section class="sidebar-card charter-card">
+                    <section class="sidebar-card">
 
                         <div class="sidebar-heading">
 
                             <div class="sidebar-icon">
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"
-                                        stroke-width="1.7"
-                                    />
-
-                                    <path
-                                        d="M9 11h6M9 14h4"
-                                        stroke-width="1.7"
-                                        stroke-linecap="round"
-                                    />
-                                </svg>
-
+                                ✓
                             </div>
 
-                            <h2>
-                                Citizen's Charter Guarantee
-                            </h2>
+
+                            <div>
+
+                                <h2>
+                                    Citizen's Charter Guarantee
+                                </h2>
+
+                            </div>
 
                         </div>
 
 
                         <p>
-                            Complaint processing follows the applicable
-                            barangay procedures and service timelines.
+                            Complaint processing follows the
+                            applicable barangay procedures
+                            and service timelines.
                         </p>
 
-
-                        <div class="charter-steps">
-
-                            <div>
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        d="m6 12 4 4 8-8"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                </svg>
-
-                                <span>
-                                    Desk Officer assessment and validation.
-                                </span>
-
-                            </div>
-
-
-                            <div>
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        d="m6 12 4 4 8-8"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                </svg>
-
-                                <span>
-                                    Investigation, notice, or mediation
-                                    when applicable.
-                                </span>
-
-                            </div>
-
-
-                            <div>
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        d="m6 12 4 4 8-8"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                </svg>
-
-                                <span>
-                                    Resolution and official case documentation.
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <a
-                            href="#"
-                            class="charter-link"
-                        >
-                            Read Full Barangay Citizen's Charter →
-
-                        </a>
-
                     </section>
-
 
 
                     <!-- LEDGER -->
@@ -1256,18 +1044,22 @@
                                 Public Ledger Node
                             </span>
 
+
                             <strong>
+
                                 <span class="online-dot"></span>
+
                                 Operational
+
                             </strong>
 
                         </div>
 
 
                         <p>
-                            Every complaint submission and stage resolution
-                            is cryptographically recorded to support
-                            tamper-evident audit history.
+                            Every complaint submission and stage
+                            resolution is cryptographically recorded
+                            to support tamper-evident audit history.
                         </p>
 
 
@@ -1298,6 +1090,376 @@
     </main>
 
 
+    <!-- =====================================================
+         TIMELINE MODAL
+    ====================================================== -->
+
+    <div
+        id="timelineModal"
+        class="timeline-modal"
+        aria-hidden="true"
+    >
+
+
+        <div
+            class="timeline-overlay"
+            id="timelineOverlay"
+        ></div>
+
+
+        <div
+            class="timeline-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="timelineTitle"
+        >
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="timeline-header">
+
+                <div>
+
+                    <span class="timeline-eyebrow">
+                        COMPLAINT TIMELINE
+                    </span>
+
+
+                    <h2 id="timelineTitle">
+                        Complaint Timeline
+                    </h2>
+
+
+                    <p id="timelineReference">
+                        --
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="timelineClose"
+                    class="timeline-close"
+                    aria-label="Close timeline"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+
+                        <path
+                            d="M6 6l12 12M18 6L6 18"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="timeline-summary">
+
+
+                <div class="timeline-summary-card">
+
+                    <span>
+                        Complaint Started
+                    </span>
+
+                    <strong id="timelineStart">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="timeline-summary-card current">
+
+                    <span>
+                        Status Today
+                    </span>
+
+                    <strong id="timelineStatus">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="timeline-summary-card">
+
+                    <span>
+                        Time Elapsed
+                    </span>
+
+                    <strong id="timelineElapsed">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="timeline-information">
+
+                <div>
+
+                    <span>
+                        Complaint Reference
+                    </span>
+
+                    <strong id="timelineReferenceInfo">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Category
+                    </span>
+
+                    <strong id="timelineCategory">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="timeline-information-wide">
+
+                    <span>
+                        Subject
+                    </span>
+
+                    <strong id="timelineSubject">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 VISUAL TIMELINE
+            ================================================== -->
+
+            <section class="timeline-chart">
+
+
+                <div class="timeline-chart-title">
+
+                    <div>
+
+                        <span>
+                            STATUS PROGRESS
+                        </span>
+
+                        <h3>
+                            Complaint history
+                        </h3>
+
+                    </div>
+
+
+                    <div class="timeline-today-badge">
+
+                        <span class="timeline-live-dot"></span>
+
+                        Today
+
+                    </div>
+
+                </div>
+
+
+                <!-- TIMELINE -->
+
+                <div class="timeline-track">
+
+
+                    <!-- CONNECTING LINE -->
+
+                    <div class="timeline-line">
+
+                        <div
+                            id="timelineProgress"
+                            class="timeline-line-progress"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- START -->
+
+                    <div class="timeline-point start">
+
+                        <div class="timeline-marker">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+
+                                <path
+                                    d="M6 3h8l5 5v13H6V3Z"
+                                    stroke-width="1.8"
+                                />
+
+                                <path
+                                    d="M14 3v6h5"
+                                    stroke-width="1.8"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="timeline-point-content">
+
+                            <span>
+                                Complaint Started
+                            </span>
+
+                            <strong id="timelineStartPoint">
+                                --
+                            </strong>
+
+                            <p>
+                                Complaint officially submitted
+                                to the barangay.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TODAY -->
+
+                    <div class="timeline-point today">
+
+                        <div class="timeline-marker">
+
+                            <span class="today-marker-dot"></span>
+
+                        </div>
+
+
+                        <div class="timeline-point-content">
+
+                            <span>
+                                Status Today
+                            </span>
+
+                            <strong id="timelineStatusPoint">
+                                --
+                            </strong>
+
+                            <p id="timelineDescription">
+                                --
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LEGEND -->
+
+                <div class="timeline-note">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                            stroke-width="1.6"
+                        />
+
+                        <path
+                            d="M12 10v5"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M12 7h.01"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+
+                    <span>
+                        This timeline reflects the complaint's
+                        recorded filing date and its current
+                        status in the system.
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- FOOTER -->
+
+            <div class="timeline-footer">
+
+                <div>
+
+                    <span class="timeline-live-dot"></span>
+
+                    <span>
+                        Current status
+                    </span>
+
+                    <strong id="timelineFooterStatus">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="timelineDone"
+                    class="timeline-done"
+                >
+                    Done
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     <!-- =====================================================
          FOOTER
@@ -1306,14 +1468,19 @@
     {% include 'partials/footer.html' %}
 
 
-
     <!-- =====================================================
          JAVASCRIPT
     ====================================================== -->
 
-    <script src="{% static 'js/topnav.js' %}"></script>
+    <script
+        src="{% static 'js/topnav.js' %}?v=20261003"
+    ></script>
 
-    <script src="{% static 'js/my_complaints.js' %}"></script>
+
+    <script
+        src="{% static 'js/my_complaints.js' %}?v=20261003"
+    ></script>
+
 
 </body>
 
