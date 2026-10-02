@@ -1,6 +1,5 @@
 import hashlib
 import os
-
 from xml.sax.saxutils import escape
 
 from django.conf import settings
@@ -17,7 +16,6 @@ from reportlab.platypus import (
     Table,
     TableStyle,
     KeepTogether,
-    PageBreak,
 )
 
 from complaints.models import Complaint
@@ -31,7 +29,7 @@ from documents.models import ComplaintDocument
 
 def calculate_file_hash(file_path):
     """
-    Calculate the SHA-256 hash of the final PDF file.
+    Calculate the SHA-256 hash of a file.
     """
 
     sha256 = hashlib.sha256()
@@ -49,8 +47,8 @@ def calculate_file_hash(file_path):
 
 def safe_value(value):
     """
-    Convert empty values to N/A and escape user-entered
-    content so it does not break ReportLab markup.
+    Convert empty values to N/A and escape text so that
+    user-entered characters do not break ReportLab markup.
     """
 
     if value is None or value == "":
@@ -106,6 +104,8 @@ def get_resident_address(resident):
         if part and str(part).strip()
     )
 
+    # Fall back to the general address field when the
+    # structured address fields are empty.
     if not address and resident.address:
         address = resident.address
 
@@ -118,17 +118,14 @@ def get_resident_address(resident):
 
 def add_page_number(canvas, doc):
     """
-    Add the BantayBarangay footer and page number
-    to every page of the PDF.
+    Add a footer and page number to every PDF page.
     """
 
     canvas.saveState()
 
     page_width, _ = A4
 
-    canvas.setStrokeColor(
-        colors.HexColor("#D1D5DB")
-    )
+    canvas.setStrokeColor(colors.HexColor("#D1D5DB"))
     canvas.setLineWidth(0.5)
 
     canvas.line(
@@ -138,14 +135,8 @@ def add_page_number(canvas, doc):
         15 * mm,
     )
 
-    canvas.setFont(
-        "Helvetica",
-        7.5
-    )
-
-    canvas.setFillColor(
-        colors.HexColor("#6B7280")
-    )
+    canvas.setFont("Helvetica", 7.5)
+    canvas.setFillColor(colors.HexColor("#6B7280"))
 
     canvas.drawString(
         20 * mm,
@@ -185,6 +176,7 @@ def create_information_table(rows, styles):
     formatted_rows = []
 
     for label, value in rows:
+
         formatted_rows.append(
             [
                 Paragraph(
@@ -216,12 +208,14 @@ def create_information_table(rows, styles):
                     (-1, -1),
                     "TOP",
                 ),
+
                 (
                     "BACKGROUND",
                     (0, 0),
                     (0, -1),
                     colors.HexColor("#F3F4F6"),
                 ),
+
                 (
                     "BOX",
                     (0, 0),
@@ -229,6 +223,7 @@ def create_information_table(rows, styles):
                     0.5,
                     colors.HexColor("#CBD5E1"),
                 ),
+
                 (
                     "INNERGRID",
                     (0, 0),
@@ -236,24 +231,28 @@ def create_information_table(rows, styles):
                     0.35,
                     colors.HexColor("#E2E8F0"),
                 ),
+
                 (
                     "LEFTPADDING",
                     (0, 0),
                     (-1, -1),
                     8,
                 ),
+
                 (
                     "RIGHTPADDING",
                     (0, 0),
                     (-1, -1),
                     8,
                 ),
+
                 (
                     "TOPPADDING",
                     (0, 0),
                     (-1, -1),
                     7,
                 ),
+
                 (
                     "BOTTOMPADDING",
                     (0, 0),
@@ -268,86 +267,10 @@ def create_information_table(rows, styles):
 
 
 # =========================================================
-# OFFICIAL HEADER
-# =========================================================
-
-def add_official_header(
-    story,
-    styles,
-    document_title,
-):
-    """
-    Add the official BantayBarangay document header.
-    """
-
-    story.append(
-        Paragraph(
-            "REPUBLIC OF THE PHILIPPINES",
-            styles["republic"],
-        )
-    )
-
-    story.append(
-        Paragraph(
-            "BANTAYBARANGAY",
-            styles["system_name"],
-        )
-    )
-
-    story.append(
-        Paragraph(
-            document_title,
-            styles["document_title"],
-        )
-    )
-
-    header_line = Table(
-        [[""]],
-        colWidths=[160 * mm],
-        rowHeights=[1],
-    )
-
-    header_line.setStyle(
-        TableStyle(
-            [
-                (
-                    "BACKGROUND",
-                    (0, 0),
-                    (-1, -1),
-                    colors.HexColor("#1F2937"),
-                ),
-            ]
-        )
-    )
-
-    story.append(header_line)
-
-    story.append(
-        Spacer(
-            1,
-            7 * mm
-        )
-    )
-
-
-# =========================================================
 # GENERATE OFFICIAL COMPLAINT PDF
 # =========================================================
 
 def generate_complaint_pdf(complaint_id):
-    """
-    Generate the official complaint record.
-
-    Page 1:
-        Official complaint and incident information.
-
-    Page 2 onward:
-        Full complaint details, respondent information,
-        processing information, and document integrity.
-
-    The SHA-256 hash is calculated only after the final
-    PDF has been completely generated.
-    """
 
     # =====================================================
     # GET COMPLAINT
@@ -367,9 +290,8 @@ def generate_complaint_pdf(complaint_id):
 
     reference_number = complaint.reference_number
 
-    document_identifier = (
-        f"DOC-{reference_number}"
-    )
+    # Stable identifier used to reference this document.
+    document_identifier = f"DOC-{reference_number}"
 
     # =====================================================
     # FILE DIRECTORY
@@ -406,58 +328,6 @@ def generate_complaint_pdf(complaint_id):
         f"complaint_documents/"
         f"complaint_{complaint.complaint_id}/"
         f"{file_name}"
-    )
-
-    # =====================================================
-    # DATE / TIME VALUES
-    # =====================================================
-
-    date_filed = (
-        complaint.submitted_at.strftime(
-            "%B %d, %Y"
-        )
-        if complaint.submitted_at
-        else "N/A"
-    )
-
-    submitted_at = (
-        complaint.submitted_at.strftime(
-            "%B %d, %Y - %I:%M %p"
-        )
-        if complaint.submitted_at
-        else "N/A"
-    )
-
-    updated_at = (
-        complaint.updated_at.strftime(
-            "%B %d, %Y - %I:%M %p"
-        )
-        if complaint.updated_at
-        else "N/A"
-    )
-
-    incident_date = (
-        complaint.incident_date.strftime(
-            "%B %d, %Y"
-        )
-        if complaint.incident_date
-        else "N/A"
-    )
-
-    incident_time = (
-        complaint.incident_time.strftime(
-            "%I:%M %p"
-        )
-        if complaint.incident_time
-        else "N/A"
-    )
-
-    complainant_name = get_resident_full_name(
-        resident
-    )
-
-    complainant_address = get_resident_address(
-        resident
     )
 
     # =====================================================
@@ -540,25 +410,33 @@ def generate_complaint_pdf(complaint_id):
         textColor=colors.HexColor("#111827"),
     )
 
-    styles["details"] = ParagraphStyle(
-        "Details",
+    styles["body"] = ParagraphStyle(
+        "Body",
         parent=base_styles["Normal"],
         fontName="Helvetica",
-        fontSize=9.5,
-        leading=15,
+        fontSize=9,
+        leading=14,
         alignment=TA_LEFT,
         textColor=colors.HexColor("#111827"),
-        spaceAfter=6,
     )
 
-    styles["details_label"] = ParagraphStyle(
-        "DetailsLabel",
+    styles["description_label"] = ParagraphStyle(
+        "DescriptionLabel",
         parent=base_styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=9,
-        leading=12,
+        fontSize=8.5,
+        leading=11,
         textColor=colors.HexColor("#374151"),
-        spaceAfter=6,
+        spaceAfter=5,
+    )
+
+    styles["description"] = ParagraphStyle(
+        "Description",
+        parent=base_styles["Normal"],
+        fontName="Helvetica",
+        fontSize=9,
+        leading=14,
+        textColor=colors.HexColor("#111827"),
     )
 
     styles["integrity"] = ParagraphStyle(
@@ -591,10 +469,7 @@ def generate_complaint_pdf(complaint_id):
         leftMargin=25 * mm,
         topMargin=20 * mm,
         bottomMargin=23 * mm,
-        title=(
-            f"Complaint Record "
-            f"{reference_number}"
-        ),
+        title=f"Complaint {reference_number}",
         author="BantayBarangay",
         subject="Official Complaint Record",
     )
@@ -602,84 +477,91 @@ def generate_complaint_pdf(complaint_id):
     story = []
 
     # =====================================================
-    # PAGE 1
-    # OFFICIAL COMPLAINT RECORD
+    # OFFICIAL HEADER
     # =====================================================
 
-    add_official_header(
-        story,
-        styles,
-        "OFFICIAL COMPLAINT RECORD",
+    story.append(
+        Paragraph(
+            "REPUBLIC OF THE PHILIPPINES",
+            styles["republic"],
+        )
     )
+
+    story.append(
+        Paragraph(
+            "BANTAYBARANGAY",
+            styles["system_name"],
+        )
+    )
+
+    story.append(
+        Paragraph(
+            "OFFICIAL COMPLAINT RECORD",
+            styles["document_title"],
+        )
+    )
+
+    # Header divider
+    header_line = Table(
+        [[""]],
+        colWidths=[160 * mm],
+        rowHeights=[1],
+    )
+
+    header_line.setStyle(
+        TableStyle(
+            [
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, -1),
+                    colors.HexColor("#1F2937"),
+                ),
+            ]
+        )
+    )
+
+    story.append(header_line)
+
+    story.append(Spacer(1, 7 * mm))
 
     # =====================================================
     # REFERENCE INFORMATION
     # =====================================================
 
+    date_filed = (
+        complaint.submitted_at.strftime("%B %d, %Y")
+        if complaint.submitted_at
+        else "N/A"
+    )
+
     reference_table = Table(
         [
             [
                 Paragraph(
-                    (
-                        "<b>Reference No.:</b> "
-                        f"{safe_value(reference_number)}"
-                    ),
+                    f"<b>Reference No.:</b> "
+                    f"{safe_value(reference_number)}",
                     styles["reference"],
                 ),
                 Paragraph(
-                    (
-                        "<b>Date Filed:</b> "
-                        f"{safe_value(date_filed)}"
-                    ),
+                    f"<b>Date Filed:</b> "
+                    f"{safe_value(date_filed)}",
                     styles["reference"],
                 ),
             ]
         ],
-        colWidths=[
-            80 * mm,
-            80 * mm,
-        ],
+        colWidths=[80 * mm, 80 * mm],
     )
 
     reference_table.setStyle(
         TableStyle(
             [
-                (
-                    "VALIGN",
-                    (0, 0),
-                    (-1, -1),
-                    "TOP",
-                ),
-                (
-                    "ALIGN",
-                    (1, 0),
-                    (1, 0),
-                    "RIGHT",
-                ),
-                (
-                    "LEFTPADDING",
-                    (0, 0),
-                    (-1, -1),
-                    0,
-                ),
-                (
-                    "RIGHTPADDING",
-                    (0, 0),
-                    (-1, -1),
-                    0,
-                ),
-                (
-                    "TOPPADDING",
-                    (0, 0),
-                    (-1, -1),
-                    0,
-                ),
-                (
-                    "BOTTOMPADDING",
-                    (0, 0),
-                    (-1, -1),
-                    0,
-                ),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                ("ALIGN", (1, 0), (1, 0), "RIGHT"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
             ]
         )
     )
@@ -690,6 +572,14 @@ def generate_complaint_pdf(complaint_id):
     # I. COMPLAINANT INFORMATION
     # =====================================================
 
+    complainant_name = get_resident_full_name(
+        resident
+    )
+
+    complainant_address = get_resident_address(
+        resident
+    )
+
     complainant_section = [
         section_title(
             "I",
@@ -699,22 +589,13 @@ def generate_complaint_pdf(complaint_id):
 
         create_information_table(
             [
-                (
-                    "Name",
-                    complainant_name
-                ),
-                (
-                    "Address",
-                    complainant_address
-                ),
+                ("Name", complainant_name),
+                ("Address", complainant_address),
                 (
                     "Contact Number",
-                    resident.contact_number
+                    resident.contact_number,
                 ),
-                (
-                    "Sex",
-                    resident.gender
-                ),
+                ("Sex", resident.gender),
             ],
             styles,
         ),
@@ -739,24 +620,15 @@ def generate_complaint_pdf(complaint_id):
             [
                 (
                     "Report Type",
-                    complaint.report_type
+                    complaint.report_type,
                 ),
                 (
                     "Complaint Type",
-                    complaint.complaint_type
+                    complaint.complaint_type,
                 ),
-                (
-                    "Subject",
-                    complaint.subject
-                ),
-                (
-                    "Priority",
-                    complaint.priority
-                ),
-                (
-                    "Status",
-                    complaint.status
-                ),
+                ("Subject", complaint.subject),
+                ("Priority", complaint.priority),
+                ("Status", complaint.status),
             ],
             styles,
         ),
@@ -770,6 +642,22 @@ def generate_complaint_pdf(complaint_id):
     # III. INCIDENT INFORMATION
     # =====================================================
 
+    incident_date = (
+        complaint.incident_date.strftime(
+            "%B %d, %Y"
+        )
+        if complaint.incident_date
+        else "N/A"
+    )
+
+    incident_time = (
+        complaint.incident_time.strftime(
+            "%I:%M %p"
+        )
+        if complaint.incident_time
+        else "N/A"
+    )
+
     incident_section = [
         section_title(
             "III",
@@ -779,18 +667,9 @@ def generate_complaint_pdf(complaint_id):
 
         create_information_table(
             [
-                (
-                    "Date",
-                    incident_date
-                ),
-                (
-                    "Time",
-                    incident_time
-                ),
-                (
-                    "Location",
-                    complaint.location
-                ),
+                ("Date", incident_date),
+                ("Time", incident_time),
+                ("Location", complaint.location),
             ],
             styles,
         ),
@@ -801,117 +680,45 @@ def generate_complaint_pdf(complaint_id):
     )
 
     # =====================================================
-    # FORCE DETAILS TO NEW PAGE
-    # =====================================================
-
-    story.append(
-        PageBreak()
-    )
-
-    # =====================================================
-    # PAGE 2+
-    # COMPLAINT DETAILS
-    # =====================================================
-
-    add_official_header(
-        story,
-        styles,
-        "COMPLAINT DETAILS",
-    )
-
-    # =====================================================
-    # COMPLAINT REFERENCE INFORMATION
-    # =====================================================
-
-    complaint_reference = create_information_table(
-        [
-            (
-                "Reference Number",
-                reference_number
-            ),
-            (
-                "Date Filed",
-                date_filed
-            ),
-            (
-                "Complainant",
-                complainant_name
-            ),
-            (
-                "Respondent",
-                complaint.respondent_name
-            ),
-            (
-                "Complaint Type",
-                complaint.complaint_type
-            ),
-            (
-                "Status",
-                complaint.status
-            ),
-        ],
-        styles,
-    )
-
-    story.append(
-        complaint_reference
-    )
-
-    story.append(
-        Spacer(
-            1,
-            7 * mm
-        )
-    )
-
-    # =====================================================
-    # IV. COMPLAINT NARRATIVE
+    # IV. COMPLAINT DETAILS
     # =====================================================
 
     story.append(
         section_title(
             "IV",
-            "Complaint Narrative",
+            "Complaint Details",
             styles["section"],
         )
-    )
-
-    story.append(
-        Paragraph(
-            "Official complaint description:",
-            styles["details_label"],
-        )
-    )
-
-    description_text = (
-        safe_value(complaint.description)
-        .replace("\r\n", "<br/>")
-        .replace("\n", "<br/>")
-        .replace("\r", "<br/>")
     )
 
     description_box = Table(
         [
             [
                 Paragraph(
-                    description_text,
-                    styles["details"],
+                    "<b>Description</b>",
+                    styles["description_label"],
                 )
-            ]
+            ],
+            [
+                Paragraph(
+                    safe_value(
+                        complaint.description
+                    ),
+                    styles["description"],
+                )
+            ],
         ],
-        colWidths=[
-            160 * mm
-        ],
+        colWidths=[160 * mm],
     )
 
     description_box.setStyle(
         TableStyle(
             [
                 (
-                    "VALIGN",
+                    "BACKGROUND",
                     (0, 0),
-                    (-1, -1),
-                    "TOP",
+                    (-1, 0),
+                    colors.HexColor("#F3F4F6"),
                 ),
                 (
                     "BOX",
@@ -921,42 +728,41 @@ def generate_complaint_pdf(complaint_id):
                     colors.HexColor("#CBD5E1"),
                 ),
                 (
-                    "BACKGROUND",
+                    "LINEBELOW",
                     (0, 0),
-                    (-1, -1),
-                    colors.HexColor("#FFFFFF"),
+                    (-1, 0),
+                    0.35,
+                    colors.HexColor("#E2E8F0"),
                 ),
                 (
                     "LEFTPADDING",
                     (0, 0),
                     (-1, -1),
-                    10,
+                    8,
                 ),
                 (
                     "RIGHTPADDING",
                     (0, 0),
                     (-1, -1),
-                    10,
+                    8,
                 ),
                 (
                     "TOPPADDING",
                     (0, 0),
                     (-1, -1),
-                    10,
+                    7,
                 ),
                 (
                     "BOTTOMPADDING",
                     (0, 0),
                     (-1, -1),
-                    10,
+                    7,
                 ),
             ]
         )
     )
 
-    story.append(
-        description_box
-    )
+    story.append(description_box)
 
     # =====================================================
     # V. RESPONDENT INFORMATION
@@ -973,19 +779,19 @@ def generate_complaint_pdf(complaint_id):
             [
                 (
                     "Name",
-                    complaint.respondent_name
+                    complaint.respondent_name,
                 ),
                 (
                     "Relationship",
-                    complaint.respondent_relationship
+                    complaint.respondent_relationship,
                 ),
                 (
                     "Contact Number",
-                    complaint.respondent_contact
+                    complaint.respondent_contact,
                 ),
                 (
                     "Address",
-                    complaint.respondent_address
+                    complaint.respondent_address,
                 ),
             ],
             styles,
@@ -1000,6 +806,22 @@ def generate_complaint_pdf(complaint_id):
     # VI. PROCESSING INFORMATION
     # =====================================================
 
+    submitted_at = (
+        complaint.submitted_at.strftime(
+            "%B %d, %Y - %I:%M %p"
+        )
+        if complaint.submitted_at
+        else "N/A"
+    )
+
+    updated_at = (
+        complaint.updated_at.strftime(
+            "%B %d, %Y - %I:%M %p"
+        )
+        if complaint.updated_at
+        else "N/A"
+    )
+
     processing_section = [
         section_title(
             "VI",
@@ -1011,20 +833,14 @@ def generate_complaint_pdf(complaint_id):
             [
                 (
                     "Assigned Official",
-                    complaint.assigned_official
+                    complaint.assigned_official,
                 ),
                 (
                     "Resolution / Remarks",
-                    complaint.resolution
+                    complaint.resolution,
                 ),
-                (
-                    "Submitted At",
-                    submitted_at
-                ),
-                (
-                    "Last Updated",
-                    updated_at
-                ),
+                ("Submitted At", submitted_at),
+                ("Last Updated", updated_at),
             ],
             styles,
         ),
@@ -1049,33 +865,24 @@ def generate_complaint_pdf(complaint_id):
             [
                 (
                     "Document ID",
-                    document_identifier
-                ),
-                (
-                    "Document Type",
-                    "Complaint Record"
+                    document_identifier,
                 ),
                 (
                     "Integrity Method",
-                    "SHA-256 / Hyperledger Fabric"
+                    "SHA-256 / Hyperledger Fabric",
                 ),
             ],
             styles,
         ),
 
-        Spacer(
-            1,
-            3 * mm
-        ),
+        Spacer(1, 3 * mm),
 
         Paragraph(
-            (
-                "This electronic complaint document is protected "
-                "using SHA-256 cryptographic hashing and "
-                "blockchain-based integrity verification. "
-                "After registration, modification of the PDF "
-                "will produce a different cryptographic hash."
-            ),
+            "This electronic complaint document is protected "
+            "using SHA-256 cryptographic hashing and "
+            "blockchain-based integrity verification. "
+            "The document's registered integrity record can "
+            "be verified through the BantayBarangay system.",
             styles["integrity"],
         ),
     ]
@@ -1089,21 +896,16 @@ def generate_complaint_pdf(complaint_id):
     # =====================================================
 
     story.append(
-        Spacer(
-            1,
-            10 * mm
-        )
+        Spacer(1, 7 * mm)
     )
 
     story.append(
         Paragraph(
-            (
-                "This document was generated electronically by "
-                "the BantayBarangay Complaint Management System. "
-                "Any modification to the generated file after "
-                "blockchain registration will result in a "
-                "different cryptographic hash."
-            ),
+            "This document was generated electronically by "
+            "the BantayBarangay Complaint Management System. "
+            "Any modification to the generated file after "
+            "registration will result in a different "
+            "cryptographic hash.",
             styles["footer_note"],
         )
     )
