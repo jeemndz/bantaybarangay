@@ -84,12 +84,6 @@ urlpatterns = [
         name="save_hearing_notes"
     ),
 
-    path(
-    "<int:hearing_id>/minutes/generate/",
-    views.generate_hearing_minutes,
-    name="generate_hearing_minutes",
-    ),
-
 
     # =====================================================
     # UPLOAD HEARING FILE

@@ -17,13 +17,8 @@ from bantaybarangay.security import role_required
 from .models import (
     Hearing,
     HearingAttachment,
-    HearingMinutesDocument,
 )
-from registration.models import User
 
-from .services.hearing_minutes_pdf import (
-    generate_hearing_minutes_pdf,
-)
 
 # =========================================================
 # CONFIGURATION
@@ -451,7 +446,7 @@ def hearing_schedule(request):
             complaint
         )
 
-        # -----------------------------------------------------
+    # -----------------------------------------------------
     # Build hearing records
     # -----------------------------------------------------
 
@@ -474,22 +469,6 @@ def hearing_schedule(request):
                 )
             )
 
-        # -------------------------------------------------
-        # Official Hearing Minutes document
-        # -------------------------------------------------
-
-        hearing_minutes_document = (
-            HearingMinutesDocument.objects
-            .filter(
-                hearing_id=hearing.hearing_id,
-                document_type="HEARING_MINUTES",
-            )
-            .order_by(
-                "-document_id"
-            )
-            .first()
-        )
-
         hearing_records.append(
             {
                 "hearing":
@@ -500,9 +479,6 @@ def hearing_schedule(request):
 
                 "can_manage":
                     can_manage,
-
-                "hearing_minutes_document":
-                    hearing_minutes_document,
             }
         )
 
@@ -1244,22 +1220,6 @@ def complete_hearing(
 
         return hearing_redirect()
 
-        # -----------------------------------------------------
-    # Hearing notes are required before completion
-    # -----------------------------------------------------
-
-    if not hearing.notes or not hearing.notes.strip():
-
-        messages.error(
-            request,
-            (
-                "Please record and save the Hearing Notes / "
-                "Minutes before completing the hearing."
-            )
-        )
-
-        return hearing_redirect()
-
     # -----------------------------------------------------
     # Complete
     #
@@ -1733,21 +1693,26 @@ def save_hearing_notes(
 
         return hearing_redirect()
 
-       # -----------------------------------------------------
-    # Notes can only be edited while hearing is active
+    # -----------------------------------------------------
+    # Only during/after actual hearing
     # -----------------------------------------------------
 
-    if hearing.status != "In Progress":
+    if hearing.status not in [
+        "In Progress",
+        "Completed",
+    ]:
 
         messages.error(
             request,
             (
-                "Hearing notes can only be edited "
-                "while the hearing is in progress."
+                "Hearing notes can only be "
+                "recorded during or after "
+                "the hearing."
             )
         )
 
         return hearing_redirect()
+
     # -----------------------------------------------------
     # Notes
     # -----------------------------------------------------
@@ -2114,211 +2079,6 @@ def delete_hearing_attachment(
     messages.success(
         request,
         "Hearing file was removed."
-    )
-
-    return hearing_redirect()
-
-
-# =========================================================
-# GENERATE OFFICIAL HEARING MINUTES
-# =========================================================
-
-@role_required("admin", "official")
-@require_POST
-def generate_hearing_minutes(
-    request,
-    hearing_id
-):
-
-    # -----------------------------------------------------
-    # Hearing
-    # -----------------------------------------------------
-
-    hearing = get_object_or_404(
-        Hearing,
-        hearing_id=hearing_id,
-    )
-
-    # -----------------------------------------------------
-    # Complaint
-    # -----------------------------------------------------
-
-    complaint = get_object_or_404(
-        Complaint,
-        complaint_id=hearing.complaint_id,
-    )
-
-    # -----------------------------------------------------
-    # Ownership
-    # -----------------------------------------------------
-
-    if not user_can_manage_complaint(
-        request,
-        complaint
-    ):
-
-        messages.error(
-            request,
-            (
-                "You cannot generate the Hearing Minutes "
-                "for another official's hearing."
-            )
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # Hearing must be completed
-    # -----------------------------------------------------
-
-    if hearing.status != "Completed":
-
-        messages.error(
-            request,
-            (
-                "Official Hearing Minutes can only be "
-                "generated after the hearing is completed."
-            )
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # Hearing notes are required
-    # -----------------------------------------------------
-
-    if not hearing.notes or not hearing.notes.strip():
-
-        messages.error(
-            request,
-            (
-                "Hearing Minutes cannot be generated "
-                "because no hearing notes were recorded."
-            )
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # Current user
-    # -----------------------------------------------------
-
-    current_user_id = get_current_user_id(
-        request
-    )
-
-    if not current_user_id:
-
-        messages.error(
-            request,
-            "Your login session has expired."
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # User record
-    # -----------------------------------------------------
-
-    try:
-
-        current_user = User.objects.get(
-            user_id=current_user_id
-        )
-
-    except User.DoesNotExist:
-
-        messages.error(
-            request,
-            (
-                "The account that is processing this "
-                "document could not be found."
-            )
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # Existing Hearing Minutes document
-    # -----------------------------------------------------
-
-    existing_document = (
-        HearingMinutesDocument.objects
-        .filter(
-            hearing_id=hearing.hearing_id,
-            document_type="HEARING_MINUTES",
-        )
-        .first()
-    )
-
-    # Once registered on Fabric, the PDF must not
-    # be regenerated or overwritten because that would
-    # produce a different SHA-256 hash.
-
-    if (
-        existing_document
-        and
-        existing_document.blockchain_status == "Registered"
-    ):
-
-        messages.error(
-            request,
-            (
-                "The official Hearing Minutes have already "
-                "been registered on the blockchain and "
-                "cannot be regenerated."
-            )
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # Generate PDF
-    # -----------------------------------------------------
-
-    try:
-
-        hearing_document = (
-            generate_hearing_minutes_pdf(
-                hearing_id=hearing.hearing_id,
-                processed_by=current_user.user_id,
-                processed_by_name=current_user.username,
-                processed_by_role=current_user.role,
-            )
-        )
-
-    except ValueError as error:
-
-        messages.error(
-            request,
-            str(error)
-        )
-
-        return hearing_redirect()
-
-    except Exception:
-
-        messages.error(
-            request,
-            (
-                "The official Hearing Minutes could not "
-                "be generated. Please try again."
-            )
-        )
-
-        return hearing_redirect()
-
-    # -----------------------------------------------------
-    # Success
-    # -----------------------------------------------------
-
-    messages.success(
-        request,
-        (
-            f"Official Hearing Minutes "
-            f"{hearing_document.file_name} "
-            f"were generated successfully."
-        )
     )
 
     return hearing_redirect()
