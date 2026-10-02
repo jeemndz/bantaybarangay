@@ -388,3 +388,136 @@ class HearingAttachment(models.Model):
         return (
             f"{size / (1024 * 1024):.1f} MB"
         )
+
+
+# =========================================================
+# HEARING MINUTES DOCUMENT
+# =========================================================
+
+class HearingMinutesDocument(models.Model):
+
+    # =====================================================
+    # PRIMARY KEY
+    # =====================================================
+
+    document_id = models.AutoField(
+        primary_key=True
+    )
+
+    # =====================================================
+    # RELATED RECORD IDS
+    # =====================================================
+
+    hearing_id = models.IntegerField(
+        db_index=True
+    )
+
+    complaint_id = models.IntegerField(
+        db_index=True
+    )
+
+    # =====================================================
+    # DOCUMENT INFORMATION
+    # =====================================================
+
+    document_type = models.CharField(
+        max_length=50,
+        default="HEARING_MINUTES"
+    )
+
+    file_name = models.CharField(
+        max_length=255
+    )
+
+    file_path = models.CharField(
+        max_length=500
+    )
+
+    file_hash = models.CharField(
+        max_length=64
+    )
+
+    # =====================================================
+    # BLOCKCHAIN REGISTRATION
+    # =====================================================
+
+    blockchain_status = models.CharField(
+        max_length=20,
+        default="Pending"
+    )
+
+    blockchain_tx_id = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
+
+    blockchain_registered_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    # =====================================================
+    # INTEGRITY VERIFICATION
+    # =====================================================
+
+    integrity_status = models.CharField(
+        max_length=20,
+        default="Not Verified"
+    )
+
+    last_verified_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    # =====================================================
+    # PROCESSED BY
+    # =====================================================
+
+    processed_by = models.IntegerField(
+        null=True,
+        blank=True
+    )
+
+    processed_by_name = models.CharField(
+        max_length=150,
+        null=True,
+        blank=True
+    )
+
+    processed_by_role = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
+    )
+
+    # =====================================================
+    # TIMESTAMP
+    # =====================================================
+
+    generated_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    # =====================================================
+    # META
+    # =====================================================
+
+    class Meta:
+        db_table = "hearing_minutes_documents"
+        ordering = [
+            "-generated_at",
+            "-document_id",
+        ]
+
+    # =====================================================
+    # STRING
+    # =====================================================
+
+    def __str__(self):
+
+        return (
+            f"HRG-{self.hearing_id} - "
+            f"{self.file_name}"
+        )
