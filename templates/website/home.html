@@ -158,6 +158,229 @@
             letter-spacing: -0.025em;
         }
 
+
+        /* =====================================================
+   BANTAYBARANGAY HERO LOGO
+===================================================== */
+
+.logo-frame {
+
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(217, 164, 65, 0.55);
+
+    background: rgba(21, 63, 50, 0.75);
+
+    position: relative;
+
+    animation:
+        logoFloat 4s ease-in-out infinite,
+        logoGlow 3s ease-in-out infinite;
+
+}
+
+
+/* GLOWING BORDER */
+
+.logo-frame::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -1px;
+
+    border: 1px solid rgba(217, 164, 65, 0.25);
+
+    pointer-events: none;
+
+    animation: logoBorder 3s ease-in-out infinite;
+
+}
+
+
+/* LOGO */
+
+.hero-logo {
+
+    width: 160px;
+    height: 160px;
+
+    object-fit: contain;
+
+    display: block;
+
+    animation: logoPulse 3.5s ease-in-out infinite;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(217, 164, 65, 0.20)
+        );
+
+}
+
+
+/* =====================================================
+   FLOATING ANIMATION
+===================================================== */
+
+@keyframes logoFloat {
+
+    0%,
+    100% {
+
+        transform: translateY(0);
+
+    }
+
+    50% {
+
+        transform: translateY(-8px);
+
+    }
+
+}
+
+
+/* =====================================================
+   SUBTLE LOGO PULSE
+===================================================== */
+
+@keyframes logoPulse {
+
+    0%,
+    100% {
+
+        transform: scale(1);
+
+        filter:
+            drop-shadow(
+                0 0 8px
+                rgba(217, 164, 65, 0.15)
+            );
+
+    }
+
+    50% {
+
+        transform: scale(1.05);
+
+        filter:
+            drop-shadow(
+                0 0 20px
+                rgba(217, 164, 65, 0.38)
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   FRAME GLOW
+===================================================== */
+
+@keyframes logoGlow {
+
+    0%,
+    100% {
+
+        box-shadow:
+            0 0 0 rgba(217, 164, 65, 0);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 0 30px
+            rgba(217, 164, 65, 0.12);
+
+    }
+
+}
+
+
+/* =====================================================
+   BORDER ANIMATION
+===================================================== */
+
+@keyframes logoBorder {
+
+    0%,
+    100% {
+
+        opacity: 0.35;
+
+        transform: scale(1);
+
+    }
+
+    50% {
+
+        opacity: 0.75;
+
+        transform: scale(1.04);
+
+    }
+
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.logo-frame:hover {
+
+    transform: translateY(-6px) scale(1.02);
+
+    transition: transform 0.35s ease;
+
+}
+
+
+.logo-frame:hover .hero-logo {
+
+    transform: scale(1.08);
+
+    filter:
+        drop-shadow(
+            0 0 28px
+            rgba(217, 164, 65, 0.45)
+        );
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 640px) {
+
+    .logo-frame {
+
+        width: 160px;
+        height: 160px;
+
+    }
+
+    .hero-logo {
+
+        width: 142px;
+        height: 142px;
+
+    }
+
+}
+
     </style>
 
 </head>
@@ -392,45 +615,35 @@
                         <div class="mb-8 flex items-center justify-between">
 
                             <span class="text-xs font-bold tracking-[0.2em] text-gold-400">
-                                CIVIC DIGITAL HUB
+                                BARANGAY OFFICIAL WEBSITE
                             </span>
 
                         </div>
 
 
-                        <div class="flex justify-center py-8">
+                            <!-- =====================================================
+                                ANIMATED BANTAYBARANGAY LOGO
+                            ====================================================== -->
 
-                            <div class="flex h-32 w-32 items-center justify-center border border-gold-400/50 bg-government-800">
+                            <div class="flex justify-center py-8">
 
-                                <svg
-                                    class="h-20 w-20 text-gold-400"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.2"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
-                                    />
+                                <div class="logo-frame">
 
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M9.5 12l1.7 1.7L14.8 10"
-                                    />
-                                </svg>
+                                    <img
+                                        src="{% static 'images/SYSTEM_LOGO_W.png' %}"
+                                        alt="BantayBarangay Logo"
+                                        class="hero-logo"
+                                    >
+
+                                </div>
 
                             </div>
-
-                        </div>
 
 
                         <div class="border-t border-white/10 pt-6 text-center">
 
                             <h2 class="text-2xl font-bold text-white">
-                                Secure Barangay
+                                BANTAYBARANGAY DIGITAL GOVERNANCE
                             </h2>
 
                             <p class="mt-2 text-sm leading-6 text-slate-300">
