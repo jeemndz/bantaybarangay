@@ -1,0 +1,1134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+My Account | BantayBarangay
+{% endblock %}
+
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/my_account.css' %}"
+>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="account-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="account-page-header">
+
+        <div>
+            <h1>My Account</h1>
+
+            <p>
+                Manage your administrator account information
+                and security settings.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DJANGO MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="account-messages">
+
+            {% for message in messages %}
+
+                <div
+                    class="
+                        account-message
+
+                        {% if message.tags == 'success' %}
+                            account-message-success
+                        {% elif message.tags == 'error' %}
+                            account-message-error
+                        {% elif message.tags == 'warning' %}
+                            account-message-warning
+                        {% else %}
+                            account-message-info
+                        {% endif %}
+                    "
+                >
+
+                    <div class="account-message-icon">
+
+                        {% if message.tags == 'success' %}
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="m8 12 2.5 2.5L16 9"></path>
+                            </svg>
+
+                        {% elif message.tags == 'error' %}
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="M9 9l6 6"></path>
+                                <path d="m15 9-6 6"></path>
+                            </svg>
+
+                        {% elif message.tags == 'warning' %}
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 3 2.8 20h18.4L12 3Z"></path>
+                                <path d="M12 9v5"></path>
+                                <path d="M12 17h.01"></path>
+                            </svg>
+
+                        {% else %}
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="M12 11v5"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+
+                        {% endif %}
+
+                    </div>
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         PROFILE SUMMARY
+    ====================================================== -->
+
+    <section class="account-profile-card">
+
+        <div class="account-profile-main">
+
+
+            <!-- AVATAR -->
+
+            <div class="account-avatar">
+
+                {% if account_user.username %}
+                    {{ account_user.username|slice:":2"|upper }}
+                {% else %}
+                    AD
+                {% endif %}
+
+            </div>
+
+
+            <!-- PROFILE INFORMATION -->
+
+            <div class="account-profile-info">
+
+                <div class="account-profile-name-row">
+
+                    <h2>
+                        {{ account_user.username|default:"Administrator" }}
+                    </h2>
+
+
+                    {% if account_user.is_active %}
+
+                        <span class="account-status account-status-active">
+
+                            <span class="account-status-dot"></span>
+
+                            Active
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="account-status account-status-inactive">
+
+                            <span class="account-status-dot"></span>
+
+                            Inactive
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <p>
+                    {{ account_user.email|default:"No email address" }}
+                </p>
+
+
+                <div class="account-role">
+
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+                        <path d="m9.5 12 1.7 1.7 3.5-3.7"></path>
+                    </svg>
+
+                    {{ account_user.role|default:"admin"|title }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE META -->
+
+        <div class="account-profile-meta">
+
+            <div>
+
+                <span>
+                    Account ID
+                </span>
+
+                <strong>
+                    #{{ account_user.user_id|default:"—" }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Member Since
+                </span>
+
+                <strong>
+
+                    {% if account_user.created_at %}
+                        {{ account_user.created_at|date:"M d, Y" }}
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENT GRID
+    ====================================================== -->
+
+    <div class="account-grid">
+
+
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================== -->
+
+        <div class="account-main-column">
+
+
+            <!-- =============================================
+                 ACCOUNT INFORMATION
+            ============================================== -->
+
+            <section class="account-card">
+
+                <div class="account-card-header">
+
+                    <div class="account-card-title">
+
+                        <div class="account-card-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Account Information
+                            </h2>
+
+                            <p>
+                                Your administrator account details.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="account-details-grid">
+
+
+                    <!-- USERNAME -->
+
+                    <div class="account-detail">
+
+                        <div class="account-detail-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M5 21c0-4 3.1-7 7-7s7 3 7 7"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Username
+                            </span>
+
+                            <strong>
+                                {{ account_user.username|default:"—" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="account-detail">
+
+                        <div class="account-detail-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="m3 7 9 6 9-6"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Email Address
+                            </span>
+
+                            <strong>
+                                {{ account_user.email|default:"—" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROLE -->
+
+                    <div class="account-detail">
+
+                        <div class="account-detail-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+                                <path d="m9.5 12 1.7 1.7 3.5-3.7"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Account Role
+                            </span>
+
+                            <strong>
+                                {{ account_user.role|default:"admin"|title }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <div class="account-detail">
+
+                        <div class="account-detail-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="m8 12 2.5 2.5L16 9"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Account Status
+                            </span>
+
+
+                            {% if account_user.is_active %}
+
+                                <strong class="detail-active">
+                                    Active
+                                </strong>
+
+                            {% else %}
+
+                                <strong class="detail-inactive">
+                                    Inactive
+                                </strong>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATE CREATED -->
+
+                    <div class="account-detail">
+
+                        <div class="account-detail-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="16"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 3v4"></path>
+                                <path d="M16 3v4"></path>
+                                <path d="M3 10h18"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Date Created
+                            </span>
+
+                            <strong>
+
+                                {% if account_user.created_at %}
+                                    {{ account_user.created_at|date:"M d, Y h:i A" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LAST UPDATED -->
+
+                    <div class="account-detail">
+
+                        <div class="account-detail-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M20 11a8 8 0 1 0-2.3 5.7"></path>
+                                <path d="M20 4v7h-7"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Last Updated
+                            </span>
+
+                            <strong>
+
+                                {% if account_user.updated_at %}
+                                    {{ account_user.updated_at|date:"M d, Y h:i A" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 EDIT PROFILE
+            ============================================== -->
+
+            <section class="account-card">
+
+                <div class="account-card-header">
+
+                    <div class="account-card-title">
+
+                        <div class="account-card-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 20h9"></path>
+                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Edit Profile
+                            </h2>
+
+                            <p>
+                                Update your username and email address.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!--
+                    This form connects to:
+                    action == "update_profile"
+                    inside my_account_view()
+                -->
+
+                <form
+                    method="post"
+                    action="{% url 'my_account' %}"
+                    class="account-form"
+                    autocomplete="off"
+                >
+
+                    {% csrf_token %}
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="update_profile"
+                    >
+
+
+                    <div class="account-form-grid">
+
+
+                        <!-- USERNAME -->
+
+                        <div class="account-form-group">
+
+                            <label for="username">
+                                Username
+                            </label>
+
+
+                            <div class="account-input-wrapper">
+
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="4"></circle>
+                                    <path d="M5 21c0-4 3.1-7 7-7s7 3 7 7"></path>
+                                </svg>
+
+
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    value="{{ account_user.username|default:'' }}"
+                                    placeholder="Enter username"
+                                    autocomplete="username"
+                                    maxlength="50"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="account-form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+
+                            <div class="account-input-wrapper">
+
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                                    <rect
+                                        x="3"
+                                        y="5"
+                                        width="18"
+                                        height="14"
+                                        rx="2"
+                                    ></rect>
+
+                                    <path d="m3 7 9 6 9-6"></path>
+
+                                </svg>
+
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value="{{ account_user.email|default:'' }}"
+                                    placeholder="Enter email address"
+                                    autocomplete="email"
+                                    maxlength="100"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-form-actions">
+
+                        <button
+                            type="submit"
+                            class="account-primary-button"
+                        >
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
+                                <path d="M17 21v-8H7v8"></path>
+                                <path d="M7 3v5h8"></path>
+                            </svg>
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div class="account-side-column">
+
+
+            <!-- =============================================
+                 SECURITY
+            ============================================== -->
+
+            <section class="account-card">
+
+                <div class="account-card-header">
+
+                    <div class="account-card-title">
+
+                        <div class="account-card-icon">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                                <rect
+                                    x="5"
+                                    y="10"
+                                    width="14"
+                                    height="11"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Security
+                            </h2>
+
+                            <p>
+                                Update your account password.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!--
+                    This form connects to:
+                    action == "change_password"
+                    inside my_account_view()
+                -->
+
+                <form
+                    method="post"
+                    action="{% url 'my_account' %}"
+                    class="account-form"
+                    autocomplete="off"
+                >
+
+                    {% csrf_token %}
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="change_password"
+                    >
+
+
+                    <!-- CURRENT PASSWORD -->
+
+                    <div class="account-form-group">
+
+                        <label for="current_password">
+                            Current Password
+                        </label>
+
+
+                        <div class="account-input-wrapper">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                                <rect
+                                    x="5"
+                                    y="10"
+                                    width="14"
+                                    height="11"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+
+                            </svg>
+
+
+                            <input
+                                type="password"
+                                id="current_password"
+                                name="current_password"
+                                placeholder="Enter current password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NEW PASSWORD -->
+
+                    <div class="account-form-group">
+
+                        <label for="new_password">
+                            New Password
+                        </label>
+
+
+                        <div class="account-input-wrapper">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="8" cy="15" r="4"></circle>
+                                <path d="m11 12 8-8"></path>
+                                <path d="m16 7 2 2"></path>
+                                <path d="m14 9 2 2"></path>
+                            </svg>
+
+
+                            <input
+                                type="password"
+                                id="new_password"
+                                name="new_password"
+                                placeholder="Enter new password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONFIRM NEW PASSWORD -->
+
+                    <div class="account-form-group">
+
+                        <label for="confirm_password">
+                            Confirm New Password
+                        </label>
+
+
+                        <div class="account-input-wrapper">
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="8" cy="15" r="4"></circle>
+                                <path d="m11 12 8-8"></path>
+                                <path d="m16 7 2 2"></path>
+                            </svg>
+
+
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                name="confirm_password"
+                                placeholder="Confirm new password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD NOTE -->
+
+                    <div class="password-note">
+
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 11v5"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+
+
+                        <p>
+                            Use at least 8 characters. Your new
+                            password must be different from your
+                            current password.
+                        </p>
+
+                    </div>
+
+
+                    <div class="account-form-actions">
+
+                        <button
+                            type="submit"
+                            class="account-secondary-button"
+                        >
+
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                                <rect
+                                    x="5"
+                                    y="10"
+                                    width="14"
+                                    height="11"
+                                    rx="2"
+                                ></rect>
+
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+
+                            </svg>
+
+                            Change Password
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- =============================================
+                 ADMINISTRATOR ACCESS
+            ============================================== -->
+
+            <section class="account-card account-access-card">
+
+                <div class="account-card-title">
+
+                    <div class="account-card-icon">
+
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+                            <path d="m9.5 12 1.7 1.7 3.5-3.7"></path>
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            Administrator Access
+                        </h2>
+
+                        <p>
+                            Your current system access level.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-access-content">
+
+                    <span class="admin-access-badge">
+
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+                        </svg>
+
+                        {{ account_user.role|default:"admin"|upper }}
+
+                    </span>
+
+
+                    <p>
+                        Administrator accounts have access to
+                        management features available within
+                        BantayBarangay.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 ACCOUNT SUMMARY
+            ============================================== -->
+
+            <section class="account-card account-access-card">
+
+                <div class="account-card-title">
+
+                    <div class="account-card-icon">
+
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 7v5l3 2"></path>
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            Account Summary
+                        </h2>
+
+                        <p>
+                            Basic information about your account.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-access-content">
+
+                    <p>
+                        <strong>Username:</strong>
+                        {{ account_user.username|default:"—" }}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        {{ account_user.email|default:"—" }}
+                    </p>
+
+                    <p>
+                        <strong>Role:</strong>
+                        {{ account_user.role|default:"admin"|title }}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+
+                        {% if account_user.is_active %}
+                            Active
+                        {% else %}
+                            Inactive
+                        {% endif %}
+                    </p>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PREVENT DOUBLE FORM SUBMISSION
+========================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const forms = document.querySelectorAll(
+            ".account-form"
+        );
+
+
+        forms.forEach(
+            function (form) {
+
+                form.addEventListener(
+                    "submit",
+                    function () {
+
+                        const button =
+                            form.querySelector(
+                                "button[type='submit']"
+                            );
+
+
+                        if (!button) {
+                            return;
+                        }
+
+
+                        button.disabled = true;
+
+                        button.style.opacity = "0.7";
+
+                        button.style.cursor =
+                            "not-allowed";
+
+
+                        if (
+                            form.querySelector(
+                                'input[name="action"]'
+                            ).value === "update_profile"
+                        ) {
+
+                            button.innerHTML = `
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M20 12a8 8 0 1 1-2.34-5.66"
+                                    ></path>
+                                    <path
+                                        d="M20 4v6h-6"
+                                    ></path>
+                                </svg>
+
+                                Saving...
+                            `;
+
+                        } else {
+
+                            button.innerHTML = `
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M20 12a8 8 0 1 1-2.34-5.66"
+                                    ></path>
+                                    <path
+                                        d="M20 4v6h-6"
+                                    ></path>
+                                </svg>
+
+                                Updating...
+                            `;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

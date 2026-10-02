@@ -1181,6 +1181,576 @@ def verify_reset_code_view(request):
     )
 
 
+
+# =========================================================
+# MY ACCOUNT
+# =========================================================
+
+def my_account_view(request):
+
+    # -----------------------------------------------------
+    # REQUIRE LOGIN
+    # -----------------------------------------------------
+
+    if not request.session.get("is_logged_in"):
+
+        messages.error(
+            request,
+            "Please sign in to access your account."
+        )
+
+        return redirect(
+            "login"
+        )
+
+
+    # -----------------------------------------------------
+    # GET LOGGED-IN USER ID
+    # -----------------------------------------------------
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    if not user_id:
+
+        request.session.flush()
+
+        messages.error(
+            request,
+            "Your login session is invalid. Please sign in again."
+        )
+
+        return redirect(
+            "login"
+        )
+
+
+    # -----------------------------------------------------
+    # FIND USER
+    # -----------------------------------------------------
+
+    try:
+
+        account_user = User.objects.get(
+            user_id=user_id
+        )
+
+    except User.DoesNotExist:
+
+        request.session.flush()
+
+        messages.error(
+            request,
+            "Your account could not be found."
+        )
+
+        return redirect(
+            "login"
+        )
+
+
+    # -----------------------------------------------------
+    # CHECK ACCOUNT STATUS
+    # -----------------------------------------------------
+
+    if not account_user.is_active:
+
+        request.session.flush()
+
+        messages.error(
+            request,
+            "Your account is currently inactive."
+        )
+
+        return redirect(
+            "login"
+        )
+
+
+    # -----------------------------------------------------
+    # ADMIN ONLY
+    # -----------------------------------------------------
+
+    if account_user.role != "admin":
+
+        messages.error(
+            request,
+            "You do not have permission to access the administrator account page."
+        )
+
+        if account_user.role == "official":
+
+            return redirect(
+                "dashboard"
+            )
+
+        return redirect(
+            "home"
+        )
+
+
+    # =====================================================
+    # POST REQUEST
+    # =====================================================
+
+    if request.method == "POST":
+
+        action = request.POST.get(
+            "action",
+            ""
+        ).strip()
+
+
+        # =================================================
+        # UPDATE PROFILE
+        # =================================================
+
+        if action == "update_profile":
+
+            username = request.POST.get(
+                "username",
+                ""
+            ).strip()
+
+            email = request.POST.get(
+                "email",
+                ""
+            ).strip().lower()
+
+
+            # ---------------------------------------------
+            # USERNAME REQUIRED
+            # ---------------------------------------------
+
+            if not username:
+
+                messages.error(
+                    request,
+                    "Username is required."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # USERNAME LENGTH
+            # ---------------------------------------------
+
+            if len(username) > 50:
+
+                messages.error(
+                    request,
+                    "Username cannot be longer than 50 characters."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # EMAIL REQUIRED
+            # ---------------------------------------------
+
+            if not email:
+
+                messages.error(
+                    request,
+                    "Email address is required."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # EMAIL LENGTH
+            # ---------------------------------------------
+
+            if len(email) > 100:
+
+                messages.error(
+                    request,
+                    "Email address cannot be longer than 100 characters."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # CHECK DUPLICATE USERNAME
+            # ---------------------------------------------
+
+            username_exists = (
+                User.objects
+                .filter(
+                    username__iexact=username
+                )
+                .exclude(
+                    user_id=account_user.user_id
+                )
+                .exists()
+            )
+
+            if username_exists:
+
+                messages.error(
+                    request,
+                    "That username is already being used by another account."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # CHECK DUPLICATE EMAIL
+            # ---------------------------------------------
+
+            email_exists = (
+                User.objects
+                .filter(
+                    email__iexact=email
+                )
+                .exclude(
+                    user_id=account_user.user_id
+                )
+                .exists()
+            )
+
+            if email_exists:
+
+                messages.error(
+                    request,
+                    "That email address is already being used by another account."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # SAVE OLD VALUES FOR AUDIT LOG
+            # ---------------------------------------------
+
+            old_username = account_user.username
+            old_email = account_user.email or ""
+
+
+            # ---------------------------------------------
+            # UPDATE USER
+            # ---------------------------------------------
+
+            account_user.username = username
+            account_user.email = email
+
+            account_user.save(
+                update_fields=[
+                    "username",
+                    "email",
+                ]
+            )
+
+
+            # ---------------------------------------------
+            # UPDATE SESSION
+            # ---------------------------------------------
+
+            request.session[
+                "username"
+            ] = account_user.username
+
+            request.session[
+                "email"
+            ] = account_user.email or ""
+
+            request.session[
+                "full_name"
+            ] = account_user.username
+
+            request.session[
+                "initials"
+            ] = (
+                account_user.username[:2].upper()
+                if account_user.username
+                else "AD"
+            )
+
+            request.session.modified = True
+
+
+            # ---------------------------------------------
+            # AUDIT LOG
+            # ---------------------------------------------
+
+            try:
+
+                create_audit_log(
+                    request=request,
+                    action="ACCOUNT_UPDATED",
+                    description=(
+                        f"Administrator account updated. "
+                        f"Username: {old_username} -> "
+                        f"{account_user.username}. "
+                        f"Email: {old_email} -> "
+                        f"{account_user.email}."
+                    )
+                )
+
+            except Exception as error:
+
+                print(
+                    "MY ACCOUNT UPDATE AUDIT ERROR:",
+                    repr(error)
+                )
+
+
+            # ---------------------------------------------
+            # SUCCESS
+            # ---------------------------------------------
+
+            messages.success(
+                request,
+                "Your account information has been updated successfully."
+            )
+
+            return redirect(
+                "my_account"
+            )
+
+
+        # =================================================
+        # CHANGE PASSWORD
+        # =================================================
+
+        elif action == "change_password":
+
+            current_password = request.POST.get(
+                "current_password",
+                ""
+            )
+
+            new_password = request.POST.get(
+                "new_password",
+                ""
+            )
+
+            confirm_password = request.POST.get(
+                "confirm_password",
+                ""
+            )
+
+
+            # ---------------------------------------------
+            # REQUIRED FIELDS
+            # ---------------------------------------------
+
+            if (
+                not current_password
+                or not new_password
+                or not confirm_password
+            ):
+
+                messages.error(
+                    request,
+                    "Please complete all password fields."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # VERIFY CURRENT PASSWORD
+            # ---------------------------------------------
+
+            current_password_valid = check_password(
+                current_password,
+                account_user.password_hash
+            )
+
+
+            # ---------------------------------------------
+            # LEGACY PLAINTEXT SUPPORT
+            # ---------------------------------------------
+
+            if not current_password_valid:
+
+                current_password_valid = (
+                    current_password
+                    == account_user.password_hash
+                )
+
+
+            if not current_password_valid:
+
+                messages.error(
+                    request,
+                    "Your current password is incorrect."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # PASSWORDS MUST MATCH
+            # ---------------------------------------------
+
+            if new_password != confirm_password:
+
+                messages.error(
+                    request,
+                    "The new passwords do not match."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # MINIMUM PASSWORD LENGTH
+            # ---------------------------------------------
+
+            if len(new_password) < 8:
+
+                messages.error(
+                    request,
+                    "Your new password must be at least 8 characters long."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # PREVENT CURRENT PASSWORD REUSE
+            # ---------------------------------------------
+
+            same_as_current = check_password(
+                new_password,
+                account_user.password_hash
+            )
+
+            if not same_as_current:
+
+                same_as_current = (
+                    new_password
+                    == account_user.password_hash
+                )
+
+
+            if same_as_current:
+
+                messages.error(
+                    request,
+                    "Your new password must be different from your current password."
+                )
+
+                return redirect(
+                    "my_account"
+                )
+
+
+            # ---------------------------------------------
+            # HASH AND SAVE NEW PASSWORD
+            # ---------------------------------------------
+
+            account_user.password_hash = make_password(
+                new_password
+            )
+
+            account_user.save(
+                update_fields=[
+                    "password_hash"
+                ]
+            )
+
+
+            # ---------------------------------------------
+            # AUDIT LOG
+            # ---------------------------------------------
+
+            try:
+
+                create_audit_log(
+                    request=request,
+                    action="PASSWORD_CHANGED",
+                    description=(
+                        f"Administrator "
+                        f"{account_user.username} "
+                        "changed their account password."
+                    )
+                )
+
+            except Exception as error:
+
+                print(
+                    "MY ACCOUNT PASSWORD AUDIT ERROR:",
+                    repr(error)
+                )
+
+
+            # ---------------------------------------------
+            # SUCCESS
+            # ---------------------------------------------
+
+            messages.success(
+                request,
+                "Your password has been changed successfully."
+            )
+
+            return redirect(
+                "my_account"
+            )
+
+
+        # =================================================
+        # UNKNOWN ACTION
+        # =================================================
+
+        else:
+
+            messages.error(
+                request,
+                "Invalid account action."
+            )
+
+            return redirect(
+                "my_account"
+            )
+
+
+    # =====================================================
+    # GET REQUEST
+    # =====================================================
+
+    context = {
+
+        "account_user":
+            account_user,
+
+    }
+
+
+    return render(
+        request,
+        "login/my_account.html",
+        context
+    )
+
 # =========================================================
 # RESEND RESET CODE
 # =========================================================
