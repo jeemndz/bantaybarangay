@@ -1,0 +1,744 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0c2d24"
+    >
+
+    <title>Contact | BantayBarangay</title>
+
+    <!-- =====================================================
+         SHARED CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/topnav.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/footer.css' %}"
+    >
+
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/contact.css' %}"
+    >
+
+    <!-- =====================================================
+         TAILWIND
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        government: {
+                            50: '#f4f8f6',
+                            100: '#e5eee9',
+                            200: '#c8dcd3',
+                            300: '#9fc1b2',
+                            400: '#6d9f8a',
+                            500: '#39765f',
+                            600: '#28634f',
+                            700: '#1d503f',
+                            800: '#153f32',
+                            900: '#0c2d24',
+                            950: '#071e18'
+                        },
+
+                        gold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#d9a441',
+                            600: '#b88725',
+                            700: '#936b1c'
+                        }
+                    },
+
+                    fontFamily: {
+                        sans: [
+                            'Inter',
+                            'ui-sans-serif',
+                            'system-ui',
+                            'sans-serif'
+                        ],
+
+                        serif: [
+                            'Georgia',
+                            'Cambria',
+                            'Times New Roman',
+                            'serif'
+                        ]
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+
+    <!-- =====================================================
+         TOP NAVIGATION
+    ====================================================== -->
+
+    {% include 'partials/topnav.html' %}
+
+
+    <!-- =====================================================
+         GOVERNMENT STRIP
+    ====================================================== -->
+
+    <div class="border-b border-government-800 bg-government-900 text-white">
+
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-2 text-xs sm:px-6 lg:px-8">
+
+            <div class="flex items-center gap-2">
+
+                <svg
+                    class="h-4 w-4 text-gold-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                    />
+                </svg>
+
+                <span class="font-medium tracking-wide">
+                    OFFICIAL BARANGAY DIGITAL SERVICES PORTAL
+                </span>
+
+            </div>
+
+            <span class="hidden text-slate-300 sm:block">
+                Secure • Transparent • Accountable
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTACT HERO
+    ====================================================== -->
+
+    <section class="contact-hero">
+
+        <div class="contact-hero-decoration"></div>
+
+        <div class="contact-container">
+
+            <div class="contact-hero-content">
+
+                <span class="contact-eyebrow">
+                    CONTACT THE BARANGAY
+                </span>
+
+                <h1>
+                    We're here to help our community.
+                </h1>
+
+                <p>
+                    Contact the barangay office for questions about
+                    services, document requests, community concerns,
+                    resident assistance, and other barangay matters.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTACT INFORMATION
+    ====================================================== -->
+
+    <section class="contact-section">
+
+        <div class="contact-container">
+
+            <div class="contact-layout contact-layout-single">
+
+
+                <!-- =========================================
+                     LEFT
+                ========================================== -->
+
+                <div class="contact-information">
+
+                    <div class="contact-section-heading">
+
+                        <span class="contact-eyebrow">
+                            BARANGAY OFFICE
+                        </span>
+
+                        <h2>
+                            Contact Information
+                        </h2>
+
+                        <p>
+                            Reach the barangay through the appropriate
+                            communication channel or visit the barangay
+                            office during regular office hours.
+                        </p>
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+
+                    <article class="contact-info-card">
+
+                        <div class="contact-info-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1116 0z"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="10"
+                                    r="2.5"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                OFFICE ADDRESS
+                            </span>
+
+                            <h3>
+                                Barangay Hall
+                            </h3>
+
+                            <p>
+                                Ulingao, San Rafael, Bulacan, Philippines
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- PHONE -->
+
+                    <article class="contact-info-card">
+
+                        <div class="contact-info-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M5 4h4l2 5-2.5 1.5a15 15 0 005 5L15 13l5 2v4c0 1.1-.9 2-2 2C10 20.5 3.5 14 3 6c0-1.1.9-2 2-2z"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                CONTACT NUMBER
+                            </span>
+
+                            <h3>
+                                Barangay Office
+                            </h3>
+
+                            <p>
+                                0995-907-1234
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- EMAIL -->
+
+                    <article class="contact-info-card">
+
+                        <div class="contact-info-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="2"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4 7l8 6 8-6"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                EMAIL ADDRESS
+                            </span>
+
+                            <h3>
+                                Official Email
+                            </h3>
+
+                            <p>
+                                barangay.ulingao@gmail.com
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- HOURS -->
+
+                    <article class="contact-info-card">
+
+                        <div class="contact-info-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 7v5l3 2"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                OFFICE HOURS
+                            </span>
+
+                            <h3>
+                                Regular Barangay Services
+                            </h3>
+
+                            <p>
+                                8:00 AM - 5:00 PM, Monday to Friday
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OFFICE LOCATION
+    ====================================================== -->
+
+    <section class="contact-location-section">
+
+        <div class="contact-container">
+
+            <div class="contact-location-grid">
+
+                <div class="contact-location-content">
+
+                    <span class="contact-eyebrow">
+                        VISIT THE BARANGAY
+                    </span>
+
+                    <h2>
+                        Barangay Office Location
+                    </h2>
+
+                    <p>
+                        Residents may visit the barangay office for
+                        transactions that require personal appearance,
+                        document pickup, verification, mediation, or
+                        other in-person services.
+                    </p>
+
+                    <div class="contact-location-note">
+
+                        <strong>
+                            Before visiting
+                        </strong>
+
+                        <p>
+                            Check your request or complaint status first
+                            when applicable to avoid unnecessary visits.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================================
+                    BARANGAY HALL MAP
+                ===================================================== -->
+
+                <div class="contact-map">
+
+                    <iframe
+                        src="https://www.google.com/maps?q=14.9738782,120.9168513&z=18&output=embed"
+                        width="100%"
+                        height="350"
+                        style="border: 0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Barangay Hall Location"
+                    ></iframe>
+
+                    <div class="contact-map-footer">
+
+                        <div>
+                            <strong>Barangay Hall Location</strong>
+
+                            <span>
+                                14.9738782, 120.9168513
+                            </span>
+                        </div>
+
+                        <a
+                            href="https://www.google.com/maps?q=14.9738782,120.9168513"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="contact-map-button"
+                        >
+                            Open in Google Maps
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M5 12h14M13 6l6 6-6 6"
+                                />
+                            </svg>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         IMPORTANT CONTACT NOTICE
+    ====================================================== -->
+
+    <section class="contact-notice-section">
+
+        <div class="contact-container">
+
+            <div class="contact-notice">
+
+                <div class="contact-notice-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M10.3 4.6L2.2 18a2 2 0 001.7 3h16.2a2 2 0 001.7-3L13.7 4.6a2 2 0 00-3.4 0z"
+                        />
+
+                        <path
+                            stroke-linecap="round"
+                            d="M12 9v4M12 17h.01"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        IMPORTANT
+                    </span>
+
+                    <h2>
+                        For emergencies, contact the appropriate
+                        emergency service directly.
+                    </h2>
+
+                    <p>
+                        The BantayBarangay contact form is intended for
+                        general inquiries and regular barangay concerns.
+                        It should not be relied upon for immediate
+                        emergency assistance.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK LINKS
+    ====================================================== -->
+
+    <section class="contact-quick-section">
+
+        <div class="contact-container">
+
+            <div class="contact-quick-heading">
+
+                <span class="contact-eyebrow">
+                    ONLINE SERVICES
+                </span>
+
+                <h2>
+                    You may not need to visit the office
+                </h2>
+
+                <p>
+                    Several barangay transactions are already available
+                    through BantayBarangay.
+                </p>
+
+            </div>
+
+
+            <div class="contact-quick-grid">
+
+                <a
+                    href="{% url 'submit_complaint' %}"
+                    class="contact-quick-card"
+                >
+
+                    <span>
+                        01
+                    </span>
+
+                    <strong>
+                        Submit Complaint
+                    </strong>
+
+                    <p>
+                        File a formal complaint or community concern.
+                    </p>
+
+                    <b>
+                        Continue →
+                    </b>
+
+                </a>
+
+
+                <a
+                    href="{% url 'track_complaint' %}"
+                    class="contact-quick-card"
+                >
+
+                    <span>
+                        02
+                    </span>
+
+                    <strong>
+                        Track Complaint
+                    </strong>
+
+                    <p>
+                        Review the progress of a submitted complaint.
+                    </p>
+
+                    <b>
+                        Continue →
+                    </b>
+
+                </a>
+
+
+                <a
+                    href="{% url 'request_document' %}"
+                    class="contact-quick-card"
+                >
+
+                    <span>
+                        03
+                    </span>
+
+                    <strong>
+                        Request Document
+                    </strong>
+
+                    <p>
+                        Submit a request for an available barangay document.
+                    </p>
+
+                    <b>
+                        Continue →
+                    </b>
+
+                </a>
+
+
+                <a
+                    href="{% url 'verify_document' %}"
+                    class="contact-quick-card"
+                >
+
+                    <span>
+                        04
+                    </span>
+
+                    <strong>
+                        Verify Document
+                    </strong>
+
+                    <p>
+                        Check supported barangay-issued digital records.
+                    </p>
+
+                    <b>
+                        Continue →
+                    </b>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    {% include 'partials/footer.html' %}
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="{% static 'js/topnav.js' %}"></script>
+
+    <script src="{% static 'js/contact.js' %}"></script>
+
+</body>
+
+</html>

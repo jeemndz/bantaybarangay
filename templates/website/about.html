@@ -1,0 +1,932 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0c2d24"
+    >
+
+    <title>About | BantayBarangay</title>
+
+    <!-- =====================================================
+         SHARED CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/topnav.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/footer.css' %}"
+    >
+
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/about.css' %}"
+    >
+
+    <!-- =====================================================
+         TAILWIND
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        government: {
+                            50: '#f4f8f6',
+                            100: '#e5eee9',
+                            200: '#c8dcd3',
+                            300: '#9fc1b2',
+                            400: '#6d9f8a',
+                            500: '#39765f',
+                            600: '#28634f',
+                            700: '#1d503f',
+                            800: '#153f32',
+                            900: '#0c2d24',
+                            950: '#071e18'
+                        },
+
+                        gold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#d9a441',
+                            600: '#b88725',
+                            700: '#936b1c'
+                        }
+                    },
+
+                    fontFamily: {
+                        sans: [
+                            'Inter',
+                            'ui-sans-serif',
+                            'system-ui',
+                            'sans-serif'
+                        ],
+
+                        serif: [
+                            'Georgia',
+                            'Cambria',
+                            'Times New Roman',
+                            'serif'
+                        ]
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+
+    <!-- =====================================================
+         TOP NAVIGATION
+    ====================================================== -->
+
+    {% include 'partials/topnav.html' %}
+
+
+    <!-- =====================================================
+         GOVERNMENT STRIP
+    ====================================================== -->
+
+    <div class="border-b border-government-800 bg-government-900 text-white">
+
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-2 text-xs sm:px-6 lg:px-8">
+
+            <div class="flex items-center gap-2">
+
+                <svg
+                    class="h-4 w-4 text-gold-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                    />
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9.5 12l1.7 1.7L14.8 10"
+                    />
+                </svg>
+
+                <span class="font-medium tracking-wide">
+                    OFFICIAL BARANGAY DIGITAL SERVICES PORTAL
+                </span>
+
+            </div>
+
+            <span class="hidden text-slate-300 sm:block">
+                Secure • Transparent • Accountable
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ABOUT HERO
+    ====================================================== -->
+
+    <section class="about-hero">
+
+        <div class="about-decoration about-decoration-one"></div>
+        <div class="about-decoration about-decoration-two"></div>
+
+        <div class="about-container">
+
+            <div class="about-hero-grid">
+
+                <div>
+
+                    <div class="about-label">
+                        ABOUT BANTAYBARANGAY
+                    </div>
+
+                    <h1 class="about-title">
+
+                        Digital public service built around
+
+                        <span>
+                            the community.
+                        </span>
+
+                    </h1>
+
+                    <p class="about-description">
+
+                        BantayBarangay is a digital barangay service
+                        platform designed to provide residents with a
+                        more convenient way to access community services,
+                        submit concerns, monitor requests, and interact
+                        with barangay processes.
+
+                    </p>
+
+                    <p class="about-description">
+
+                        The platform brings important resident services
+                        into one organized system while supporting
+                        transparency, accountability, accessibility,
+                        and secure record management.
+
+                    </p>
+
+                    <div class="about-hero-actions">
+
+                        <a
+                            href="{% url 'submit_complaint' %}"
+                            class="about-primary-button"
+                        >
+                            Access Resident Services
+
+                            <span>→</span>
+                        </a>
+
+                        <a
+                            href="{% url 'contact' %}"
+                            class="about-secondary-button"
+                        >
+                            Contact Barangay
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     HERO PANEL
+                ========================================== -->
+
+                <div class="about-hero-panel">
+
+                    <div class="about-panel-heading">
+
+                        <span>
+                            DIGITAL GOVERNANCE
+                        </span>
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9.5 12l1.7 1.7L14.8 10"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div class="about-panel-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.4"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8 11h.01M12 11h.01M16 11h.01"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div class="about-panel-content">
+
+                        <h2>
+                            One Community.
+                            One Digital Portal.
+                        </h2>
+
+                        <p>
+                            Bringing essential barangay services closer
+                            to residents through an organized and
+                            accessible digital platform.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PURPOSE
+    ====================================================== -->
+
+    <section class="about-section about-section-white">
+
+        <div class="about-container">
+
+            <div class="about-section-heading">
+
+                <span class="about-eyebrow">
+                    OUR PURPOSE
+                </span>
+
+                <h2>
+                    Making barangay services more accessible
+                </h2>
+
+                <p>
+                    BantayBarangay helps connect residents and barangay
+                    services through a centralized digital environment.
+                </p>
+
+            </div>
+
+
+            <div class="about-purpose-grid">
+
+
+                <!-- ACCESSIBILITY -->
+
+                <article class="about-purpose-card">
+
+                    <div class="about-card-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <circle cx="12" cy="12" r="9"></circle>
+
+                            <path
+                                stroke-linecap="round"
+                                d="M8 12h8M12 8v8"
+                            />
+                        </svg>
+
+                    </div>
+
+                    <h3>
+                        Accessibility
+                    </h3>
+
+                    <p>
+                        Give residents convenient access to barangay
+                        services, requests, reports, and important
+                        information.
+                    </p>
+
+                </article>
+
+
+                <!-- TRANSPARENCY -->
+
+                <article class="about-purpose-card">
+
+                    <div class="about-card-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"
+                            />
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="2.5"
+                            />
+                        </svg>
+
+                    </div>
+
+                    <h3>
+                        Transparency
+                    </h3>
+
+                    <p>
+                        Help residents follow the status and progress of
+                        requests and complaints through organized digital
+                        records.
+                    </p>
+
+                </article>
+
+
+                <!-- SECURITY -->
+
+                <article class="about-purpose-card">
+
+                    <div class="about-card-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 3l7 3v5c0 4.8-2.9 8.6-7 10-4.1-1.4-7-5.2-7-10V6l7-3z"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9.5 12l1.7 1.7L14.8 10"
+                            />
+                        </svg>
+
+                    </div>
+
+                    <h3>
+                        Secure Records
+                    </h3>
+
+                    <p>
+                        Support controlled access to resident records,
+                        submitted documents, complaints, evidence, and
+                        barangay transactions.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MISSION
+    ====================================================== -->
+
+    <section class="about-mission">
+
+        <div class="about-container">
+
+            <div class="about-mission-grid">
+
+                <div>
+
+                    <span class="about-eyebrow about-eyebrow-gold">
+                        OUR MISSION
+                    </span>
+
+                    <h2>
+                        Supporting responsive and transparent
+                        barangay governance.
+                    </h2>
+
+                </div>
+
+                <div>
+
+                    <p>
+                        BantayBarangay aims to improve communication
+                        between residents and barangay services by
+                        providing tools that make common transactions
+                        easier to access, monitor, and manage.
+                    </p>
+
+                    <p>
+                        Through digital processes, residents can interact
+                        with barangay services while officials can maintain
+                        more organized records and service workflows.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SERVICES
+    ====================================================== -->
+
+    <section class="about-section about-section-light">
+
+        <div class="about-container">
+
+            <div class="about-section-heading">
+
+                <span class="about-eyebrow">
+                    DIGITAL SERVICES
+                </span>
+
+                <h2>
+                    What BantayBarangay provides
+                </h2>
+
+                <p>
+                    The platform combines several important barangay
+                    processes into one resident-accessible system.
+                </p>
+
+            </div>
+
+
+            <div class="about-services-grid">
+
+
+                <article class="about-service-card">
+
+                    <span class="about-service-number">
+                        01
+                    </span>
+
+                    <h3>
+                        Complaint Submission
+                    </h3>
+
+                    <p>
+                        Residents can submit formal complaints and
+                        community concerns with supporting information
+                        and evidence.
+                    </p>
+
+                </article>
+
+
+                <article class="about-service-card">
+
+                    <span class="about-service-number">
+                        02
+                    </span>
+
+                    <h3>
+                        Complaint Tracking
+                    </h3>
+
+                    <p>
+                        Submitted concerns can be monitored as they move
+                        through review, investigation, mediation, and
+                        resolution processes.
+                    </p>
+
+                </article>
+
+
+                <article class="about-service-card">
+
+                    <span class="about-service-number">
+                        03
+                    </span>
+
+                    <h3>
+                        Document Requests
+                    </h3>
+
+                    <p>
+                        Residents can request available barangay documents
+                        and monitor their request status.
+                    </p>
+
+                </article>
+
+
+                <article class="about-service-card">
+
+                    <span class="about-service-number">
+                        04
+                    </span>
+
+                    <h3>
+                        Document Verification
+                    </h3>
+
+                    <p>
+                        The system provides tools for verifying supported
+                        barangay-issued digital documents and records.
+                    </p>
+
+                </article>
+
+
+                <article class="about-service-card">
+
+                    <span class="about-service-number">
+                        05
+                    </span>
+
+                    <h3>
+                        Resident Verification
+                    </h3>
+
+                    <p>
+                        Registration information and submitted identity
+                        documents can be reviewed as part of the resident
+                        verification process.
+                    </p>
+
+                </article>
+
+
+                <article class="about-service-card">
+
+                    <span class="about-service-number">
+                        06
+                    </span>
+
+                    <h3>
+                        Case & Hearing Management
+                    </h3>
+
+                    <p>
+                        Barangay personnel can organize case-related
+                        hearings, mediation activities, evidence, and
+                        supporting records.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOW IT WORKS
+    ====================================================== -->
+
+    <section class="about-section about-section-white">
+
+        <div class="about-container">
+
+            <div class="about-section-heading">
+
+                <span class="about-eyebrow">
+                    HOW IT WORKS
+                </span>
+
+                <h2>
+                    A simpler way to access barangay services
+                </h2>
+
+            </div>
+
+
+            <div class="about-process">
+
+
+                <div class="about-process-item">
+
+                    <div class="about-process-number">
+                        1
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Create a resident account
+                        </h3>
+
+                        <p>
+                            Submit your resident information and required
+                            verification documents through registration.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="about-process-item">
+
+                    <div class="about-process-number">
+                        2
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Access digital services
+                        </h3>
+
+                        <p>
+                            Use your account to submit complaints,
+                            request documents, and access supported
+                            resident services.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="about-process-item">
+
+                    <div class="about-process-number">
+                        3
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Track your transactions
+                        </h3>
+
+                        <p>
+                            Follow the status of submitted complaints
+                            and requests as barangay personnel process
+                            them.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="about-process-item">
+
+                    <div class="about-process-number">
+                        4
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Receive barangay services
+                        </h3>
+
+                        <p>
+                            Complete the applicable barangay process and
+                            receive approved services or released
+                            documents.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         VALUES
+    ====================================================== -->
+
+    <section class="about-values">
+
+        <div class="about-container">
+
+            <div class="about-values-grid">
+
+                <div class="about-value">
+
+                    <strong>
+                        Secure
+                    </strong>
+
+                    <span>
+                        Digital Records
+                    </span>
+
+                </div>
+
+                <div class="about-value">
+
+                    <strong>
+                        Transparent
+                    </strong>
+
+                    <span>
+                        Service Processes
+                    </span>
+
+                </div>
+
+                <div class="about-value">
+
+                    <strong>
+                        Accessible
+                    </strong>
+
+                    <span>
+                        Resident Services
+                    </span>
+
+                </div>
+
+                <div class="about-value">
+
+                    <strong>
+                        Community
+                    </strong>
+
+                    <span>
+                        Focused
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="about-cta">
+
+        <div class="about-container">
+
+            <div class="about-cta-content">
+
+                <div>
+
+                    <span>
+                        RESIDENT SERVICES
+                    </span>
+
+                    <h2>
+                        Connect with your barangay through BantayBarangay.
+                    </h2>
+
+                    <p>
+                        Access digital barangay services, report concerns,
+                        request documents, and stay connected with your
+                        community.
+                    </p>
+
+                </div>
+
+
+                <div class="about-cta-actions">
+
+                    <a
+                        href="{% url 'submit_complaint' %}"
+                        class="about-cta-primary"
+                    >
+                        Submit a Complaint
+                    </a>
+
+                    <a
+                        href="{% url 'contact' %}"
+                        class="about-cta-secondary"
+                    >
+                        Contact Us
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    {% include 'partials/footer.html' %}
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="{% static 'js/topnav.js' %}"></script>
+
+</body>
+
+</html>

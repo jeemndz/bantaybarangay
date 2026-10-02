@@ -424,7 +424,29 @@ Resident Verification | BantayBarangay
 
 
                 <div class="resident-avatar">
+<<<<<<< HEAD
                     {{ resident.first_name|first|upper }}
+=======
+
+                    {% if profile_picture_url %}
+
+                        <img
+                            src="{{ profile_picture_url }}"
+                            alt="{{ resident.first_name }} {{ resident.last_name }} profile picture"
+                            class="resident-avatar-image"
+                        >
+
+                    {% else %}
+
+                        <span class="resident-avatar-initial">
+
+                            {{ resident.first_name|first|upper }}
+
+                        </span>
+
+                    {% endif %}
+
+>>>>>>> b1dd7002e4f42abe0ac0e0c5373fc40da7e74362
                 </div>
 
             </div>

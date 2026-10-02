@@ -114,6 +114,7 @@ def get_resident_by_user_id(user_id):
                 last_name,
                 suffix,
                 email,
+                profile_picture_path,
                 contact_number,
                 address,
                 verification_status,
@@ -177,72 +178,79 @@ def get_resident_by_user_id(user_id):
         "email":
             row[5],
 
-        "contact_number":
+        # =============================================
+        # PROFILE PICTURE
+        # =============================================
+
+        "profile_picture_path":
             row[6],
 
-        "address":
+        "contact_number":
             row[7],
 
-        "verification_status":
+        "address":
             row[8],
 
-        "birth_date":
+        "verification_status":
             row[9],
 
-        "gender":
+        "birth_date":
             row[10],
 
-        "civil_status":
+        "gender":
             row[11],
 
-        "house_block_lot":
+        "civil_status":
             row[12],
 
-        "street_purok_sitio":
+        "house_block_lot":
             row[13],
 
-        "province":
+        "street_purok_sitio":
             row[14],
 
-        "municipality_city":
+        "province":
             row[15],
 
-        "barangay":
+        "municipality_city":
             row[16],
 
-        "zip_code":
+        "barangay":
             row[17],
 
-        "verified_by":
+        "zip_code":
             row[18],
 
-        "verified_at":
+        "verified_by":
             row[19],
+
+        "verified_at":
+            row[20],
 
         # =============================================
         # REGISTRATION VERIFICATION DOCUMENTS
         # =============================================
 
         "id_type":
-            row[20],
-
-        "id_number":
             row[21],
 
-        "id_file_path":
+        "id_number":
             row[22],
 
-        "residency_document_type":
+        "id_file_path":
             row[23],
 
-        "residency_file_path":
+        "residency_document_type":
             row[24],
 
-        "created_at":
+        "residency_file_path":
             row[25],
 
-        "updated_at":
+        "created_at":
             row[26],
+
+        "updated_at":
+            row[27],
     }
 
 
@@ -302,6 +310,10 @@ def prepare_resident_profile(resident):
 
     resident = resident.copy()
 
+    # =================================================
+    # FULL NAME
+    # =================================================
+
     full_name = build_resident_full_name(
         resident
     )
@@ -310,12 +322,20 @@ def prepare_resident_profile(resident):
         full_name
     )
 
+    # =================================================
+    # CONTACT
+    # =================================================
+
     resident["mobile_number"] = (
         resident.get(
             "contact_number"
         )
         or ""
     )
+
+    # =================================================
+    # ADDRESS
+    # =================================================
 
     resident["address_line"] = (
         resident.get(
@@ -332,6 +352,61 @@ def prepare_resident_profile(resident):
     )
 
     # =================================================
+    # PROFILE PICTURE
+    # =================================================
+
+    profile_picture_path = (
+        resident.get(
+            "profile_picture_path"
+        )
+        or ""
+    )
+
+    if profile_picture_path:
+
+        clean_profile_picture_path = (
+            str(
+                profile_picture_path
+            )
+            .replace(
+                "\\",
+                "/"
+            )
+            .lstrip(
+                "/"
+            )
+        )
+
+        try:
+
+            resident[
+                "profile_picture_url"
+            ] = default_storage.url(
+                clean_profile_picture_path
+            )
+
+        except Exception:
+
+            media_url = (
+                settings.MEDIA_URL
+                or
+                "/media/"
+            )
+
+            resident[
+                "profile_picture_url"
+            ] = (
+                f"{media_url}"
+                f"{clean_profile_picture_path}"
+            )
+
+    else:
+
+        resident[
+            "profile_picture_url"
+        ] = ""
+
+    # =================================================
     # DISPLAY RESIDENT NUMBER
     # =================================================
 
@@ -343,8 +418,11 @@ def prepare_resident_profile(resident):
 
         try:
 
-            resident["resident_number"] = (
-                f"BB-RES-{int(resident_id):06d}"
+            resident[
+                "resident_number"
+            ] = (
+                f"BB-RES-"
+                f"{int(resident_id):06d}"
             )
 
         except (
@@ -352,13 +430,18 @@ def prepare_resident_profile(resident):
             ValueError
         ):
 
-            resident["resident_number"] = (
-                f"BB-RES-{resident_id}"
+            resident[
+                "resident_number"
+            ] = (
+                f"BB-RES-"
+                f"{resident_id}"
             )
 
     else:
 
-        resident["resident_number"] = ""
+        resident[
+            "resident_number"
+        ] = ""
 
     # =================================================
     # VERIFICATION
@@ -387,12 +470,20 @@ def prepare_resident_profile(resident):
     # VERIFIED CREDENTIALS
     # =================================================
 
-    resident["registration_verified"] = (
-        resident["is_verified"]
+    resident[
+        "registration_verified"
+    ] = (
+        resident[
+            "is_verified"
+        ]
     )
 
-    resident["residency_verified"] = (
-        resident["is_verified"]
+    resident[
+        "residency_verified"
+    ] = (
+        resident[
+            "is_verified"
+        ]
         and
         bool(
             resident.get(
@@ -407,8 +498,12 @@ def prepare_resident_profile(resident):
         )
     )
 
-    resident["identity_document_verified"] = (
-        resident["is_verified"]
+    resident[
+        "identity_document_verified"
+    ] = (
+        resident[
+            "is_verified"
+        ]
         and
         bool(
             resident.get(
@@ -422,14 +517,10 @@ def prepare_resident_profile(resident):
             )
         )
     )
+
     # =================================================
     # OPTIONAL PROFILE FIELDS
     # =================================================
-
-    resident.setdefault(
-        "profile_picture",
-        None
-    )
 
     resident.setdefault(
         "birth_date",
@@ -451,8 +542,12 @@ def prepare_resident_profile(resident):
         ""
     )
 
-    resident["registration_date"] = (
-        resident.get("created_at")
+    resident[
+        "registration_date"
+    ] = (
+        resident.get(
+            "created_at"
+        )
     )
 
     resident.setdefault(

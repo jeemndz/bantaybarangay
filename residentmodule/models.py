@@ -68,6 +68,12 @@ class Resident(models.Model):
         null=True
     )
 
+    profile_picture_path = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
     contact_number = models.CharField(
         max_length=20,
         blank=True,
@@ -197,6 +203,7 @@ class Resident(models.Model):
         managed = False
 
     def __str__(self):
+
         return (
             f"{self.first_name} "
             f"{self.last_name}"

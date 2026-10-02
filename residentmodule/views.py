@@ -347,7 +347,6 @@ def resident_list(request):
         context
     )
 
-
 # ============================================================
 # RESIDENT VERIFICATION / REVIEW
 # ADMIN + OFFICIAL
@@ -365,6 +364,33 @@ def resident_verify(
     )
 
     # --------------------------------------------------------
+    # PROFILE PICTURE URL
+    # --------------------------------------------------------
+
+    profile_picture_url = None
+
+    if resident.profile_picture_path:
+
+        clean_profile_picture_path = (
+            str(
+                resident.profile_picture_path
+            )
+            .replace(
+                "\\",
+                "/"
+            )
+            .lstrip(
+                "/"
+            )
+        )
+
+        profile_picture_url = (
+            f"{settings.MEDIA_URL}"
+            f"{clean_profile_picture_path}"
+        )
+
+
+    # --------------------------------------------------------
     # GOVERNMENT ID URL
     # --------------------------------------------------------
 
@@ -375,9 +401,16 @@ def resident_verify(
     if resident.id_file_path:
 
         clean_id_path = (
-            str(resident.id_file_path)
-            .replace("\\", "/")
-            .lstrip("/")
+            str(
+                resident.id_file_path
+            )
+            .replace(
+                "\\",
+                "/"
+            )
+            .lstrip(
+                "/"
+            )
         )
 
         id_file_url = (
@@ -405,6 +438,7 @@ def resident_verify(
             )
         )
 
+
     # --------------------------------------------------------
     # RESIDENCY DOCUMENT URL
     # --------------------------------------------------------
@@ -416,9 +450,16 @@ def resident_verify(
     if resident.residency_file_path:
 
         clean_residency_path = (
-            str(resident.residency_file_path)
-            .replace("\\", "/")
-            .lstrip("/")
+            str(
+                resident.residency_file_path
+            )
+            .replace(
+                "\\",
+                "/"
+            )
+            .lstrip(
+                "/"
+            )
         )
 
         residency_file_url = (
@@ -446,14 +487,24 @@ def resident_verify(
             )
         )
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b1dd7002e4f42abe0ac0e0c5373fc40da7e74362
     # --------------------------------------------------------
     # CONTEXT
     # --------------------------------------------------------
 
     context = {
+
         "resident":
             resident,
 
+        # Profile picture
+        "profile_picture_url":
+            profile_picture_url,
+
+        # Government ID
         "id_file_url":
             id_file_url,
 
@@ -463,6 +514,7 @@ def resident_verify(
         "id_file_is_pdf":
             id_file_is_pdf,
 
+        # Proof of residency
         "residency_file_url":
             residency_file_url,
 
@@ -472,6 +524,7 @@ def resident_verify(
         "residency_file_is_pdf":
             residency_file_is_pdf,
     }
+
 
     return render(
         request,
