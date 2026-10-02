@@ -32,12 +32,10 @@ def send_resident_verification_email(resident):
     # --------------------------------------------------------
 
     if not resident.email:
-
         print(
             "RESIDENT VERIFICATION EMAIL NOT SENT: "
             "Resident has no email address."
         )
-
         return False
 
     # --------------------------------------------------------
@@ -45,26 +43,10 @@ def send_resident_verification_email(resident):
     # --------------------------------------------------------
 
     name_parts = [
-        getattr(
-            resident,
-            "first_name",
-            ""
-        ),
-        getattr(
-            resident,
-            "middle_name",
-            ""
-        ),
-        getattr(
-            resident,
-            "last_name",
-            ""
-        ),
-        getattr(
-            resident,
-            "suffix",
-            ""
-        ),
+        getattr(resident, "first_name", ""),
+        getattr(resident, "middle_name", ""),
+        getattr(resident, "last_name", ""),
+        getattr(resident, "suffix", ""),
     ]
 
     full_name = " ".join(
@@ -74,7 +56,6 @@ def send_resident_verification_email(resident):
     ).strip()
 
     if not full_name:
-
         full_name = "Resident"
 
     # --------------------------------------------------------
@@ -117,14 +98,9 @@ Secure Digital Governance
     html_content = render_to_string(
         "residentmodule/emails/resident_verified.html",
         {
-            "resident":
-                resident,
-
-            "full_name":
-                full_name,
-
-            "verification_status":
-                "Verified",
+            "resident": resident,
+            "full_name": full_name,
+            "verification_status": "Verified",
         }
     )
 
@@ -136,20 +112,15 @@ Secure Digital Governance
         subject=subject,
         body=text_content,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[
-            resident.email
-        ],
-        reply_to=[
-            settings.EMAIL_HOST_USER
-        ],
+        to=[resident.email],
+        reply_to=[settings.EMAIL_HOST_USER],
     )
 
     # --------------------------------------------------------
     # ATTACH HTML VERSION
     #
-    # IMPORTANT:
-    # Do not use email.mixed_subtype = "related"
-    # because Django 6 no longer supports it.
+    # Django 6:
+    # Do NOT use email.mixed_subtype = "related".
     # --------------------------------------------------------
 
     email.attach_alternative(
@@ -199,8 +170,7 @@ Secure Digital Governance
 
         except Exception as error:
 
-            # Logo failure should not stop
-            # the verification email itself.
+            # A logo problem should not stop the email.
 
             print(
                 "RESIDENT EMAIL LOGO ERROR:",
@@ -215,14 +185,11 @@ Secure Digital Governance
         )
 
     # --------------------------------------------------------
-    # SAFE SMTP DEBUG INFORMATION
+    # SAFE EMAIL DEBUG INFORMATION
     # --------------------------------------------------------
 
     print("=" * 70)
-
-    print(
-        "RESIDENT VERIFICATION EMAIL"
-    )
+    print("RESIDENT VERIFICATION EMAIL")
 
     print(
         "EMAIL HOST:",
@@ -322,23 +289,12 @@ def resident_list(request):
     )
 
     context = {
-        "residents":
-            residents,
-
-        "verification_residents":
-            verification_residents,
-
-        "total_residents":
-            residents.count(),
-
-        "total_households":
-            0,
-
-        "senior_citizens":
-            0,
-
-        "pwd_residents":
-            0,
+        "residents": residents,
+        "verification_residents": verification_residents,
+        "total_residents": residents.count(),
+        "total_households": 0,
+        "senior_citizens": 0,
+        "pwd_residents": 0,
     }
 
     return render(
@@ -346,6 +302,7 @@ def resident_list(request):
         "residentmodule/resident_list.html",
         context
     )
+
 
 # ============================================================
 # RESIDENT VERIFICATION / REVIEW
@@ -375,20 +332,14 @@ def resident_verify(
             str(
                 resident.profile_picture_path
             )
-            .replace(
-                "\\",
-                "/"
-            )
-            .lstrip(
-                "/"
-            )
+            .replace("\\", "/")
+            .lstrip("/")
         )
 
         profile_picture_url = (
             f"{settings.MEDIA_URL}"
             f"{clean_profile_picture_path}"
         )
-
 
     # --------------------------------------------------------
     # GOVERNMENT ID URL
@@ -404,13 +355,8 @@ def resident_verify(
             str(
                 resident.id_file_path
             )
-            .replace(
-                "\\",
-                "/"
-            )
-            .lstrip(
-                "/"
-            )
+            .replace("\\", "/")
+            .lstrip("/")
         )
 
         id_file_url = (
@@ -438,7 +384,6 @@ def resident_verify(
             )
         )
 
-
     # --------------------------------------------------------
     # RESIDENCY DOCUMENT URL
     # --------------------------------------------------------
@@ -453,13 +398,8 @@ def resident_verify(
             str(
                 resident.residency_file_path
             )
-            .replace(
-                "\\",
-                "/"
-            )
-            .lstrip(
-                "/"
-            )
+            .replace("\\", "/")
+            .lstrip("/")
         )
 
         residency_file_url = (
@@ -487,18 +427,12 @@ def resident_verify(
             )
         )
 
-<<<<<<< HEAD
-=======
-
->>>>>>> b1dd7002e4f42abe0ac0e0c5373fc40da7e74362
     # --------------------------------------------------------
     # CONTEXT
     # --------------------------------------------------------
 
     context = {
-
-        "resident":
-            resident,
+        "resident": resident,
 
         # Profile picture
         "profile_picture_url":
@@ -524,7 +458,6 @@ def resident_verify(
         "residency_file_is_pdf":
             residency_file_is_pdf,
     }
-
 
     return render(
         request,
@@ -606,8 +539,6 @@ def accept_resident(
     resident.verified_at = (
         timezone.now()
     )
-
-    # Save logged-in admin/official user ID.
 
     resident.verified_by = (
         request.session.get(
@@ -693,7 +624,6 @@ def accept_resident(
         except Exception as error:
 
             print("=" * 70)
-
             print(
                 "RESIDENT VERIFICATION EMAIL FAILED"
             )
