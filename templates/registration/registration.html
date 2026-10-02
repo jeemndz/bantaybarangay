@@ -135,11 +135,6 @@
         data-background="{% static 'images/Registration_bg.jpg' %}"
     >
 
-
-        <!-- =================================================
-             BACKGROUND DECORATIONS
-        ================================================== -->
-
         <div class="network-pattern"></div>
 
         <div class="hero-glow hero-glow-one"></div>
@@ -147,17 +142,11 @@
         <div class="hero-glow hero-glow-two"></div>
 
 
-
-        <!-- =================================================
-             BRAND
-        ================================================== -->
+        <!-- BRAND -->
 
         <div class="relative z-10">
 
             <div class="inline-flex items-center gap-4">
-
-
-                <!-- Logo -->
 
                 <div
                     class="
@@ -189,8 +178,6 @@
 
                 </div>
 
-
-                <!-- Brand Text -->
 
                 <div>
 
@@ -224,10 +211,7 @@
         </div>
 
 
-
-        <!-- =================================================
-             HERO CONTENT
-        ================================================== -->
+        <!-- HERO CONTENT -->
 
         <div
             class="
@@ -238,9 +222,6 @@
                 py-16
             "
         >
-
-
-            <!-- Secure Badge -->
 
             <div
                 class="
@@ -296,9 +277,6 @@
             </div>
 
 
-
-            <!-- Hero Heading -->
-
             <h2
                 class="
                     max-w-lg
@@ -320,9 +298,6 @@
             </h2>
 
 
-
-            <!-- Hero Description -->
-
             <p
                 class="
                     mt-6
@@ -340,15 +315,9 @@
             </p>
 
 
-
-            <!-- =================================================
-                 BENEFITS
-            ================================================== -->
+            <!-- BENEFIT 1 -->
 
             <div class="mt-10 space-y-5">
-
-
-                <!-- Benefit 1 -->
 
                 <div class="flex items-center gap-4">
 
@@ -402,8 +371,7 @@
                 </div>
 
 
-
-                <!-- Benefit 2 -->
+                <!-- BENEFIT 2 -->
 
                 <div class="flex items-center gap-4">
 
@@ -457,8 +425,7 @@
                 </div>
 
 
-
-                <!-- Benefit 3 -->
+                <!-- BENEFIT 3 -->
 
                 <div class="flex items-center gap-4">
 
@@ -516,10 +483,7 @@
         </div>
 
 
-
-        <!-- =================================================
-             LEFT FOOTER
-        ================================================== -->
+        <!-- LEFT FOOTER -->
 
         <div
             class="
@@ -559,7 +523,6 @@
     </aside>
 
 
-
     <!-- =====================================================
          RIGHT PANEL
     ====================================================== -->
@@ -580,9 +543,7 @@
         <div class="mx-auto w-full max-w-2xl">
 
 
-            <!-- =================================================
-                 MOBILE BRAND
-            ================================================== -->
+            <!-- MOBILE BRAND -->
 
             <div
                 class="
@@ -649,10 +610,7 @@
             </div>
 
 
-
-            <!-- =================================================
-                 PAGE HEADER
-            ================================================== -->
+            <!-- PAGE HEADER -->
 
             <header>
 
@@ -718,10 +676,7 @@
             </header>
 
 
-
-            <!-- =================================================
-                 REGISTRATION PROGRESS
-            ================================================== -->
+            <!-- REGISTRATION PROGRESS -->
 
             <section
                 class="
@@ -791,8 +746,6 @@
                 </div>
 
 
-                <!-- Progress Bar -->
-
                 <div
                     class="
                         h-2
@@ -813,8 +766,6 @@
 
                 </div>
 
-
-                <!-- Progress Labels -->
 
                 <div
                     class="
@@ -850,10 +801,7 @@
             </section>
 
 
-
-            <!-- =================================================
-                 DJANGO ERROR
-            ================================================== -->
+            <!-- DJANGO ERROR -->
 
             {% if error %}
 
@@ -914,7 +862,6 @@
             {% endif %}
 
 
-
             <!-- =================================================
                  REGISTRATION FORM
             ================================================== -->
@@ -923,6 +870,7 @@
                 method="POST"
                 action="{% url 'registration' %}"
                 enctype="multipart/form-data"
+                id="registrationForm"
                 class="
                     mt-6
                     overflow-hidden
@@ -937,7 +885,6 @@
                 {% csrf_token %}
 
 
-
                 <!-- =================================================
                      PERSONAL INFORMATION
                 ================================================== -->
@@ -945,7 +892,7 @@
                 <section class="p-6 sm:p-8">
 
 
-                    <!-- Section Header -->
+                    <!-- SECTION HEADER -->
 
                     <div
                         class="
@@ -1020,15 +967,19 @@
 
 
                     <!-- =================================================
-                        PROFILE PICTURE
+                         PROFILE PICTURE
                     ================================================== -->
 
                     <div class="mb-7">
 
                         <label class="form-label">
+
                             Profile Picture
+
                             <span class="required">*</span>
+
                         </label>
+
 
                         <div
                             class="
@@ -1050,8 +1001,6 @@
                                     sm:items-center
                                 "
                             >
-
-                                <!-- PREVIEW -->
 
                                 <div
                                     class="
@@ -1103,19 +1052,19 @@
                                             stroke="currentColor"
                                             class="h-12 w-12"
                                         >
+
                                             <path
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                                 d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                                             />
+
                                         </svg>
 
                                     </div>
 
                                 </div>
 
-
-                                <!-- UPLOAD -->
 
                                 <div class="flex-1">
 
@@ -1140,6 +1089,7 @@
                                         Use a clear front-facing photo.
                                         JPG, JPEG, or PNG only. Maximum 5 MB.
                                     </p>
+
 
                                     <label
                                         for="profile_picture"
@@ -1169,16 +1119,19 @@
                                             stroke="currentColor"
                                             class="h-4 w-4"
                                         >
+
                                             <path
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                                 d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 7.5 12 3m0 0L7.5 7.5M12 3v13.5"
                                             />
+
                                         </svg>
 
                                         Choose Photo
 
                                     </label>
+
 
                                     <input
                                         type="file"
@@ -1188,6 +1141,7 @@
                                         class="hidden"
                                         required
                                     >
+
 
                                     <p
                                         id="profilePictureFileName"
@@ -1208,6 +1162,8 @@
                         </div>
 
                     </div>
+
+
                     <!-- =================================================
                          FULL NAME
                     ================================================== -->
@@ -1263,7 +1219,6 @@
                     </div>
 
 
-
                     <!-- =================================================
                          DATE OF BIRTH + GENDER
                     ================================================== -->
@@ -1276,9 +1231,6 @@
                             sm:grid-cols-2
                         "
                     >
-
-
-                        <!-- Date of Birth -->
 
                         <div>
 
@@ -1328,9 +1280,6 @@
 
                         </div>
 
-
-
-                        <!-- Gender -->
 
                         <div>
 
@@ -1428,7 +1377,6 @@
                         </div>
 
                     </div>
-
 
 
                     <!-- =================================================
@@ -1540,13 +1488,9 @@
                 </section>
 
 
-
-                <!-- =================================================
-                     DIVIDER
-                ================================================== -->
+                <!-- DIVIDER -->
 
                 <div class="border-t border-slate-100"></div>
-
 
 
                 <!-- =================================================
@@ -1562,7 +1506,7 @@
                 >
 
 
-                    <!-- Section Header -->
+                    <!-- SECTION HEADER -->
 
                     <div
                         class="
@@ -1636,7 +1580,6 @@
                     </div>
 
 
-
                     <!-- =================================================
                          USERNAME
                     ================================================== -->
@@ -1647,8 +1590,11 @@
                             for="username"
                             class="form-label"
                         >
+
                             Username
+
                             <span class="required">*</span>
+
                         </label>
 
 
@@ -1685,6 +1631,8 @@
                                 autocomplete="username"
                                 minlength="4"
                                 maxlength="30"
+                                pattern="^[A-Za-z0-9][A-Za-z0-9._-]{3,29}$"
+                                title="Username must be 4–30 characters and may only contain letters, numbers, periods, underscores, and hyphens. It must start with a letter or number."
                                 class="form-input"
                                 required
                             >
@@ -1693,11 +1641,11 @@
 
 
                         <p class="form-help">
-                            Use 4–30 characters for your username.
+                            4–30 characters. Letters, numbers, periods,
+                            underscores, and hyphens only. No spaces.
                         </p>
 
                     </div>
-
 
 
                     <!-- =================================================
@@ -1710,8 +1658,11 @@
                             for="password"
                             class="form-label"
                         >
+
                             Password
+
                             <span class="required">*</span>
+
                         </label>
 
 
@@ -1746,6 +1697,8 @@
                                 placeholder="Create a secure password"
                                 autocomplete="new-password"
                                 minlength="8"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$"
+                                title="Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
                                 class="
                                     form-input
                                     password-input
@@ -1789,12 +1742,103 @@
                         </div>
 
 
-                        <p class="form-help">
-                            Password must contain at least 8 characters.
-                        </p>
+                        <!-- PASSWORD REQUIREMENTS -->
+
+                        <div class="mt-3 rounded-xl bg-slate-100 p-3">
+
+                            <p
+                                class="
+                                    mb-2
+                                    text-xs
+                                    font-semibold
+                                    text-slate-600
+                                "
+                            >
+                                Password requirements:
+                            </p>
+
+
+                            <ul
+                                class="
+                                    space-y-1.5
+                                    text-xs
+                                "
+                            >
+
+                                <li
+                                    id="passwordRequirementLength"
+                                    class="flex items-center gap-2 text-slate-500"
+                                >
+
+                                    <span class="password-requirement-icon">
+                                        ○
+                                    </span>
+
+                                    At least 8 characters
+
+                                </li>
+
+
+                                <li
+                                    id="passwordRequirementUpper"
+                                    class="flex items-center gap-2 text-slate-500"
+                                >
+
+                                    <span class="password-requirement-icon">
+                                        ○
+                                    </span>
+
+                                    At least one uppercase letter
+
+                                </li>
+
+
+                                <li
+                                    id="passwordRequirementLower"
+                                    class="flex items-center gap-2 text-slate-500"
+                                >
+
+                                    <span class="password-requirement-icon">
+                                        ○
+                                    </span>
+
+                                    At least one lowercase letter
+
+                                </li>
+
+
+                                <li
+                                    id="passwordRequirementNumber"
+                                    class="flex items-center gap-2 text-slate-500"
+                                >
+
+                                    <span class="password-requirement-icon">
+                                        ○
+                                    </span>
+
+                                    At least one number
+
+                                </li>
+
+
+                                <li
+                                    id="passwordRequirementSpecial"
+                                    class="flex items-center gap-2 text-slate-500"
+                                >
+
+                                    <span class="password-requirement-icon">
+                                        ○
+                                    </span>
+
+                                    At least one special character
+
+                                </li>
+
+                            </ul>
+
+                        </div>
 
                     </div>
-
 
 
                     <!-- =================================================
@@ -1807,8 +1851,11 @@
                             for="confirm_password"
                             class="form-label"
                         >
+
                             Confirm Password
+
                             <span class="required">*</span>
+
                         </label>
 
 
@@ -1843,6 +1890,8 @@
                                 placeholder="Re-enter your password"
                                 autocomplete="new-password"
                                 minlength="8"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$"
+                                title="Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
                                 class="
                                     form-input
                                     password-input
@@ -1885,8 +1934,18 @@
 
                         </div>
 
-                    </div>
 
+                        <p
+                            id="passwordMatchMessage"
+                            class="
+                                mt-2
+                                hidden
+                                text-xs
+                                font-medium
+                            "
+                        ></p>
+
+                    </div>
 
 
                     <!-- =================================================
@@ -1960,7 +2019,6 @@
                     </div>
 
                 </section>
-
 
 
                 <!-- =================================================
@@ -2056,10 +2114,7 @@
             </form>
 
 
-
-            <!-- =================================================
-                 LOGIN
-            ================================================== -->
+            <!-- LOGIN -->
 
             <div
                 class="
@@ -2090,10 +2145,7 @@
             </div>
 
 
-
-            <!-- =================================================
-                 MOBILE FOOTER
-            ================================================== -->
+            <!-- MOBILE FOOTER -->
 
             <p
                 class="
@@ -2114,150 +2166,147 @@
 </div>
 
 
-
 <!-- =========================================================
      JAVASCRIPT
 ========================================================== -->
 
 <script>
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-            initializeRegistrationBackground();
+        initializeRegistrationBackground();
 
-            initializePasswordToggles();
+        initializePasswordToggles();
 
-            initializeProfilePicture();
+        initializeProfilePicture();
+
+        initializeCredentialValidation();
+
+    }
+);
+
+
+/* =====================================================
+   REGISTRATION BACKGROUND
+====================================================== */
+
+function initializeRegistrationBackground() {
+
+    const registrationHero =
+        document.querySelector(
+            ".registration-hero"
+        );
+
+
+    if (!registrationHero) {
+        return;
+    }
+
+
+    const backgroundImage =
+        registrationHero.getAttribute(
+            "data-background"
+        );
+
+
+    if (!backgroundImage) {
+        return;
+    }
+
+
+    registrationHero.style.backgroundImage =
+        "linear-gradient(" +
+        "rgba(2, 44, 34, 0.88), " +
+        "rgba(2, 44, 34, 0.94)" +
+        "), url('" +
+        backgroundImage +
+        "')";
+
+}
+
+
+/* =====================================================
+   PASSWORD TOGGLES
+====================================================== */
+
+function initializePasswordToggles() {
+
+    const passwordButtons =
+        document.querySelectorAll(
+            ".password-toggle"
+        );
+
+
+    passwordButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const inputId =
+                        button.getAttribute(
+                            "data-password-target"
+                        );
+
+
+                    togglePassword(
+                        inputId,
+                        button
+                    );
+
+                }
+            );
 
         }
     );
 
-
-    /* =====================================================
-       REGISTRATION BACKGROUND
-    ====================================================== */
-
-    function initializeRegistrationBackground() {
-
-        const registrationHero =
-            document.querySelector(
-                ".registration-hero"
-            );
+}
 
 
-        if (!registrationHero) {
+/* =====================================================
+   TOGGLE PASSWORD
+====================================================== */
 
-            return;
+function togglePassword(
+    inputId,
+    button
+) {
 
-        }
-
-
-        const backgroundImage =
-            registrationHero.getAttribute(
-                "data-background"
-            );
-
-
-        if (!backgroundImage) {
-
-            return;
-
-        }
-
-
-        registrationHero.style.backgroundImage =
-            "linear-gradient(" +
-            "rgba(2, 44, 34, 0.88), " +
-            "rgba(2, 44, 34, 0.94)" +
-            "), url('" +
-            backgroundImage +
-            "')";
-
-    }
-
-
-    /* =====================================================
-       PASSWORD TOGGLES
-    ====================================================== */
-
-    function initializePasswordToggles() {
-
-        const passwordButtons =
-            document.querySelectorAll(
-                ".password-toggle"
-            );
-
-
-        passwordButtons.forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        const inputId =
-                            button.getAttribute(
-                                "data-password-target"
-                            );
-
-
-                        togglePassword(
-                            inputId,
-                            button
-                        );
-
-                    }
-                );
-
-            }
+    const input =
+        document.getElementById(
+            inputId
         );
 
+
+    if (!input) {
+        return;
     }
 
 
-    /* =====================================================
-       TOGGLE PASSWORD
-    ====================================================== */
-
-    function togglePassword(
-        inputId,
-        button
-    ) {
-
-        const input =
-            document.getElementById(
-                inputId
-            );
+    const passwordIsHidden =
+        input.type === "password";
 
 
-        if (!input) {
-
-            return;
-
-        }
-
-
-        const passwordIsHidden =
-            input.type === "password";
+    input.type =
+        passwordIsHidden
+            ? "text"
+            : "password";
 
 
-        input.type =
-            passwordIsHidden
-                ? "text"
-                : "password";
+    button.setAttribute(
+        "aria-label",
+        passwordIsHidden
+            ? "Hide password"
+            : "Show password"
+    );
+
+}
 
 
-        button.setAttribute(
-            "aria-label",
-            passwordIsHidden
-                ? "Hide password"
-                : "Show password"
-        );
-
-    }
-    /* =====================================================
+/* =====================================================
    PROFILE PICTURE
 ====================================================== */
 
@@ -2392,6 +2441,554 @@ function initializeProfilePicture() {
     );
 
 }
+
+
+/* =====================================================
+   CREDENTIAL VALIDATION
+====================================================== */
+
+function initializeCredentialValidation() {
+
+    const form =
+        document.getElementById(
+            "registrationForm"
+        );
+
+    const username =
+        document.getElementById(
+            "username"
+        );
+
+    const password =
+        document.getElementById(
+            "password"
+        );
+
+    const confirmPassword =
+        document.getElementById(
+            "confirm_password"
+        );
+
+
+    if (
+        !form ||
+        !username ||
+        !password ||
+        !confirmPassword
+    ) {
+        return;
+    }
+
+
+    /* =================================================
+       REGEX
+    ================================================= */
+
+    const usernameRegex =
+        /^[A-Za-z0-9][A-Za-z0-9._-]{3,29}$/;
+
+
+    const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+
+    /* =================================================
+       PASSWORD REQUIREMENT ELEMENTS
+    ================================================= */
+
+    const lengthRequirement =
+        document.getElementById(
+            "passwordRequirementLength"
+        );
+
+    const upperRequirement =
+        document.getElementById(
+            "passwordRequirementUpper"
+        );
+
+    const lowerRequirement =
+        document.getElementById(
+            "passwordRequirementLower"
+        );
+
+    const numberRequirement =
+        document.getElementById(
+            "passwordRequirementNumber"
+        );
+
+    const specialRequirement =
+        document.getElementById(
+            "passwordRequirementSpecial"
+        );
+
+
+    /* =================================================
+       PASSWORD REQUIREMENT UPDATE
+    ================================================= */
+
+    function updateRequirement(
+        element,
+        valid
+    ) {
+
+        if (!element) {
+            return;
+        }
+
+
+        const icon =
+            element.querySelector(
+                ".password-requirement-icon"
+            );
+
+
+        if (valid) {
+
+            element.classList.remove(
+                "text-slate-500"
+            );
+
+            element.classList.remove(
+                "text-red-500"
+            );
+
+            element.classList.add(
+                "text-emerald-600"
+            );
+
+
+            if (icon) {
+                icon.textContent = "✓";
+            }
+
+        } else {
+
+            element.classList.remove(
+                "text-emerald-600"
+            );
+
+            element.classList.remove(
+                "text-slate-500"
+            );
+
+            element.classList.add(
+                "text-red-500"
+            );
+
+
+            if (icon) {
+                icon.textContent = "○";
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       UPDATE PASSWORD REQUIREMENTS
+    ================================================= */
+
+    function updatePasswordRequirements() {
+
+        const value =
+            password.value;
+
+
+        const hasLength =
+            value.length >= 8;
+
+
+        const hasUpper =
+            /[A-Z]/.test(value);
+
+
+        const hasLower =
+            /[a-z]/.test(value);
+
+
+        const hasNumber =
+            /\d/.test(value);
+
+
+        const hasSpecial =
+            /[^A-Za-z\d]/.test(value);
+
+
+        updateRequirement(
+            lengthRequirement,
+            hasLength
+        );
+
+
+        updateRequirement(
+            upperRequirement,
+            hasUpper
+        );
+
+
+        updateRequirement(
+            lowerRequirement,
+            hasLower
+        );
+
+
+        updateRequirement(
+            numberRequirement,
+            hasNumber
+        );
+
+
+        updateRequirement(
+            specialRequirement,
+            hasSpecial
+        );
+
+    }
+
+
+    /* =================================================
+       USERNAME VALIDATION
+    ================================================== */
+
+    username.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                username.value.trim();
+
+
+            username.value =
+                username.value.replace(
+                    /\s/g,
+                    ""
+                );
+
+
+            if (value === "") {
+
+                username.setCustomValidity(
+                    ""
+                );
+
+                username.classList.remove(
+                    "border-red-400"
+                );
+
+                return;
+            }
+
+
+            if (
+                !usernameRegex.test(
+                    username.value
+                )
+            ) {
+
+                username.setCustomValidity(
+                    "Username must be 4–30 characters and may only contain letters, numbers, periods, underscores, and hyphens. It must start with a letter or number."
+                );
+
+                username.classList.add(
+                    "border-red-400"
+                );
+
+            } else {
+
+                username.setCustomValidity(
+                    ""
+                );
+
+                username.classList.remove(
+                    "border-red-400"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =================================================
+       PASSWORD VALIDATION
+    ================================================== */
+
+    password.addEventListener(
+        "input",
+        function () {
+
+            updatePasswordRequirements();
+
+
+            const value =
+                password.value;
+
+
+            if (value === "") {
+
+                password.setCustomValidity(
+                    ""
+                );
+
+                password.classList.remove(
+                    "border-red-400"
+                );
+
+                validatePasswordMatch();
+
+                return;
+            }
+
+
+            if (
+                !passwordRegex.test(
+                    value
+                )
+            ) {
+
+                password.setCustomValidity(
+                    "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+                );
+
+                password.classList.add(
+                    "border-red-400"
+                );
+
+            } else {
+
+                password.setCustomValidity(
+                    ""
+                );
+
+                password.classList.remove(
+                    "border-red-400"
+                );
+
+            }
+
+
+            validatePasswordMatch();
+
+        }
+    );
+
+
+    /* =================================================
+       CONFIRM PASSWORD VALIDATION
+    ================================================== */
+
+    confirmPassword.addEventListener(
+        "input",
+        function () {
+
+            validatePasswordMatch();
+
+        }
+    );
+
+
+    /* =================================================
+       PASSWORD MATCH
+    ================================================== */
+
+    function validatePasswordMatch() {
+
+        const message =
+            document.getElementById(
+                "passwordMatchMessage"
+            );
+
+
+        if (
+            confirmPassword.value === ""
+        ) {
+
+            confirmPassword.setCustomValidity(
+                ""
+            );
+
+            confirmPassword.classList.remove(
+                "border-red-400"
+            );
+
+
+            if (message) {
+
+                message.textContent =
+                    "";
+
+                message.classList.add(
+                    "hidden"
+                );
+
+            }
+
+            return;
+        }
+
+
+        if (
+            password.value !==
+            confirmPassword.value
+        ) {
+
+            confirmPassword.setCustomValidity(
+                "Passwords do not match."
+            );
+
+            confirmPassword.classList.add(
+                "border-red-400"
+            );
+
+
+            if (message) {
+
+                message.textContent =
+                    "Passwords do not match.";
+
+                message.classList.remove(
+                    "hidden"
+                );
+
+                message.classList.remove(
+                    "text-emerald-600"
+                );
+
+                message.classList.add(
+                    "text-red-500"
+                );
+
+            }
+
+        } else {
+
+            confirmPassword.setCustomValidity(
+                ""
+            );
+
+            confirmPassword.classList.remove(
+                "border-red-400"
+            );
+
+
+            if (message) {
+
+                message.textContent =
+                    "Passwords match.";
+
+                message.classList.remove(
+                    "hidden"
+                );
+
+                message.classList.remove(
+                    "text-red-500"
+                );
+
+                message.classList.add(
+                    "text-emerald-600"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       FORM SUBMISSION VALIDATION
+    ================================================== */
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            updatePasswordRequirements();
+
+            validatePasswordMatch();
+
+
+            const usernameValid =
+                usernameRegex.test(
+                    username.value
+                );
+
+
+            const passwordValid =
+                passwordRegex.test(
+                    password.value
+                );
+
+
+            const passwordMatch =
+                password.value ===
+                confirmPassword.value;
+
+
+            if (!usernameValid) {
+
+                event.preventDefault();
+
+                username.setCustomValidity(
+                    "Username must be 4–30 characters and may only contain letters, numbers, periods, underscores, and hyphens. It must start with a letter or number."
+                );
+
+                username.reportValidity();
+
+                return;
+
+            }
+
+
+            if (!passwordValid) {
+
+                event.preventDefault();
+
+                password.setCustomValidity(
+                    "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+                );
+
+                password.reportValidity();
+
+                return;
+
+            }
+
+
+            if (!passwordMatch) {
+
+                event.preventDefault();
+
+                confirmPassword.setCustomValidity(
+                    "Passwords do not match."
+                );
+
+                confirmPassword.reportValidity();
+
+                return;
+
+            }
+
+
+            username.setCustomValidity("");
+
+            password.setCustomValidity("");
+
+            confirmPassword.setCustomValidity("");
+
+        }
+    );
+
+
+    /* =================================================
+       INITIAL PASSWORD STATE
+    ================================================== */
+
+    updatePasswordRequirements();
+
+}
+
 </script>
 
 
