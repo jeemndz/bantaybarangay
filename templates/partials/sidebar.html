@@ -1,52 +1,106 @@
 {% load static %}
 
+<!-- =========================================================
+     MOBILE SIDEBAR TOGGLE
+========================================================= -->
+
+<button
+    type="button"
+    id="sidebarToggle"
+    class="sidebar-toggle"
+    aria-label="Open navigation menu"
+    aria-controls="sidebar"
+    aria-expanded="false"
+>
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M4 6h16"></path>
+        <path d="M4 12h16"></path>
+        <path d="M4 18h16"></path>
+    </svg>
+</button>
+
+
+<!-- =========================================================
+     MOBILE BACKDROP
+========================================================= -->
+
+<div
+    id="sidebarBackdrop"
+    class="sidebar-backdrop"
+    aria-hidden="true"
+></div>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
 <aside
     id="sidebar"
-    class="sidebar fixed inset-y-0 left-0 z-50
-           flex h-screen w-64 shrink-0 flex-col
-           bg-gradient-to-b
-           from-emerald-800
-           via-emerald-900
-           to-green-950
-           text-white shadow-xl
-           transition-transform duration-300 ease-in-out
-           -translate-x-full
-           lg:h-[100dvh] lg:translate-x-0"
+    class="sidebar"
+    aria-label="Main navigation"
 >
 
     <!-- =====================================================
          LOGO
     ====================================================== -->
 
-    <div
-        class="flex h-20 shrink-0 items-center gap-3
-               border-b border-emerald-700/50 px-6"
-    >
+    <div class="sidebar-logo">
 
-        <div class="flex h-11 w-11 shrink-0 items-center justify-center">
+        <div class="sidebar-logo-image">
 
             <img
                 src="{% static 'images/logo.png' %}"
                 alt="BantayBarangay"
-                class="h-11 w-11 object-contain"
             >
 
         </div>
 
-        <div class="min-w-0">
 
-            <h2
-                class="truncate text-lg font-bold
-                       tracking-tight text-white"
-            >
+        <div class="sidebar-logo-text">
+
+            <h2>
                 BantayBarangay
             </h2>
 
-            <span class="text-xs font-medium text-emerald-300">
+            <span>
                 Barangay Management
             </span>
 
         </div>
+
+
+        <!-- MOBILE CLOSE -->
+
+        <button
+            type="button"
+            id="sidebarClose"
+            class="sidebar-close"
+            aria-label="Close navigation menu"
+        >
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M6 6l12 12"></path>
+                <path d="M18 6L6 18"></path>
+            </svg>
+
+        </button>
 
     </div>
 
@@ -55,61 +109,66 @@
          NAVIGATION
     ====================================================== -->
 
-    <nav
-        class="sidebar-nav flex-1 overflow-y-auto px-4 py-5
-               [scrollbar-width:none] [-ms-overflow-style:none]
-               [&::-webkit-scrollbar]:hidden"
-    >
+    <nav class="sidebar-nav">
 
         <!-- =================================================
              MAIN
         ================================================== -->
 
-        <div class="mb-7">
+        <div class="nav-section">
 
-            <p
-                class="mb-3 px-3 text-[11px] font-bold
-                       uppercase tracking-widest text-emerald-400"
-            >
+            <p class="nav-title">
                 Main
             </p>
 
 
-            <!-- =================================================
-                 DASHBOARD
-            ================================================== -->
+            <!-- DASHBOARD -->
 
             <a
                 href="{% url 'dashboard' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.url_name == 'dashboard' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.url_name == 'dashboard' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.url_name == 'dashboard' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
-                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                    <rect
+                        x="3"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    ></rect>
+
+                    <rect
+                        x="14"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    ></rect>
+
+                    <rect
+                        x="3"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    ></rect>
+
+                    <rect
+                        x="14"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1"
+                    ></rect>
                 </svg>
 
                 <span>
@@ -119,42 +178,29 @@
             </a>
 
 
-            <!-- =================================================
-                 COMPLAINTS
-            ================================================== -->
+            <!-- COMPLAINTS -->
 
             <a
                 href="{% url 'complaints' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.url_name == 'complaints' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.url_name == 'complaints' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.url_name == 'complaints' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="M12 9v3.5m0 3h.01M10.3 4.8L2.9 18a1.5 1.5 0 001.3 2.25h15.6A1.5 1.5 0 0021.1 18L13.7 4.8a1.95 1.95 0 00-3.4 0z"
                     />
+
                 </svg>
 
                 <span>
@@ -164,37 +210,23 @@
             </a>
 
 
-            <!-- =================================================
-                 HEARINGS
-            ================================================== -->
+            <!-- HEARINGS -->
 
             <a
                 href="{% url 'hearingmodule:hearing_schedule' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.namespace == 'hearingmodule' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.namespace == 'hearingmodule' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.namespace == 'hearingmodule' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <rect
                         x="3"
                         y="5"
@@ -214,6 +246,7 @@
                         stroke-linejoin="round"
                         d="M8 14h3M8 17h6"
                     />
+
                 </svg>
 
                 <span>
@@ -223,37 +256,23 @@
             </a>
 
 
-            <!-- =================================================
-                 RESIDENTS
-            ================================================== -->
+            <!-- RESIDENTS -->
 
             <a
                 href="{% url 'resident_list' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.url_name == 'resident_list' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.url_name == 'resident_list' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.url_name == 'resident_list' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -271,6 +290,7 @@
                         stroke-linejoin="round"
                         d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
                     />
+
                 </svg>
 
                 <span>
@@ -280,37 +300,23 @@
             </a>
 
 
-            <!-- =================================================
-                 EVIDENCE MANAGEMENT
-            ================================================== -->
+            <!-- EVIDENCE MANAGEMENT -->
 
             <a
                 href="{% url 'evidencemodule:evidence_list' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.namespace == 'evidencemodule' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.namespace == 'evidencemodule' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.namespace == 'evidencemodule' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -322,6 +328,7 @@
                         stroke-linejoin="round"
                         d="M8 13l2.5 2.5L16 10"
                     />
+
                 </svg>
 
                 <span>
@@ -331,32 +338,17 @@
             </a>
 
 
-            <!-- =================================================
-                 DOCUMENT REQUESTS
-            ================================================== -->
+            <!-- DOCUMENT REQUESTS -->
 
             <a
                 href="{% url 'docrequestmodule:request_documents' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.namespace == 'docrequestmodule' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.namespace == 'docrequestmodule' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.namespace == 'docrequestmodule' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -402,32 +394,17 @@
             </a>
 
 
-            <!-- =================================================
-                 DOCUMENTS
-            ================================================== -->
+            <!-- DOCUMENTS -->
 
             <a
                 href="{% url 'documents:document_list' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.url_name == 'document_list' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.url_name == 'document_list' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.url_name == 'document_list' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -455,32 +432,17 @@
             </a>
 
 
-            <!-- =================================================
-                 BLOCKCHAIN LOGS
-            ================================================== -->
+            <!-- BLOCKCHAIN LOGS -->
 
             <a
                 href="{% url 'blockchain_logs' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.url_name == 'blockchain_logs' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.url_name == 'blockchain_logs' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.url_name == 'blockchain_logs' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -510,32 +472,17 @@
             </a>
 
 
-            <!-- =================================================
-                 REPORTS & ANALYTICS
-            ================================================== -->
+            <!-- REPORTS & ANALYTICS -->
 
             <a
                 href="{% url 'reportsmodule:reports' %}"
-                class="nav-item group mb-1 flex items-center gap-3
-                       rounded-xl px-3 py-3 text-sm font-medium
-                       transition-all duration-200
-
-                       {% if request.resolver_match.namespace == 'reportsmodule' %}
-                           bg-emerald-700 text-white shadow-sm
-                       {% else %}
-                           text-emerald-100
-                           hover:bg-emerald-800 hover:text-white
-                       {% endif %}"
+                class="nav-item
+                    {% if request.resolver_match.namespace == 'reportsmodule' %}
+                        active
+                    {% endif %}"
             >
 
                 <svg
-                    class="h-5 w-5 shrink-0 transition-colors
-
-                           {% if request.resolver_match.namespace == 'reportsmodule' %}
-                               text-white
-                           {% else %}
-                               text-emerald-300 group-hover:text-white
-                           {% endif %}"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -569,23 +516,18 @@
              SYSTEM
         ================================================== -->
 
-        <div>
+        <div class="nav-section">
 
-            <p
-                class="mb-3 px-3 text-[11px] font-bold
-                       uppercase tracking-widest text-emerald-400"
-            >
+            <p class="nav-title">
                 System
             </p>
 
 
-            <!-- =================================================
-                 SETTINGS
-            ================================================== -->
+            <!-- SETTINGS -->
 
             <div
                 id="settingsNavigation"
-                class="group/settings"
+                class="settings-navigation"
             >
 
                 <button
@@ -593,27 +535,13 @@
                     id="settingsMenuButton"
                     aria-controls="settingsSubmenu"
                     aria-expanded="{% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}true{% else %}false{% endif %}"
-                    class="nav-item flex w-full items-center gap-3
-                           rounded-xl px-3 py-3 text-left
-                           text-sm font-medium
-                           transition-all duration-200
-
-                           {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
-                               bg-emerald-700 text-white shadow-sm
-                           {% else %}
-                               text-emerald-100
-                               hover:bg-emerald-800 hover:text-white
-                           {% endif %}"
+                    class="nav-item settings-toggle
+                        {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
+                            active
+                        {% endif %}"
                 >
 
                     <svg
-                        class="h-5 w-5 shrink-0 transition-colors
-
-                               {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
-                                   text-white
-                               {% else %}
-                                   text-emerald-300
-                               {% endif %}"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -635,20 +563,17 @@
                     </svg>
 
 
-                    <span class="flex-1">
+                    <span>
                         Settings
                     </span>
 
 
                     <svg
                         id="settingsMenuArrow"
-                        class="h-4 w-4 shrink-0
-                               text-emerald-300
-                               transition-transform duration-300
-
-                               {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
-                                   rotate-180 text-white
-                               {% endif %}"
+                        class="settings-arrow
+                            {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
+                                rotate
+                            {% endif %}"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -666,62 +591,32 @@
                 </button>
 
 
-                <!-- =================================================
-                     SETTINGS SUBMENU
-                ================================================== -->
+                <!-- SETTINGS SUBMENU -->
 
                 <div
                     id="settingsSubmenu"
-                    class="settings-menu grid overflow-hidden
-                           transition-all duration-300 ease-in-out
-
-                           {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
-                               grid-rows-[1fr] opacity-100
-                           {% else %}
-                               grid-rows-[0fr] opacity-0
-                           {% endif %}"
+                    class="settings-menu
+                        {% if request.resolver_match.namespace == 'usermanagement' or request.resolver_match.url_name == 'audit_logs' %}
+                            is-open
+                        {% endif %}"
                 >
 
-                    <div class="min-h-0 overflow-hidden">
+                    <div class="settings-submenu-inner">
 
-                        <div
-                            class="ml-5 mt-1 border-l
-                                   border-emerald-700
-                                   pb-1 pl-3"
-                        >
+                        <div class="settings-submenu-list">
 
 
-                            <!-- =====================================
-                                 USER MANAGEMENT
-                            ====================================== -->
+                            <!-- USER MANAGEMENT -->
 
                             <a
                                 href="{% url 'usermanagement:user_list' %}"
-                                class="nav-item group/user mb-1
-                                       flex items-center gap-3
-                                       rounded-xl px-3 py-2.5
-                                       text-sm font-medium
-                                       transition-all duration-200
-
-                                       {% if request.resolver_match.namespace == 'usermanagement' %}
-                                           bg-emerald-700 text-white
-                                       {% else %}
-                                           text-emerald-200
-                                           hover:bg-emerald-800
-                                           hover:text-white
-                                       {% endif %}"
+                                class="nav-item
+                                    {% if request.resolver_match.namespace == 'usermanagement' %}
+                                        active
+                                    {% endif %}"
                             >
 
                                 <svg
-                                    class="h-4 w-4 shrink-0
-                                           transition-colors
-
-                                           {% if request.resolver_match.namespace == 'usermanagement' %}
-                                               text-white
-                                           {% else %}
-                                               text-emerald-400
-                                               group-hover/user:text-white
-                                           {% endif %}"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -755,37 +650,17 @@
                             </a>
 
 
-                            <!-- =====================================
-                                 AUDIT LOGS
-                            ====================================== -->
+                            <!-- AUDIT LOGS -->
 
                             <a
                                 href="{% url 'audit_logs' %}"
-                                class="nav-item group/audit mb-1
-                                       flex items-center gap-3
-                                       rounded-xl px-3 py-2.5
-                                       text-sm font-medium
-                                       transition-all duration-200
-
-                                       {% if request.resolver_match.url_name == 'audit_logs' %}
-                                           bg-emerald-700 text-white
-                                       {% else %}
-                                           text-emerald-200
-                                           hover:bg-emerald-800
-                                           hover:text-white
-                                       {% endif %}"
+                                class="nav-item
+                                    {% if request.resolver_match.url_name == 'audit_logs' %}
+                                        active
+                                    {% endif %}"
                             >
 
                                 <svg
-                                    class="h-4 w-4 shrink-0
-                                           transition-colors
-
-                                           {% if request.resolver_match.url_name == 'audit_logs' %}
-                                               text-white
-                                           {% else %}
-                                               text-emerald-400
-                                               group-hover/audit:text-white
-                                           {% endif %}"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -835,23 +710,14 @@
          BOTTOM NAVIGATION
     ====================================================== -->
 
-    <div
-        class="shrink-0 border-t border-emerald-700/40
-               bg-emerald-950/20 px-4 py-4"
-    >
+    <div class="sidebar-bottom">
 
         <a
             href="#"
-            class="nav-item group flex items-center gap-3
-                   rounded-xl px-3 py-3 text-sm font-medium
-                   text-emerald-100
-                   transition-all duration-200
-                   hover:bg-emerald-800 hover:text-white"
+            class="nav-item"
         >
 
             <svg
-                class="h-5 w-5 shrink-0 text-emerald-300
-                       transition-colors group-hover:text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -881,114 +747,3 @@
     </div>
 
 </aside>
-
-
-<!-- =========================================================
-     SETTINGS DROPDOWN SCRIPT
-========================================================= -->
-
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const settingsButton =
-            document.getElementById(
-                "settingsMenuButton"
-            );
-
-        const settingsMenu =
-            document.getElementById(
-                "settingsSubmenu"
-            );
-
-        const settingsArrow =
-            document.getElementById(
-                "settingsMenuArrow"
-            );
-
-
-        if (
-            !settingsButton ||
-            !settingsMenu ||
-            !settingsArrow
-        ) {
-            return;
-        }
-
-
-        let settingsOpen =
-            settingsButton
-                .getAttribute(
-                    "aria-expanded"
-                )
-                .trim() === "true";
-
-
-        function updateSettingsMenu() {
-
-            settingsButton.setAttribute(
-                "aria-expanded",
-                settingsOpen
-                    ? "true"
-                    : "false"
-            );
-
-
-            if (settingsOpen) {
-
-                settingsMenu.classList.remove(
-                    "grid-rows-[0fr]",
-                    "opacity-0"
-                );
-
-                settingsMenu.classList.add(
-                    "grid-rows-[1fr]",
-                    "opacity-100"
-                );
-
-                settingsArrow.classList.add(
-                    "rotate-180"
-                );
-
-            } else {
-
-                settingsMenu.classList.remove(
-                    "grid-rows-[1fr]",
-                    "opacity-100"
-                );
-
-                settingsMenu.classList.add(
-                    "grid-rows-[0fr]",
-                    "opacity-0"
-                );
-
-                settingsArrow.classList.remove(
-                    "rotate-180"
-                );
-
-            }
-
-        }
-
-
-        settingsButton.addEventListener(
-            "click",
-            function () {
-
-                settingsOpen =
-                    !settingsOpen;
-
-                updateSettingsMenu();
-
-            }
-        );
-
-
-        updateSettingsMenu();
-
-    }
-);
-
-</script>

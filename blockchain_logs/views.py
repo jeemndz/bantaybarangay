@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator
 
 from .models import BlockchainLog
 
@@ -98,6 +99,25 @@ def blockchain_logs(request):
         logs = logs.filter(
             verification_status=verification_status
         )
+
+
+    # =========================================================
+    # PAGINATION
+    # 10 BLOCKCHAIN LOGS PER PAGE
+    # =========================================================
+
+    paginator = Paginator(
+        logs,
+        10
+    )
+
+    page_number = request.GET.get(
+        "page"
+    )
+
+    logs = paginator.get_page(
+        page_number
+    )
 
 
     # =========================================================

@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =====================================================
+    // =========================================================
     // ELEMENTS
-    // =====================================================
+    // =========================================================
 
     const notificationToggle =
         document.getElementById("notification-toggle");
@@ -41,20 +41,19 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("search-loading");
 
 
-    // =====================================================
+    // =========================================================
     // SEARCH STATE
-    // =====================================================
+    // =========================================================
 
     let searchTimeout = null;
 
 
-    // =====================================================
+    // =========================================================
     // CLOSE ALL DROPDOWNS
-    // =====================================================
+    // =========================================================
 
     function closeDropdowns() {
 
-        // Notification
         if (notificationMenu) {
 
             notificationMenu.classList.add("hidden");
@@ -71,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Profile
         if (profileMenu) {
 
             profileMenu.classList.add("hidden");
@@ -98,9 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // NOTIFICATION DROPDOWN
-    // =====================================================
+    // =========================================================
 
     if (
         notificationToggle &&
@@ -112,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
             function (event) {
 
                 event.preventDefault();
-
                 event.stopPropagation();
 
 
@@ -122,11 +119,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                // Close everything first
                 closeDropdowns();
 
 
-                // Open notification menu
                 if (!isOpen) {
 
                     notificationMenu.classList.remove(
@@ -146,9 +141,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // PROFILE DROPDOWN
-    // =====================================================
+    // =========================================================
 
     if (
         profileToggle &&
@@ -160,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
             function (event) {
 
                 event.preventDefault();
-
                 event.stopPropagation();
 
 
@@ -170,11 +164,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                // Close everything first
                 closeDropdowns();
 
 
-                // Open profile menu
                 if (!isOpen) {
 
                     profileMenu.classList.remove(
@@ -203,9 +195,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // MARK ALL NOTIFICATIONS AS READ
-    // =====================================================
+    // =========================================================
 
     if (markAllRead) {
 
@@ -214,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
             function (event) {
 
                 event.preventDefault();
-
                 event.stopPropagation();
 
 
@@ -239,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
 
-                // Remove notification badge
                 if (notificationBadge) {
 
                     notificationBadge.textContent = "0";
@@ -256,9 +246,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // INDIVIDUAL NOTIFICATION CLICK
-    // =====================================================
+    // =========================================================
 
     notificationItems.forEach(
         function (item) {
@@ -282,7 +272,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    // Update notification count
                     if (notificationBadge) {
 
                         let count =
@@ -322,23 +311,11 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    // =====================================================
+    // =========================================================
     // GLOBAL SEARCH DATA
-    // =====================================================
-    //
-    // Temporary frontend search data.
-    //
-    // Later, this can be replaced with a Django
-    // /search/ API endpoint so the search uses your
-    // actual database.
-    //
-    // =====================================================
+    // =========================================================
 
     const globalSearchData = [
-
-        // -------------------------------------------------
-        // RESIDENTS
-        // -------------------------------------------------
 
         {
             type: "Resident",
@@ -354,11 +331,6 @@ document.addEventListener("DOMContentLoaded", function () {
             url: "/residents/"
         },
 
-
-        // -------------------------------------------------
-        // COMPLAINTS
-        // -------------------------------------------------
-
         {
             type: "Complaint",
             title: "Noise Complaint",
@@ -372,11 +344,6 @@ document.addEventListener("DOMContentLoaded", function () {
             description: "Complaint #CMP-002",
             url: "/complaints/"
         },
-
-
-        // -------------------------------------------------
-        // DOCUMENTS
-        // -------------------------------------------------
 
         {
             type: "Document",
@@ -392,11 +359,6 @@ document.addEventListener("DOMContentLoaded", function () {
             url: "/documents/"
         },
 
-
-        // -------------------------------------------------
-        // BLOCKCHAIN
-        // -------------------------------------------------
-
         {
             type: "Blockchain",
             title: "Block #82910",
@@ -407,15 +369,11 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
 
-    // =====================================================
+    // =========================================================
     // SEARCH ICONS
-    // =====================================================
+    // =========================================================
 
     function getSearchIcon(type) {
-
-        // -------------------------------------------------
-        // RESIDENT
-        // -------------------------------------------------
 
         if (type === "Resident") {
 
@@ -427,7 +385,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
-
                     <circle
                         cx="12"
                         cy="8"
@@ -439,16 +396,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         stroke-linejoin="round"
                         d="M4 21a8 8 0 0116 0"
                     />
-
                 </svg>
             `;
 
         }
 
-
-        // -------------------------------------------------
-        // COMPLAINT
-        // -------------------------------------------------
 
         if (type === "Complaint") {
 
@@ -460,7 +412,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
-
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -478,16 +429,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         stroke-linejoin="round"
                         d="M10.3 3.8 2.7 17a2 2 0 001.7 3h15.2a2 2 0 001.7-3L13.7 3.8a2 2 0 00-3.4 0Z"
                     />
-
                 </svg>
             `;
 
         }
 
-
-        // -------------------------------------------------
-        // DOCUMENT
-        // -------------------------------------------------
 
         if (type === "Document") {
 
@@ -499,7 +445,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
-
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -520,16 +465,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         stroke-linecap="round"
                         d="M9 17h5"
                     />
-
                 </svg>
             `;
 
         }
 
-
-        // -------------------------------------------------
-        // BLOCKCHAIN
-        // -------------------------------------------------
 
         if (type === "Blockchain") {
 
@@ -541,7 +481,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
-
                     <rect
                         x="5"
                         y="5"
@@ -564,16 +503,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         stroke-linecap="round"
                         d="M9 15h4"
                     />
-
                 </svg>
             `;
 
         }
 
-
-        // -------------------------------------------------
-        // DEFAULT
-        // -------------------------------------------------
 
         return `
             <svg
@@ -583,7 +517,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 viewBox="0 0 24 24"
                 stroke-width="1.8"
             >
-
                 <circle
                     cx="11"
                     cy="11"
@@ -594,16 +527,32 @@ document.addEventListener("DOMContentLoaded", function () {
                     stroke-linecap="round"
                     d="m20 20-4-4"
                 />
-
             </svg>
         `;
 
     }
 
 
-    // =====================================================
-    // SHOW NO SEARCH RESULTS
-    // =====================================================
+    // =========================================================
+    // ESCAPE HTML
+    // =========================================================
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            String(value);
+
+        return div.innerHTML;
+
+    }
+
+
+    // =========================================================
+    // SHOW NO RESULTS
+    // =========================================================
 
     function showNoResults(query) {
 
@@ -680,9 +629,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // DISPLAY SEARCH RESULTS
-    // =====================================================
+    // =========================================================
 
     function displaySearchResults(
         results,
@@ -707,8 +656,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         searchResultsContent.innerHTML = `
-
-            <!-- HEADER -->
 
             <div
                 class="flex items-center
@@ -736,8 +683,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
 
-            <!-- RESULTS -->
-
             ${results.map(function (result) {
 
                 return `
@@ -750,8 +695,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                transition-colors
                                hover:bg-emerald-50"
                     >
-
-                        <!-- ICON -->
 
                         <div
                             class="flex h-10 w-10
@@ -767,8 +710,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         </div>
 
-
-                        <!-- CONTENT -->
 
                         <div
                             class="min-w-0 flex-1"
@@ -795,8 +736,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         </div>
 
-
-                        <!-- TYPE -->
 
                         <span
                             class="shrink-0
@@ -826,26 +765,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
-    // ESCAPE HTML
-    // =====================================================
-
-    function escapeHtml(value) {
-
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            String(value);
-
-        return div.innerHTML;
-
-    }
-
-
-    // =====================================================
-    // PERFORM GLOBAL SEARCH
-    // =====================================================
+    // =========================================================
+    // PERFORM SEARCH
+    // =========================================================
 
     function performGlobalSearch(query) {
 
@@ -853,7 +775,6 @@ document.addEventListener("DOMContentLoaded", function () {
             query.trim().toLowerCase();
 
 
-        // Empty search
         if (!normalizedQuery) {
 
             if (searchResults) {
@@ -878,7 +799,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Show loading
         if (searchLoading) {
 
             searchLoading.classList.remove(
@@ -888,8 +808,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Cancel previous search
-        clearTimeout(searchTimeout);
+        clearTimeout(
+            searchTimeout
+        );
 
 
         searchTimeout =
@@ -916,12 +837,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 return (
                                     title.includes(
                                         normalizedQuery
-                                    )
-                                    ||
+                                    ) ||
                                     description.includes(
                                         normalizedQuery
-                                    )
-                                    ||
+                                    ) ||
                                     type.includes(
                                         normalizedQuery
                                     )
@@ -931,7 +850,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
 
-                    // Hide loading
                     if (searchLoading) {
 
                         searchLoading.classList.add(
@@ -953,13 +871,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // SEARCH INPUT
-    // =====================================================
+    // =========================================================
 
     if (searchInput) {
 
-        // Search while typing
         searchInput.addEventListener(
             "input",
             function () {
@@ -972,7 +889,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-        // Search when focused
         searchInput.addEventListener(
             "focus",
             function () {
@@ -993,12 +909,13 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-        // Escape search
         searchInput.addEventListener(
             "keydown",
             function (event) {
 
-                if (event.key === "Escape") {
+                if (
+                    event.key === "Escape"
+                ) {
 
                     this.value = "";
 
@@ -1031,15 +948,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
-    // CLOSE SEARCH WHEN CLICKING OUTSIDE
-    // =====================================================
+    // =========================================================
+    // CLICK OUTSIDE
+    // =========================================================
 
     document.addEventListener(
         "click",
         function (event) {
 
-            // Search
             if (
                 searchInput &&
                 searchResults &&
@@ -1058,7 +974,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            // Notifications
             if (
                 notificationToggle &&
                 notificationMenu &&
@@ -1082,7 +997,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            // Profile
             if (
                 profileToggle &&
                 profileMenu &&
@@ -1118,15 +1032,17 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    // =====================================================
+    // =========================================================
     // ESCAPE KEY
-    // =====================================================
+    // =========================================================
 
     document.addEventListener(
         "keydown",
         function (event) {
 
-            if (event.key === "Escape") {
+            if (
+                event.key === "Escape"
+            ) {
 
                 closeDropdowns();
 
@@ -1139,15 +1055,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 }
 
+
+                if (searchLoading) {
+
+                    searchLoading.classList.add(
+                        "hidden"
+                    );
+
+                }
+
             }
 
         }
     );
 
 
-    // =====================================================
+    // =========================================================
     // PREVENT SEARCH DROPDOWN FROM CLOSING
-    // =====================================================
+    // =========================================================
 
     if (searchResults) {
 
@@ -1163,9 +1088,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================================
     // INITIAL STATE
-    // =====================================================
+    // =========================================================
 
     closeDropdowns();
 

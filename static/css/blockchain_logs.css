@@ -13,15 +13,9 @@
 }
 
 
-/*
-    IMPORTANT:
-    The previous green page background:
-        background: #eaf8ed;
-
-    has been removed.
-
-    The background from base.html will now show through.
-*/
+/* =========================================================
+   PAGE
+========================================================= */
 
 .blockchain-page {
 
@@ -39,9 +33,7 @@
         Arial,
         Helvetica,
         sans-serif;
-
 }
-
 
 
 /* =========================================================
@@ -53,20 +45,16 @@
     display: flex;
 
     justify-content: space-between;
-
     align-items: flex-start;
 
     gap: 20px;
 
     margin-bottom: 20px;
-
 }
 
 
 .header-left {
-
     min-width: 0;
-
 }
 
 
@@ -75,13 +63,10 @@
     margin: 0;
 
     font-size: 22px;
-
     font-weight: 700;
-
     line-height: 1.2;
 
     color: #073f36;
-
 }
 
 
@@ -90,101 +75,10 @@
     margin: 5px 0 0;
 
     font-size: 11px;
-
     line-height: 1.5;
 
     color: #64817a;
-
 }
-
-
-.header-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    flex-shrink: 0;
-
-}
-
-
-.filter-button,
-.resync-button {
-
-    height: 32px;
-
-    padding: 0 13px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 6px;
-
-    border-radius: 7px;
-
-    font-family: inherit;
-
-    font-size: 10px;
-
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
-
-}
-
-
-.filter-button {
-
-    border: 1px solid #d6e1da;
-
-    background: #ffffff;
-
-    color: #234d44;
-
-}
-
-
-.filter-button:hover {
-
-    border-color: #b8cdc0;
-
-    background: #f8faf9;
-
-}
-
-
-.resync-button {
-
-    border: 1px solid #073f36;
-
-    background: #073f36;
-
-    color: #ffffff;
-
-}
-
-
-.resync-button:hover {
-
-    background: #0b5448;
-
-    border-color: #0b5448;
-
-    transform: translateY(-1px);
-
-}
-
 
 
 /* =========================================================
@@ -201,7 +95,6 @@
     gap: 10px;
 
     margin-bottom: 12px;
-
 }
 
 
@@ -223,18 +116,27 @@
         0 2px 8px
         rgba(15, 23, 42, 0.04);
 
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 
-/*
-    Removed the separate green failed-card background.
-    All four cards now use the same clean white design.
-*/
-
 .blockchain-stat-card.failed-card {
-
     background: #ffffff;
+}
 
+
+.blockchain-stat-card:hover {
+
+    border-color: #d2dfd9;
+
+    box-shadow:
+        0 5px 14px
+        rgba(15, 23, 42, 0.06);
+
+    transform: translateY(-1px);
 }
 
 
@@ -243,11 +145,9 @@
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     gap: 10px;
-
 }
 
 
@@ -258,20 +158,128 @@
     font-weight: 500;
 
     color: #637b74;
-
 }
 
+
+/* =========================================================
+   STAT CARD ICONS
+========================================================= */
 
 .stat-icon {
 
+    width: 30px;
+    height: 30px;
+
     flex-shrink: 0;
 
-    font-size: 13px;
+    display: flex;
 
-    color: #4c7770;
+    align-items: center;
+    justify-content: center;
 
+    border-radius: 8px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+
+.stat-icon svg {
+
+    width: 16px;
+    height: 16px;
+
+    fill: none;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   TOTAL LOGS ICON
+========================================================= */
+
+.stat-icon-total {
+
+    background: #edf6f3;
+
+    color: #176356;
+
+    border: 1px solid #d8ebe5;
+}
+
+
+.stat-icon-total svg {
+
+    stroke-width: 1.6;
+}
+
+
+/* =========================================================
+   SUCCESS ICON
+========================================================= */
+
+.stat-icon-success {
+
+    background: #eef8f1;
+
+    color: #3f7b5e;
+
+    border: 1px solid #dceee1;
+}
+
+
+/* =========================================================
+   VERIFIED ICON
+========================================================= */
+
+.stat-icon-verified {
+
+    background: #eef6f8;
+
+    color: #3f7280;
+
+    border: 1px solid #dcebed;
+}
+
+
+/* =========================================================
+   FAILED ICON
+========================================================= */
+
+.stat-icon-failed {
+
+    background: #fff2f2;
+
+    color: #a45151;
+
+    border: 1px solid #f1dada;
+}
+
+
+/* =========================================================
+   ICON HOVER
+========================================================= */
+
+.blockchain-stat-card:hover .stat-icon {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 3px 8px
+        rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================================
+   STAT NUMBER
+========================================================= */
 
 .blockchain-stat-card h2 {
 
@@ -282,7 +290,6 @@
     font-weight: 700;
 
     color: #123e36;
-
 }
 
 
@@ -291,23 +298,136 @@
     font-size: 8px;
 
     color: #67817a;
-
 }
 
 
 .stat-growth.positive {
-
     color: #47836a;
-
 }
 
 
 .stat-growth.success {
-
     color: #41765e;
-
 }
 
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.blockchain-filter-form {
+    margin-bottom: 12px;
+}
+
+
+.blockchain-filter-group {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+
+.blockchain-search-input,
+.blockchain-filter-select {
+
+    height: 32px;
+
+    padding: 0 10px;
+
+    border: 1px solid #d6e1da;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #234d44;
+
+    font-family: inherit;
+
+    font-size: 9px;
+
+    outline: none;
+}
+
+
+.blockchain-search-input {
+    min-width: 190px;
+}
+
+
+.blockchain-search-input:focus,
+.blockchain-filter-select:focus {
+
+    border-color: #7ca99b;
+}
+
+
+.filter-button,
+.clear-filter-button {
+
+    height: 32px;
+
+    padding: 0 13px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 9px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.filter-button {
+
+    border: 1px solid #073f36;
+
+    background: #073f36;
+
+    color: #ffffff;
+}
+
+
+.filter-button:hover {
+
+    background: #0b5448;
+
+    border-color: #0b5448;
+}
+
+
+.clear-filter-button {
+
+    border: 1px solid #d6e1da;
+
+    background: #ffffff;
+
+    color: #536f67;
+}
+
+
+.clear-filter-button:hover {
+    background: #f5f8f6;
+}
 
 
 /* =========================================================
@@ -324,10 +444,8 @@
 
     gap: 10px;
 
-    align-items: stretch;
-
+    align-items: start;
 }
-
 
 
 /* =========================================================
@@ -348,16 +466,12 @@
     box-shadow:
         0 3px 10px
         rgba(15, 23, 42, 0.04);
-
 }
 
 
 .ledger-panel {
-
     overflow: hidden;
-
 }
-
 
 
 /* =========================================================
@@ -379,7 +493,6 @@
     gap: 12px;
 
     border-bottom: 1px solid #e7ece9;
-
 }
 
 
@@ -393,7 +506,6 @@
     font-weight: 600;
 
     color: #16483e;
-
 }
 
 
@@ -412,9 +524,7 @@
     font-size: 7px;
 
     font-weight: 500;
-
 }
-
 
 
 /* =========================================================
@@ -426,7 +536,6 @@
     width: 100%;
 
     overflow-x: auto;
-
 }
 
 
@@ -437,14 +546,11 @@
     border-collapse: collapse;
 
     background: #ffffff;
-
 }
 
 
 .ledger-table thead {
-
     background: #063d35;
-
 }
 
 
@@ -461,7 +567,6 @@
     color: #ffffff;
 
     white-space: nowrap;
-
 }
 
 
@@ -476,7 +581,6 @@
     color: #3d5952;
 
     white-space: nowrap;
-
 }
 
 
@@ -486,21 +590,16 @@
 
     transition:
         background-color 0.15s ease;
-
 }
 
 
 .transaction-row:hover {
-
     background: #f7faf8;
-
 }
 
 
 .transaction-row.active-row {
-
     background: #f1f8f3;
-
 }
 
 
@@ -509,7 +608,6 @@
     color: #1f6256;
 
     font-weight: 600;
-
 }
 
 
@@ -522,9 +620,12 @@
     font-size: 7px;
 
     color: #9aaea8;
-
 }
 
+
+/* =========================================================
+   DOCUMENT / ACTION BADGES
+========================================================= */
 
 .document-badge {
 
@@ -541,9 +642,46 @@
     color: #4b7c68;
 
     font-size: 7px;
-
 }
 
+
+.action-badge {
+
+    display: inline-flex;
+
+    padding: 4px 7px;
+
+    border-radius: 20px;
+
+    background: #f1f4f2;
+
+    color: #587068;
+
+    font-size: 7px;
+
+    font-weight: 600;
+}
+
+
+.action-register {
+
+    background: #edf5ff;
+
+    color: #416b8d;
+}
+
+
+.action-verify {
+
+    background: #eef8f1;
+
+    color: #46765f;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
 
 .status-validated {
 
@@ -552,9 +690,31 @@
     font-size: 7px;
 
     font-weight: 600;
-
 }
 
+
+.status-failed {
+
+    color: #a34e4e;
+
+    font-size: 7px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   EMPTY TABLE
+========================================================= */
+
+.empty-ledger {
+
+    padding: 35px !important;
+
+    text-align: center !important;
+
+    color: #83978f !important;
+}
 
 
 /* =========================================================
@@ -563,9 +723,9 @@
 
 .ledger-footer {
 
-    min-height: 42px;
+    min-height: 50px;
 
-    padding: 0 12px;
+    padding: 9px 12px;
 
     display: flex;
 
@@ -575,14 +735,39 @@
 
     gap: 12px;
 
+    border-top: 1px solid #edf1ef;
+
     background: #ffffff;
 
-    font-size: 7px;
+    color: #7b918a;
+}
+
+
+/* =========================================================
+   PAGINATION INFORMATION
+========================================================= */
+
+.pagination-info {
+
+    font-size: 8px;
 
     color: #7b918a;
 
+    white-space: nowrap;
 }
 
+
+.pagination-info strong {
+
+    color: #365950;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
 
 .pagination {
 
@@ -592,24 +777,26 @@
 
     gap: 4px;
 
+    flex-wrap: wrap;
 }
 
 
-.pagination button {
+.pagination-button {
 
-    width: 23px;
+    min-width: 27px;
 
-    height: 23px;
+    height: 27px;
 
-    display: flex;
+    padding: 0 7px;
+
+    display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
     border: 1px solid #dce5df;
 
-    border-radius: 5px;
+    border-radius: 6px;
 
     background: #ffffff;
 
@@ -619,23 +806,35 @@
 
     font-size: 8px;
 
+    font-weight: 600;
+
+    line-height: 1;
+
+    text-decoration: none;
+
     cursor: pointer;
 
     transition:
         background-color 0.15s ease,
-        border-color 0.15s ease;
-
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
 }
 
 
-.pagination button:hover {
+.pagination-button:hover {
+
+    border-color: #a9bdb4;
 
     background: #f3f7f4;
 
+    color: #234d44;
+
+    transform: translateY(-1px);
 }
 
 
-.pagination button.active {
+.pagination-button.active {
 
     border-color: #063d35;
 
@@ -643,12 +842,32 @@
 
     color: #ffffff;
 
+    cursor: default;
+
+    transform: none;
 }
 
 
+.pagination-button.disabled {
+
+    opacity: 0.38;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+}
+
+
+.pagination-arrow {
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+
 
 /* =========================================================
-   TRANSACTION DETAILS
+   TRANSACTION PANEL
 ========================================================= */
 
 .transaction-panel {
@@ -656,7 +875,6 @@
     padding-bottom: 10px;
 
     overflow: hidden;
-
 }
 
 
@@ -675,7 +893,6 @@
     gap: 10px;
 
     border-bottom: 1px solid #e7ece9;
-
 }
 
 
@@ -694,9 +911,7 @@
     font-size: 6px;
 
     font-weight: 600;
-
 }
-
 
 
 /* =========================================================
@@ -716,39 +931,6 @@
     border-radius: 7px;
 
     background: #fafcfb;
-
-}
-
-
-.qr-placeholder {
-
-    width: 65px;
-
-    height: 65px;
-
-    margin: 0 auto 8px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background: #ffffff;
-
-    border: 1px solid #e0e8e3;
-
-    border-radius: 5px;
-
-}
-
-
-.qr-code {
-
-    font-size: 38px;
-
-    color: #1f554b;
-
 }
 
 
@@ -759,7 +941,6 @@
     font-size: 7px;
 
     color: #7b918a;
-
 }
 
 
@@ -774,19 +955,21 @@
     line-height: 1.5;
 
     color: #173f37;
-
 }
 
 
-
 /* =========================================================
-   INFORMATION
+   TRANSACTION INFORMATION
 ========================================================= */
 
 .transaction-information {
 
     padding: 0 12px;
+}
 
+
+.detail-section .transaction-information {
+    padding: 0;
 }
 
 
@@ -803,7 +986,6 @@
     padding: 7px 0;
 
     border-bottom: 1px solid #edf1ef;
-
 }
 
 
@@ -812,220 +994,159 @@
     font-size: 7px;
 
     color: #748b84;
-
 }
 
 
 .information-row strong {
 
+    max-width: 55%;
+
     text-align: right;
+
+    word-break: break-word;
 
     font-size: 7px;
 
     font-weight: 600;
 
     color: #294e46;
-
 }
-
-
-.network-status {
-
-    color: #4b8068 !important;
-
-}
-
 
 
 /* =========================================================
-   VERIFICATION HISTORY
+   DETAIL SECTIONS
 ========================================================= */
 
-.verification-history {
+.detail-section {
 
     padding: 8px 12px;
 
+    border-top: 1px solid #edf1ef;
 }
 
 
-.verification-history h3 {
+.detail-section h3 {
 
-    margin: 5px 0 10px;
+    margin: 3px 0 8px;
+
+    color: #45665e;
 
     font-size: 8px;
 
     font-weight: 600;
-
-    color: #45665e;
-
 }
 
 
-.history-item {
+.detail-hash-box {
 
-    position: relative;
+    padding: 9px;
 
-    display: flex;
+    border: 1px solid #e5ebe7;
 
-    gap: 9px;
+    border-radius: 7px;
 
-    padding-bottom: 12px;
-
+    background: #fafcfb;
 }
 
 
-.history-item:not(:last-child)::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 3px;
-
-    top: 8px;
-
-    width: 1px;
-
-    height: calc(100% - 5px);
-
-    background: #d6e1da;
-
-}
-
-
-.history-dot {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: 7px;
-
-    height: 7px;
-
-    margin-top: 2px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    background: #4d7e6c;
-
-}
-
-
-.history-item strong {
+.detail-hash-box small {
 
     display: block;
+
+    margin-bottom: 5px;
+
+    color: #7b918a;
 
     font-size: 7px;
-
-    font-weight: 600;
-
-    color: #365950;
-
 }
 
 
-.history-item small {
+.detail-hash-box p {
 
-    display: block;
+    margin: 0;
 
-    margin-top: 3px;
+    word-break: break-all;
+
+    color: #173f37;
 
     font-size: 6px;
 
-    color: #8a9c96;
-
+    line-height: 1.6;
 }
-
 
 
 /* =========================================================
-   TRANSACTION ACTIONS
+   ERROR
 ========================================================= */
 
-.transaction-actions {
+.error-message-box {
 
-    display: grid;
+    padding: 9px;
 
-    grid-template-columns:
-        1fr 1fr;
+    border: 1px solid #ecd1d1;
 
-    gap: 7px;
+    border-radius: 7px;
 
-    padding: 0 10px;
-
+    background: #fff7f7;
 }
 
 
-.view-source-btn,
-.export-btn {
+.error-message-box p {
 
-    height: 30px;
+    margin: 0;
+
+    word-break: break-word;
+
+    color: #9b4545;
+
+    font-size: 7px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   EMPTY DETAIL PANEL
+========================================================= */
+
+.empty-detail-panel {
+
+    min-height: 250px;
+
+    padding: 30px 20px;
 
     display: flex;
+
+    flex-direction: column;
 
     align-items: center;
 
     justify-content: center;
 
-    gap: 5px;
-
-    border-radius: 7px;
-
-    font-family: inherit;
-
-    font-size: 7px;
-
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease;
-
+    text-align: center;
 }
 
 
-.view-source-btn {
+.empty-detail-panel strong {
 
-    border: 1px solid #063d35;
+    color: #365950;
 
-    background: #063d35;
-
-    color: #ffffff;
-
+    font-size: 11px;
 }
 
 
-.view-source-btn:hover {
+.empty-detail-panel span {
 
-    border-color: #0a5146;
+    max-width: 210px;
 
-    background: #0a5146;
+    margin-top: 6px;
 
+    color: #8a9c96;
+
+    font-size: 8px;
+
+    line-height: 1.5;
 }
-
-
-.export-btn {
-
-    border: 1px solid #d1ddd5;
-
-    background: #ffffff;
-
-    color: #4a665f;
-
-}
-
-
-.export-btn:hover {
-
-    background: #f5f8f6;
-
-}
-
 
 
 /* =========================================================
@@ -1049,7 +1170,6 @@
     font-size: 7px;
 
     color: #7d918b;
-
 }
 
 
@@ -1060,25 +1180,7 @@
     align-items: center;
 
     gap: 18px;
-
 }
-
-
-.blockchain-footer a {
-
-    color: #718781;
-
-    text-decoration: underline;
-
-}
-
-
-.blockchain-footer a:hover {
-
-    color: #315f53;
-
-}
-
 
 
 /* =========================================================
@@ -1091,25 +1193,21 @@
 
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
-
     }
 
 
     .blockchain-content {
 
         grid-template-columns: 1fr;
-
     }
 
 
     .transaction-panel {
 
         width: 100%;
-
     }
 
 }
-
 
 
 /* =========================================================
@@ -1121,7 +1219,6 @@
     .blockchain-page {
 
         padding: 18px;
-
     }
 
 
@@ -1132,29 +1229,29 @@
         align-items: stretch;
 
         gap: 12px;
-
-    }
-
-
-    .header-actions {
-
-        width: 100%;
-
-    }
-
-
-    .filter-button,
-    .resync-button {
-
-        flex: 1;
-
     }
 
 
     .blockchain-stats {
 
         grid-template-columns: 1fr;
+    }
 
+
+    .blockchain-filter-group {
+
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .blockchain-search-input,
+    .blockchain-filter-select,
+    .blockchain-filter-group .filter-button,
+    .clear-filter-button {
+
+        width: 100%;
     }
 
 
@@ -1164,10 +1261,21 @@
 
         align-items: center;
 
-        gap: 8px;
+        gap: 9px;
 
-        padding: 10px;
+        padding: 12px;
+    }
 
+
+    .pagination-info {
+
+        text-align: center;
+    }
+
+
+    .pagination {
+
+        justify-content: center;
     }
 
 
@@ -1178,18 +1286,15 @@
         gap: 8px;
 
         text-align: center;
-
     }
 
 
     .blockchain-footer div {
 
         justify-content: center;
-
     }
 
 }
-
 
 
 /* =========================================================
@@ -1201,21 +1306,12 @@
     .blockchain-page {
 
         padding: 14px;
-
     }
 
 
     .header-left h1 {
 
         font-size: 19px;
-
-    }
-
-
-    .transaction-actions {
-
-        grid-template-columns: 1fr;
-
     }
 
 
@@ -1228,7 +1324,6 @@
         padding-top: 10px;
 
         padding-bottom: 10px;
-
     }
 
 
@@ -1241,189 +1336,38 @@
         padding-top: 10px;
 
         padding-bottom: 10px;
-
     }
 
-    
 
-}
+    .pagination-button {
 
-/* =========================================================
-   REAL BLOCKCHAIN LOG CONTROLS
-========================================================= */
+        min-width: 25px;
 
-.blockchain-filter-form {
-    margin-bottom: 12px;
-}
+        height: 25px;
 
-.blockchain-filter-group {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 7px;
-}
-
-.blockchain-search-input,
-.blockchain-filter-select {
-    height: 32px;
-    padding: 0 10px;
-    border: 1px solid #d6e1da;
-    border-radius: 7px;
-    background: #ffffff;
-    color: #234d44;
-    font-family: inherit;
-    font-size: 9px;
-    outline: none;
-}
-
-.blockchain-search-input {
-    min-width: 190px;
-}
-
-.blockchain-search-input:focus,
-.blockchain-filter-select:focus {
-    border-color: #7ca99b;
-}
-
-.clear-filter-button {
-    height: 32px;
-    padding: 0 13px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #d6e1da;
-    border-radius: 7px;
-    background: #ffffff;
-    color: #536f67;
-    font-size: 9px;
-    text-decoration: none;
-}
-
-.clear-filter-button:hover {
-    background: #f5f8f6;
-}
-
-.action-badge {
-    display: inline-flex;
-    padding: 4px 7px;
-    border-radius: 20px;
-    background: #f1f4f2;
-    color: #587068;
-    font-size: 7px;
-    font-weight: 600;
-}
-
-.action-register {
-    background: #edf5ff;
-    color: #416b8d;
-}
-
-.action-verify {
-    background: #eef8f1;
-    color: #46765f;
-}
-
-.status-failed {
-    color: #a34e4e;
-    font-size: 7px;
-    font-weight: 600;
-}
-
-.empty-ledger {
-    padding: 35px !important;
-    text-align: center !important;
-    color: #83978f !important;
-}
-
-.detail-section {
-    padding: 8px 12px;
-    border-top: 1px solid #edf1ef;
-}
-
-.detail-section h3 {
-    margin: 3px 0 8px;
-    color: #45665e;
-    font-size: 8px;
-    font-weight: 600;
-}
-
-.detail-hash-box {
-    padding: 9px;
-    border: 1px solid #e5ebe7;
-    border-radius: 7px;
-    background: #fafcfb;
-}
-
-.detail-hash-box small {
-    display: block;
-    margin-bottom: 5px;
-    color: #7b918a;
-    font-size: 7px;
-}
-
-.detail-hash-box p {
-    margin: 0;
-    word-break: break-all;
-    color: #173f37;
-    font-size: 6px;
-    line-height: 1.6;
-}
-
-.error-message-box {
-    padding: 9px;
-    border: 1px solid #ecd1d1;
-    border-radius: 7px;
-    background: #fff7f7;
-}
-
-.error-message-box p {
-    margin: 0;
-    word-break: break-word;
-    color: #9b4545;
-    font-size: 7px;
-    line-height: 1.5;
-}
-
-.empty-detail-panel {
-    min-height: 250px;
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.empty-detail-panel strong {
-    color: #365950;
-    font-size: 11px;
-}
-
-.empty-detail-panel span {
-    max-width: 210px;
-    margin-top: 6px;
-    color: #8a9c96;
-    font-size: 8px;
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   FILTER RESPONSIVE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    .blockchain-filter-group {
-        align-items: stretch;
-        flex-direction: column;
+        padding: 0 6px;
     }
 
-    .blockchain-search-input,
-    .blockchain-filter-select,
-    .blockchain-filter-group .filter-button,
-    .clear-filter-button {
-        width: 100%;
+
+    .pagination-arrow {
+
+        font-size: 13px;
+    }
+
+
+    /* Keep stat icons compact on small screens */
+
+    .stat-icon {
+
+        width: 29px;
+        height: 29px;
+    }
+
+
+    .stat-icon svg {
+
+        width: 15px;
+        height: 15px;
     }
 
 }

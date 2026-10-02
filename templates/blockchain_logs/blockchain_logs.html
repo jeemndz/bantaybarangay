@@ -2,21 +2,28 @@
 
 {% load static %}
 
+
 {% block title %}
+
 Blockchain Logs | BantayBarangay
+
 {% endblock %}
 
+
 {% block extra_css %}
+
 <link
     rel="stylesheet"
     href="{% static 'css/blockchain_logs.css' %}"
 >
+
 {% endblock %}
 
 
 {% block content %}
 
 <div class="blockchain-page">
+
 
     <!-- =====================================================
          PAGE HEADER
@@ -46,7 +53,10 @@ Blockchain Logs | BantayBarangay
 
     <div class="blockchain-stats">
 
-        <!-- TOTAL LOGS -->
+
+        <!-- =================================================
+             TOTAL LOGS
+        ================================================== -->
 
         <div class="blockchain-stat-card">
 
@@ -56,8 +66,23 @@ Blockchain Logs | BantayBarangay
                     Total Blockchain Logs
                 </span>
 
-                <span class="stat-icon">
-                    ▣
+                <span
+                    class="stat-icon stat-icon-total"
+                    aria-hidden="true"
+                >
+
+                    <svg viewBox="0 0 24 24">
+
+                        <path d="M7 3h10v5H7z"/>
+
+                        <path d="M4 8h16v5H4z"/>
+
+                        <path d="M7 13h10v5H7z"/>
+
+                        <path d="M4 18h16v3H4z"/>
+
+                    </svg>
+
                 </span>
 
             </div>
@@ -73,7 +98,9 @@ Blockchain Logs | BantayBarangay
         </div>
 
 
-        <!-- SUCCESSFUL OPERATIONS -->
+        <!-- =================================================
+             SUCCESSFUL OPERATIONS
+        ================================================== -->
 
         <div class="blockchain-stat-card">
 
@@ -83,8 +110,17 @@ Blockchain Logs | BantayBarangay
                     Successful Operations
                 </span>
 
-                <span class="stat-icon">
-                    ✓
+                <span
+                    class="stat-icon stat-icon-success"
+                    aria-hidden="true"
+                >
+
+                    <svg viewBox="0 0 24 24">
+
+                        <path d="M5 12.5l4.2 4.2L19 7"/>
+
+                    </svg>
+
                 </span>
 
             </div>
@@ -100,7 +136,9 @@ Blockchain Logs | BantayBarangay
         </div>
 
 
-        <!-- CONFIRMED VERIFICATIONS -->
+        <!-- =================================================
+             CONFIRMED VERIFICATIONS
+        ================================================== -->
 
         <div class="blockchain-stat-card">
 
@@ -110,8 +148,23 @@ Blockchain Logs | BantayBarangay
                     Confirmed Verifications
                 </span>
 
-                <span class="stat-icon">
-                    ◉
+                <span
+                    class="stat-icon stat-icon-verified"
+                    aria-hidden="true"
+                >
+
+                    <svg viewBox="0 0 24 24">
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="8"
+                        />
+
+                        <path d="M8.5 12l2.3 2.3 4.7-4.8"/>
+
+                    </svg>
+
                 </span>
 
             </div>
@@ -127,7 +180,9 @@ Blockchain Logs | BantayBarangay
         </div>
 
 
-        <!-- FAILED OPERATIONS -->
+        <!-- =================================================
+             FAILED OPERATIONS
+        ================================================== -->
 
         <div class="blockchain-stat-card failed-card">
 
@@ -137,8 +192,25 @@ Blockchain Logs | BantayBarangay
                     Failed Operations
                 </span>
 
-                <span class="stat-icon">
-                    !
+                <span
+                    class="stat-icon stat-icon-failed"
+                    aria-hidden="true"
+                >
+
+                    <svg viewBox="0 0 24 24">
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="8"
+                        />
+
+                        <path d="M9 9l6 6"/>
+
+                        <path d="M15 9l-6 6"/>
+
+                    </svg>
+
                 </span>
 
             </div>
@@ -184,6 +256,7 @@ Blockchain Logs | BantayBarangay
                 placeholder="Search CMP-22, EVD-11..."
                 class="blockchain-search-input"
             >
+
 
             <select
                 name="document_type"
@@ -351,7 +424,7 @@ Blockchain Logs | BantayBarangay
 
 
         <!-- =================================================
-             LEDGER FEED
+             LEDGER
         ================================================== -->
 
         <section class="ledger-panel">
@@ -368,6 +441,10 @@ Blockchain Logs | BantayBarangay
 
             </div>
 
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
 
             <div class="ledger-table-wrapper">
 
@@ -407,12 +484,9 @@ Blockchain Logs | BantayBarangay
                         {% for log in logs %}
 
                             <tr
-                                class="
-                                    transaction-row
-                                    {% if forloop.first %}
-                                        active-row
-                                    {% endif %}
-                                "
+                                class="transaction-row {% if forloop.first %}active-row{% endif %}"
+
+                                data-log-id="{{ log.blockchain_log_id|default:'' }}"
                                 data-blockchain-id="{{ log.blockchain_document_id|default:'' }}"
                                 data-document-id="{{ log.document_id|default:'' }}"
                                 data-document-type="{{ log.document_type|default:'' }}"
@@ -428,21 +502,18 @@ Blockchain Logs | BantayBarangay
                                 data-recorded-by="{{ log.recorded_by|default:'' }}"
                                 data-recorded-at="{{ log.recorded_at|date:'M d, Y h:i:s A' }}"
                                 data-error-message="{{ log.error_message|default:'' }}"
+
                                 onclick="showTransaction(this)"
                             >
 
                                 <td>
 
                                     <div class="transaction-id">
-
                                         {{ log.blockchain_document_id }}
-
                                     </div>
 
                                     <small>
-
                                         LOG #{{ log.blockchain_log_id }}
-
                                     </small>
 
                                 </td>
@@ -451,9 +522,7 @@ Blockchain Logs | BantayBarangay
                                 <td>
 
                                     <span class="document-badge">
-
                                         {{ log.document_type }}
-
                                     </span>
 
                                 </td>
@@ -523,9 +592,7 @@ Blockchain Logs | BantayBarangay
                                     colspan="5"
                                     class="empty-ledger"
                                 >
-
                                     No blockchain logs found.
-
                                 </td>
 
                             </tr>
@@ -539,14 +606,179 @@ Blockchain Logs | BantayBarangay
             </div>
 
 
+            <!-- =================================================
+                 PAGINATION
+            ================================================== -->
+
             <div class="ledger-footer">
 
-                <span>
 
-                    Showing {{ logs|length }}
-                    blockchain log{{ logs|length|pluralize }}
+                <!-- RESULT INFORMATION -->
 
-                </span>
+                <div class="pagination-info">
+
+                    {% if logs.paginator.count > 0 %}
+
+                        Showing
+
+                        <strong>
+                            {{ logs.start_index }}
+                        </strong>
+
+                        -
+
+                        <strong>
+                            {{ logs.end_index }}
+                        </strong>
+
+                        of
+
+                        <strong>
+                            {{ logs.paginator.count }}
+                        </strong>
+
+                        blockchain logs
+
+                    {% else %}
+
+                        No blockchain logs
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PAGINATION CONTROLS -->
+
+                {% if logs.paginator.num_pages > 1 %}
+
+                    <nav
+                        class="pagination"
+                        aria-label="Blockchain log pagination"
+                    >
+
+
+                        <!-- FIRST PAGE -->
+
+                        {% if logs.has_previous %}
+
+                            <a
+                                href="?page=1{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_document_type %}&document_type={{ selected_document_type|urlencode }}{% endif %}{% if selected_action %}&action={{ selected_action|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}{% if selected_verification_status %}&verification_status={{ selected_verification_status|urlencode }}{% endif %}"
+                                class="pagination-button pagination-arrow"
+                                title="First page"
+                            >
+                                «
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-button pagination-arrow disabled"
+                            >
+                                «
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- PREVIOUS PAGE -->
+
+                        {% if logs.has_previous %}
+
+                            <a
+                                href="?page={{ logs.previous_page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_document_type %}&document_type={{ selected_document_type|urlencode }}{% endif %}{% if selected_action %}&action={{ selected_action|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}{% if selected_verification_status %}&verification_status={{ selected_verification_status|urlencode }}{% endif %}"
+                                class="pagination-button pagination-arrow"
+                                title="Previous page"
+                            >
+                                ‹
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-button pagination-arrow disabled"
+                            >
+                                ‹
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- PAGE NUMBERS -->
+
+                        {% for page_number in logs.paginator.page_range %}
+
+                            {% if page_number == logs.number %}
+
+                                <span
+                                    class="pagination-button active"
+                                    aria-current="page"
+                                >
+                                    {{ page_number }}
+                                </span>
+
+                            {% elif page_number >= logs.number|add:"-2" and page_number <= logs.number|add:"2" %}
+
+                                <a
+                                    href="?page={{ page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_document_type %}&document_type={{ selected_document_type|urlencode }}{% endif %}{% if selected_action %}&action={{ selected_action|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}{% if selected_verification_status %}&verification_status={{ selected_verification_status|urlencode }}{% endif %}"
+                                    class="pagination-button"
+                                >
+                                    {{ page_number }}
+                                </a>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                        <!-- NEXT PAGE -->
+
+                        {% if logs.has_next %}
+
+                            <a
+                                href="?page={{ logs.next_page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_document_type %}&document_type={{ selected_document_type|urlencode }}{% endif %}{% if selected_action %}&action={{ selected_action|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}{% if selected_verification_status %}&verification_status={{ selected_verification_status|urlencode }}{% endif %}"
+                                class="pagination-button pagination-arrow"
+                                title="Next page"
+                            >
+                                ›
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-button pagination-arrow disabled"
+                            >
+                                ›
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- LAST PAGE -->
+
+                        {% if logs.has_next %}
+
+                            <a
+                                href="?page={{ logs.paginator.num_pages }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_document_type %}&document_type={{ selected_document_type|urlencode }}{% endif %}{% if selected_action %}&action={{ selected_action|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}{% if selected_verification_status %}&verification_status={{ selected_verification_status|urlencode }}{% endif %}"
+                                class="pagination-button pagination-arrow"
+                                title="Last page"
+                            >
+                                »
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="pagination-button pagination-arrow disabled"
+                            >
+                                »
+                            </span>
+
+                        {% endif %}
+
+                    </nav>
+
+                {% endif %}
 
             </div>
 
@@ -569,11 +801,13 @@ Blockchain Logs | BantayBarangay
                     class="block-number"
                     id="detailLogId"
                 >
+
                     {% if logs %}
                         LOG
                     {% else %}
                         NO LOG
                     {% endif %}
+
                 </span>
 
             </div>
@@ -581,7 +815,8 @@ Blockchain Logs | BantayBarangay
 
             {% if logs %}
 
-                <!-- BLOCKCHAIN TRANSACTION -->
+
+                <!-- TRANSACTION HASH -->
 
                 <div class="hash-card">
 
@@ -729,7 +964,7 @@ Blockchain Logs | BantayBarangay
                 </div>
 
 
-                <!-- FABRIC INFORMATION -->
+                <!-- HYPERLEDGER FABRIC -->
 
                 <div class="detail-section">
 
@@ -795,7 +1030,7 @@ Blockchain Logs | BantayBarangay
                 </div>
 
 
-                <!-- ERROR INFORMATION -->
+                <!-- ERROR -->
 
                 <div
                     class="detail-section error-detail-section"
@@ -809,14 +1044,15 @@ Blockchain Logs | BantayBarangay
 
                     <div class="error-message-box">
 
-                        <p id="detailErrorMessage">
-                        </p>
+                        <p id="detailErrorMessage"></p>
 
                     </div>
 
                 </div>
 
+
             {% else %}
+
 
                 <div class="empty-detail-panel">
 
@@ -831,6 +1067,7 @@ Blockchain Logs | BantayBarangay
 
                 </div>
 
+
             {% endif %}
 
         </aside>
@@ -839,7 +1076,7 @@ Blockchain Logs | BantayBarangay
 
 
     <!-- =====================================================
-         PAGE FOOTER
+         FOOTER
     ====================================================== -->
 
     <div class="blockchain-footer">
@@ -872,7 +1109,7 @@ Blockchain Logs | BantayBarangay
 <script>
 
     /* =====================================================
-       SET TEXT
+       SET DETAIL TEXT
     ====================================================== */
 
     function setBlockchainDetail(
@@ -904,12 +1141,11 @@ Blockchain Logs | BantayBarangay
 
         element.textContent =
             value;
-
     }
 
 
     /* =====================================================
-       SHOW SELECTED LOG
+       SHOW SELECTED TRANSACTION
     ====================================================== */
 
     function showTransaction(row) {
@@ -919,9 +1155,7 @@ Blockchain Logs | BantayBarangay
         }
 
 
-        /* =============================================
-           ACTIVE ROW
-        ============================================== */
+        /* ACTIVE ROW */
 
         const rows =
             document.querySelectorAll(
@@ -943,73 +1177,58 @@ Blockchain Logs | BantayBarangay
         );
 
 
-        /* =============================================
-           DATA
-        ============================================== */
+        /* DATA */
 
         const data =
             row.dataset;
 
 
-        /* =============================================
-           BASIC INFORMATION
-        ============================================== */
+        /* LOG ID */
 
         setBlockchainDetail(
             "detailLogId",
-            "LOG #" +
-            (
-                row.querySelector("small")
-                    ?.textContent
-                    ?.replace("LOG #", "")
-                    ?.trim()
-                || ""
-            ),
-            "LOG"
+            data.logId
+                ? "LOG #" + data.logId
+                : "LOG"
         );
 
+
+        /* BASIC INFORMATION */
 
         setBlockchainDetail(
             "detailBlockchainId",
             data.blockchainId
         );
 
-
         setBlockchainDetail(
             "detailDocumentId",
             data.documentId
         );
-
 
         setBlockchainDetail(
             "detailDocumentType",
             data.documentType
         );
 
-
         setBlockchainDetail(
             "detailAction",
             data.action
         );
-
 
         setBlockchainDetail(
             "detailStatus",
             data.status
         );
 
-
         setBlockchainDetail(
             "detailVerificationStatus",
             data.verificationStatus
         );
 
-
         setBlockchainDetail(
             "detailRecordedBy",
             data.recordedBy
         );
-
 
         setBlockchainDetail(
             "detailRecordedAt",
@@ -1017,9 +1236,7 @@ Blockchain Logs | BantayBarangay
         );
 
 
-        /* =============================================
-           DOCUMENT HASH
-        ============================================== */
+        /* DOCUMENT HASH */
 
         setBlockchainDetail(
             "detailDocumentHash",
@@ -1027,27 +1244,22 @@ Blockchain Logs | BantayBarangay
         );
 
 
-        /* =============================================
-           FABRIC INFORMATION
-        ============================================== */
+        /* FABRIC */
 
         setBlockchainDetail(
             "detailNetwork",
             data.network
         );
 
-
         setBlockchainDetail(
             "detailChannel",
             data.channel
         );
 
-
         setBlockchainDetail(
             "detailChaincode",
             data.chaincode
         );
-
 
         setBlockchainDetail(
             "detailBlockNumber",
@@ -1056,9 +1268,7 @@ Blockchain Logs | BantayBarangay
         );
 
 
-        /* =============================================
-           TRANSACTION HASH
-        ============================================== */
+        /* TRANSACTION HASH */
 
         setBlockchainDetail(
             "hashValue",
@@ -1069,9 +1279,7 @@ Blockchain Logs | BantayBarangay
         );
 
 
-        /* =============================================
-           ERROR INFORMATION
-        ============================================== */
+        /* ERROR */
 
         const errorSection =
             document.getElementById(
@@ -1096,8 +1304,7 @@ Blockchain Logs | BantayBarangay
                 errorMessage.textContent =
                     data.errorMessage;
 
-            }
-            else {
+            } else {
 
                 errorSection.hidden =
                     true;
@@ -1113,7 +1320,7 @@ Blockchain Logs | BantayBarangay
 
 
     /* =====================================================
-       LOAD FIRST LOG AUTOMATICALLY
+       LOAD FIRST ROW
     ====================================================== */
 
     document.addEventListener(

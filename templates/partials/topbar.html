@@ -1,164 +1,134 @@
 {% load static %}
 
 <header
-    class="sticky top-0 z-40 flex h-[90px] w-full items-center
-           justify-between border-b border-slate-200
-           bg-white px-6 lg:px-8"
+    class="topbar"
 >
 
-<!-- ================================================= -->
-<!-- GLOBAL SEARCH -->
-<!-- ================================================= -->
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
 
-<div class="flex min-w-0 flex-1 items-center">
+    <div
+        class="topbar-search-wrapper"
+    >
 
-    <div class="relative w-full max-w-2xl">
-
-        <!-- Search Icon -->
-        <svg
-            class="pointer-events-none absolute left-4 top-1/2
-                   h-5 w-5 -translate-y-1/2
-                   text-slate-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-        >
-            <circle
-                cx="11"
-                cy="11"
-                r="7"
-            />
-
-            <path
-                stroke-linecap="round"
-                d="m20 20-4-4"
-            />
-        </svg>
-
-
-        <!-- Global Search Input -->
-        <input
-            id="global-search"
-            type="search"
-            autocomplete="off"
-            placeholder="Search residents, complaints, documents..."
-            class="h-[52px] w-full rounded-2xl
-                   border border-slate-200
-                   bg-slate-50/70
-                   pl-12 pr-12
-                   text-sm text-slate-700
-                   outline-none
-                   transition-all duration-200
-                   placeholder:text-slate-400
-                   focus:border-emerald-500
-                   focus:bg-white
-                   focus:ring-4
-                   focus:ring-emerald-500/10"
-        >
-
-
-        <!-- Loading Indicator -->
         <div
-            id="search-loading"
-            class="absolute right-4 top-1/2
-                   hidden -translate-y-1/2"
+            class="topbar-search"
         >
 
             <svg
-                class="h-5 w-5 animate-spin
-                       text-emerald-600"
+                class="search-icon"
                 fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
+                stroke-width="2"
             >
+
                 <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="3"
-                ></circle>
+                    cx="11"
+                    cy="11"
+                    r="7"
+                />
 
                 <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"
-                ></path>
+                    stroke-linecap="round"
+                    d="m20 20-4-4"
+                />
 
             </svg>
+
+
+            <input
+                id="global-search"
+                type="search"
+                autocomplete="off"
+                placeholder="Search residents, complaints, documents..."
+            />
+
+
+            <div
+                id="search-loading"
+                class="hidden"
+            >
+
+                <svg
+                    class="animate-spin"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+
+                    <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="3"
+                    ></circle>
+
+                    <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"
+                    ></path>
+
+                </svg>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SEARCH RESULTS
+        ================================================== -->
+
+        <div
+            id="global-search-results"
+            class="hidden"
+        >
+
+            <div
+                id="search-results-content"
+            >
+            </div>
 
         </div>
 
     </div>
 
-</div>
 
-
-<!-- ================================================= -->
-<!-- GLOBAL SEARCH RESULTS -->
-<!-- ================================================= -->
-
-<div
-    id="global-search-results"
-    class="absolute left-0 right-0 top-[60px]
-           z-50 hidden overflow-hidden
-           rounded-2xl border border-slate-200
-           bg-white shadow-xl
-           shadow-slate-900/10"
->
+    <!-- =====================================================
+         RIGHT SIDE
+    ====================================================== -->
 
     <div
-        id="search-results-content"
-        class="max-h-[420px] overflow-y-auto"
+        class="topbar-right"
     >
 
-        <!-- Results will be inserted by JavaScript -->
+        <!-- =================================================
+             NOTIFICATIONS
+        ================================================== -->
 
-    </div>
-
-</div>
-
-    <!-- ================================================= -->
-    <!-- RIGHT SIDE -->
-    <!-- ================================================= -->
-
-    <div
-        class="ml-4 flex shrink-0 items-center gap-3
-               sm:gap-5"
-    >
-
-
-        <!-- ================================================= -->
-        <!-- NOTIFICATIONS -->
-        <!-- ================================================= -->
-
-        <div class="relative">
+        <div
+            class="notification-wrapper"
+        >
 
             <button
                 id="notification-toggle"
                 type="button"
                 aria-expanded="false"
                 aria-label="Notifications"
-                class="relative flex h-11 w-11
-                       items-center justify-center
-                       rounded-xl text-slate-500
-                       transition-all duration-200
-                       hover:bg-slate-50
-                       hover:text-emerald-700
-                       focus:outline-none
-                       focus:ring-4
-                       focus:ring-emerald-500/10"
+                class="notification-btn"
             >
 
-                <!-- Bell -->
                 <svg
-                    class="h-6 w-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -170,19 +140,13 @@
                         stroke-linejoin="round"
                         d="M10 21h4"
                     />
+
                 </svg>
 
 
-                <!-- Notification Badge -->
                 <span
                     id="notification-badge"
-                    class="absolute right-1 top-1
-                           flex h-5 min-w-5 items-center
-                           justify-center rounded-full
-                           bg-red-500 px-1
-                           text-[10px] font-bold
-                           text-white ring-2
-                           ring-white"
+                    class="notification-badge"
                 >
                     3
                 </span>
@@ -190,20 +154,15 @@
             </button>
 
 
-            <!-- ================================================= -->
-            <!-- NOTIFICATION DROPDOWN -->
-            <!-- ================================================= -->
+            <!-- =================================================
+                 NOTIFICATION MENU
+            ================================================== -->
 
             <div
                 id="notification-menu"
-                class="absolute right-0 top-14 hidden
-                       w-[360px] overflow-hidden
-                       rounded-2xl border
-                       border-slate-200 bg-white
-                       shadow-xl shadow-slate-900/10"
+                class="hidden"
             >
 
-                <!-- Header -->
                 <div
                     class="flex items-center justify-between
                            border-b border-slate-100
@@ -213,15 +172,13 @@
                     <div>
 
                         <h3
-                            class="text-sm font-bold
-                                   text-slate-800"
+                            class="text-sm font-bold text-slate-800"
                         >
                             Notifications
                         </h3>
 
                         <p
-                            class="mt-0.5 text-xs
-                                   text-slate-400"
+                            class="mt-0.5 text-xs text-slate-400"
                         >
                             Recent system activity
                         </p>
@@ -234,7 +191,6 @@
                         type="button"
                         class="text-xs font-semibold
                                text-emerald-600
-                               transition-colors
                                hover:text-emerald-700"
                     >
                         Mark all read
@@ -243,19 +199,18 @@
                 </div>
 
 
-                <!-- Notification List -->
                 <div
                     id="notification-list"
-                    class="max-h-[360px] overflow-y-auto"
                 >
 
                     <!-- Notification 1 -->
+
                     <button
                         type="button"
                         class="notification-item flex w-full
-                               gap-3 border-b
-                               border-slate-100 px-5 py-4
-                               text-left transition-colors
+                               gap-3 border-b border-slate-100
+                               px-5 py-4 text-left
+                               transition-colors
                                hover:bg-slate-50"
                     >
 
@@ -273,6 +228,7 @@
                                 viewBox="0 0 24 24"
                                 stroke-width="1.8"
                             >
+
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -290,6 +246,7 @@
                                     stroke-linejoin="round"
                                     d="M10.3 3.8 2.7 17a2 2 0 001.7 3h15.2a2 2 0 001.7-3L13.7 3.8a2 2 0 00-3.4 0Z"
                                 />
+
                             </svg>
 
                         </div>
@@ -298,27 +255,25 @@
                         <div class="min-w-0 flex-1">
 
                             <p
-                                class="text-sm font-semibold
-                                       text-slate-700"
+                                class="text-sm font-semibold text-slate-700"
                             >
                                 New complaint submitted
                             </p>
 
                             <p
-                                class="mt-1 text-xs
-                                       leading-5 text-slate-400"
+                                class="mt-1 text-xs leading-5 text-slate-400"
                             >
                                 A new complaint requires your attention.
                             </p>
 
                             <span
-                                class="mt-1 block text-[11px]
-                                       text-slate-400"
+                                class="mt-1 block text-[11px] text-slate-400"
                             >
                                 5 minutes ago
                             </span>
 
                         </div>
+
 
                         <span
                             class="mt-2 h-2 w-2 shrink-0
@@ -329,12 +284,13 @@
 
 
                     <!-- Notification 2 -->
+
                     <button
                         type="button"
                         class="notification-item flex w-full
-                               gap-3 border-b
-                               border-slate-100 px-5 py-4
-                               text-left transition-colors
+                               gap-3 border-b border-slate-100
+                               px-5 py-4 text-left
+                               transition-colors
                                hover:bg-slate-50"
                     >
 
@@ -352,6 +308,7 @@
                                 viewBox="0 0 24 24"
                                 stroke-width="1.8"
                             >
+
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -366,27 +323,25 @@
                         <div class="min-w-0 flex-1">
 
                             <p
-                                class="text-sm font-semibold
-                                       text-slate-700"
+                                class="text-sm font-semibold text-slate-700"
                             >
                                 Document verified
                             </p>
 
                             <p
-                                class="mt-1 text-xs
-                                       leading-5 text-slate-400"
+                                class="mt-1 text-xs leading-5 text-slate-400"
                             >
                                 A barangay document has been verified.
                             </p>
 
                             <span
-                                class="mt-1 block text-[11px]
-                                       text-slate-400"
+                                class="mt-1 block text-[11px] text-slate-400"
                             >
                                 1 hour ago
                             </span>
 
                         </div>
+
 
                         <span
                             class="mt-2 h-2 w-2 shrink-0
@@ -397,11 +352,12 @@
 
 
                     <!-- Notification 3 -->
+
                     <button
                         type="button"
                         class="notification-item flex w-full
-                               gap-3 px-5 py-4
-                               text-left transition-colors
+                               gap-3 px-5 py-4 text-left
+                               transition-colors
                                hover:bg-slate-50"
                     >
 
@@ -419,6 +375,7 @@
                                 viewBox="0 0 24 24"
                                 stroke-width="1.8"
                             >
+
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -439,27 +396,25 @@
                         <div class="min-w-0 flex-1">
 
                             <p
-                                class="text-sm font-semibold
-                                       text-slate-700"
+                                class="text-sm font-semibold text-slate-700"
                             >
                                 System backup completed
                             </p>
 
                             <p
-                                class="mt-1 text-xs
-                                       leading-5 text-slate-400"
+                                class="mt-1 text-xs leading-5 text-slate-400"
                             >
                                 The latest system backup was completed.
                             </p>
 
                             <span
-                                class="mt-1 block text-[11px]
-                                       text-slate-400"
+                                class="mt-1 block text-[11px] text-slate-400"
                             >
                                 3 hours ago
                             </span>
 
                         </div>
+
 
                         <span
                             class="mt-2 h-2 w-2 shrink-0
@@ -471,7 +426,6 @@
                 </div>
 
 
-                <!-- Footer -->
                 <div
                     class="border-t border-slate-100 p-3"
                 >
@@ -482,7 +436,6 @@
                                text-center text-xs
                                font-semibold
                                text-emerald-600
-                               transition-colors
                                hover:bg-emerald-50"
                     >
                         View all notifications
@@ -495,20 +448,22 @@
         </div>
 
 
-        <!-- ================================================= -->
-        <!-- DIVIDER -->
-        <!-- ================================================= -->
+        <!-- =================================================
+             DIVIDER
+        ================================================== -->
 
         <div
-            class="hidden h-9 w-px bg-slate-200 sm:block"
+            class="topbar-divider"
         ></div>
 
 
-        <!-- ================================================= -->
-        <!-- PROFILE -->
-        <!-- ================================================= -->
+        <!-- =================================================
+             PROFILE
+        ================================================== -->
 
-        <div class="relative">
+        <div
+            class="topbar-user"
+        >
 
             <button
                 id="profile-toggle"
@@ -518,19 +473,11 @@
                        rounded-xl p-1.5
                        transition-all duration-200
                        hover:bg-slate-50
-                       focus:outline-none
-                       focus:ring-4
-                       focus:ring-emerald-500/10"
+                       focus:outline-none"
             >
 
-                <!-- Avatar -->
                 <div
-                    class="flex h-11 w-11 shrink-0
-                           items-center justify-center
-                           rounded-xl
-                           bg-emerald-700
-                           text-sm font-bold
-                           text-white shadow-sm"
+                    class="user-avatar"
                 >
 
                     {% if request.session.is_logged_in %}
@@ -546,27 +493,17 @@
                 </div>
 
 
-                <!-- User Info -->
                 <div
-                    class="hidden max-w-[150px]
-                           text-left sm:block"
+                    class="user-info"
                 >
 
                     {% if request.session.is_logged_in %}
 
-                        <p
-                            class="truncate text-sm
-                                   font-semibold
-                                   text-slate-700"
-                        >
+                        <strong>
                             {{ request.session.full_name }}
-                        </p>
+                        </strong>
 
-
-                        <p
-                            class="truncate text-xs
-                                   text-slate-400"
-                        >
+                        <span>
 
                             {% if request.session.role == "admin" %}
 
@@ -586,106 +523,80 @@
 
                             {% endif %}
 
-                        </p>
+                        </span>
 
                     {% else %}
 
-                        <p
-                            class="text-sm font-semibold
-                                   text-slate-700"
-                        >
+                        <strong>
                             Guest
-                        </p>
+                        </strong>
 
-                        <p
-                            class="text-xs text-slate-400"
-                        >
+                        <span>
                             Not logged in
-                        </p>
+                        </span>
 
                     {% endif %}
 
                 </div>
 
 
-                <!-- Arrow -->
                 <svg
                     id="profile-arrow"
-                    class="hidden h-4 w-4
-                           text-slate-400
-                           transition-transform
-                           duration-200 sm:block"
+                    class="user-arrow"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     stroke-width="2"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="m6 9 6 6 6-6"
                     />
+
                 </svg>
 
             </button>
 
 
-            <!-- ================================================= -->
-            <!-- PROFILE DROPDOWN -->
-            <!-- ================================================= -->
+            <!-- =================================================
+                 PROFILE MENU
+            ================================================== -->
 
             <div
                 id="profile-menu"
-                class="absolute right-0 top-14 hidden
-                       w-72 overflow-hidden
-                       rounded-2xl border
-                       border-slate-200
-                       bg-white
-                       shadow-xl
-                       shadow-slate-900/10"
+                class="hidden"
             >
 
                 {% if request.session.is_logged_in %}
 
-                    <!-- ACCOUNT HEADER -->
                     <div
-                        class="border-b border-slate-100
-                               px-5 py-5"
+                        class="border-b border-slate-100 px-5 py-5"
                     >
 
                         <div
                             class="flex items-center gap-3"
                         >
 
-                            <!-- Avatar -->
                             <div
-                                class="flex h-12 w-12
-                                       shrink-0 items-center
-                                       justify-center
-                                       rounded-xl
-                                       bg-emerald-700
-                                       text-sm font-bold
-                                       text-white"
+                                class="user-avatar"
                             >
                                 {{ request.session.initials }}
                             </div>
 
 
-                            <!-- Account Details -->
                             <div class="min-w-0">
 
                                 <p
-                                    class="truncate text-sm
-                                           font-bold
+                                    class="truncate text-sm font-bold
                                            text-slate-800"
                                 >
                                     {{ request.session.full_name }}
                                 </p>
 
-
                                 <p
-                                    class="mt-0.5 truncate
-                                           text-xs
+                                    class="mt-0.5 truncate text-xs
                                            text-slate-400"
                                 >
 
@@ -701,21 +612,15 @@
 
                                 </p>
 
-
                                 <span
                                     class="mt-2 inline-flex
-                                           rounded-full
-                                           bg-emerald-50
+                                           rounded-full bg-emerald-50
                                            px-2.5 py-1
-                                           text-[10px]
-                                           font-bold
-                                           uppercase
-                                           tracking-wide
+                                           text-[10px] font-bold
+                                           uppercase tracking-wide
                                            text-emerald-700"
                                 >
-
                                     {{ request.session.role }}
-
                                 </span>
 
                             </div>
@@ -725,17 +630,14 @@
                     </div>
 
 
-                    <!-- MENU -->
                     <div class="p-2">
 
-                        <!-- My Account -->
                         <a
                             href="#"
                             class="flex items-center gap-3
                                    rounded-xl px-3 py-3
                                    text-sm font-medium
                                    text-slate-600
-                                   transition-colors
                                    hover:bg-emerald-50
                                    hover:text-emerald-700"
                         >
@@ -754,6 +656,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.8"
                                 >
+
                                     <circle
                                         cx="12"
                                         cy="8"
@@ -765,6 +668,7 @@
                                         stroke-linejoin="round"
                                         d="M4 21a8 8 0 0116 0"
                                     />
+
                                 </svg>
 
                             </span>
@@ -776,14 +680,12 @@
                         </a>
 
 
-                        <!-- Settings -->
                         <a
                             href="#"
                             class="flex items-center gap-3
                                    rounded-xl px-3 py-3
                                    text-sm font-medium
                                    text-slate-600
-                                   transition-colors
                                    hover:bg-emerald-50
                                    hover:text-emerald-700"
                         >
@@ -802,6 +704,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.8"
                                 >
+
                                     <circle
                                         cx="12"
                                         cy="12"
@@ -813,6 +716,7 @@
                                         stroke-linejoin="round"
                                         d="M19.4 15a1.7 1.7 0 00.34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 00-1.88-.34 1.7 1.7 0 00-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 00-1.03-1.56 1.7 1.7 0 00-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 008.46 15a1.7 1.7 0 00-1.56-1.03H6v-2.4h.9a1.7 1.7 0 001.56-1.03 1.7 1.7 0 00-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 001.88.34A1.7 1.7 0 0012.73 5V4h2.4v1a1.7 1.7 0 001.03 1.56 1.7 1.7 0 001.88-.34l.06-.06 1.7 1.7-.06.06a1.7 1.7 0 00-.34 1.88A1.7 1.7 0 0020.97 11H22v2.4h-1.03A1.7 1.7 0 0019.4 15z"
                                     />
+
                                 </svg>
 
                             </span>
@@ -826,7 +730,6 @@
                     </div>
 
 
-                    <!-- SIGN OUT -->
                     <div
                         class="border-t border-slate-100 p-2"
                     >
@@ -837,7 +740,6 @@
                                    rounded-xl px-3 py-3
                                    text-sm font-semibold
                                    text-red-500
-                                   transition-colors
                                    hover:bg-red-50"
                         >
 
@@ -854,6 +756,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.8"
                                 >
+
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -871,6 +774,7 @@
                                         stroke-linejoin="round"
                                         d="M21 19V5a2 2 0 00-2-2h-6"
                                     />
+
                                 </svg>
 
                             </span>
@@ -885,7 +789,6 @@
 
                 {% else %}
 
-                    <!-- NOT LOGGED IN -->
                     <div
                         class="px-5 py-6 text-center"
                     >
@@ -904,6 +807,7 @@
                                 viewBox="0 0 24 24"
                                 stroke-width="1.8"
                             >
+
                                 <circle
                                     cx="12"
                                     cy="8"
@@ -915,6 +819,7 @@
                                     stroke-linejoin="round"
                                     d="M4 21a8 8 0 0116 0"
                                 />
+
                             </svg>
 
                         </div>
@@ -935,7 +840,6 @@
                                    px-4 py-2.5
                                    text-sm font-semibold
                                    text-white
-                                   transition-colors
                                    hover:bg-emerald-800"
                         >
                             Sign In

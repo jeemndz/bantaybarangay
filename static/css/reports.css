@@ -16,12 +16,7 @@
 
     color: #0f2b25;
 
-    background:
-        linear-gradient(
-            135deg,
-            #edfff0 0%,
-            #e6fdeb 100%
-        );
+    background: transparent;
 }
 
 

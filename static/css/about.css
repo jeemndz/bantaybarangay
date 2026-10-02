@@ -1,8 +1,13 @@
 /* =========================================================
    BANTAYBARANGAY
    ABOUT PAGE
+   TYPOGRAPHY MATCHED WITH HOME.HTML
 ========================================================= */
 
+
+/* =========================================================
+   ROOT VARIABLES
+========================================================= */
 
 :root {
 
@@ -10,6 +15,7 @@
     --about-green-100: #e5eee9;
     --about-green-200: #c8dcd3;
     --about-green-300: #9fc1b2;
+    --about-green-400: #6d9f8a;
     --about-green-500: #39765f;
     --about-green-600: #28634f;
     --about-green-700: #1d503f;
@@ -17,21 +23,40 @@
     --about-green-900: #0c2d24;
     --about-green-950: #071e18;
 
+    --about-gold-50: #fffbeb;
+    --about-gold-100: #fef3c7;
+    --about-gold-200: #fde68a;
+    --about-gold-300: #fcd34d;
+    --about-gold-400: #fbbf24;
+    --about-gold-500: #d9a441;
+    --about-gold-600: #b88725;
+    --about-gold-700: #936b1c;
+
     --about-gold: #d9a441;
 
     --about-white: #ffffff;
+
     --about-slate-50: #f8fafc;
     --about-slate-100: #f1f5f9;
     --about-slate-200: #e2e8f0;
+    --about-slate-300: #cbd5e1;
+    --about-slate-400: #94a3b8;
     --about-slate-500: #64748b;
     --about-slate-600: #475569;
     --about-slate-700: #334155;
+    --about-slate-800: #1e293b;
+
 }
 
 
 /* =========================================================
-   BASE
+   RESET
 ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
 
 html {
     scroll-behavior: smooth;
@@ -39,27 +64,124 @@ html {
 
 
 body {
+
     margin: 0;
 
     font-family:
         "Inter",
-        Arial,
-        Helvetica,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
         sans-serif;
 
-    background: var(--about-slate-50);
+    font-weight: 400;
 
-    color: var(--about-slate-700);
+    background:
+        var(--about-slate-50);
+
+    color:
+        var(--about-slate-700);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
 }
 
 
-.about-container {
-    width: min(
-        100% - 40px,
-        1280px
-    );
+button,
+input,
+select,
+textarea {
 
-    margin: 0 auto;
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+}
+
+
+/* =========================================================
+   GLOBAL ABOUT TYPOGRAPHY
+========================================================= */
+
+.about-hero,
+.about-section,
+.about-mission,
+.about-values,
+.about-cta {
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+}
+
+
+.about-hero *,
+.about-section *,
+.about-mission *,
+.about-values *,
+.about-cta * {
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+}
+
+
+.about-hero h1,
+.about-hero h2,
+.about-hero h3,
+.about-section h1,
+.about-section h2,
+.about-section h3,
+.about-mission h1,
+.about-mission h2,
+.about-mission h3,
+.about-values h1,
+.about-values h2,
+.about-values h3,
+.about-cta h1,
+.about-cta h2,
+.about-cta h3 {
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    letter-spacing: -0.025em;
+
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.about-container {
+
+    width:
+        min(
+            100% - 40px,
+            1280px
+        );
+
+    margin:
+        0 auto;
+
 }
 
 
@@ -68,6 +190,7 @@ body {
 ========================================================= */
 
 .about-hero {
+
     position: relative;
 
     overflow: hidden;
@@ -78,19 +201,27 @@ body {
 
     background:
         var(--about-white);
+
 }
 
 
+/* =========================================================
+   HERO DECORATIONS
+========================================================= */
+
 .about-decoration {
+
     position: absolute;
 
     border-radius: 50%;
 
     pointer-events: none;
+
 }
 
 
 .about-decoration-one {
+
     width: 430px;
     height: 430px;
 
@@ -99,10 +230,12 @@ body {
 
     background:
         var(--about-green-50);
+
 }
 
 
 .about-decoration-two {
+
     width: 350px;
     height: 350px;
 
@@ -110,11 +243,17 @@ body {
     left: -120px;
 
     background:
-        #fffbeb;
+        var(--about-gold-50);
+
 }
 
 
+/* =========================================================
+   HERO GRID
+========================================================= */
+
 .about-hero-grid {
+
     position: relative;
 
     display: grid;
@@ -130,11 +269,17 @@ body {
     padding:
         96px
         0;
+
 }
 
 
+/* =========================================================
+   LABELS / EYEBROWS
+========================================================= */
+
 .about-label,
 .about-eyebrow {
+
     display: inline-block;
 
     color:
@@ -144,13 +289,17 @@ body {
 
     font-weight: 800;
 
+    line-height: 1.4;
+
     letter-spacing: 0.18em;
 
     text-transform: uppercase;
+
 }
 
 
 .about-label {
+
     padding:
         10px
         14px;
@@ -161,10 +310,16 @@ body {
 
     background:
         var(--about-green-50);
+
 }
 
 
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
 .about-title {
+
     max-width: 760px;
 
     margin:
@@ -176,35 +331,56 @@ body {
         var(--about-green-950);
 
     font-family:
-        Georgia,
-        Cambria,
-        "Times New Roman",
-        serif;
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
     font-size:
         clamp(
             40px,
             5vw,
-            64px
+            60px
         );
+
+    font-weight: 700;
 
     line-height: 1.12;
 
-    font-weight: 700;
+    letter-spacing: -0.035em;
+
 }
 
 
 .about-title span {
+
     display: block;
 
     margin-top: 8px;
 
     color:
         var(--about-green-700);
+
+    font-family: inherit;
+
+    font-size: inherit;
+
+    font-weight: 700;
+
+    line-height: inherit;
+
+    letter-spacing: inherit;
+
 }
 
 
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
 .about-description {
+
     max-width: 720px;
 
     margin:
@@ -217,11 +393,21 @@ body {
 
     font-size: 16px;
 
+    font-weight: 400;
+
     line-height: 1.9;
+
+    letter-spacing: 0;
+
 }
 
 
+/* =========================================================
+   HERO ACTIONS
+========================================================= */
+
 .about-hero-actions {
+
     display: flex;
 
     flex-wrap: wrap;
@@ -229,14 +415,16 @@ body {
     gap: 12px;
 
     margin-top: 34px;
+
 }
 
 
 .about-primary-button,
 .about-secondary-button {
+
     display: inline-flex;
 
-    min-height: 48px;
+    min-height: 50px;
 
     align-items: center;
     justify-content: center;
@@ -245,11 +433,20 @@ body {
 
     padding:
         0
-        22px;
+        24px;
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
     font-size: 14px;
 
-    font-weight: 800;
+    font-weight: 700;
+
+    letter-spacing: 0;
 
     text-decoration: none;
 
@@ -257,11 +454,14 @@ body {
         background-color 0.2s ease,
         border-color 0.2s ease,
         color 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
 }
 
 
 .about-primary-button {
+
     border:
         1px solid
         var(--about-green-800);
@@ -271,19 +471,35 @@ body {
 
     color:
         var(--about-white);
+
+    box-shadow:
+        0 8px 20px
+        rgba(
+            12,
+            45,
+            36,
+            0.12
+        );
+
 }
 
 
 .about-primary-button:hover {
+
+    border-color:
+        var(--about-green-900);
+
     background:
         var(--about-green-900);
 
     transform:
         translateY(-1px);
+
 }
 
 
 .about-secondary-button {
+
     border:
         1px solid
         var(--about-green-300);
@@ -293,12 +509,21 @@ body {
 
     color:
         var(--about-green-800);
+
 }
 
 
 .about-secondary-button:hover {
+
+    border-color:
+        var(--about-green-600);
+
     background:
         var(--about-green-50);
+
+    transform:
+        translateY(-1px);
+
 }
 
 
@@ -307,6 +532,7 @@ body {
 ========================================================= */
 
 .about-hero-panel {
+
     position: relative;
 
     overflow: hidden;
@@ -333,36 +559,56 @@ body {
             36,
             0.16
         );
+
 }
 
 
+/* =========================================================
+   HERO PANEL HEADING
+========================================================= */
+
 .about-panel-heading {
+
     display: flex;
 
     align-items: center;
     justify-content: space-between;
 
     color:
-        #fbbf24;
+        var(--about-gold-400);
+
 }
 
 
 .about-panel-heading span {
+
     font-size: 11px;
 
     font-weight: 800;
 
+    line-height: 1.4;
+
     letter-spacing: 0.2em;
+
+    text-transform: uppercase;
+
 }
 
 
 .about-panel-heading svg {
+
     width: 26px;
     height: 26px;
+
 }
 
 
+/* =========================================================
+   HERO PANEL ICON
+========================================================= */
+
 .about-panel-icon {
+
     display: flex;
 
     width: 130px;
@@ -385,20 +631,28 @@ body {
         );
 
     color:
-        #fbbf24;
+        var(--about-gold-400);
 
     background:
         var(--about-green-800);
+
 }
 
 
 .about-panel-icon svg {
+
     width: 75px;
     height: 75px;
+
 }
 
 
+/* =========================================================
+   HERO PANEL CONTENT
+========================================================= */
+
 .about-panel-content {
+
     padding-top: 26px;
 
     border-top:
@@ -411,56 +665,70 @@ body {
         );
 
     text-align: center;
+
 }
 
 
 .about-panel-content h2 {
+
     margin: 0;
 
-    color: white;
-
-    font-family:
-        Georgia,
-        Cambria,
-        "Times New Roman",
-        serif;
+    color:
+        var(--about-white);
 
     font-size: 25px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    letter-spacing: -0.025em;
+
 }
 
 
 .about-panel-content p {
+
     margin:
         12px
         0
         0;
 
-    color: #cbd5e1;
+    color:
+        var(--about-slate-300);
 
     font-size: 14px;
 
+    font-weight: 400;
+
     line-height: 1.8;
+
 }
 
 
 /* =========================================================
-   SECTIONS
+   GENERAL SECTIONS
 ========================================================= */
 
 .about-section {
+
     padding:
         82px
         0;
+
 }
 
 
 .about-section-white {
+
     background:
         var(--about-white);
+
 }
 
 
 .about-section-light {
+
     border-top:
         1px solid
         var(--about-slate-200);
@@ -471,17 +739,25 @@ body {
 
     background:
         var(--about-slate-50);
+
 }
 
 
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
 .about-section-heading {
+
     max-width: 720px;
 
     margin-bottom: 44px;
+
 }
 
 
 .about-section-heading h2 {
+
     margin:
         10px
         0
@@ -490,24 +766,24 @@ body {
     color:
         var(--about-green-950);
 
-    font-family:
-        Georgia,
-        Cambria,
-        "Times New Roman",
-        serif;
-
     font-size:
         clamp(
-            30px,
+            28px,
             4vw,
-            42px
+            38px
         );
 
+    font-weight: 700;
+
     line-height: 1.2;
+
+    letter-spacing: -0.03em;
+
 }
 
 
 .about-section-heading p {
+
     margin:
         16px
         0
@@ -516,7 +792,12 @@ body {
     color:
         var(--about-slate-500);
 
+    font-size: 14px;
+
+    font-weight: 400;
+
     line-height: 1.8;
+
 }
 
 
@@ -525,6 +806,7 @@ body {
 ========================================================= */
 
 .about-purpose-grid {
+
     display: grid;
 
     grid-template-columns:
@@ -541,10 +823,12 @@ body {
         var(--about-green-200);
 
     gap: 1px;
+
 }
 
 
 .about-purpose-card {
+
     min-height: 290px;
 
     padding: 34px;
@@ -555,16 +839,24 @@ body {
     transition:
         background-color 0.2s ease,
         transform 0.2s ease;
+
 }
 
 
 .about-purpose-card:hover {
+
     background:
         var(--about-green-50);
+
 }
 
 
+/* =========================================================
+   PURPOSE ICON
+========================================================= */
+
 .about-card-icon {
+
     display: flex;
 
     width: 52px;
@@ -584,34 +876,55 @@ body {
 
     color:
         var(--about-green-700);
+
 }
 
 
 .about-card-icon svg {
+
     width: 27px;
     height: 27px;
+
 }
 
+
+/* =========================================================
+   CARD HEADINGS
+========================================================= */
 
 .about-purpose-card h3,
 .about-service-card h3,
 .about-process-item h3 {
+
     margin: 0;
 
     color:
         var(--about-green-950);
 
     font-family:
-        Georgia,
-        Cambria,
-        "Times New Roman",
-        serif;
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
     font-size: 20px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    letter-spacing: -0.025em;
+
 }
 
 
+/* =========================================================
+   PURPOSE DESCRIPTION
+========================================================= */
+
 .about-purpose-card p {
+
     margin:
         14px
         0
@@ -622,7 +935,10 @@ body {
 
     font-size: 14px;
 
+    font-weight: 400;
+
     line-height: 1.8;
+
 }
 
 
@@ -631,16 +947,19 @@ body {
 ========================================================= */
 
 .about-mission {
+
     padding:
         78px
         0;
 
     background:
         var(--about-green-900);
+
 }
 
 
 .about-mission-grid {
+
     display: grid;
 
     grid-template-columns:
@@ -648,16 +967,24 @@ body {
         minmax(0, 1.1fr);
 
     gap: 80px;
+
 }
 
 
 .about-eyebrow-gold {
+
     color:
-        #fbbf24;
+        var(--about-gold-400);
+
 }
 
 
+/* =========================================================
+   MISSION HEADING
+========================================================= */
+
 .about-mission h2 {
+
     max-width: 600px;
 
     margin:
@@ -665,35 +992,45 @@ body {
         0
         0;
 
-    color: white;
-
-    font-family:
-        Georgia,
-        Cambria,
-        "Times New Roman",
-        serif;
+    color:
+        var(--about-white);
 
     font-size:
         clamp(
-            30px,
+            28px,
             4vw,
-            42px
+            38px
         );
 
+    font-weight: 700;
+
     line-height: 1.25;
+
+    letter-spacing: -0.03em;
+
 }
 
 
+/* =========================================================
+   MISSION TEXT
+========================================================= */
+
 .about-mission p {
+
     margin:
         0
         0
         20px;
 
     color:
-        #cbd5e1;
+        var(--about-slate-300);
+
+    font-size: 14px;
+
+    font-weight: 400;
 
     line-height: 1.9;
+
 }
 
 
@@ -702,6 +1039,7 @@ body {
 ========================================================= */
 
 .about-services-grid {
+
     display: grid;
 
     grid-template-columns:
@@ -711,10 +1049,12 @@ body {
         );
 
     gap: 20px;
+
 }
 
 
 .about-service-card {
+
     min-height: 260px;
 
     padding: 30px;
@@ -730,10 +1070,12 @@ body {
         border-color 0.2s ease,
         transform 0.2s ease,
         box-shadow 0.2s ease;
+
 }
 
 
 .about-service-card:hover {
+
     border-color:
         var(--about-green-300);
 
@@ -748,10 +1090,16 @@ body {
             36,
             0.08
         );
+
 }
 
 
+/* =========================================================
+   SERVICE NUMBER
+========================================================= */
+
 .about-service-number {
+
     display: block;
 
     margin-bottom: 38px;
@@ -763,11 +1111,19 @@ body {
 
     font-weight: 800;
 
+    line-height: 1.4;
+
     letter-spacing: 0.14em;
+
 }
 
 
+/* =========================================================
+   SERVICE DESCRIPTION
+========================================================= */
+
 .about-service-card p {
+
     margin:
         14px
         0
@@ -778,7 +1134,10 @@ body {
 
     font-size: 14px;
 
+    font-weight: 400;
+
     line-height: 1.8;
+
 }
 
 
@@ -787,6 +1146,7 @@ body {
 ========================================================= */
 
 .about-process {
+
     display: grid;
 
     grid-template-columns:
@@ -802,10 +1162,12 @@ body {
     border-bottom:
         1px solid
         var(--about-slate-200);
+
 }
 
 
 .about-process-item {
+
     padding:
         32px
         28px;
@@ -813,15 +1175,23 @@ body {
     border-right:
         1px solid
         var(--about-slate-200);
+
 }
 
 
 .about-process-item:last-child {
+
     border-right: none;
+
 }
 
 
+/* =========================================================
+   PROCESS NUMBER
+========================================================= */
+
 .about-process-number {
+
     display: flex;
 
     width: 38px;
@@ -836,13 +1206,21 @@ body {
         var(--about-green-800);
 
     color:
-        white;
+        var(--about-white);
+
+    font-size: 14px;
 
     font-weight: 800;
+
 }
 
 
+/* =========================================================
+   PROCESS TEXT
+========================================================= */
+
 .about-process-item p {
+
     margin:
         12px
         0
@@ -853,7 +1231,10 @@ body {
 
     font-size: 14px;
 
+    font-weight: 400;
+
     line-height: 1.7;
+
 }
 
 
@@ -862,6 +1243,7 @@ body {
 ========================================================= */
 
 .about-values {
+
     border-top:
         1px solid
         var(--about-green-200);
@@ -872,10 +1254,12 @@ body {
 
     background:
         var(--about-green-50);
+
 }
 
 
 .about-values-grid {
+
     display: grid;
 
     grid-template-columns:
@@ -883,10 +1267,12 @@ body {
             4,
             minmax(0, 1fr)
         );
+
 }
 
 
 .about-value {
+
     padding:
         32px
         20px;
@@ -896,25 +1282,45 @@ body {
         var(--about-green-200);
 
     text-align: center;
+
 }
 
 
 .about-value:last-child {
+
     border-right: none;
+
 }
 
 
+/* =========================================================
+   VALUE TITLE
+========================================================= */
+
 .about-value strong {
+
     display: block;
 
     color:
         var(--about-green-800);
 
     font-size: 22px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    letter-spacing: -0.025em;
+
 }
 
 
+/* =========================================================
+   VALUE DESCRIPTION
+========================================================= */
+
 .about-value span {
+
     display: block;
 
     margin-top: 5px;
@@ -926,9 +1332,12 @@ body {
 
     font-weight: 700;
 
+    line-height: 1.4;
+
     letter-spacing: 0.08em;
 
     text-transform: uppercase;
+
 }
 
 
@@ -937,55 +1346,71 @@ body {
 ========================================================= */
 
 .about-cta {
+
     padding:
         55px
         0;
 
     background:
         var(--about-green-950);
+
 }
 
 
 .about-cta-content {
+
     display: flex;
 
     align-items: center;
     justify-content: space-between;
 
     gap: 60px;
+
 }
 
 
 .about-cta-content > div:first-child {
+
     max-width: 720px;
+
 }
 
 
-.about-cta-content span {
+/* =========================================================
+   CTA LABEL
+========================================================= */
+
+.about-cta-content > div:first-child > span {
+
     color:
-        #fbbf24;
+        var(--about-gold-400);
 
     font-size: 11px;
 
     font-weight: 800;
 
+    line-height: 1.4;
+
     letter-spacing: 0.2em;
+
+    text-transform: uppercase;
+
 }
 
 
+/* =========================================================
+   CTA HEADING
+========================================================= */
+
 .about-cta-content h2 {
+
     margin:
         10px
         0
         0;
 
-    color: white;
-
-    font-family:
-        Georgia,
-        Cambria,
-        "Times New Roman",
-        serif;
+    color:
+        var(--about-white);
 
     font-size:
         clamp(
@@ -993,35 +1418,57 @@ body {
             3vw,
             34px
         );
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    letter-spacing: -0.03em;
+
 }
 
 
+/* =========================================================
+   CTA TEXT
+========================================================= */
+
 .about-cta-content p {
+
     margin:
         12px
         0
         0;
 
     color:
-        #cbd5e1;
+        var(--about-slate-300);
 
     font-size: 14px;
 
+    font-weight: 400;
+
     line-height: 1.8;
+
 }
 
 
+/* =========================================================
+   CTA ACTIONS
+========================================================= */
+
 .about-cta-actions {
+
     display: flex;
 
     flex-shrink: 0;
 
     gap: 10px;
+
 }
 
 
 .about-cta-primary,
 .about-cta-secondary {
+
     display: inline-flex;
 
     min-height: 46px;
@@ -1033,24 +1480,59 @@ body {
         0
         20px;
 
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
     font-size: 13px;
 
-    font-weight: 800;
+    font-weight: 700;
 
     text-decoration: none;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+
 }
 
 
 .about-cta-primary {
+
+    border:
+        1px solid
+        var(--about-gold);
+
     background:
         var(--about-gold);
 
     color:
         var(--about-green-950);
+
+}
+
+
+.about-cta-primary:hover {
+
+    background:
+        var(--about-gold-400);
+
+    border-color:
+        var(--about-gold-400);
+
+    transform:
+        translateY(-1px);
+
 }
 
 
 .about-cta-secondary {
+
     border:
         1px solid
         rgba(
@@ -1060,101 +1542,183 @@ body {
             0.3
         );
 
-    color: white;
+    color:
+        var(--about-white);
+
+}
+
+
+.about-cta-secondary:hover {
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    transform:
+        translateY(-1px);
+
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE - TABLET
 ========================================================= */
 
 @media (max-width: 1000px) {
 
     .about-hero-grid {
+
         grid-template-columns: 1fr;
 
         gap: 50px;
+
     }
 
 
     .about-hero-panel {
+
         max-width: 600px;
+
     }
 
 
     .about-purpose-grid,
     .about-services-grid {
+
         grid-template-columns:
             repeat(
                 2,
                 minmax(0, 1fr)
             );
+
     }
 
 
     .about-process {
+
         grid-template-columns:
             repeat(
                 2,
                 minmax(0, 1fr)
             );
+
     }
 
 
     .about-process-item:nth-child(2) {
+
         border-right: none;
+
     }
 
 
     .about-process-item:nth-child(-n+2) {
+
         border-bottom:
             1px solid
             var(--about-slate-200);
+
     }
 
 
     .about-mission-grid {
+
         grid-template-columns: 1fr;
 
         gap: 35px;
+
     }
 
 
     .about-cta-content {
+
         align-items: flex-start;
 
         flex-direction: column;
+
     }
 
 }
 
 
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
 @media (max-width: 650px) {
 
     .about-container {
+
         width:
             min(
                 100% - 30px,
                 1280px
             );
+
     }
 
 
+    /* HERO */
+
     .about-hero-grid {
+
         padding:
-            65px
+            60px
             0;
+
+    }
+
+
+    .about-label {
+
+        padding:
+            9px
+            12px;
+
+        font-size: 10px;
+
+        letter-spacing: 0.15em;
+
     }
 
 
     .about-title {
+
+        margin-top: 20px;
+
         font-size: 38px;
+
+        line-height: 1.15;
+
+    }
+
+
+    .about-description {
+
+        font-size: 15px;
+
+        line-height: 1.8;
+
     }
 
 
     .about-hero-actions,
     .about-cta-actions {
+
         flex-direction: column;
+
     }
 
 
@@ -1162,61 +1726,171 @@ body {
     .about-secondary-button,
     .about-cta-primary,
     .about-cta-secondary {
+
         width: 100%;
+
     }
 
+
+    /* HERO PANEL */
 
     .about-hero-panel {
+
         padding: 25px;
+
     }
 
+
+    .about-panel-icon {
+
+        width: 110px;
+        height: 110px;
+
+        margin:
+            42px
+            auto;
+
+    }
+
+
+    .about-panel-icon svg {
+
+        width: 62px;
+        height: 62px;
+
+    }
+
+
+    .about-panel-content h2 {
+
+        font-size: 22px;
+
+    }
+
+
+    /* GRIDS */
 
     .about-purpose-grid,
     .about-services-grid,
     .about-process,
     .about-values-grid {
+
         grid-template-columns: 1fr;
+
     }
 
 
     .about-purpose-card {
+
         min-height: auto;
+
     }
 
 
+    /* PROCESS */
+
     .about-process-item,
     .about-process-item:nth-child(2) {
+
         border-right: none;
 
         border-bottom:
             1px solid
             var(--about-slate-200);
+
     }
 
 
     .about-process-item:last-child {
+
         border-bottom: none;
+
     }
 
 
+    /* VALUES */
+
     .about-value {
+
         border-right: none;
 
         border-bottom:
             1px solid
             var(--about-green-200);
+
     }
 
 
     .about-value:last-child {
+
         border-bottom: none;
+
     }
 
 
+    /* SECTIONS */
+
     .about-section {
+
         padding:
             62px
             0;
+
+    }
+
+
+    .about-mission {
+
+        padding:
+            62px
+            0;
+
+    }
+
+
+    .about-section-heading h2,
+    .about-mission h2 {
+
+        font-size: 30px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .about-title {
+
+        font-size: 34px;
+
+    }
+
+
+    .about-section-heading h2,
+    .about-mission h2 {
+
+        font-size: 27px;
+
+    }
+
+
+    .about-purpose-card,
+    .about-service-card {
+
+        padding: 25px;
+
+    }
+
+
+    .about-cta-content h2 {
+
+        font-size: 26px;
+
     }
 
 }

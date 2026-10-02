@@ -5,6 +5,10 @@
 
 <head>
 
+    <!-- =====================================================
+         META
+    ====================================================== -->
+
     <meta charset="UTF-8">
 
     <meta
@@ -18,6 +22,7 @@
     >
 
     <title>About | BantayBarangay</title>
+
 
     <!-- =====================================================
          SHARED CSS
@@ -33,6 +38,7 @@
         href="{% static 'css/footer.css' %}"
     >
 
+
     <!-- =====================================================
          PAGE CSS
     ====================================================== -->
@@ -42,65 +48,10 @@
         href="{% static 'css/about.css' %}"
     >
 
-    <!-- =====================================================
-         TAILWIND
-    ====================================================== -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        government: {
-                            50: '#f4f8f6',
-                            100: '#e5eee9',
-                            200: '#c8dcd3',
-                            300: '#9fc1b2',
-                            400: '#6d9f8a',
-                            500: '#39765f',
-                            600: '#28634f',
-                            700: '#1d503f',
-                            800: '#153f32',
-                            900: '#0c2d24',
-                            950: '#071e18'
-                        },
-
-                        gold: {
-                            50: '#fffbeb',
-                            100: '#fef3c7',
-                            200: '#fde68a',
-                            300: '#fcd34d',
-                            400: '#fbbf24',
-                            500: '#d9a441',
-                            600: '#b88725',
-                            700: '#936b1c'
-                        }
-                    },
-
-                    fontFamily: {
-                        sans: [
-                            'Inter',
-                            'ui-sans-serif',
-                            'system-ui',
-                            'sans-serif'
-                        ],
-
-                        serif: [
-                            'Georgia',
-                            'Cambria',
-                            'Times New Roman',
-                            'serif'
-                        ]
-                    }
-                }
-            }
-        };
-    </script>
 
     <!-- =====================================================
          GOOGLE FONT
+         SAME TYPOGRAPHY AS HOME.HTML
     ====================================================== -->
 
     <link
@@ -115,14 +66,84 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet"
     >
+
+
+    <!-- =====================================================
+         TAILWIND
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        government: {
+
+                            50: '#f4f8f6',
+                            100: '#e5eee9',
+                            200: '#c8dcd3',
+                            300: '#9fc1b2',
+                            400: '#6d9f8a',
+                            500: '#39765f',
+                            600: '#28634f',
+                            700: '#1d503f',
+                            800: '#153f32',
+                            900: '#0c2d24',
+                            950: '#071e18'
+
+                        },
+
+                        gold: {
+
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#d9a441',
+                            600: '#b88725',
+                            700: '#936b1c'
+
+                        }
+
+                    },
+
+                    fontFamily: {
+
+                        sans: [
+                            'Inter',
+                            'ui-sans-serif',
+                            'system-ui',
+                            '-apple-system',
+                            'BlinkMacSystemFont',
+                            '"Segoe UI"',
+                            'sans-serif'
+                        ]
+
+                    }
+
+                }
+
+            }
+
+        };
+
+    </script>
 
 </head>
 
 
-<body class="bg-slate-50 text-slate-800 antialiased">
+<body class="bg-slate-50 font-sans text-slate-800 antialiased">
 
 
     <!-- =====================================================
@@ -149,6 +170,7 @@
                     stroke="currentColor"
                     stroke-width="1.8"
                 >
+
                     <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -160,13 +182,15 @@
                         stroke-linejoin="round"
                         d="M9.5 12l1.7 1.7L14.8 10"
                     />
+
                 </svg>
 
-                <span class="font-medium tracking-wide">
+                <span class="font-semibold tracking-wide">
                     OFFICIAL BARANGAY DIGITAL SERVICES PORTAL
                 </span>
 
             </div>
+
 
             <span class="hidden text-slate-300 sm:block">
                 Secure • Transparent • Accountable
@@ -186,15 +210,22 @@
         <div class="about-decoration about-decoration-one"></div>
         <div class="about-decoration about-decoration-two"></div>
 
+
         <div class="about-container">
 
             <div class="about-hero-grid">
+
+
+                <!-- =========================================
+                     HERO CONTENT
+                ========================================== -->
 
                 <div>
 
                     <div class="about-label">
                         ABOUT BANTAYBARANGAY
                     </div>
+
 
                     <h1 class="about-title">
 
@@ -206,6 +237,7 @@
 
                     </h1>
 
+
                     <p class="about-description">
 
                         BantayBarangay is a digital barangay service
@@ -216,6 +248,7 @@
 
                     </p>
 
+
                     <p class="about-description">
 
                         The platform brings important resident services
@@ -225,16 +258,20 @@
 
                     </p>
 
+
                     <div class="about-hero-actions">
 
                         <a
                             href="{% url 'submit_complaint' %}"
                             class="about-primary-button"
                         >
+
                             Access Resident Services
 
                             <span>→</span>
+
                         </a>
+
 
                         <a
                             href="{% url 'contact' %}"
@@ -254,11 +291,13 @@
 
                 <div class="about-hero-panel">
 
+
                     <div class="about-panel-heading">
 
                         <span>
                             DIGITAL GOVERNANCE
                         </span>
+
 
                         <svg
                             viewBox="0 0 24 24"
@@ -266,6 +305,7 @@
                             stroke="currentColor"
                             stroke-width="1.6"
                         >
+
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -277,6 +317,7 @@
                                 stroke-linejoin="round"
                                 d="M9.5 12l1.7 1.7L14.8 10"
                             />
+
                         </svg>
 
                     </div>
@@ -290,6 +331,7 @@
                             stroke="currentColor"
                             stroke-width="1.4"
                         >
+
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -301,6 +343,7 @@
                                 stroke-linejoin="round"
                                 d="M8 11h.01M12 11h.01M16 11h.01"
                             />
+
                         </svg>
 
                     </div>
@@ -312,6 +355,7 @@
                             One Community.
                             One Digital Portal.
                         </h2>
+
 
                         <p>
                             Bringing essential barangay services closer
@@ -344,9 +388,11 @@
                     OUR PURPOSE
                 </span>
 
+
                 <h2>
                     Making barangay services more accessible
                 </h2>
+
 
                 <p>
                     BantayBarangay helps connect residents and barangay
@@ -371,19 +417,27 @@
                             stroke="currentColor"
                             stroke-width="1.8"
                         >
-                            <circle cx="12" cy="12" r="9"></circle>
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                            ></circle>
 
                             <path
                                 stroke-linecap="round"
                                 d="M8 12h8M12 8v8"
                             />
+
                         </svg>
 
                     </div>
 
+
                     <h3>
                         Accessibility
                     </h3>
+
 
                     <p>
                         Give residents convenient access to barangay
@@ -406,6 +460,7 @@
                             stroke="currentColor"
                             stroke-width="1.8"
                         >
+
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -417,13 +472,16 @@
                                 cy="12"
                                 r="2.5"
                             />
+
                         </svg>
 
                     </div>
 
+
                     <h3>
                         Transparency
                     </h3>
+
 
                     <p>
                         Help residents follow the status and progress of
@@ -446,6 +504,7 @@
                             stroke="currentColor"
                             stroke-width="1.8"
                         >
+
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
@@ -457,13 +516,16 @@
                                 stroke-linejoin="round"
                                 d="M9.5 12l1.7 1.7L14.8 10"
                             />
+
                         </svg>
 
                     </div>
 
+
                     <h3>
                         Secure Records
                     </h3>
+
 
                     <p>
                         Support controlled access to resident records,
@@ -496,12 +558,14 @@
                         OUR MISSION
                     </span>
 
+
                     <h2>
                         Supporting responsive and transparent
                         barangay governance.
                     </h2>
 
                 </div>
+
 
                 <div>
 
@@ -511,6 +575,7 @@
                         providing tools that make common transactions
                         easier to access, monitor, and manage.
                     </p>
+
 
                     <p>
                         Through digital processes, residents can interact
@@ -541,9 +606,11 @@
                     DIGITAL SERVICES
                 </span>
 
+
                 <h2>
                     What BantayBarangay provides
                 </h2>
+
 
                 <p>
                     The platform combines several important barangay
@@ -688,6 +755,7 @@
                     HOW IT WORKS
                 </span>
 
+
                 <h2>
                     A simpler way to access barangay services
                 </h2>
@@ -805,6 +873,7 @@
 
             <div class="about-values-grid">
 
+
                 <div class="about-value">
 
                     <strong>
@@ -816,6 +885,7 @@
                     </span>
 
                 </div>
+
 
                 <div class="about-value">
 
@@ -829,6 +899,7 @@
 
                 </div>
 
+
                 <div class="about-value">
 
                     <strong>
@@ -840,6 +911,7 @@
                     </span>
 
                 </div>
+
 
                 <div class="about-value">
 
@@ -876,9 +948,11 @@
                         RESIDENT SERVICES
                     </span>
 
+
                     <h2>
                         Connect with your barangay through BantayBarangay.
                     </h2>
+
 
                     <p>
                         Access digital barangay services, report concerns,
@@ -897,6 +971,7 @@
                     >
                         Submit a Complaint
                     </a>
+
 
                     <a
                         href="{% url 'contact' %}"
@@ -926,6 +1001,7 @@
     ====================================================== -->
 
     <script src="{% static 'js/topnav.js' %}"></script>
+
 
 </body>
 
