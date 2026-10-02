@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <!-- =========================================================
      MOBILE SIDEBAR TOGGLE
 ========================================================= -->
@@ -49,21 +50,26 @@
     aria-label="Main navigation"
 >
 
+
     <!-- =====================================================
-         LOGO
+         BRAND / LOGO
     ====================================================== -->
 
     <div class="sidebar-logo">
 
+        <!-- LOGO IMAGE -->
+
         <div class="sidebar-logo-image">
 
             <img
-                src="{% static 'images/logo.png' %}"
+                src="{% static 'images/SYSTEM_LOGO_W.png' %}"
                 alt="BantayBarangay"
             >
 
         </div>
 
+
+        <!-- BRAND TEXT -->
 
         <div class="sidebar-logo-text">
 
@@ -72,7 +78,7 @@
             </h2>
 
             <span>
-                Barangay Management
+                Barangay Management System
             </span>
 
         </div>
@@ -111,6 +117,7 @@
 
     <nav class="sidebar-nav">
 
+
         <!-- =================================================
              MAIN
         ================================================== -->
@@ -138,6 +145,7 @@
                     viewBox="0 0 24 24"
                     stroke-width="1.8"
                 >
+
                     <rect
                         x="3"
                         y="3"
@@ -169,6 +177,7 @@
                         height="7"
                         rx="1"
                     ></rect>
+
                 </svg>
 
                 <span>
@@ -432,7 +441,7 @@
             </a>
 
 
-            <!-- BLOCKCHAIN LOGS -->
+           <!-- BLOCKCHAIN LOGS -->
 
             <a
                 href="{% url 'blockchain_logs' %}"
@@ -442,35 +451,30 @@
                     {% endif %}"
             >
 
-                <svg
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.8"
-                >
+                <span class="ledger-nav-icon" aria-hidden="true">
 
-                    <rect
-                        x="4"
-                        y="3"
-                        width="16"
-                        height="18"
-                        rx="2"
-                    ></rect>
+                    <span class="ledger-sheet ledger-sheet-back"></span>
+                    <span class="ledger-sheet ledger-sheet-middle"></span>
 
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 7h6M9 12h6M9 17h6"
-                    />
+                    <span class="ledger-sheet ledger-sheet-front">
 
-                </svg>
+                        <span class="ledger-title-line"></span>
+
+                        <span class="ledger-content">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+
+                    </span>
+
+                </span>
 
                 <span>
                     Blockchain Logs
                 </span>
 
             </a>
-
 
             <!-- REPORTS & ANALYTICS -->
 

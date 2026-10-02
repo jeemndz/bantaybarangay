@@ -20,7 +20,6 @@
     height: 100dvh;
 
     display: flex;
-
     flex-direction: column;
 
     padding: 0;
@@ -41,7 +40,6 @@
 
     transition:
         transform 0.3s ease;
-
 }
 
 
@@ -83,7 +81,6 @@
         background-color 0.2s ease,
         transform 0.2s ease,
         box-shadow 0.2s ease;
-
 }
 
 
@@ -95,17 +92,14 @@
 
     box-shadow:
         0 10px 28px rgba(0, 0, 0, 0.22);
-
 }
 
 
 .sidebar-toggle:focus-visible {
 
-    outline:
-        2px solid #a7f3d0;
+    outline: 2px solid #a7f3d0;
 
     outline-offset: 3px;
-
 }
 
 
@@ -113,7 +107,6 @@
 
     width: 22px;
     height: 22px;
-
 }
 
 
@@ -144,7 +137,6 @@
 
     transition:
         opacity 0.3s ease;
-
 }
 
 
@@ -153,7 +145,6 @@
     display: block;
 
     opacity: 1;
-
 }
 
 
@@ -164,6 +155,11 @@
 .sidebar-close {
 
     display: none;
+
+    position: absolute;
+
+    top: 12px;
+    right: 12px;
 
     width: 36px;
     height: 36px;
@@ -186,7 +182,6 @@
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
-
 }
 
 
@@ -196,7 +191,6 @@
         rgba(255, 255, 255, 0.08);
 
     color: #ffffff;
-
 }
 
 
@@ -206,7 +200,6 @@
         2px solid #a7f3d0;
 
     outline-offset: 2px;
-
 }
 
 
@@ -214,40 +207,50 @@
 
     width: 19px;
     height: 19px;
-
 }
 
 
 /* =========================================================
-   LOGO
+   LOGO / BRAND
 ========================================================= */
 
 .sidebar-logo {
 
+    position: relative;
+
+    width: 100%;
+
+    min-height: 138px;
+
     display: flex;
+    flex-direction: column;
 
     align-items: center;
+    justify-content: center;
 
-    min-height: 80px;
+    gap: 8px;
 
-    padding: 16px 20px;
-
-    gap: 12px;
+    padding: 18px 20px 20px;
 
     box-sizing: border-box;
+
+    text-align: center;
 
     border-bottom:
         1px solid rgba(255, 255, 255, 0.10);
 
     flex-shrink: 0;
-
 }
 
 
+/* =========================================================
+   LOGO IMAGE
+========================================================= */
+
 .sidebar-logo-image {
 
-    width: 44px;
-    height: 44px;
+    width: 54px;
+    height: 54px;
 
     display: flex;
 
@@ -255,28 +258,42 @@
     justify-content: center;
 
     flex-shrink: 0;
-
 }
 
 
+.sidebar-logo-image img,
 .sidebar-logo img {
 
-    width: 44px;
-    height: 44px;
+    display: block;
+
+    width: 54px;
+    height: 54px;
 
     object-fit: contain;
 
     flex-shrink: 0;
-
 }
 
 
+/* =========================================================
+   LOGO TEXT
+========================================================= */
+
 .sidebar-logo-text {
+
+    width: 100%;
 
     min-width: 0;
 
-    flex: 1;
+    display: flex;
+    flex-direction: column;
 
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    flex: none;
 }
 
 
@@ -294,6 +311,7 @@
 
     line-height: 1.2;
 
+    text-align: center;
 }
 
 
@@ -301,7 +319,7 @@
 
     display: block;
 
-    margin-top: 3px;
+    margin: 0;
 
     color: #9fc9c0;
 
@@ -313,6 +331,7 @@
 
     line-height: 1.3;
 
+    text-align: center;
 }
 
 
@@ -335,7 +354,6 @@
     box-sizing: border-box;
 
     overflow-x: hidden;
-
     overflow-y: auto;
 
     scrollbar-width: thin;
@@ -343,21 +361,18 @@
     scrollbar-color:
         rgba(255, 255, 255, 0.15)
         transparent;
-
 }
 
 
 .sidebar-nav::-webkit-scrollbar {
 
     width: 4px;
-
 }
 
 
 .sidebar-nav::-webkit-scrollbar-track {
 
     background: transparent;
-
 }
 
 
@@ -367,7 +382,6 @@
         rgba(255, 255, 255, 0.15);
 
     border-radius: 10px;
-
 }
 
 
@@ -375,7 +389,6 @@
 
     background:
         rgba(255, 255, 255, 0.25);
-
 }
 
 
@@ -390,7 +403,6 @@
     flex-direction: column;
 
     gap: 4px;
-
 }
 
 
@@ -413,7 +425,6 @@
     letter-spacing: 1.1px;
 
     text-transform: uppercase;
-
 }
 
 
@@ -462,7 +473,6 @@
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
-
 }
 
 
@@ -483,7 +493,6 @@
     font-weight: 400 !important;
 
     line-height: 1.25;
-
 }
 
 
@@ -503,7 +512,6 @@
     transition:
         color 0.2s ease,
         transform 0.2s ease;
-
 }
 
 
@@ -521,21 +529,18 @@
     text-decoration: none;
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .nav-item:hover > span {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .nav-item:hover svg {
 
     color: #ffffff;
-
 }
 
 
@@ -552,14 +557,12 @@
     text-decoration: none;
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .nav-item:focus > span {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -569,7 +572,6 @@
         2px solid rgba(167, 243, 208, 0.7);
 
     outline-offset: 2px;
-
 }
 
 
@@ -584,21 +586,18 @@
     color: #ffffff;
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .nav-item.active > span {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .nav-item.active svg {
 
     color: #ffffff;
-
 }
 
 
@@ -609,14 +608,12 @@
 .sidebar .nav-item:active {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .nav-item:active > span {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -628,7 +625,6 @@
 .sidebar .bg-emerald-700.nav-item {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -636,7 +632,6 @@
 .sidebar .bg-emerald-700.nav-item > span {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -647,7 +642,6 @@
 #settingsNavigation {
 
     width: 100%;
-
 }
 
 
@@ -664,7 +658,6 @@
     font-size: 13px !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -675,21 +668,18 @@
     font-size: 13px !important;
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar #settingsMenuButton.bg-emerald-700 {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar #settingsMenuButton.bg-emerald-700 > span {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -711,7 +701,6 @@
     transition:
         transform 0.3s ease,
         color 0.2s ease;
-
 }
 
 
@@ -719,7 +708,6 @@
 
     transform:
         rotate(180deg);
-
 }
 
 
@@ -742,7 +730,6 @@
     transition:
         grid-template-rows 0.3s ease,
         opacity 0.25s ease;
-
 }
 
 
@@ -751,7 +738,6 @@
     grid-template-rows: 1fr;
 
     opacity: 1;
-
 }
 
 
@@ -760,7 +746,6 @@
     min-height: 0;
 
     overflow: hidden;
-
 }
 
 
@@ -771,12 +756,10 @@
     margin-left: 20px;
 
     padding-left: 12px;
-
     padding-bottom: 4px;
 
     border-left:
         1px solid #0b6658;
-
 }
 
 
@@ -791,7 +774,6 @@
     font-size: 12.5px !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -802,7 +784,6 @@
     font-size: 12.5px !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -812,7 +793,6 @@
     height: 16px;
 
     min-width: 16px;
-
 }
 
 
@@ -830,7 +810,6 @@
     font-family: inherit !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -842,7 +821,6 @@
     font-family: inherit !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -853,7 +831,6 @@
 .sidebar button {
 
     font-family: inherit !important;
-
 }
 
 
@@ -863,7 +840,6 @@
 .sidebar button.nav-item:active {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -873,7 +849,6 @@
 .sidebar button.nav-item:active > span {
 
     font-weight: 400 !important;
-
 }
 
 
@@ -884,7 +859,6 @@
 .sidebar a {
 
     text-decoration: none;
-
 }
 
 
@@ -895,7 +869,6 @@
 .sidebar a:active {
 
     text-decoration: none;
-
 }
 
 
@@ -909,7 +882,6 @@
     font-family: inherit !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -919,7 +891,6 @@
     font-family: inherit !important;
 
     font-weight: 400 !important;
-
 }
 
 
@@ -946,21 +917,198 @@
         rgba(0, 0, 0, 0.05);
 
     flex-shrink: 0;
-
 }
 
 
 .sidebar-bottom .nav-item {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar-bottom .nav-item > span {
 
     font-weight: 400 !important;
+}
 
+/* =========================================================
+   BLOCKCHAIN LEDGER ICON
+========================================================= */
+
+.ledger-nav-icon {
+
+    position: relative;
+
+    width: 18px !important;
+    height: 18px !important;
+
+    min-width: 18px !important;
+
+    display: block;
+
+    flex: 0 0 18px !important;
+
+    color: #8fc1b7;
+}
+
+
+/* =========================================================
+   LEDGER SHEETS
+========================================================= */
+
+.ledger-sheet {
+
+    position: absolute;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    border: 1.5px solid currentColor;
+
+    border-radius: 2px;
+
+    background: #063f35;
+}
+
+
+/* BACK PAGE */
+
+.ledger-sheet-back {
+
+    width: 12px;
+    height: 14px;
+
+    top: 0;
+    left: 1px;
+}
+
+
+/* MIDDLE PAGE */
+
+.ledger-sheet-middle {
+
+    width: 12px;
+    height: 14px;
+
+    top: 2px;
+    left: 3px;
+}
+
+
+/* FRONT PAGE */
+
+.ledger-sheet-front {
+
+    width: 12px;
+    height: 14px;
+
+    top: 4px;
+    left: 5px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   TOP RECTANGLE / TITLE
+========================================================= */
+
+.ledger-title-line {
+
+    position: absolute;
+
+    top: 2px;
+    left: 2px;
+
+    width: 7px;
+    height: 2px;
+
+    display: block;
+
+    border: 1px solid currentColor;
+
+    border-radius: 1px;
+}
+
+
+/* =========================================================
+   LEDGER LINES
+========================================================= */
+
+.ledger-content {
+
+    position: absolute;
+
+    top: 7px;
+    left: 2px;
+
+    width: 7px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1.5px;
+}
+
+
+.ledger-content span {
+
+    display: block;
+
+    width: 7px;
+    height: 1px;
+
+    border-radius: 10px;
+
+    background: currentColor;
+}
+
+
+/* SHORTEN LAST LINE */
+
+.ledger-content span:last-child {
+
+    width: 5px;
+}
+
+
+/* =========================================================
+   NORMAL SIDEBAR STATE
+========================================================= */
+
+.sidebar .nav-item .ledger-nav-icon {
+
+    color: #8fc1b7;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* =========================================================
+   ACTIVE STATE
+========================================================= */
+
+.sidebar .nav-item.active .ledger-nav-icon {
+
+    color: #ffffff;
+}
+
+
+/* Make pages blend with active/hover background */
+
+.sidebar .nav-item:hover .ledger-sheet {
+
+    background: transparent;
+}
+
+
+.sidebar .nav-item.active .ledger-sheet {
+
+    background: transparent;
 }
 
 
@@ -973,21 +1121,18 @@
     color: #f7c0bb;
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .logout > span {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .logout svg {
 
     color: #e5aaa5;
-
 }
 
 
@@ -999,21 +1144,18 @@
     color: #fecaca;
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .logout:hover > span {
 
     font-weight: 400 !important;
-
 }
 
 
 .sidebar .logout:hover svg {
 
     color: #fecaca;
-
 }
 
 
@@ -1029,7 +1171,6 @@
         calc(100% - 245px);
 
     min-height: 100vh;
-
     min-height: 100dvh;
 
     box-sizing: border-box;
@@ -1037,7 +1178,6 @@
     transition:
         margin-left 0.3s ease,
         width 0.3s ease;
-
 }
 
 
@@ -1058,7 +1198,6 @@
 
         box-shadow:
             10px 0 35px rgba(0, 0, 0, 0.18);
-
     }
 
 
@@ -1066,21 +1205,18 @@
 
         transform:
             translateX(0);
-
     }
 
 
     .sidebar-toggle {
 
         display: flex;
-
     }
 
 
     .sidebar-close {
 
         display: flex;
-
     }
 
 
@@ -1089,7 +1225,6 @@
         margin-left: 0;
 
         width: 100%;
-
     }
 
 }
@@ -1105,47 +1240,44 @@
 
         width:
             min(280px, 88vw);
-
     }
 
 
     .sidebar-logo {
 
-        min-height: 72px;
+        min-height: 125px;
 
         padding:
-            14px 16px;
+            15px 16px 17px;
 
-    }
-
-
-    .sidebar-logo img {
-
-        width: 40px;
-        height: 40px;
-
+        gap: 6px;
     }
 
 
     .sidebar-logo-image {
 
-        width: 40px;
-        height: 40px;
+        width: 47px;
+        height: 47px;
+    }
 
+
+    .sidebar-logo-image img,
+    .sidebar-logo img {
+
+        width: 47px;
+        height: 47px;
     }
 
 
     .sidebar-logo h2 {
 
         font-size: 16px;
-
     }
 
 
     .sidebar-logo span {
 
         font-size: 9px;
-
     }
 
 
@@ -1153,7 +1285,6 @@
 
         padding:
             16px 12px;
-
     }
 
 
@@ -1166,7 +1297,6 @@
 
         font-size:
             12.5px !important;
-
     }
 
 
@@ -1174,7 +1304,6 @@
 
         font-size:
             12.5px !important;
-
     }
 
 
@@ -1182,7 +1311,6 @@
 
         padding:
             12px;
-
     }
 
 
@@ -1193,7 +1321,6 @@
 
         width: 42px;
         height: 42px;
-
     }
 
 }
@@ -1212,7 +1339,6 @@
     #settingsMenuArrow {
 
         transition: none;
-
     }
 
 }

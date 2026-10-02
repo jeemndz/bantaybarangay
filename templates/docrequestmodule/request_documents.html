@@ -1,8 +1,12 @@
 {% extends "base.html" %}
+
 {% load static %}
 
+
 {% block title %}
+
 Document Requests | BantayBarangay
+
 {% endblock %}
 
 
@@ -20,30 +24,29 @@ Document Requests | BantayBarangay
 
 <div class="dr-page">
 
-    <!-- ==================================================
-         PAGE HEADER
-    =================================================== -->
 
-    <div class="dr-header">
+<!-- ==================================================
+     PAGE HEADER
+=================================================== -->
 
-        <div>
+<div class="dr-header">
 
-            <p class="dr-eyebrow">
-                Document Management
-            </p>
+    <div>
 
-            <h1>
-                Document Requests
-            </h1>
+        </p>
 
-            <p class="dr-subtitle">
-                Review and process document requests
-                submitted by residents.
-            </p>
+        <h1>
+            Document Requests
+        </h1>
 
-        </div>
+        <p class="dr-subtitle">
+            Review and process document requests
+            submitted by residents.
+        </p>
 
     </div>
+
+</div>
 
 
     <!-- ==================================================
@@ -65,6 +68,24 @@ Document Requests | BantayBarangay
                     "
                 >
 
+                    <span class="dr-message-icon">
+
+                        {% if "success" in message.tags %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% elif "error" in message.tags %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                        {% endif %}
+
+                    </span>
+
                     <span>
                         {{ message }}
                     </span>
@@ -82,92 +103,151 @@ Document Requests | BantayBarangay
          STATISTICS
     =================================================== -->
 
-    <div class="dr-stats">
+   <!-- ==================================================
+     STATISTICS
+=================================================== -->
 
-        <div class="dr-stat-card">
-
-            <div class="dr-stat-icon">
-                <i class="fa-solid fa-file-lines"></i>
-            </div>
-
-            <div>
-
-                <span class="dr-stat-label">
-                    Total Requests
-                </span>
-
-                <strong>
-                    {{ total_requests }}
-                </strong>
-
-            </div>
-
-        </div>
+<div class="dr-stats">
 
 
-        <div class="dr-stat-card">
+    <!-- TOTAL REQUESTS -->
 
-            <div class="dr-stat-icon">
-                <i class="fa-solid fa-clock"></i>
-            </div>
+    <div class="dr-stat-card">
 
-            <div>
+        <div class="dr-stat-icon dr-stat-icon-total">
 
-                <span class="dr-stat-label">
-                    Processing
-                </span>
-
-                <strong>
-                    {{ pending_requests }}
-                </strong>
-
-            </div>
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path d="M6 3h9l4 4v14H6z"></path>
+                <path d="M15 3v5h4"></path>
+                <path d="M9 12h6"></path>
+                <path d="M9 16h6"></path>
+            </svg>
 
         </div>
 
+        <div>
 
-        <div class="dr-stat-card">
+            <span class="dr-stat-label">
+                Total Requests
+            </span>
 
-            <div class="dr-stat-icon">
-                <i class="fa-solid fa-box-archive"></i>
-            </div>
-
-            <div>
-
-                <span class="dr-stat-label">
-                    Ready for Pickup
-                </span>
-
-                <strong>
-                    {{ ready_requests }}
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <div class="dr-stat-card">
-
-            <div class="dr-stat-icon">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-
-            <div>
-
-                <span class="dr-stat-label">
-                    Released
-                </span>
-
-                <strong>
-                    {{ released_requests }}
-                </strong>
-
-            </div>
+            <strong>
+                {{ total_requests }}
+            </strong>
 
         </div>
 
     </div>
+
+
+    <!-- PROCESSING -->
+
+    <div class="dr-stat-card">
+
+        <div class="dr-stat-icon dr-stat-icon-processing">
+
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="8"
+                ></circle>
+
+                <path d="M12 8v5"></path>
+                <path d="M12 13l3 2"></path>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span class="dr-stat-label">
+                Processing
+            </span>
+
+            <strong>
+                {{ pending_requests }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- READY FOR PICKUP -->
+
+    <div class="dr-stat-card">
+
+        <div class="dr-stat-icon dr-stat-icon-pickup">
+
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path d="M4 8h16v12H4z"></path>
+                <path d="M3 4h18v4H3z"></path>
+                <path d="M9 12h6"></path>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span class="dr-stat-label">
+                Ready for Pickup
+            </span>
+
+            <strong>
+                {{ ready_requests }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- RELEASED -->
+
+    <div class="dr-stat-card">
+
+        <div class="dr-stat-icon dr-stat-icon-released">
+
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="8"
+                ></circle>
+
+                <path d="M8.5 12l2.3 2.3 4.8-4.8"></path>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span class="dr-stat-label">
+                Released
+            </span>
+
+            <strong>
+                {{ released_requests }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
 
 
     <!-- ==================================================
@@ -180,6 +260,7 @@ Document Requests | BantayBarangay
             method="GET"
             class="dr-filter-form"
         >
+
 
             <!-- SEARCH -->
 
@@ -199,73 +280,95 @@ Document Requests | BantayBarangay
 
             <!-- DOCUMENT TYPE -->
 
-            <select
-                name="document_type"
-                class="dr-filter-select"
-            >
+            <div class="dr-select-wrapper">
 
-                <option value="">
-                    All Documents
-                </option>
+                <i class="fa-regular fa-file-lines"></i>
 
-                {% for document in document_types %}
+                <select
+                    name="document_type"
+                    class="dr-filter-select"
+                >
 
-                    <option
-                        value="{{ document.document_type_id }}"
-                        {% if selected_document_type == document.document_type_id|stringformat:"s" %}
-                            selected
-                        {% endif %}
-                    >
-                        {{ document.type_name }}
+                    <option value="">
+                        All Documents
                     </option>
 
-                {% endfor %}
+                    {% for document in document_types %}
 
-            </select>
+                        <option
+                            value="{{ document.document_type_id }}"
+                            {% if selected_document_type == document.document_type_id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ document.type_name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
 
 
             <!-- STATUS -->
 
-            <select
-                name="status"
-                class="dr-filter-select"
-            >
+            <div class="dr-select-wrapper">
 
-                <option value="">
-                    All Statuses
-                </option>
+                <i class="fa-solid fa-list-check"></i>
 
-                {% for status in statuses %}
+                <select
+                    name="status"
+                    class="dr-filter-select"
+                >
 
-                    <option
-                        value="{{ status }}"
-                        {% if selected_status == status %}
-                            selected
-                        {% endif %}
-                    >
-                        {{ status }}
+                    <option value="">
+                        All Statuses
                     </option>
 
-                {% endfor %}
+                    {% for status in statuses %}
 
-            </select>
+                        <option
+                            value="{{ status }}"
+                            {% if selected_status == status %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ status }}
+                        </option>
 
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- FILTER BUTTON -->
 
             <button
                 type="submit"
                 class="dr-filter-button"
             >
+
                 <i class="fa-solid fa-filter"></i>
 
                 Filter
+
             </button>
 
+
+            <!-- CLEAR -->
 
             <a
                 href="{% url 'docrequestmodule:request_documents' %}"
                 class="dr-clear-button"
             >
+
+                <i class="fa-solid fa-rotate-left"></i>
+
                 Clear
+
             </a>
 
         </form>
@@ -279,24 +382,51 @@ Document Requests | BantayBarangay
 
     <div class="dr-table-card">
 
+
+        <!-- TABLE HEADER -->
+
         <div class="dr-table-header">
 
-            <div>
+            <div class="dr-table-title">
 
-                <h2>
-                    Resident Requests
-                </h2>
+                <div class="dr-table-title-icon">
 
-                <p>
-                    {{ document_requests|length }}
-                    request{{ document_requests|length|pluralize }}
-                    displayed
-                </p>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8 6h12"></path>
+                            <path d="M8 12h12"></path>
+                            <path d="M8 18h12"></path>
+
+                            <circle cx="4" cy="6" r="1"></circle>
+                            <circle cx="4" cy="12" r="1"></circle>
+                            <circle cx="4" cy="18" r="1"></circle>
+                        </svg>
+
+                    </div>
+
+                    <i class="fa-solid fa-list-ul"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Resident Requests
+                    </h2>
+
+                    <p>
+                        {{ document_requests|length }}
+                        request{{ document_requests|length|pluralize }}
+                        displayed
+                    </p>
+
+                </div>
 
             </div>
 
         </div>
 
+
+        <!-- TABLE -->
 
         <div class="dr-table-wrapper">
 
@@ -307,31 +437,93 @@ Document Requests | BantayBarangay
                     <tr>
 
                         <th>
-                            Reference
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-solid fa-hashtag"></i>
+
+                                Reference
+
+                            </span>
+
                         </th>
 
-                        <th>
-                            Resident
-                        </th>
 
                         <th>
-                            Document
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-regular fa-user"></i>
+
+                                Resident
+
+                            </span>
+
                         </th>
 
-                        <th>
-                            Purpose
-                        </th>
 
                         <th>
-                            Submitted
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-regular fa-file-lines"></i>
+
+                                Document
+
+                            </span>
+
                         </th>
 
-                        <th>
-                            Status
-                        </th>
 
                         <th>
-                            Action
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-solid fa-bullseye"></i>
+
+                                Purpose
+
+                            </span>
+
+                        </th>
+
+
+                        <th>
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                                Submitted
+
+                            </span>
+
+                        </th>
+
+
+                        <th>
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                                Status
+
+                            </span>
+
+                        </th>
+
+
+                        <th>
+
+                            <span class="dr-th-content">
+
+                                <i class="fa-solid fa-gear"></i>
+
+                                Action
+
+                            </span>
+
                         </th>
 
                     </tr>
@@ -377,6 +569,7 @@ Document Requests | BantayBarangay
                             data-submitted="{{ item.created_at|date:'M d, Y h:i A' }}"
                         >
 
+
                             <!-- REFERENCE -->
 
                             <td>
@@ -384,7 +577,11 @@ Document Requests | BantayBarangay
                                 <div class="dr-reference">
 
                                     <strong>
+
+                                        <i class="fa-solid fa-link"></i>
+
                                         {{ item.reference_number }}
+
                                     </strong>
 
                                     <small>
@@ -429,17 +626,41 @@ Document Requests | BantayBarangay
 
                             <td>
 
-                                <strong>
-                                    {{ item.document_name }}
-                                </strong>
+                                <div class="dr-document-cell">
 
-                                {% if item.institution %}
+                                    <span class="dr-document-icon">
 
-                                    <small class="dr-cell-subtext">
-                                        {{ item.institution }}
-                                    </small>
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
 
-                                {% endif %}
+                                                <path d="M6 3h8l4 4v14H6z"></path>
+
+                                                <path d="M14 3v5h4"></path>
+
+                                                <path d="M9 12h6"></path>
+
+                                                <path d="M9 16h6"></path>
+
+                                            </svg>
+
+                                        </span>
+
+                                    <div>
+
+                                        <strong>
+                                            {{ item.document_name }}
+                                        </strong>
+
+                                        {% if item.institution %}
+
+                                            <small class="dr-cell-subtext">
+                                                {{ item.institution }}
+                                            </small>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
 
                             </td>
 
@@ -459,13 +680,25 @@ Document Requests | BantayBarangay
 
                             <td>
 
-                                <span>
-                                    {{ item.created_at|date:"M d, Y" }}
-                                </span>
+                                <div class="dr-date-cell">
 
-                                <small class="dr-cell-subtext">
-                                    {{ item.created_at|date:"h:i A" }}
-                                </small>
+                                    <span>
+
+                                        <i class="fa-regular fa-calendar"></i>
+
+                                        {{ item.created_at|date:"M d, Y" }}
+
+                                    </span>
+
+                                    <small class="dr-cell-subtext">
+
+                                        <i class="fa-regular fa-clock"></i>
+
+                                        {{ item.created_at|date:"h:i A" }}
+
+                                    </small>
+
+                                </div>
 
                             </td>
 
@@ -502,6 +735,40 @@ Document Requests | BantayBarangay
                                         {% endif %}
                                     "
                                 >
+
+                                    {% if item.status == 'Submitted' %}
+
+                                        <i class="fa-regular fa-paper-plane"></i>
+
+                                    {% elif item.status == 'Under Verification' %}
+
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    {% elif item.status == 'Ready for Signature' %}
+
+                                        <i class="fa-solid fa-pen-nib"></i>
+
+                                    {% elif item.status == 'Ready for Pickup' %}
+
+                                        <i class="fa-solid fa-box-open"></i>
+
+                                    {% elif item.status == 'Released' %}
+
+                                        <i class="fa-solid fa-circle-check"></i>
+
+                                    {% elif item.status == 'Rejected' %}
+
+                                        <i class="fa-solid fa-circle-xmark"></i>
+
+                                    {% elif item.status == 'Cancelled' %}
+
+                                        <i class="fa-solid fa-ban"></i>
+
+                                    {% else %}
+
+                                        <i class="fa-solid fa-circle-info"></i>
+
+                                    {% endif %}
 
                                     {{ item.status }}
 
@@ -540,7 +807,11 @@ Document Requests | BantayBarangay
                                 class="dr-empty"
                             >
 
-                                <i class="fa-regular fa-folder-open"></i>
+                                <div class="dr-empty-icon">
+
+                                    <i class="fa-regular fa-folder-open"></i>
+
+                                </div>
 
                                 <strong>
                                     No document requests found
@@ -577,26 +848,41 @@ Document Requests | BantayBarangay
     class="dr-modal"
 >
 
-    <div class="dr-modal-overlay"
-         onclick="closeRequestModal()">
+    <div
+        class="dr-modal-overlay"
+        onclick="closeRequestModal()"
+    >
     </div>
 
 
     <div class="dr-modal-panel">
 
-        <!-- HEADER -->
+
+        <!-- =================================================
+             MODAL HEADER
+        ================================================== -->
 
         <div class="dr-modal-header">
 
-            <div>
+            <div class="dr-modal-heading">
 
-                <p class="dr-eyebrow">
-                    Document Request
-                </p>
+                <div class="dr-modal-heading-icon">
 
-                <h2 id="modalReference">
-                    Request Details
-                </h2>
+                    <i class="fa-regular fa-file-lines"></i>
+
+                </div>
+
+                <div>
+
+                    <p class="dr-eyebrow">
+                        Document Request
+                    </p>
+
+                    <h2 id="modalReference">
+                        Request Details
+                    </h2>
+
+                </div>
 
             </div>
 
@@ -605,32 +891,55 @@ Document Requests | BantayBarangay
                 type="button"
                 class="dr-modal-close"
                 onclick="closeRequestModal()"
+                aria-label="Close request details"
             >
+
                 <i class="fa-solid fa-xmark"></i>
+
             </button>
 
         </div>
 
 
-        <!-- BODY -->
+        <!-- =================================================
+             MODAL BODY
+        ================================================== -->
 
         <div class="dr-modal-body">
 
 
-            <!-- RESIDENT -->
+            <!-- =================================================
+                 RESIDENT INFORMATION
+            ================================================== -->
 
             <section class="dr-detail-section">
 
                 <h3>
+
+                    <span class="dr-section-icon">
+
+                        <i class="fa-regular fa-user"></i>
+
+                    </span>
+
                     Resident Information
+
                 </h3>
 
+
                 <div class="dr-detail-grid">
+
+
+                    <!-- RESIDENT -->
 
                     <div>
 
                         <span>
+
+                            <i class="fa-regular fa-user"></i>
+
                             Resident
+
                         </span>
 
                         <strong id="modalResident">
@@ -640,10 +949,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- RESIDENT ID -->
+
                     <div>
 
                         <span>
+
+                            <i class="fa-solid fa-id-card"></i>
+
                             Resident ID
+
                         </span>
 
                         <strong id="modalResidentId">
@@ -653,10 +968,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- EMAIL -->
+
                     <div>
 
                         <span>
+
+                            <i class="fa-regular fa-envelope"></i>
+
                             Email
+
                         </span>
 
                         <strong id="modalEmail">
@@ -666,10 +987,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- CONTACT -->
+
                     <div>
 
                         <span>
+
+                            <i class="fa-solid fa-phone"></i>
+
                             Contact Number
+
                         </span>
 
                         <strong id="modalContact">
@@ -679,10 +1006,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- ADDRESS -->
+
                     <div class="dr-detail-wide">
 
                         <span>
+
+                            <i class="fa-solid fa-location-dot"></i>
+
                             Address
+
                         </span>
 
                         <strong id="modalAddress">
@@ -696,20 +1029,38 @@ Document Requests | BantayBarangay
             </section>
 
 
-            <!-- REQUEST -->
+            <!-- =================================================
+                 REQUEST INFORMATION
+            ================================================== -->
 
             <section class="dr-detail-section">
 
                 <h3>
+
+                    <span class="dr-section-icon">
+
+                        <i class="fa-regular fa-file-lines"></i>
+
+                    </span>
+
                     Request Information
+
                 </h3>
 
+
                 <div class="dr-detail-grid">
+
+
+                    <!-- DOCUMENT -->
 
                     <div>
 
                         <span>
+
+                            <i class="fa-regular fa-file-lines"></i>
+
                             Document
+
                         </span>
 
                         <strong id="modalDocument">
@@ -719,10 +1070,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- SUBMITTED -->
+
                     <div>
 
                         <span>
+
+                            <i class="fa-regular fa-calendar"></i>
+
                             Submitted
+
                         </span>
 
                         <strong id="modalSubmitted">
@@ -732,10 +1089,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- PURPOSE -->
+
                     <div class="dr-detail-wide">
 
                         <span>
+
+                            <i class="fa-solid fa-bullseye"></i>
+
                             Purpose
+
                         </span>
 
                         <strong id="modalPurpose">
@@ -745,10 +1108,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- INSTITUTION -->
+
                     <div class="dr-detail-wide">
 
                         <span>
+
+                            <i class="fa-regular fa-building"></i>
+
                             Institution
+
                         </span>
 
                         <strong id="modalInstitution">
@@ -758,10 +1127,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- NOTES -->
+
                     <div class="dr-detail-wide">
 
                         <span>
+
+                            <i class="fa-regular fa-note-sticky"></i>
+
                             Notes
+
                         </span>
 
                         <strong id="modalNotes">
@@ -771,10 +1146,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- RELEASE METHOD -->
+
                     <div>
 
                         <span>
+
+                            <i class="fa-solid fa-box"></i>
+
                             Release Method
+
                         </span>
 
                         <strong id="modalDelivery">
@@ -784,10 +1165,16 @@ Document Requests | BantayBarangay
                     </div>
 
 
+                    <!-- PAYMENT -->
+
                     <div>
 
                         <span>
+
+                            <i class="fa-regular fa-credit-card"></i>
+
                             Payment Method
+
                         </span>
 
                         <strong id="modalPayment">
@@ -801,13 +1188,24 @@ Document Requests | BantayBarangay
             </section>
 
 
-            <!-- STATUS -->
+            <!-- =================================================
+                 UPDATE STATUS
+            ================================================== -->
 
             <section class="dr-detail-section">
 
                 <h3>
+
+                    <span class="dr-section-icon">
+
+                        <i class="fa-solid fa-arrows-rotate"></i>
+
+                    </span>
+
                     Update Status
+
                 </h3>
+
 
                 <form
                     id="statusUpdateForm"
@@ -818,23 +1216,29 @@ Document Requests | BantayBarangay
 
                     <div class="dr-status-form">
 
-                        <select
-                            name="status"
-                            id="modalStatus"
-                            required
-                        >
+                        <div class="dr-status-select-wrapper">
 
-                            {% for status in statuses %}
+                            <i class="fa-solid fa-list-check"></i>
 
-                                <option
-                                    value="{{ status }}"
-                                >
-                                    {{ status }}
-                                </option>
+                            <select
+                                name="status"
+                                id="modalStatus"
+                                required
+                            >
 
-                            {% endfor %}
+                                {% for status in statuses %}
 
-                        </select>
+                                    <option
+                                        value="{{ status }}"
+                                    >
+                                        {{ status }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
 
 
                         <button
@@ -859,7 +1263,6 @@ Document Requests | BantayBarangay
     </div>
 
 </div>
-
 
 {% endblock %}
 
@@ -886,6 +1289,10 @@ Document Requests | BantayBarangay
             document.getElementById(
                 "requestModal"
             );
+
+        if (!modal) {
+            return;
+        }
 
 
         // =================================================
