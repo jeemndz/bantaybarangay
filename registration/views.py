@@ -9,7 +9,7 @@ from .models import User, Resident
 
 import os
 import random
-
+import uuid
 
 # =====================================================
 # HELPER - GET REGISTRATION SESSION DATA
@@ -49,11 +49,11 @@ def registration(request):
 
     registration_data = get_registration_data(request)
 
-    # -------------------------------------------------
-    # POST STEP 1
-    # -------------------------------------------------
-
     if request.method == "POST":
+
+        # -------------------------------------------------
+        # GET FORM DATA
+        # -------------------------------------------------
 
         full_name = request.POST.get(
             "full_name",
@@ -90,112 +90,128 @@ def registration(request):
             ""
         )
 
+        profile_picture = request.FILES.get(
+            "profile_picture"
+        )
+
+
         # -------------------------------------------------
-        # REQUIRED FIELD VALIDATION
+        # REQUIRED FIELDS
         # -------------------------------------------------
 
-        if not full_name:
+        if not all([
+            full_name,
+            birth_date,
+            gender,
+            civil_status,
+            username,
+        ]):
 
             return render(
                 request,
                 "registration/registration.html",
                 {
-                    "error": "Please enter your full name.",
-                    "registration_data": registration_data,
+                    "error":
+                        "Please complete all required fields.",
 
-                    "full_name": full_name,
-                    "birth_date": birth_date,
-                    "gender": gender,
-                    "civil_status": civil_status,
-                    "username": username,
+                    "registration_data":
+                        registration_data,
+
+                    "full_name":
+                        full_name,
+
+                    "birth_date":
+                        birth_date,
+
+                    "gender":
+                        gender,
+
+                    "civil_status":
+                        civil_status,
+
+                    "username":
+                        username,
                 }
             )
 
-        if not birth_date:
+
+        # -------------------------------------------------
+        # USERNAME VALIDATION
+        # -------------------------------------------------
+
+        existing_username = (
+            registration_data.get(
+                "username",
+                ""
+            )
+        )
+
+        username_query = User.objects.filter(
+            username=username
+        )
+
+        if (
+            existing_username
+            and existing_username == username
+        ):
+
+            username_query = (
+                username_query.exclude(
+                    username=existing_username
+                )
+            )
+
+        if username_query.exists():
 
             return render(
                 request,
                 "registration/registration.html",
                 {
-                    "error": "Please enter your birth date.",
-                    "registration_data": registration_data,
+                    "error":
+                        "That username is already in use.",
 
-                    "full_name": full_name,
-                    "birth_date": birth_date,
-                    "gender": gender,
-                    "civil_status": civil_status,
-                    "username": username,
+                    "registration_data":
+                        registration_data,
+
+                    "full_name":
+                        full_name,
+
+                    "birth_date":
+                        birth_date,
+
+                    "gender":
+                        gender,
+
+                    "civil_status":
+                        civil_status,
+
+                    "username":
+                        username,
                 }
             )
 
-        if not gender:
-
-            return render(
-                request,
-                "registration/registration.html",
-                {
-                    "error": "Please select your gender.",
-                    "registration_data": registration_data,
-
-                    "full_name": full_name,
-                    "birth_date": birth_date,
-                    "gender": gender,
-                    "civil_status": civil_status,
-                    "username": username,
-                }
-            )
-
-        if not civil_status:
-
-            return render(
-                request,
-                "registration/registration.html",
-                {
-                    "error": "Please select your civil status.",
-                    "registration_data": registration_data,
-
-                    "full_name": full_name,
-                    "birth_date": birth_date,
-                    "gender": gender,
-                    "civil_status": civil_status,
-                    "username": username,
-                }
-            )
-
-        if not username:
-
-            return render(
-                request,
-                "registration/registration.html",
-                {
-                    "error": "Please enter a username.",
-                    "registration_data": registration_data,
-
-                    "full_name": full_name,
-                    "birth_date": birth_date,
-                    "gender": gender,
-                    "civil_status": civil_status,
-                    "username": username,
-                }
-            )
 
         # -------------------------------------------------
         # PASSWORD VALIDATION
-        #
-        # If the user returned from Step 2, the password
-        # fields may be left blank. In that case, keep
-        # the previously saved password.
         # -------------------------------------------------
 
-        existing_password = registration_data.get(
-            "password",
-            ""
+        existing_password = (
+            registration_data.get(
+                "password",
+                ""
+            )
         )
 
-        if not password and existing_password:
+        # If the applicant returned from Step 2,
+        # allow the previously entered password
+        # to remain in the registration session.
+
+        if (
+            not password
+            and existing_password
+        ):
 
             password = existing_password
-
             confirm_password = existing_password
 
         else:
@@ -206,16 +222,29 @@ def registration(request):
                     request,
                     "registration/registration.html",
                     {
-                        "error": "Please enter a password.",
-                        "registration_data": registration_data,
+                        "error":
+                            "Please enter a password.",
 
-                        "full_name": full_name,
-                        "birth_date": birth_date,
-                        "gender": gender,
-                        "civil_status": civil_status,
-                        "username": username,
+                        "registration_data":
+                            registration_data,
+
+                        "full_name":
+                            full_name,
+
+                        "birth_date":
+                            birth_date,
+
+                        "gender":
+                            gender,
+
+                        "civil_status":
+                            civil_status,
+
+                        "username":
+                            username,
                     }
                 )
+
 
             if len(password) < 8:
 
@@ -223,16 +252,29 @@ def registration(request):
                     request,
                     "registration/registration.html",
                     {
-                        "error": "Password must be at least 8 characters.",
-                        "registration_data": registration_data,
+                        "error":
+                            "Password must be at least 8 characters long.",
 
-                        "full_name": full_name,
-                        "birth_date": birth_date,
-                        "gender": gender,
-                        "civil_status": civil_status,
-                        "username": username,
+                        "registration_data":
+                            registration_data,
+
+                        "full_name":
+                            full_name,
+
+                        "birth_date":
+                            birth_date,
+
+                        "gender":
+                            gender,
+
+                        "civil_status":
+                            civil_status,
+
+                        "username":
+                            username,
                     }
                 )
+
 
             if password != confirm_password:
 
@@ -240,24 +282,223 @@ def registration(request):
                     request,
                     "registration/registration.html",
                     {
-                        "error": "Passwords do not match.",
-                        "registration_data": registration_data,
+                        "error":
+                            "Passwords do not match.",
 
-                        "full_name": full_name,
-                        "birth_date": birth_date,
-                        "gender": gender,
-                        "civil_status": civil_status,
-                        "username": username,
+                        "registration_data":
+                            registration_data,
+
+                        "full_name":
+                            full_name,
+
+                        "birth_date":
+                            birth_date,
+
+                        "gender":
+                            gender,
+
+                        "civil_status":
+                            civil_status,
+
+                        "username":
+                            username,
                     }
                 )
 
+
         # -------------------------------------------------
-        # SAVE STEP 1
-        #
-        # IMPORTANT:
-        # update() is used instead of replacing the entire
-        # dictionary. This keeps Step 2 / Step 3 information
-        # if the user goes backward.
+        # PROFILE PICTURE REQUIRED
+        # -------------------------------------------------
+
+        existing_profile_picture = (
+            registration_data.get(
+                "profile_picture_path"
+            )
+        )
+
+        if (
+            not profile_picture
+            and not existing_profile_picture
+        ):
+
+            return render(
+                request,
+                "registration/registration.html",
+                {
+                    "error":
+                        "Please upload your profile picture.",
+
+                    "registration_data":
+                        registration_data,
+
+                    "full_name":
+                        full_name,
+
+                    "birth_date":
+                        birth_date,
+
+                    "gender":
+                        gender,
+
+                    "civil_status":
+                        civil_status,
+
+                    "username":
+                        username,
+                }
+            )
+
+
+        # -------------------------------------------------
+        # PROFILE PICTURE VALIDATION
+        # -------------------------------------------------
+
+        if profile_picture:
+
+            max_profile_size = (
+                5 * 1024 * 1024
+            )
+
+            if (
+                profile_picture.size
+                > max_profile_size
+            ):
+
+                return render(
+                    request,
+                    "registration/registration.html",
+                    {
+                        "error":
+                            "Profile picture must not exceed 5 MB.",
+
+                        "registration_data":
+                            registration_data,
+
+                        "full_name":
+                            full_name,
+
+                        "birth_date":
+                            birth_date,
+
+                        "gender":
+                            gender,
+
+                        "civil_status":
+                            civil_status,
+
+                        "username":
+                            username,
+                    }
+                )
+
+
+            extension = os.path.splitext(
+                profile_picture.name
+            )[1].lower()
+
+
+            allowed_profile_extensions = [
+                ".jpg",
+                ".jpeg",
+                ".png",
+            ]
+
+
+            if (
+                extension
+                not in allowed_profile_extensions
+            ):
+
+                return render(
+                    request,
+                    "registration/registration.html",
+                    {
+                        "error":
+                            "Profile picture must be JPG, JPEG, or PNG.",
+
+                        "registration_data":
+                            registration_data,
+
+                        "full_name":
+                            full_name,
+
+                        "birth_date":
+                            birth_date,
+
+                        "gender":
+                            gender,
+
+                        "civil_status":
+                            civil_status,
+
+                        "username":
+                            username,
+                    }
+                )
+
+
+        # -------------------------------------------------
+        # SAVE PROFILE PICTURE
+        # -------------------------------------------------
+
+        if profile_picture:
+
+            old_profile_picture = (
+                registration_data.get(
+                    "profile_picture_path"
+                )
+            )
+
+
+            # Delete the previous temporary profile
+            # picture if the applicant selected
+            # another one.
+
+            if (
+                old_profile_picture
+                and default_storage.exists(
+                    old_profile_picture
+                )
+            ):
+
+                default_storage.delete(
+                    old_profile_picture
+                )
+
+
+            extension = os.path.splitext(
+                profile_picture.name
+            )[1].lower()
+
+
+            unique_filename = (
+                f"{uuid.uuid4().hex}"
+                f"{extension}"
+            )
+
+
+            profile_picture_path = (
+                default_storage.save(
+                    os.path.join(
+                        "resident_profiles",
+                        unique_filename
+                    ),
+                    profile_picture
+                )
+            )
+
+
+            registration_data[
+                "profile_picture_path"
+            ] = profile_picture_path
+
+            registration_data[
+                "profile_picture_name"
+            ] = profile_picture.name
+
+
+        # -------------------------------------------------
+        # SAVE STEP 1 DATA
         # -------------------------------------------------
 
         registration_data.update({
@@ -282,67 +523,63 @@ def registration(request):
 
         })
 
+
         save_registration_data(
             request,
             registration_data
         )
 
+
         # -------------------------------------------------
-        # STEP 1 → STEP 2
+        # NEXT STEP
         # -------------------------------------------------
 
         return redirect(
             "step2_contact"
         )
 
-    # -------------------------------------------------
-    # GET STEP 1
-    #
-    # Restore information if user clicked Back
-    # from Step 2.
-    # -------------------------------------------------
 
-    context = {
-
-        "registration_data":
-            registration_data,
-
-        "full_name":
-            registration_data.get(
-                "full_name",
-                ""
-            ),
-
-        "birth_date":
-            registration_data.get(
-                "birth_date",
-                ""
-            ),
-
-        "gender":
-            registration_data.get(
-                "gender",
-                ""
-            ),
-
-        "civil_status":
-            registration_data.get(
-                "civil_status",
-                ""
-            ),
-
-        "username":
-            registration_data.get(
-                "username",
-                ""
-            ),
-
-    }
+    # =====================================================
+    # GET REQUEST
+    # =====================================================
 
     return render(
         request,
         "registration/registration.html",
-        context
+        {
+            "registration_data":
+                registration_data,
+
+            "full_name":
+                registration_data.get(
+                    "full_name",
+                    ""
+                ),
+
+            "birth_date":
+                registration_data.get(
+                    "birth_date",
+                    ""
+                ),
+
+            "gender":
+                registration_data.get(
+                    "gender",
+                    ""
+                ),
+
+            "civil_status":
+                registration_data.get(
+                    "civil_status",
+                    ""
+                ),
+
+            "username":
+                registration_data.get(
+                    "username",
+                    ""
+                ),
+        }
     )
 
 
@@ -1244,6 +1481,10 @@ def step4_review(request):
 
                     email=
                         email,
+                        
+                    profile_picture_path=registration_data.get(
+                        "profile_picture_path"
+                    ),
 
                     # =============================================
                     # GOVERNMENT-ISSUED ID

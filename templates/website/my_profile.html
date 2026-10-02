@@ -153,7 +153,7 @@
 
 
                         <span class="resident-code">
-                            QC-SAN-ANT
+                            3008
                         </span>
 
                     </div>
@@ -169,11 +169,12 @@
 
                             <div class="resident-avatar">
 
-                                {% if resident.profile_picture %}
+                                {% if resident.profile_picture_url %}
 
                                     <img
-                                        src="{{ resident.profile_picture.url }}"
-                                        alt="Resident profile"
+                                        src="{{ resident.profile_picture_url }}"
+                                        alt="{{ resident.full_name|default:'Resident' }} profile picture"
+                                        class="resident-profile-image"
                                     >
 
                                 {% else %}

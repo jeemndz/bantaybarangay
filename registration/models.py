@@ -94,6 +94,12 @@ class Resident(models.Model):
         max_length=30
     )
 
+    profile_picture_path = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
     # =================================================
     # CONTACT INFORMATION
     # =================================================

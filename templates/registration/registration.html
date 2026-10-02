@@ -922,6 +922,7 @@
             <form
                 method="POST"
                 action="{% url 'registration' %}"
+                enctype="multipart/form-data"
                 class="
                     mt-6
                     overflow-hidden
@@ -1018,7 +1019,195 @@
                     </div>
 
 
+                    <!-- =================================================
+                        PROFILE PICTURE
+                    ================================================== -->
 
+                    <div class="mb-7">
+
+                        <label class="form-label">
+                            Profile Picture
+                            <span class="required">*</span>
+                        </label>
+
+                        <div
+                            class="
+                                rounded-2xl
+                                border
+                                border-slate-200
+                                bg-slate-50
+                                p-5
+                            "
+                        >
+
+                            <div
+                                class="
+                                    flex
+                                    flex-col
+                                    items-center
+                                    gap-5
+                                    sm:flex-row
+                                    sm:items-center
+                                "
+                            >
+
+                                <!-- PREVIEW -->
+
+                                <div
+                                    class="
+                                        relative
+                                        flex
+                                        h-28
+                                        w-28
+                                        shrink-0
+                                        items-center
+                                        justify-center
+                                        overflow-hidden
+                                        rounded-full
+                                        border-4
+                                        border-white
+                                        bg-emerald-50
+                                        shadow-md
+                                    "
+                                >
+
+                                    <img
+                                        id="profilePicturePreview"
+                                        src=""
+                                        alt="Profile picture preview"
+                                        class="
+                                            hidden
+                                            h-full
+                                            w-full
+                                            object-cover
+                                        "
+                                    >
+
+                                    <div
+                                        id="profilePicturePlaceholder"
+                                        class="
+                                            flex
+                                            h-full
+                                            w-full
+                                            items-center
+                                            justify-center
+                                            text-emerald-700
+                                        "
+                                    >
+
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="h-12 w-12"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                                            />
+                                        </svg>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- UPLOAD -->
+
+                                <div class="flex-1">
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            font-bold
+                                            text-slate-900
+                                        "
+                                    >
+                                        Upload your photo
+                                    </p>
+
+                                    <p
+                                        class="
+                                            mt-1
+                                            text-xs
+                                            leading-5
+                                            text-slate-500
+                                        "
+                                    >
+                                        Use a clear front-facing photo.
+                                        JPG, JPEG, or PNG only. Maximum 5 MB.
+                                    </p>
+
+                                    <label
+                                        for="profile_picture"
+                                        class="
+                                            mt-4
+                                            inline-flex
+                                            cursor-pointer
+                                            items-center
+                                            gap-2
+                                            rounded-xl
+                                            bg-emerald-900
+                                            px-4
+                                            py-2.5
+                                            text-sm
+                                            font-semibold
+                                            text-white
+                                            transition
+                                            hover:bg-emerald-800
+                                        "
+                                    >
+
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2"
+                                            stroke="currentColor"
+                                            class="h-4 w-4"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 7.5 12 3m0 0L7.5 7.5M12 3v13.5"
+                                            />
+                                        </svg>
+
+                                        Choose Photo
+
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        id="profile_picture"
+                                        name="profile_picture"
+                                        accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                                        class="hidden"
+                                        required
+                                    >
+
+                                    <p
+                                        id="profilePictureFileName"
+                                        class="
+                                            mt-3
+                                            text-xs
+                                            font-medium
+                                            text-slate-500
+                                        "
+                                    >
+                                        No photo selected
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
                     <!-- =================================================
                          FULL NAME
                     ================================================== -->
@@ -1940,6 +2129,8 @@
 
             initializePasswordToggles();
 
+            initializeProfilePicture();
+
         }
     );
 
@@ -2066,7 +2257,141 @@
         );
 
     }
+    /* =====================================================
+   PROFILE PICTURE
+====================================================== */
 
+function initializeProfilePicture() {
+
+    const input =
+        document.getElementById(
+            "profile_picture"
+        );
+
+    const preview =
+        document.getElementById(
+            "profilePicturePreview"
+        );
+
+    const placeholder =
+        document.getElementById(
+            "profilePicturePlaceholder"
+        );
+
+    const fileName =
+        document.getElementById(
+            "profilePictureFileName"
+        );
+
+
+    if (
+        !input ||
+        !preview ||
+        !placeholder ||
+        !fileName
+    ) {
+        return;
+    }
+
+
+    input.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                input.files[0];
+
+
+            if (!file) {
+
+                preview.src = "";
+
+                preview.classList.add(
+                    "hidden"
+                );
+
+                placeholder.classList.remove(
+                    "hidden"
+                );
+
+                fileName.textContent =
+                    "No photo selected";
+
+                return;
+            }
+
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png"
+            ];
+
+
+            if (
+                !allowedTypes.includes(
+                    file.type
+                )
+            ) {
+
+                alert(
+                    "Please select a JPG, JPEG, or PNG image."
+                );
+
+                input.value = "";
+
+                return;
+            }
+
+
+            const maxSize =
+                5 * 1024 * 1024;
+
+
+            if (file.size > maxSize) {
+
+                alert(
+                    "Profile picture must not exceed 5 MB."
+                );
+
+                input.value = "";
+
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (event) {
+
+                    preview.src =
+                        event.target.result;
+
+                    preview.classList.remove(
+                        "hidden"
+                    );
+
+                    placeholder.classList.add(
+                        "hidden"
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+
+            fileName.textContent =
+                file.name;
+
+        }
+    );
+
+}
 </script>
 
 
