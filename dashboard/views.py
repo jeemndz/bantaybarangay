@@ -2,7 +2,7 @@ from datetime import date
 
 from django.db import connection
 from django.shortcuts import render, redirect
-
+from bantaybarangay.security import role_required
 
 # =========================================================
 # DATABASE HELPERS
@@ -55,36 +55,8 @@ def fetch_all_dict(query, params=None):
 # =========================================================
 # DASHBOARD
 # =========================================================
-
+@role_required("admin", "official")
 def dashboard(request):
-
-    # =====================================================
-    # LOGIN CHECK
-    # =====================================================
-
-    if not request.session.get("is_logged_in"):
-
-        return redirect("login")
-
-
-    # =====================================================
-    # ROLE CHECK
-    # =====================================================
-
-    role = (
-        request.session.get(
-            "role",
-            ""
-        )
-        or ""
-    ).strip().lower()
-
-    if role not in [
-        "admin",
-        "official"
-    ]:
-
-        return redirect("home")
 
 
     # =====================================================

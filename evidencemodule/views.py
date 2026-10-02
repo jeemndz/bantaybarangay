@@ -11,7 +11,8 @@ from django.shortcuts import (
 from django.views.decorators.http import require_GET
 from django.utils import timezone
 from django.views.decorators.http import require_POST
-
+from urllib3 import request
+from bantaybarangay.security import role_required
 from .models import Evidence
 
 from .services.fabric_service import (
@@ -29,7 +30,7 @@ from blockchain_logs.services.blockchain_logger import create_blockchain_log
 # =========================================================
 # EVIDENCE MANAGEMENT / LIST
 # =========================================================
-
+@role_required("admin", "official")
 def evidence_list(request):
 
     evidence = (
@@ -52,7 +53,7 @@ def evidence_list(request):
 # =========================================================
 # EVIDENCE DETAIL
 # =========================================================
-
+@role_required("admin", "official")
 def evidence_detail(request, evidence_id):
 
     evidence = get_object_or_404(
@@ -75,7 +76,7 @@ def evidence_detail(request, evidence_id):
 # EVIDENCE BY COMPLAINT
 # Used by Complaint Review modal
 # =========================================================
-
+@role_required("admin", "official")
 @require_GET
 def complaint_evidence(request, complaint_id):
 
@@ -201,7 +202,7 @@ def complaint_evidence(request, complaint_id):
 # =========================================================
 # CREATE EVIDENCE
 # =========================================================
-
+@role_required("admin", "official")
 def evidence_create(request):
 
     if request.method == "POST":
@@ -209,12 +210,7 @@ def evidence_create(request):
         complaint_id = request.POST.get(
             "complaint_id"
         )
-
-        uploaded_by = (
-            request.session.get("user_id")
-            or
-            request.POST.get("uploaded_by")
-        )
+        uploaded_by = request.session.get("user_id")
 
         uploaded_file = request.FILES.get(
             "file"
@@ -445,7 +441,7 @@ def save_evidence_file(
 # =========================================================
 # DELETE EVIDENCE
 # =========================================================
-
+@role_required("admin", "official")
 def evidence_delete(request, evidence_id):
 
     evidence = get_object_or_404(
@@ -498,7 +494,7 @@ def evidence_delete(request, evidence_id):
 # =========================================================
 # REGISTER EVIDENCE ON BLOCKCHAIN
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 def register_evidence_blockchain(request, evidence_id):
 
@@ -718,7 +714,7 @@ def register_evidence_blockchain(request, evidence_id):
 # =========================================================
 # VERIFY EVIDENCE INTEGRITY
 # =========================================================
-
+@role_required("admin", "official")
 @require_POST
 def verify_evidence_integrity(request, evidence_id):
 

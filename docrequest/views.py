@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.db import connection, transaction
 from django.shortcuts import render, redirect
-
+from django.views.decorators.http import require_POST
+from bantaybarangay.security import role_required
 
 # =========================================================
 # STATUS CHOICES
@@ -21,7 +22,7 @@ DOCUMENT_REQUEST_STATUSES = [
 # =========================================================
 # DOCUMENT REQUEST LIST
 # =========================================================
-
+@role_required("admin", "official")
 def document_request_list(request):
 
     document_requests = []
@@ -444,24 +445,12 @@ def document_request_list(request):
 # UPDATE DOCUMENT REQUEST STATUS
 # =========================================================
 
+@role_required("admin", "official")
+@require_POST
 def update_request_status(
     request,
     request_id
 ):
-
-    # =====================================================
-    # ONLY ALLOW POST
-    # =====================================================
-
-    if request.method != "POST":
-
-        return redirect(
-            "docrequestmodule:request_documents"
-        )
-
-    # =====================================================
-    # GET STATUS
-    # =====================================================
 
     new_status = (
         request.POST.get(
@@ -542,8 +531,10 @@ def update_request_status(
 
         messages.error(
             request,
-            "Unable to update the "
-            "document request status."
+            (
+                "Unable to update the "
+                "document request status."
+            )
         )
 
     return redirect(

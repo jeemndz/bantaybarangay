@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
-
+from django.contrib.auth.hashers import check_password, make_password
 import secrets
 
 from .models import User
@@ -22,6 +22,16 @@ from auditlogs.utils import create_audit_log
 
 def login_view(request):
 
+    # =================================================
+    # CLEAR OLD MESSAGES ON LOGIN PAGE
+    # =================================================
+
+    if request.method == "GET":
+
+        storage = messages.get_messages(request)
+
+        for message in storage:
+            pass
     # =================================================
     # ALREADY LOGGED IN
     # =================================================
@@ -700,13 +710,62 @@ def logout_view(request):
     request.session.flush()
 
 
-    # -------------------------------------------------
-    # SUCCESS MESSAGE
-    # -------------------------------------------------
+    # =====================================================
+# LOGOUT
+# =====================================================
 
-    messages.success(
-        request,
-        "You have been successfully signed out."
+def logout_view(request):
+
+    # =================================================
+    # GET SESSION INFORMATION BEFORE CLEARING IT
+    # =================================================
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    username = request.session.get(
+        "username",
+        ""
+    )
+
+    is_logged_in = request.session.get(
+        "is_logged_in",
+        False
+    )
+
+
+    # =================================================
+    # AUDIT LOG - LOGOUT
+    # =================================================
+
+    if is_logged_in:
+
+        create_audit_log(
+            request=request,
+            user_id=user_id,
+            action="LOGOUT",
+            module="Authentication",
+            description=(
+                f"User '{username or 'Unknown'}' "
+                f"logged out of BantayBarangay."
+            )
+        )
+
+
+    # =================================================
+    # CLEAR SESSION
+    # =================================================
+
+    request.session.flush()
+
+
+    # =================================================
+    # RETURN TO LOGIN
+    # =================================================
+
+    return redirect(
+        "login"
     )
 
 

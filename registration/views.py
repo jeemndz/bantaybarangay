@@ -1242,11 +1242,48 @@ def step4_review(request):
                             "zip_code"
                         ),
 
-                    verification_status=
-                        "Pending",
-
                     email=
                         email,
+
+                    # =============================================
+                    # GOVERNMENT-ISSUED ID
+                    # =============================================
+
+                    id_type=
+                        registration_data.get(
+                            "id_type"
+                        ),
+
+                    id_number=
+                        registration_data.get(
+                            "id_number"
+                        ),
+
+                    id_file_path=
+                        registration_data.get(
+                            "valid_id"
+                        ),
+
+                    # =============================================
+                    # PROOF OF RESIDENCY
+                    # =============================================
+
+                    residency_document_type=
+                        registration_data.get(
+                            "document_type"
+                        ),
+
+                    residency_file_path=
+                        registration_data.get(
+                            "residency_proof"
+                        ),
+
+                    # =============================================
+                    # VERIFICATION
+                    # =============================================
+
+                    verification_status=
+                        "Pending",
 
                 )
 

@@ -146,7 +146,7 @@
                             <i class="fa-solid fa-landmark"></i>
 
                             <span>
-                                REPÚBLICA NG PILIPINAS
+                                Republic of the Philippines
                             </span>
 
                         </div>
@@ -269,123 +269,7 @@
 
 
 
-                        <!-- =================================
-                            DIGITAL RESIDENT PASS
-                        ================================== -->
-
-                        <div class="digital-pass">
-
-
-                            <div class="digital-pass-header">
-
-                                <strong>
-
-                                    <i class="fa-solid fa-qrcode"></i>
-
-                                    Digital Resident Pass
-
-                                </strong>
-
-
-                                <span>
-                                    Civic ID
-                                </span>
-
-                            </div>
-
-
-
-                            <div class="digital-pass-content">
-
-
-                                <div
-                                    class="qr-placeholder"
-                                    id="residentQrCode"
-                                >
-
-                                    <div class="qr-grid">
-
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-
-                                    </div>
-
-                                </div>
-
-
-
-                                <div class="digital-pass-details">
-
-                                    <span>
-                                        Resident Identity
-                                    </span>
-
-
-                                    <strong>
-
-                                        {% if resident.identity_hash %}
-
-                                            {{ resident.identity_hash }}
-
-                                        {% else %}
-
-                                            {{ resident.resident_number|default:"Not available" }}
-
-                                        {% endif %}
-
-                                    </strong>
-
-
-                                    <small>
-
-                                        {% if resident.is_verified %}
-
-                                            Verified resident record
-
-                                        {% else %}
-
-                                            Verification pending
-
-                                        {% endif %}
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-
-
-                            <button
-                                type="button"
-                                class="download-pass-button"
-                                id="downloadQrButton"
-                            >
-
-                                <i class="fa-solid fa-download"></i>
-
-                                Download QR ID
-
-                            </button>
-
-                        </div>
+                      
 
 
 
@@ -537,7 +421,7 @@
                         <span class="quick-action-text">
 
                             <strong>
-                                Request Barangay Clearance
+                                Request an official document
                             </strong>
 
                             <small>
@@ -1058,272 +942,351 @@
 
 
                 <!-- =========================================
-                    VERIFIED CREDENTIALS
-                ========================================== -->
+    VERIFIED CREDENTIALS
+========================================== -->
 
-                <section class="profile-section">
+<section class="profile-section">
 
+    <div class="profile-section-header">
 
-                    <div class="profile-section-header">
+        <div class="section-title">
 
+            <span class="section-icon">
+                <i class="fa-solid fa-cube"></i>
+            </span>
 
-                        <div class="section-title">
+            <div>
 
-                            <span class="section-icon">
+                <h2>
+                    Verified Credentials
+                </h2>
 
-                                <i class="fa-solid fa-cube"></i>
+                <p>
+                    Civic identity and verification information
+                </p>
 
-                            </span>
+            </div>
 
+        </div>
 
-                            <div>
 
-                                <h2>
-                                    Verified Credentials & Blockchain Seal
-                                </h2>
+        <!-- =====================================
+            OVERALL VERIFICATION STATUS
+        ====================================== -->
 
-                                <p>
-                                    Civic identity and verification information
-                                </p>
+        {% if resident.is_verified %}
 
-                            </div>
+            <span class="ledger-badge">
 
-                        </div>
+                <i class="fa-solid fa-shield-halved"></i>
 
+                Resident Verified
 
-                        {% if resident.is_verified %}
+            </span>
 
-                            <span class="ledger-badge">
+        {% elif resident.verification_status == "Rejected" %}
 
-                                <i class="fa-solid fa-shield-halved"></i>
+            <span class="rejected-badge">
 
-                                Resident Verified
+                <i class="fa-solid fa-circle-xmark"></i>
 
-                            </span>
+                Verification Rejected
 
-                        {% endif %}
+            </span>
 
-                    </div>
+        {% else %}
 
+            <span class="pending-badge">
 
+                <i class="fa-solid fa-clock"></i>
 
-                    <!-- =====================================
-                        RESIDENT VERIFICATION
-                    ====================================== -->
+                Pending Verification
 
-                    <div class="credential-list">
+            </span>
 
+        {% endif %}
 
-                        <div class="credential-item">
+    </div>
 
-                            <span class="credential-icon">
 
-                                <i class="fa-solid fa-id-card"></i>
+    <!-- =====================================
+        CREDENTIAL LIST
+    ====================================== -->
 
-                            </span>
+    <div class="credential-list">
 
 
-                            <div class="credential-info">
+        <!-- =================================
+            RESIDENT REGISTRATION
+        ================================== -->
 
-                                <strong>
-                                    Resident Registration
-                                </strong>
+        <div class="credential-item">
 
-                                <small>
+            <div class="credential-icon">
 
-                                    {{ resident.resident_number|default:"No resident ID" }}
+                <i class="fa-solid fa-id-card"></i>
 
-                                </small>
+            </div>
 
-                            </div>
 
+            <div class="credential-content">
 
-                            {% if resident.is_verified %}
+                <strong>
+                    Resident Registration
+                </strong>
 
-                                <span class="credential-status">
+                <span>
+                    {{ resident.resident_number|default:"Resident ID unavailable" }}
+                </span>
 
-                                    <i class="fa-solid fa-check"></i>
+            </div>
 
-                                    Verified
 
-                                </span>
+            <div class="credential-status">
 
-                            {% else %}
+                {% if resident.registration_verified %}
 
-                                <span class="credential-status">
+                    <span class="verified-badge">
 
-                                    {{ resident.verification_status|default:"Pending" }}
+                        <i class="fa-solid fa-check"></i>
 
-                                </span>
+                        Verified
 
-                            {% endif %}
+                    </span>
 
+                {% elif resident.verification_status == "Rejected" %}
 
-                            <small class="credential-source">
-                                Barangay Registry
-                            </small>
+                    <span class="rejected-badge">
 
-                        </div>
+                        <i class="fa-solid fa-xmark"></i>
 
+                        Rejected
 
+                    </span>
 
-                        <div class="credential-item">
+                {% else %}
 
-                            <span class="credential-icon">
+                    <span class="pending-badge">
 
-                                <i class="fa-solid fa-house"></i>
+                        <i class="fa-solid fa-clock"></i>
 
-                            </span>
+                        Pending
 
+                    </span>
 
-                            <div class="credential-info">
+                {% endif %}
 
-                                <strong>
-                                    Proof of Residency
-                                </strong>
 
-                                <small>
+                <span>
+                    Barangay Registry
+                </span>
 
-                                    {% if resident.address %}
+            </div>
 
-                                        Registered barangay address
+        </div>
 
-                                    {% else %}
 
-                                        Address record unavailable
+        <!-- =================================
+            GOVERNMENT-ISSUED ID
+        ================================== -->
 
-                                    {% endif %}
+        <div class="credential-item">
 
-                                </small>
+            <div class="credential-icon">
 
-                            </div>
+                <i class="fa-solid fa-address-card"></i>
 
+            </div>
 
-                            {% if resident.is_verified %}
 
-                                <span class="credential-status">
+            <div class="credential-content">
 
-                                    <i class="fa-solid fa-check"></i>
+                <strong>
+                    Government-Issued ID
+                </strong>
 
-                                    Verified
+                <span>
 
-                                </span>
+                    {% if resident.id_type %}
 
-                            {% else %}
+                        {{ resident.id_type }}
 
-                                <span class="credential-status">
-                                    Pending
-                                </span>
+                    {% else %}
 
-                            {% endif %}
+                        No government ID submitted
 
+                    {% endif %}
 
-                            <small class="credential-source">
-                                Barangay Registry
-                            </small>
+                </span>
 
-                        </div>
+            </div>
 
-                    </div>
 
+            <div class="credential-status">
 
+                {% if resident.identity_document_verified %}
 
-                    <!-- =====================================
-                        BLOCKCHAIN / IDENTITY HASH
-                    ====================================== -->
+                    <span class="verified-badge">
 
-                    <div class="blockchain-box">
+                        <i class="fa-solid fa-check"></i>
 
+                        Verified
 
-                        <div class="blockchain-header">
+                    </span>
 
-                            <strong>
+                {% elif resident.verification_status == "Rejected" %}
 
-                                <i class="fa-solid fa-share-nodes"></i>
+                    <span class="rejected-badge">
 
-                                Cryptographic Identity Hash
+                        <i class="fa-solid fa-xmark"></i>
 
-                            </strong>
+                        Rejected
 
+                    </span>
 
-                            <span>
+                {% else %}
 
-                                {% if resident.identity_hash %}
+                    <span class="pending-badge">
 
-                                    Registered Identity
+                        <i class="fa-solid fa-clock"></i>
 
-                                {% else %}
+                        Pending
 
-                                    Not yet available
+                    </span>
 
-                                {% endif %}
+                {% endif %}
 
-                            </span>
 
-                        </div>
+                <span>
+                    Registration Record
+                </span>
 
+            </div>
 
+        </div>
 
-                        <div class="hash-value">
 
-                            <code id="identityHash">
+        <!-- =================================
+            PROOF OF RESIDENCY
+        ================================== -->
 
-                                {% if resident.identity_hash %}
+        <div class="credential-item">
 
-                                    {{ resident.identity_hash }}
+            <div class="credential-icon">
 
-                                {% else %}
+                <i class="fa-solid fa-house"></i>
 
-                                    No identity hash available
+            </div>
 
-                                {% endif %}
 
-                            </code>
+            <div class="credential-content">
 
+                <strong>
+                    Proof of Residency
+                </strong>
 
-                            {% if resident.identity_hash %}
+                <span>
 
-                                <button
-                                    type="button"
-                                    id="copyHashButton"
-                                    title="Copy identity hash"
-                                >
+                    {% if resident.residency_document_type %}
 
-                                    <i class="fa-regular fa-copy"></i>
+                        {{ resident.residency_document_type }}
 
-                                </button>
+                    {% else %}
 
-                            {% endif %}
+                        No residency document submitted
 
-                        </div>
+                    {% endif %}
 
+                </span>
 
+            </div>
 
-                        <div class="blockchain-footer">
 
-                            <span>
+            <div class="credential-status">
 
-                                <i class="fa-solid fa-database"></i>
+                {% if resident.residency_verified %}
 
-                                Resident ID:
-                                {{ resident.resident_number|default:"N/A" }}
+                    <span class="verified-badge">
 
-                            </span>
+                        <i class="fa-solid fa-check"></i>
 
+                        Verified
 
-                            <span>
+                    </span>
 
-                                <i class="fa-solid fa-shield-halved"></i>
+                {% elif resident.verification_status == "Rejected" %}
 
-                                {{ resident.verification_status|default:"Pending Verification" }}
+                    <span class="rejected-badge">
 
-                            </span>
+                        <i class="fa-solid fa-xmark"></i>
 
-                        </div>
+                        Rejected
 
-                    </div>
+                    </span>
 
-                </section>
+                {% else %}
+
+                    <span class="pending-badge">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        Pending
+
+                    </span>
+
+                {% endif %}
+
+
+                <span>
+                    Barangay Registry
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+        VERIFICATION INFORMATION
+    ====================================== -->
+
+    {% if resident.is_verified %}
+
+        <div class="credential-verification-info">
+
+            <span>
+
+                <i class="fa-solid fa-user-check"></i>
+
+                Resident identity verified by
+                BantayBarangay
+
+            </span>
+
+
+            {% if resident.verified_at %}
+
+                <span>
+
+                    <i class="fa-regular fa-calendar-check"></i>
+
+                    Verified
+                    {{ resident.verified_at|date:"M. d, Y" }}
+
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+
+    
+
+</section>
 
 
 
@@ -1366,92 +1329,51 @@
 
                     <div class="security-list">
 
+                        <!-- =========================================
+                                CHANGE PASSWORD
+                            ========================================== -->
 
-                        <!-- 2FA -->
+                            <div class="security-item">
 
-                        <div class="security-item">
+                                <div class="security-info">
 
+                                    <strong>
+                                        Change Password
+                                    </strong>
 
-                            <div class="security-info">
+                                    <small>
+                                        Update your account password to keep
+                                        your resident portal secure.
+                                    </small>
 
-                                <strong>
-                                    Two-Factor Authentication (2FA)
-                                </strong>
-
-                                <small>
-
-                                    Additional account authentication
-                                    security for your resident portal.
-
-                                </small>
-
-                            </div>
+                                </div>
 
 
-                            <div class="security-actions">
+                                <div class="security-actions">
 
-                                <span class="security-status">
-                                    Account Security
-                                </span>
+                                    <span class="security-status active">
 
+                                        <i class="fa-solid fa-lock"></i>
 
-                                <button
-                                    type="button"
-                                    class="text-button"
-                                    id="configure2faButton"
-                                >
+                                        Password Security
 
-                                    Configure
-
-                                </button>
-
-                            </div>
-
-                        </div>
+                                    </span>
 
 
+                                    <button
+                                        type="button"
+                                        class="text-button"
+                                        id="changePasswordButton"
+                                    >
 
-                        <!-- ALERTS -->
+                                        Change Password
 
-                        <div class="security-item">
+                                    </button>
 
-
-                            <div class="security-info">
-
-                                <strong>
-                                    SMS Alerts for Emergency & Case Updates
-                                </strong>
-
-                                <small>
-
-                                    Receive notifications for barangay
-                                    announcements and complaint updates.
-
-                                </small>
+                                </div>
 
                             </div>
-
-
-                            <div class="security-actions">
-
-                                <span class="security-status active">
-                                    Available
-                                </span>
-
-
-                                <button
-                                    type="button"
-                                    class="text-button"
-                                    id="manageAlertsButton"
-                                >
-
-                                    Manage
-
-                                </button>
-
-                            </div>
-
-                        </div>
+                        
 
 
 
@@ -1648,7 +1570,232 @@
 
     </div>
 
+<!-- =====================================================
+    CHANGE PASSWORD MODAL
+====================================================== -->
 
+<div
+    class="profile-modal"
+    id="changePasswordModal"
+    aria-hidden="true"
+>
+
+    <div class="profile-modal-overlay"></div>
+
+
+    <div class="profile-modal-dialog">
+
+        <!-- =============================================
+            HEADER
+        ============================================== -->
+
+        <div class="profile-modal-header">
+
+            <div>
+
+                <h2>
+                    Change Password
+                </h2>
+
+                <p>
+                    Enter your current password and choose
+                    a new password for your account.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-password-modal
+                aria-label="Close"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- =============================================
+            FORM
+        ============================================== -->
+
+        <form
+            method="POST"
+            action="{% url 'change_password' %}"
+            id="changePasswordForm"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- =========================================
+                CURRENT PASSWORD
+            ========================================== -->
+
+            <div class="modal-form-group">
+
+                <label for="current_password">
+                    Current Password
+                </label>
+
+
+                <div class="password-input-wrapper">
+
+                    <input
+                        type="password"
+                        id="current_password"
+                        name="current_password"
+                        placeholder="Enter current password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-password-target="current_password"
+                        aria-label="Show current password"
+                    >
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                NEW PASSWORD
+            ========================================== -->
+
+            <div class="modal-form-group">
+
+                <label for="new_password">
+                    New Password
+                </label>
+
+
+                <div class="password-input-wrapper">
+
+                    <input
+                        type="password"
+                        id="new_password"
+                        name="new_password"
+                        placeholder="Enter new password"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-password-target="new_password"
+                        aria-label="Show new password"
+                    >
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+
+                <small class="password-help">
+                    Use at least 8 characters.
+                </small>
+
+            </div>
+
+
+            <!-- =========================================
+                CONFIRM PASSWORD
+            ========================================== -->
+
+            <div class="modal-form-group">
+
+                <label for="confirm_password">
+                    Confirm New Password
+                </label>
+
+
+                <div class="password-input-wrapper">
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Confirm new password"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-password-target="confirm_password"
+                        aria-label="Show confirmed password"
+                    >
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+
+                <small
+                    class="password-match-message"
+                    id="passwordMatchMessage"
+                ></small>
+
+            </div>
+
+
+            <!-- =========================================
+                ACTIONS
+            ========================================== -->
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="modal-cancel"
+                    data-close-password-modal
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="modal-save"
+                    id="savePasswordButton"
+                >
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Change Password
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
     <!-- =====================================================
         TOAST
@@ -1673,7 +1820,7 @@
         PROFILE JAVASCRIPT
     ====================================================== -->
 
-    <script src="{% static 'website/js/my_profile.js' %}"></script>
+    <script src="{% static 'js/my_profile.js' %}"></script>
     <script src="{% static 'js/topnav.js' %}"></script>
 
 

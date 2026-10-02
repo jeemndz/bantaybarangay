@@ -1,16 +1,21 @@
 import hashlib
 import os
 import uuid
+import mimetypes
+
 
 from datetime import datetime
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password, make_password
 from django.core.files.storage import default_storage
 from django.db import connection, transaction
 from django.shortcuts import render, redirect
-
-
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.http import FileResponse, Http404
+from auditlogs.utils import create_audit_log
 # =====================================================
 # EVIDENCE CONFIGURATION
 # =====================================================
@@ -111,9 +116,35 @@ def get_resident_by_user_id(user_id):
                 email,
                 contact_number,
                 address,
-                verification_status
+                verification_status,
+
+                birth_date,
+                gender,
+                civil_status,
+
+                house_block_lot,
+                street_purok_sitio,
+                province,
+                municipality_city,
+                barangay,
+                zip_code,
+
+                verified_by,
+                verified_at,
+
+                id_type,
+                id_number,
+                id_file_path,
+                residency_document_type,
+                residency_file_path,
+
+                created_at,
+                updated_at
+
             FROM residents
+
             WHERE user_id = %s
+
             LIMIT 1
             """,
             [
@@ -127,6 +158,7 @@ def get_resident_by_user_id(user_id):
         return None
 
     return {
+
         "resident_id":
             row[0],
 
@@ -153,6 +185,64 @@ def get_resident_by_user_id(user_id):
 
         "verification_status":
             row[8],
+
+        "birth_date":
+            row[9],
+
+        "gender":
+            row[10],
+
+        "civil_status":
+            row[11],
+
+        "house_block_lot":
+            row[12],
+
+        "street_purok_sitio":
+            row[13],
+
+        "province":
+            row[14],
+
+        "municipality_city":
+            row[15],
+
+        "barangay":
+            row[16],
+
+        "zip_code":
+            row[17],
+
+        "verified_by":
+            row[18],
+
+        "verified_at":
+            row[19],
+
+        # =============================================
+        # REGISTRATION VERIFICATION DOCUMENTS
+        # =============================================
+
+        "id_type":
+            row[20],
+
+        "id_number":
+            row[21],
+
+        "id_file_path":
+            row[22],
+
+        "residency_document_type":
+            row[23],
+
+        "residency_file_path":
+            row[24],
+
+        "created_at":
+            row[25],
+
+        "updated_at":
+            row[26],
     }
 
 
@@ -294,6 +384,45 @@ def prepare_resident_profile(resident):
     )
 
     # =================================================
+    # VERIFIED CREDENTIALS
+    # =================================================
+
+    resident["registration_verified"] = (
+        resident["is_verified"]
+    )
+
+    resident["residency_verified"] = (
+        resident["is_verified"]
+        and
+        bool(
+            resident.get(
+                "residency_document_type"
+            )
+        )
+        and
+        bool(
+            resident.get(
+                "residency_file_path"
+            )
+        )
+    )
+
+    resident["identity_document_verified"] = (
+        resident["is_verified"]
+        and
+        bool(
+            resident.get(
+                "id_type"
+            )
+        )
+        and
+        bool(
+            resident.get(
+                "id_file_path"
+            )
+        )
+    )
+    # =================================================
     # OPTIONAL PROFILE FIELDS
     # =================================================
 
@@ -322,9 +451,8 @@ def prepare_resident_profile(resident):
         ""
     )
 
-    resident.setdefault(
-        "registration_date",
-        None
+    resident["registration_date"] = (
+        resident.get("created_at")
     )
 
     resident.setdefault(
@@ -1734,6 +1862,7 @@ def submit_complaint(request):
 
 def my_complaints(request):
 
+
     # =================================================
     # CHECK LOGIN
     # =================================================
@@ -1888,11 +2017,88 @@ def my_complaints(request):
             incident_time = row[18]
 
             evidence_count = (
-                row[19] or 0
-            )
+    row[19] or 0
+)
+
+            # =================================================
+            # RELEASED DOCUMENTS
+            # =================================================
+
+            released_documents = []
+            documents_released = False
+            documents_released_at = None
+
+            with connection.cursor() as release_cursor:
+
+                # Check if documents were released
+                release_cursor.execute(
+                    """
+                    SELECT released_at
+                    FROM complaint_document_releases
+                    WHERE complaint_id = %s
+                    LIMIT 1
+                    """,
+                    [complaint_id]
+                )
+
+                release_row = release_cursor.fetchone()
+
+                if release_row:
+                    documents_released = True
+                    documents_released_at = release_row[0]
+
+                    # Official complaint documents
+                    release_cursor.execute(
+                        """
+                        SELECT
+                            document_id,
+                            file_name
+                        FROM complaint_documents
+                        WHERE complaint_id = %s
+                        AND blockchain_status = 'Registered'
+                        AND integrity_status = 'Verified'
+                        ORDER BY generated_at DESC
+                        """,
+                        [complaint_id]
+                    )
+
+                    for document_row in release_cursor.fetchall():
+
+                        released_documents.append({
+                            "id": document_row[0],
+                            "source": "complaint_document",
+                            "type": "Official Complaint Document",
+                            "file_name": document_row[1],
+                            "blockchain_id": f"CMP-{complaint_id}",
+                        })
+
+                    # Verified evidence
+                    release_cursor.execute(
+                        """
+                        SELECT
+                            evidence_id,
+                            file_name
+                        FROM evidence
+                        WHERE complaint_id = %s
+                        AND blockchain_status = 'Registered'
+                        AND integrity_status = 'Verified'
+                        ORDER BY uploaded_at DESC
+                        """,
+                        [complaint_id]
+                    )
+
+                    for evidence_row in release_cursor.fetchall():
+
+                        released_documents.append({
+                            "id": evidence_row[0],
+                            "source": "evidence",
+                            "type": "Evidence",
+                            "file_name": evidence_row[1],
+                            "blockchain_id": f"EVD-{evidence_row[0]}",
+                        })
+
 
             complaint = {
-
                 "complaint_id":
                     complaint_id,
 
@@ -1952,6 +2158,18 @@ def my_complaints(request):
 
                 "evidence_count":
                     evidence_count,
+
+                "documents_released":
+                    documents_released,
+
+                "documents_released_at":
+                    documents_released_at,
+
+                "released_documents":
+                    released_documents,
+
+                "released_document_count":
+                    len(released_documents),
 
                 "reference_number":
                     build_complaint_reference(
@@ -2083,6 +2301,284 @@ def my_complaints(request):
         context
     )
 
+
+# =====================================================
+# RELEASED COMPLAINT DOCUMENT
+# =====================================================
+
+def released_complaint_document(
+    request,
+    complaint_id,
+    source,
+    file_id
+):
+
+    # =================================================
+    # CHECK LOGIN
+    # =================================================
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    if not user_id:
+        return redirect(
+            "login"
+        )
+
+
+    # =================================================
+    # CHECK RESIDENT
+    # =================================================
+
+    resident = get_resident_by_user_id(
+        user_id
+    )
+
+    if not resident:
+        raise Http404(
+            "Resident profile not found."
+        )
+
+    resident_id = resident[
+        "resident_id"
+    ]
+
+
+    # =================================================
+    # CHECK COMPLAINT OWNERSHIP
+    # =================================================
+
+    with connection.cursor() as cursor:
+
+        cursor.execute(
+            """
+            SELECT complaint_id
+            FROM complaints
+            WHERE complaint_id = %s
+              AND resident_id = %s
+            LIMIT 1
+            """,
+            [
+                complaint_id,
+                resident_id
+            ]
+        )
+
+        complaint = cursor.fetchone()
+
+
+    if not complaint:
+        raise Http404(
+            "Complaint not found."
+        )
+
+
+    # =================================================
+    # CHECK RELEASE
+    # =================================================
+
+    with connection.cursor() as cursor:
+
+        cursor.execute(
+            """
+            SELECT release_id
+            FROM complaint_document_releases
+            WHERE complaint_id = %s
+            LIMIT 1
+            """,
+            [complaint_id]
+        )
+
+        release = cursor.fetchone()
+
+
+    if not release:
+        raise Http404(
+            "Documents have not been released."
+        )
+
+
+    # =================================================
+    # FIND REQUESTED FILE
+    # =================================================
+
+    file_name = None
+    file_path = None
+    file_type = None
+
+
+    # -------------------------------------------------
+    # OFFICIAL COMPLAINT DOCUMENT
+    # -------------------------------------------------
+
+    if source == "complaint_document":
+
+        with connection.cursor() as cursor:
+
+            cursor.execute(
+                """
+                SELECT
+                    file_name,
+                    file_path
+                FROM complaint_documents
+                WHERE document_id = %s
+                  AND complaint_id = %s
+                  AND blockchain_status = 'Registered'
+                  AND integrity_status = 'Verified'
+                LIMIT 1
+                """,
+                [
+                    file_id,
+                    complaint_id
+                ]
+            )
+
+            row = cursor.fetchone()
+
+
+        if row:
+            file_name = row[0]
+            file_path = row[1]
+
+            file_type = (
+                mimetypes.guess_type(
+                    file_name
+                )[0]
+                or
+                "application/octet-stream"
+            )
+
+
+    # -------------------------------------------------
+    # EVIDENCE
+    # -------------------------------------------------
+
+    elif source == "evidence":
+
+        with connection.cursor() as cursor:
+
+            cursor.execute(
+                """
+                SELECT
+                    file_name,
+                    file_path,
+                    file_type
+                FROM evidence
+                WHERE evidence_id = %s
+                  AND complaint_id = %s
+                  AND blockchain_status = 'Registered'
+                  AND integrity_status = 'Verified'
+                LIMIT 1
+                """,
+                [
+                    file_id,
+                    complaint_id
+                ]
+            )
+
+            row = cursor.fetchone()
+
+
+        if row:
+            file_name = row[0]
+            file_path = row[1]
+
+            file_type = (
+                row[2]
+                or
+                mimetypes.guess_type(
+                    file_name
+                )[0]
+                or
+                "application/octet-stream"
+            )
+
+
+    else:
+        raise Http404(
+            "Invalid document source."
+        )
+
+
+    if not file_path:
+        raise Http404(
+            "Document not found."
+        )
+
+
+    # =================================================
+    # CONVERT STORED URL TO STORAGE PATH
+    # =================================================
+
+    storage_path = str(
+        file_path
+    ).replace(
+        "\\",
+        "/"
+    )
+
+
+    media_url = (
+        settings.MEDIA_URL
+        or
+        "/media/"
+    )
+
+
+    if storage_path.startswith(
+        media_url
+    ):
+        storage_path = storage_path[
+            len(media_url):
+        ]
+
+
+    storage_path = storage_path.lstrip(
+        "/"
+    )
+
+
+    # =================================================
+    # CHECK PHYSICAL FILE
+    # =================================================
+
+    if not default_storage.exists(
+        storage_path
+    ):
+        raise Http404(
+            "The physical document could not be found."
+        )
+
+
+    # =================================================
+    # VIEW OR DOWNLOAD
+    # =================================================
+
+    download = (
+        request.GET.get(
+            "download"
+        )
+        ==
+        "1"
+    )
+
+
+    file_handle = default_storage.open(
+        storage_path,
+        "rb"
+    )
+
+
+    response = FileResponse(
+        file_handle,
+        content_type=file_type,
+        as_attachment=download,
+        filename=file_name
+    )
+
+
+    return response
 
 # =====================================================
 # TRACK COMPLAINT
@@ -3131,9 +3627,297 @@ def request_document(request):
 # =====================================================
 # MY PROFILE
 # =====================================================
+# =====================================================
+# CHANGE PASSWORD
+# =====================================================
 
+@require_POST
+def change_password(request):
+
+    # =================================================
+    # CHECK LOGIN
+    # =================================================
+
+    user_id = request.session.get(
+        "user_id"
+    )
+
+    if not user_id:
+
+        messages.error(
+            request,
+            "Please log in first."
+        )
+
+        return redirect(
+            "login"
+        )
+
+    # =================================================
+    # CHECK ROLE
+    # =================================================
+
+    role = (
+        request.session.get(
+            "role",
+            ""
+        )
+        or ""
+    ).strip().lower()
+
+    if role != "resident":
+
+        messages.error(
+            request,
+            "Only resident accounts can "
+            "change their password here."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    # =================================================
+    # FORM VALUES
+    # =================================================
+
+    current_password = request.POST.get(
+        "current_password",
+        ""
+    )
+
+    new_password = request.POST.get(
+        "new_password",
+        ""
+    )
+
+    confirm_password = request.POST.get(
+        "confirm_password",
+        ""
+    )
+
+    # =================================================
+    # REQUIRED FIELDS
+    # =================================================
+
+    if (
+        not current_password
+        or not new_password
+        or not confirm_password
+    ):
+
+        messages.error(
+            request,
+            "Please complete all password fields."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # PASSWORD MATCH
+    # =================================================
+
+    if new_password != confirm_password:
+
+        messages.error(
+            request,
+            "New password and confirmation "
+            "do not match."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # PASSWORD LENGTH
+    # =================================================
+
+    if len(new_password) < 8:
+
+        messages.error(
+            request,
+            "Your new password must contain "
+            "at least 8 characters."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # GET USER
+    # =================================================
+
+    try:
+
+        from login.models import User
+
+        user = User.objects.get(
+            user_id=user_id
+        )
+
+    except User.DoesNotExist:
+
+        messages.error(
+            request,
+            "Your account could not be found."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # CHECK ACCOUNT STATUS
+    # =================================================
+
+    if not user.is_active:
+
+        request.session.flush()
+
+        messages.error(
+            request,
+            "Your account is currently inactive."
+        )
+
+        return redirect(
+            "login"
+        )
+
+    # =================================================
+    # VERIFY CURRENT PASSWORD
+    # =================================================
+
+    password_valid = False
+
+    try:
+
+        password_valid = check_password(
+            current_password,
+            user.password_hash
+        )
+
+    except Exception:
+
+        password_valid = False
+
+    # =================================================
+    # LEGACY PLAIN-TEXT SUPPORT
+    # =================================================
+
+    if not password_valid:
+
+        password_valid = (
+            current_password
+            ==
+            user.password_hash
+        )
+
+    if not password_valid:
+
+        messages.error(
+            request,
+            "Your current password is incorrect."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # PREVENT SAME PASSWORD
+    # =================================================
+
+    same_password = False
+
+    try:
+
+        same_password = check_password(
+            new_password,
+            user.password_hash
+        )
+
+    except Exception:
+
+        same_password = (
+            new_password
+            ==
+            user.password_hash
+        )
+
+    if same_password:
+
+        messages.error(
+            request,
+            "Your new password must be different "
+            "from your current password."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # SAVE HASHED PASSWORD
+    # =================================================
+
+    try:
+
+        user.password_hash = make_password(
+            new_password
+        )
+
+        user.save(
+            update_fields=[
+                "password_hash",
+                "updated_at",
+            ]
+        )
+
+    except Exception as error:
+
+        print(
+            "CHANGE PASSWORD ERROR:",
+            error
+        )
+
+        messages.error(
+            request,
+            "Unable to change your password. "
+            "Please try again."
+        )
+
+        return redirect(
+            "my_profile"
+        )
+
+    # =================================================
+    # AUDIT LOG
+    # =================================================
+
+    create_audit_log(
+    request=request,
+    action="PASSWORD_CHANGE",
+    description="Resident changed account password."
+)
+
+    # =================================================
+    # SUCCESS
+    # =================================================
+
+    messages.success(
+        request,
+        "Your password has been changed successfully."
+    )
+
+    return redirect(
+        "my_profile"
+    )
 def my_profile(request):
-
+    
     # =================================================
     # CHECK LOGIN
     # =================================================
@@ -3162,6 +3946,31 @@ def my_profile(request):
     )
 
     # =================================================
+    # CHECK ROLE
+    # =================================================
+
+    role = (
+        context.get(
+            "role",
+            ""
+        )
+        .strip()
+        .lower()
+    )
+
+    if role != "resident":
+
+        messages.error(
+            request,
+            "Only resident accounts can access "
+            "the resident profile."
+        )
+
+        return redirect(
+            "home"
+        )
+
+    # =================================================
     # GET RESIDENT
     # =================================================
 
@@ -3178,6 +3987,183 @@ def my_profile(request):
 
         return redirect(
             "home"
+        )
+
+    # =================================================
+    # UPDATE CONTACT INFORMATION
+    # =================================================
+
+    if request.method == "POST":
+
+        mobile_number = (
+            request.POST.get(
+                "mobile_number",
+                ""
+            )
+            .strip()
+        )
+
+        email = (
+            request.POST.get(
+                "email",
+                ""
+            )
+            .strip()
+            .lower()
+        )
+
+        # =============================================
+        # VALIDATION
+        # =============================================
+
+        if not mobile_number:
+
+            messages.error(
+                request,
+                "Please enter your mobile number."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        if len(mobile_number) > 20:
+
+            messages.error(
+                request,
+                "Mobile number must not exceed "
+                "20 characters."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        if not email:
+
+            messages.error(
+                request,
+                "Please enter your email address."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        if len(email) > 100:
+
+            messages.error(
+                request,
+                "Email address must not exceed "
+                "100 characters."
+            )
+
+            return redirect(
+                "my_profile"
+            )
+
+        # =============================================
+        # UPDATE DATABASE
+        # =============================================
+
+        try:
+
+            with transaction.atomic():
+
+                # =====================================
+                # UPDATE RESIDENT
+                # =====================================
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE residents
+
+                        SET
+                            contact_number = %s,
+                            email = %s,
+                            updated_at = NOW()
+
+                        WHERE
+                            resident_id = %s
+                            AND user_id = %s
+                        """,
+                        [
+                            mobile_number,
+                            email,
+                            resident[
+                                "resident_id"
+                            ],
+                            user_id,
+                        ]
+                    )
+
+                    if cursor.rowcount == 0:
+
+                        raise Exception(
+                            "Resident profile could "
+                            "not be updated."
+                        )
+
+                # =====================================
+                # UPDATE USER EMAIL
+                # =====================================
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute(
+                        """
+                        UPDATE users
+
+                        SET
+                            email = %s,
+                            updated_at = NOW()
+
+                        WHERE
+                            user_id = %s
+                        """,
+                        [
+                            email,
+                            user_id,
+                        ]
+                    )
+
+            # =========================================
+            # UPDATE SESSION EMAIL
+            # =========================================
+
+            request.session[
+                "email"
+            ] = email
+
+            request.session.modified = True
+
+            # =========================================
+            # SUCCESS
+            # =========================================
+
+            messages.success(
+                request,
+                "Your contact information has "
+                "been updated successfully."
+            )
+
+        except Exception as error:
+
+            print(
+                "PROFILE UPDATE ERROR:",
+                error
+            )
+
+            messages.error(
+                request,
+                "Unable to update your contact "
+                "information. Please try again."
+            )
+
+        return redirect(
+            "my_profile"
         )
 
     # =================================================
@@ -3238,3 +4224,150 @@ def contact(request):
         "website/contact.html",
         context
     )
+
+@require_POST
+def release_complaint_documents(request, complaint_id):
+
+    try:
+        # ==============================================
+        # FIND COMPLAINT + OWNER
+        # ==============================================
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    complaint_id,
+                    resident_id
+                FROM complaints
+                WHERE complaint_id = %s
+                LIMIT 1
+                """,
+                [complaint_id]
+            )
+
+            complaint = cursor.fetchone()
+
+        if not complaint:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "Complaint not found."
+                },
+                status=404
+            )
+
+        resident_id = complaint[1]
+
+        # ==============================================
+        # CHECK OFFICIAL COMPLAINT DOCUMENT
+        # ==============================================
+
+        from documents.models import ComplaintDocument
+        from evidencemodule.models import Evidence
+
+        complaint_documents = ComplaintDocument.objects.filter(
+            complaint_id=complaint_id,
+            blockchain_status="Registered",
+            integrity_status="Verified"
+        )
+
+        # ==============================================
+        # CHECK VERIFIED EVIDENCE
+        # ==============================================
+
+        evidence_files = Evidence.objects.filter(
+            complaint_id=complaint_id,
+            blockchain_status="Registered",
+            integrity_status="Verified"
+        )
+
+        total_files = (
+            complaint_documents.count()
+            +
+            evidence_files.count()
+        )
+
+        if total_files == 0:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": (
+                        "There are no registered and verified "
+                        "documents available for release."
+                    )
+                },
+                status=400
+            )
+
+        # ==============================================
+        # ADMIN / USER WHO RELEASED
+        # ==============================================
+
+        released_by = request.session.get("user_id")
+
+        if not released_by:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "You must be logged in."
+                },
+                status=401
+            )
+
+        # ==============================================
+        # CREATE RELEASE
+        # ==============================================
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO complaint_document_releases
+                (
+                    complaint_id,
+                    released_by,
+                    released_at
+                )
+                VALUES
+                (
+                    %s,
+                    %s,
+                    NOW()
+                )
+                ON DUPLICATE KEY UPDATE
+                    released_by = VALUES(released_by),
+                    released_at = NOW()
+                """,
+                [
+                    complaint_id,
+                    released_by
+                ]
+            )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "complaint_id": complaint_id,
+                "resident_id": resident_id,
+                "file_count": total_files,
+                "message": (
+                    f"{total_files} verified document(s) "
+                    "were released to the resident."
+                )
+            }
+        )
+
+    except Exception as error:
+
+        print(
+            "RELEASE COMPLAINT DOCUMENTS ERROR:",
+            error
+        )
+
+        return JsonResponse(
+            {
+                "success": False,
+                "error": str(error)
+            },
+            status=500
+        )

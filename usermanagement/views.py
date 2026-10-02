@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import User
-
+from bantaybarangay.security import role_required
 
 # =========================================================
 # MANAGED USER ROLES
@@ -22,7 +22,7 @@ MANAGED_ROLES = {
 # =========================================================
 # USER MANAGEMENT
 # =========================================================
-
+@role_required("admin")
 def user_list(request):
 
     # =====================================================

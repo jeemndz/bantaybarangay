@@ -20,6 +20,10 @@ document.addEventListener(
 function initializeProfilePage() {
 
     initializeContactModal();
+    initializeChangePasswordModal();
+    initializePasswordToggles();
+    initializePasswordValidation();
+
     initializeHashCopy();
     initializeProfileSync();
     initializeQrDownload();
@@ -37,10 +41,14 @@ function initializeProfilePage() {
 function initializeContactModal() {
 
     const modal =
-        document.getElementById("contactModal");
+        document.getElementById(
+            "contactModal"
+        );
 
     const openButton =
-        document.getElementById("editContactButton");
+        document.getElementById(
+            "editContactButton"
+        );
 
     if (!modal) {
         return;
@@ -53,7 +61,9 @@ function initializeContactModal() {
             "click",
             function () {
 
-                openProfileModal(modal);
+                openProfileModal(
+                    modal
+                );
 
             }
         );
@@ -62,14 +72,18 @@ function initializeContactModal() {
 
 
     modal
-        .querySelectorAll("[data-close-modal]")
+        .querySelectorAll(
+            "[data-close-modal]"
+        )
         .forEach(function (button) {
 
             button.addEventListener(
                 "click",
                 function () {
 
-                    closeProfileModal(modal);
+                    closeProfileModal(
+                        modal
+                    );
 
                 }
             );
@@ -78,7 +92,9 @@ function initializeContactModal() {
 
 
     const overlay =
-        modal.querySelector(".profile-modal-overlay");
+        modal.querySelector(
+            ".profile-modal-overlay"
+        );
 
 
     if (overlay) {
@@ -87,7 +103,74 @@ function initializeContactModal() {
             "click",
             function () {
 
-                closeProfileModal(modal);
+                closeProfileModal(
+                    modal
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CHANGE PASSWORD MODAL
+========================================================= */
+
+function initializeChangePasswordModal() {
+
+    const modal =
+        document.getElementById(
+            "changePasswordModal"
+        );
+
+    const openButton =
+        document.getElementById(
+            "changePasswordButton"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    /* =====================================================
+       OPEN MODAL
+    ===================================================== */
+
+    if (openButton) {
+
+        openButton.addEventListener(
+            "click",
+            function () {
+
+                resetPasswordForm();
+
+                openProfileModal(
+                    modal
+                );
+
+
+                const currentPassword =
+                    document.getElementById(
+                        "current_password"
+                    );
+
+
+                if (currentPassword) {
+
+                    window.setTimeout(
+                        function () {
+
+                            currentPassword.focus();
+
+                        },
+                        100
+                    );
+
+                }
 
             }
         );
@@ -95,18 +178,282 @@ function initializeContactModal() {
     }
 
 
-    document.addEventListener(
-        "keydown",
-        function (event) {
+    /* =====================================================
+       CLOSE BUTTONS
+    ===================================================== */
 
-            if (
-                event.key === "Escape" &&
-                modal.classList.contains("show")
-            ) {
+    modal
+        .querySelectorAll(
+            "[data-close-password-modal]"
+        )
+        .forEach(function (button) {
 
-                closeProfileModal(modal);
+            button.addEventListener(
+                "click",
+                function () {
+
+                    closePasswordModal(
+                        modal
+                    );
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       OVERLAY
+    ===================================================== */
+
+    const overlay =
+        modal.querySelector(
+            ".profile-modal-overlay"
+        );
+
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            function () {
+
+                closePasswordModal(
+                    modal
+                );
 
             }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   OPEN PROFILE MODAL
+========================================================= */
+
+function openProfileModal(modal) {
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE PROFILE MODAL
+========================================================= */
+
+function closeProfileModal(modal) {
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   CLOSE PASSWORD MODAL
+========================================================= */
+
+function closePasswordModal(modal) {
+
+    closeProfileModal(
+        modal
+    );
+
+    resetPasswordForm();
+
+}
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key !== "Escape") {
+            return;
+        }
+
+
+        const contactModal =
+            document.getElementById(
+                "contactModal"
+            );
+
+        const passwordModal =
+            document.getElementById(
+                "changePasswordModal"
+            );
+
+
+        if (
+            passwordModal &&
+            passwordModal.classList.contains(
+                "show"
+            )
+        ) {
+
+            closePasswordModal(
+                passwordModal
+            );
+
+            return;
+
+        }
+
+
+        if (
+            contactModal &&
+            contactModal.classList.contains(
+                "show"
+            )
+        ) {
+
+            closeProfileModal(
+                contactModal
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PASSWORD SHOW / HIDE
+========================================================= */
+
+function initializePasswordToggles() {
+
+    const toggleButtons =
+        document.querySelectorAll(
+            "[data-password-target]"
+        );
+
+
+    toggleButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const targetId =
+                        button.getAttribute(
+                            "data-password-target"
+                        );
+
+                    if (!targetId) {
+                        return;
+                    }
+
+
+                    const input =
+                        document.getElementById(
+                            targetId
+                        );
+
+                    if (!input) {
+                        return;
+                    }
+
+
+                    const icon =
+                        button.querySelector(
+                            "i"
+                        );
+
+
+                    if (
+                        input.type ===
+                        "password"
+                    ) {
+
+                        input.type =
+                            "text";
+
+                        button.setAttribute(
+                            "aria-label",
+                            "Hide password"
+                        );
+
+
+                        if (icon) {
+
+                            icon.classList.remove(
+                                "fa-eye"
+                            );
+
+                            icon.classList.add(
+                                "fa-eye-slash"
+                            );
+
+                        }
+
+                    }
+
+                    else {
+
+                        input.type =
+                            "password";
+
+                        button.setAttribute(
+                            "aria-label",
+                            "Show password"
+                        );
+
+
+                        if (icon) {
+
+                            icon.classList.remove(
+                                "fa-eye-slash"
+                            );
+
+                            icon.classList.add(
+                                "fa-eye"
+                            );
+
+                        }
+
+                    }
+
+                }
+            );
 
         }
     );
@@ -114,30 +461,350 @@ function initializeContactModal() {
 }
 
 
-function openProfileModal(modal) {
+/* =========================================================
+   PASSWORD VALIDATION
+========================================================= */
 
-    modal.classList.add("show");
+function initializePasswordValidation() {
 
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
+    const form =
+        document.getElementById(
+            "changePasswordForm"
+        );
+
+    const newPassword =
+        document.getElementById(
+            "new_password"
+        );
+
+    const confirmPassword =
+        document.getElementById(
+            "confirm_password"
+        );
+
+    const message =
+        document.getElementById(
+            "passwordMatchMessage"
+        );
+
+
+    if (
+        !form ||
+        !newPassword ||
+        !confirmPassword
+    ) {
+        return;
+    }
+
+
+    /* =====================================================
+       LIVE VALIDATION
+    ===================================================== */
+
+    newPassword.addEventListener(
+        "input",
+        validatePasswordMatch
     );
 
-    document.body.style.overflow = "hidden";
+    confirmPassword.addEventListener(
+        "input",
+        validatePasswordMatch
+    );
+
+
+    /* =====================================================
+       SUBMIT VALIDATION
+    ===================================================== */
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            const newValue =
+                newPassword.value;
+
+            const confirmValue =
+                confirmPassword.value;
+
+
+            if (newValue.length < 8) {
+
+                event.preventDefault();
+
+                showPasswordMessage(
+                    "Password must contain at least 8 characters.",
+                    "error"
+                );
+
+                newPassword.focus();
+
+                return;
+
+            }
+
+
+            if (
+                newValue !==
+                confirmValue
+            ) {
+
+                event.preventDefault();
+
+                showPasswordMessage(
+                    "Passwords do not match.",
+                    "error"
+                );
+
+                confirmPassword.focus();
+
+                return;
+
+            }
+
+
+            showPasswordMessage(
+                "Passwords match.",
+                "success"
+            );
+
+
+            const submitButton =
+                document.getElementById(
+                    "savePasswordButton"
+                );
+
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    true;
+
+                submitButton.innerHTML =
+                    '<i class="fa-solid fa-spinner fa-spin"></i> Changing Password...';
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       CHECK MATCH
+    ===================================================== */
+
+    function validatePasswordMatch() {
+
+        const newValue =
+            newPassword.value;
+
+        const confirmValue =
+            confirmPassword.value;
+
+
+        if (!confirmValue) {
+
+            clearPasswordMessage();
+
+            confirmPassword.setCustomValidity(
+                ""
+            );
+
+            return;
+
+        }
+
+
+        if (
+            newValue ===
+            confirmValue
+        ) {
+
+            confirmPassword.setCustomValidity(
+                ""
+            );
+
+            showPasswordMessage(
+                "Passwords match.",
+                "success"
+            );
+
+        }
+
+        else {
+
+            confirmPassword.setCustomValidity(
+                "Passwords do not match."
+            );
+
+            showPasswordMessage(
+                "Passwords do not match.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SHOW MESSAGE
+    ===================================================== */
+
+    function showPasswordMessage(
+        text,
+        type
+    ) {
+
+        if (!message) {
+            return;
+        }
+
+
+        message.textContent =
+            text;
+
+        message.classList.remove(
+            "success",
+            "error"
+        );
+
+
+        if (type) {
+
+            message.classList.add(
+                type
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CLEAR MESSAGE
+    ===================================================== */
+
+    function clearPasswordMessage() {
+
+        if (!message) {
+            return;
+        }
+
+
+        message.textContent =
+            "";
+
+        message.classList.remove(
+            "success",
+            "error"
+        );
+
+    }
 
 }
 
 
-function closeProfileModal(modal) {
+/* =========================================================
+   RESET PASSWORD FORM
+========================================================= */
 
-    modal.classList.remove("show");
+function resetPasswordForm() {
 
-    modal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
+    const form =
+        document.getElementById(
+            "changePasswordForm"
+        );
 
-    document.body.style.overflow = "";
+    const message =
+        document.getElementById(
+            "passwordMatchMessage"
+        );
+
+    const submitButton =
+        document.getElementById(
+            "savePasswordButton"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+    if (message) {
+
+        message.textContent =
+            "";
+
+        message.classList.remove(
+            "success",
+            "error"
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            "#changePasswordModal input[type='text'], " +
+            "#changePasswordModal input[type='password']"
+        )
+        .forEach(function (input) {
+
+            input.type =
+                "password";
+
+            input.setCustomValidity(
+                ""
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "#changePasswordModal .password-toggle"
+        )
+        .forEach(function (button) {
+
+            const icon =
+                button.querySelector(
+                    "i"
+                );
+
+
+            button.setAttribute(
+                "aria-label",
+                "Show password"
+            );
+
+
+            if (icon) {
+
+                icon.classList.remove(
+                    "fa-eye-slash"
+                );
+
+                icon.classList.add(
+                    "fa-eye"
+                );
+
+            }
+
+        });
+
+
+    if (submitButton) {
+
+        submitButton.disabled =
+            false;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-lock"></i> Change Password';
+
+    }
 
 }
 
@@ -149,13 +816,20 @@ function closeProfileModal(modal) {
 function initializeHashCopy() {
 
     const copyButton =
-        document.getElementById("copyHashButton");
+        document.getElementById(
+            "copyHashButton"
+        );
 
     const hash =
-        document.getElementById("identityHash");
+        document.getElementById(
+            "identityHash"
+        );
 
 
-    if (!copyButton || !hash) {
+    if (
+        !copyButton ||
+        !hash
+    ) {
         return;
     }
 
@@ -182,7 +856,9 @@ function initializeHashCopy() {
 
             catch (error) {
 
-                fallbackCopyText(value);
+                fallbackCopyText(
+                    value
+                );
 
             }
 
@@ -199,20 +875,32 @@ function initializeHashCopy() {
 function fallbackCopyText(value) {
 
     const textarea =
-        document.createElement("textarea");
+        document.createElement(
+            "textarea"
+        );
 
-    textarea.value = value;
+    textarea.value =
+        value;
 
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
+    textarea.style.position =
+        "fixed";
 
-    document.body.appendChild(textarea);
+    textarea.style.opacity =
+        "0";
+
+
+    document.body.appendChild(
+        textarea
+    );
 
     textarea.select();
 
+
     try {
 
-        document.execCommand("copy");
+        document.execCommand(
+            "copy"
+        );
 
         showProfileToast(
             "Identity hash copied to clipboard."
@@ -228,6 +916,7 @@ function fallbackCopyText(value) {
 
     }
 
+
     textarea.remove();
 
 }
@@ -240,7 +929,9 @@ function fallbackCopyText(value) {
 function initializeProfileSync() {
 
     const button =
-        document.getElementById("syncProfileButton");
+        document.getElementById(
+            "syncProfileButton"
+        );
 
 
     if (!button) {
@@ -265,14 +956,9 @@ function initializeProfileSync() {
                 "is-loading"
             );
 
-            button.disabled = true;
+            button.disabled =
+                true;
 
-
-            /*
-             * Replace this timeout with a Django
-             * fetch/AJAX request later if you want
-             * real blockchain synchronization.
-             */
 
             window.setTimeout(
                 function () {
@@ -281,7 +967,8 @@ function initializeProfileSync() {
                         "is-loading"
                     );
 
-                    button.disabled = false;
+                    button.disabled =
+                        false;
 
                     showProfileToast(
                         "Resident profile synchronized."
@@ -304,7 +991,9 @@ function initializeProfileSync() {
 function initializeQrDownload() {
 
     const button =
-        document.getElementById("downloadQrButton");
+        document.getElementById(
+            "downloadQrButton"
+        );
 
 
     if (!button) {
@@ -315,11 +1004,6 @@ function initializeQrDownload() {
     button.addEventListener(
         "click",
         function () {
-
-            /*
-             * Connect this to the real resident
-             * QR file when your backend generates it.
-             */
 
             showProfileToast(
                 "QR ID download will use the resident's generated QR file."
@@ -338,7 +1022,9 @@ function initializeQrDownload() {
 function initializeFamilyButton() {
 
     const button =
-        document.getElementById("viewFamilyButton");
+        document.getElementById(
+            "viewFamilyButton"
+        );
 
 
     if (!button) {
@@ -450,7 +1136,9 @@ function initializeSecurityButtons() {
 function initializeLogoutButton() {
 
     const button =
-        document.getElementById("logoutButton");
+        document.getElementById(
+            "logoutButton"
+        );
 
 
     if (!button) {
@@ -477,11 +1165,11 @@ function initializeLogoutButton() {
 
 
             /*
-             * Change this to your actual Django
-             * logout URL if the URL name differs.
+             * This matches your current logout URL.
              */
 
-            window.location.href = "/logout/";
+            window.location.href =
+                "/logout/";
 
         }
     );
@@ -493,13 +1181,16 @@ function initializeLogoutButton() {
    TOAST
 ========================================================= */
 
-let profileToastTimeout = null;
+let profileToastTimeout =
+    null;
 
 
 function showProfileToast(message) {
 
     const toast =
-        document.getElementById("profileToast");
+        document.getElementById(
+            "profileToast"
+        );
 
     const text =
         document.getElementById(
@@ -507,14 +1198,20 @@ function showProfileToast(message) {
         );
 
 
-    if (!toast || !text) {
+    if (
+        !toast ||
+        !text
+    ) {
         return;
     }
 
 
-    text.textContent = message;
+    text.textContent =
+        message;
 
-    toast.classList.add("show");
+    toast.classList.add(
+        "show"
+    );
 
 
     if (profileToastTimeout) {

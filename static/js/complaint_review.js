@@ -642,7 +642,7 @@ function openComplaintReview(row) {
     }
 
 
-    /* =====================================================
+    /* ==========================ed===========================
        UPDATE FORM ACTION
     ===================================================== */
 
@@ -694,9 +694,12 @@ function openComplaintReview(row) {
     );
 
     loadComplaintDocument(
-    complaintId
-);
+        complaintId
+    );
 
+    loadDocumentRelease(
+        complaintId
+    );
 }
 
 
@@ -1516,6 +1519,693 @@ async function loadComplaintEvidence(
     }
 
 }
+
+
+
+
+
+
+/* =========================================================
+   DOCUMENT RELEASE
+========================================================= */
+
+async function loadDocumentRelease(complaintId) {
+
+    const count =
+        document.getElementById(
+            "reviewReleaseFileCount"
+        );
+
+    const title =
+        document.getElementById(
+            "reviewReleaseTitle"
+        );
+
+    const description =
+        document.getElementById(
+            "reviewReleaseDescription"
+        );
+
+    const fileList =
+        document.getElementById(
+            "reviewReleaseFileList"
+        );
+
+    const button =
+        document.getElementById(
+            "reviewReleaseDocumentsButton"
+        );
+
+    const message =
+        document.getElementById(
+            "reviewReleaseMessage"
+        );
+
+
+    if (!fileList || !button) {
+        return;
+    }
+
+
+    /* RESET */
+
+    fileList.innerHTML = "";
+
+    button.disabled = true;
+
+    button.dataset.complaintId =
+        complaintId || "";
+
+    button.textContent =
+        "Return Verified Documents to Resident";
+
+
+    if (count) {
+        count.textContent = "Checking files...";
+    }
+
+
+    if (title) {
+        title.textContent =
+            "Checking verified documents...";
+    }
+
+
+    if (description) {
+        description.textContent =
+            "Please wait while BantayBarangay checks the verified files for this complaint.";
+    }
+
+
+    if (message) {
+        message.hidden = true;
+        message.textContent = "";
+        message.classList.remove(
+            "success",
+            "error"
+        );
+    }
+
+
+    if (!complaintId) {
+
+        if (count) {
+            count.textContent = "Unavailable";
+        }
+
+        if (title) {
+            title.textContent =
+                "Unable to determine complaint";
+        }
+
+        return;
+    }
+
+
+    const url =
+        "/complaints/complaint/"
+        +
+        encodeURIComponent(complaintId)
+        +
+        "/verified-files/";
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+                    },
+
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok
+            ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error
+                ||
+                "Unable to load verified documents."
+            );
+        }
+
+
+        const files =
+            Array.isArray(data.files)
+                ? data.files
+                : [];
+
+
+        if (count) {
+
+            count.textContent =
+                files.length
+                +
+                (
+                    files.length === 1
+                        ? " verified document"
+                        : " verified documents"
+                );
+        }
+
+
+        /* NO VERIFIED FILES */
+
+        if (files.length === 0) {
+
+            if (title) {
+                title.textContent =
+                    "No verified documents available";
+            }
+
+            if (description) {
+                description.textContent =
+                    "Register and verify the complaint documents on the blockchain before returning them to the resident.";
+            }
+
+            button.disabled = true;
+
+            return;
+        }
+
+
+        /* DISPLAY ALL VERIFIED FILES */
+
+        files.forEach(
+            function (file) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "review-release-file-item";
+
+
+                const check =
+                    document.createElement(
+                        "span"
+                    );
+
+                check.className =
+                    "review-release-file-check";
+
+                check.textContent =
+                    "✓";
+
+
+                const information =
+                    document.createElement(
+                        "div"
+                    );
+
+                information.className =
+                    "review-release-file-info";
+
+
+                const name =
+                    document.createElement(
+                        "strong"
+                    );
+
+                name.textContent =
+                    file.file_name
+                    ||
+                    "Complaint document";
+
+
+                const type =
+                    document.createElement(
+                        "span"
+                    );
+
+                type.textContent =
+                    (
+                        file.type
+                        ||
+                        "Complaint File"
+                    )
+                    +
+                    " • "
+                    +
+                    (
+                        file.blockchain_id
+                        ||
+                        ""
+                    );
+
+
+                information.appendChild(
+                    name
+                );
+
+                information.appendChild(
+                    type
+                );
+
+
+                item.appendChild(
+                    check
+                );
+
+                item.appendChild(
+                    information
+                );
+
+
+                fileList.appendChild(
+                    item
+                );
+            }
+        );
+
+
+        if (title) {
+            title.textContent =
+                "Verified documents ready";
+        }
+
+
+        if (description) {
+            description.textContent =
+                "All documents below are registered and integrity-verified on Hyperledger Fabric.";
+        }
+
+
+        button.disabled = false;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Document release loading error:",
+            error
+        );
+
+
+        if (count) {
+            count.textContent =
+                "Unavailable";
+        }
+
+
+        if (title) {
+            title.textContent =
+                "Unable to load documents";
+        }
+
+
+        if (description) {
+            description.textContent =
+                error.message
+                ||
+                "The verified documents could not be loaded.";
+        }
+
+
+        button.disabled = true;
+    }
+}
+
+
+/* =========================================================
+   RETURN VERIFIED DOCUMENTS
+========================================================= */
+
+async function releaseComplaintDocuments(button) {
+
+    const complaintId =
+        button.dataset.complaintId;
+
+
+    if (!complaintId) {
+
+        window.alert(
+            "Unable to determine the current complaint."
+        );
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            "Return all registered and verified documents for this complaint to the resident?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const originalText =
+        button.textContent;
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Returning Documents...";
+
+
+    const message =
+        document.getElementById(
+            "reviewReleaseMessage"
+        );
+
+
+    const url =
+        "/complaints/complaint/"
+        +
+        encodeURIComponent(complaintId)
+        +
+        "/release-documents/";
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "X-Requested-With":
+                            "XMLHttpRequest",
+
+                        "X-CSRFToken":
+                            getReviewCsrfToken()
+                    },
+
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok
+            ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error
+                ||
+                "Unable to return the documents."
+            );
+        }
+
+
+        button.textContent =
+            "✓ Documents Returned";
+
+        button.disabled = true;
+
+
+        if (message) {
+
+            message.hidden = false;
+
+            message.classList.remove(
+                "error"
+            );
+
+            message.classList.add(
+                "success"
+            );
+
+            message.textContent =
+                data.message
+                ||
+                "Verified documents were successfully returned to the resident.";
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Document release error:",
+            error
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            originalText;
+
+
+        if (message) {
+
+            message.hidden = false;
+
+            message.classList.remove(
+                "success"
+            );
+
+            message.classList.add(
+                "error"
+            );
+
+            message.textContent =
+                error.message
+                ||
+                "Unable to return the documents.";
+        }
+    }
+}
+
+
+/* =========================================================
+   DOCUMENT RELEASE BUTTON
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                "#reviewReleaseDocumentsButton"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        releaseComplaintDocuments(
+            button
+        );
+    }
+);
+
+
+/* =========================================================
+   GENERATE OFFICIAL COMPLAINT DOCUMENT
+========================================================= */
+
+async function generateComplaintDocument(button) {
+
+    if (
+        !activeComplaintRow
+        ||
+        !activeComplaintRow.dataset.complaintId
+    ) {
+
+        window.alert(
+            "Unable to determine the current complaint."
+        );
+
+        return;
+    }
+
+
+    const complaintId =
+        activeComplaintRow.dataset.complaintId;
+
+
+    const originalText =
+        button
+            ? button.textContent
+            : "Generate Official PDF";
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Generating PDF...";
+
+    }
+
+
+    const url =
+        "/documents/complaint/"
+        +
+        encodeURIComponent(complaintId)
+        +
+        "/generate/";
+
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "X-Requested-With":
+                            "XMLHttpRequest",
+
+                        "X-CSRFToken":
+                            getReviewCsrfToken()
+
+                    },
+
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok
+            ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error
+                ||
+                data.message
+                ||
+                "Unable to generate the official complaint PDF."
+            );
+        }
+
+
+        window.alert(
+            data.already_exists
+                ? "The official complaint PDF already exists."
+                : "Official complaint PDF generated successfully."
+        );
+
+
+        /*
+         * Reload the document area.
+         *
+         * This will automatically replace the empty
+         * state with the generated PDF information.
+         */
+        reloadActiveComplaintDocument();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Complaint PDF generation error:",
+            error
+        );
+
+
+        window.alert(
+            error.message
+            ||
+            "Unable to generate the official complaint PDF."
+        );
+
+    }
+
+    finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                originalText;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   GENERATE OFFICIAL COMPLAINT DOCUMENT BUTTON
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                "#generateComplaintDocumentButton"
+            );
+
+
+        if (!button) {
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        generateComplaintDocument(
+            button
+        );
+
+    }
+);
 
 
 /* =========================================================
